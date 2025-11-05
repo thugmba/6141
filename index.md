@@ -8,7 +8,7 @@ Students in this course will develop a comprehensive understanding of businessan
 
 - [Machine Learning for Business Analytics](AI_BI.html)
 
-## Term Project
+## Final Project
 
 - [Project](Project.html)
 - [Report Template](template.docx)
