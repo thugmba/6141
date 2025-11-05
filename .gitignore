@@ -1,1 +1,2 @@
- *.[qmd|src]
+ *.qmd
+ *.src

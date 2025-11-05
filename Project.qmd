@@ -1,0 +1,1012 @@
+---
+title: "Business Analytics and AI Application Term Project"
+subtitle: "Regression Analysis of Financial Drivers for a Listed Company"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: show
+    theme: cosmo
+    embed-resources: true
+  # pdf:
+  #   toc: true
+  #   number-sections: true
+  #   mainfont: "Times New Roman"
+  #   sansfont: "Times New Roman"
+  #   monofont: "Consolas"
+  #   papersize: a4
+execute:
+  echo: false
+
+jupyter: python3
+---
+
+# Project Title
+
+**Regression Analysis: What Drives Stock Price Changes for [Selected Company]?**
+
+# Objective
+
+Apply regression analysis to real annual financial data to discover which financial metrics most impact the stock price of a publicly listed company. The project bridges statistical analysis with real-world business decision-making.
+
+# Project Workflow
+
+## 1. Company & Question Selection
+
+Each student selects a publicly listed company in their home country.
+
+### Step-by-Step Instructions: Selecting a Publicly Listed Company
+
+Here are concrete steps for students as the first phase of your MBA regression analysis project:
+
+#### 1. Brainstorm and Shortlist
+
+- List 3–5 companies from your home country's stock exchange that interest you.
+- Consider industries you want to learn about (technology, finance, manufacturing, etc.).
+
+#### 2. Confirm Public Listing Status
+
+- Search for each company on your country's main stock exchange website (e.g., KOSPI, NSE, TSE, etc.).
+- Make sure the company is actively traded and regularly publishes annual reports.
+
+#### 3. Check Data Availability
+
+- Visit the investor relations section of each company's official website.
+- Confirm that you can access at least 5–10 years of annual financial statements (income statement, balance sheet, cash flow).
+- Check if historical stock price data is available for free.
+
+#### 4. Create a Short Rationale
+
+For your top company, write 2–3 sentences explaining why you chose it (personal interest, industry relevance, notable recent changes, etc.).
+
+### Example (for Samsung Electronics, Korea)
+
+**Company:** Samsung Electronics Co., Ltd.
+
+**Stock Symbol:** 005930 (KOSPI)
+
+**Reason for Selection:** Samsung is Korea's leading technology company with a robust historical dataset and global relevance. I am interested in exploring what drives its stock price given recent shifts in the semiconductor industry.
+
+**Investor Relations Link:** https://www.samsung.com/global/ir/
+
+### Research Question
+
+Define a clear business question, e.g.: "What factors most strongly predict changes in [Company]'s stock price?"
+
+## 2. Data Acquisition
+
+### Purpose
+
+Gather comprehensive historical financial and stock market data that forms the foundation of your regression analysis. Quality data acquisition ensures reliable and valid analytical results.
+
+### Metrics
+
+Collect the following data for at least 5–10 consecutive years:
+
+**Financial Statement Data:**
+
+- **Income Statement**: Revenue, Net Income, Operating Income, EBITDA, R&D Expenses, Marketing Expenses
+- **Balance Sheet**: Total Assets, Total Liabilities, Shareholders' Equity, Current Assets, Current Liabilities
+- **Cash Flow Statement**: Operating Cash Flow, Investing Cash Flow, Financing Cash Flow, Free Cash Flow
+
+**Market Data:**
+
+- **Stock Prices**: Annual closing prices, adjusted for stock splits and dividends
+- **Market Benchmark**: Relevant market index values (e.g., KOSPI, S&P 500, Nikkei 225)
+- **Trading Volume**: Annual average trading volume (optional)
+
+**Calculated Ratios** (if not directly available):
+
+- Earnings Per Share (EPS)
+- Debt-to-Equity Ratio
+- Return on Equity (ROE)
+- Return on Assets (ROA)
+- Price-to-Earnings Ratio (P/E)
+
+### Expected Output
+
+A comprehensive dataset with the following characteristics:
+
+- **Time Coverage**: Minimum 5 years, preferably 10+ years of annual data
+- **Data Sources**: Official company filings (10-K, annual reports), financial databases
+- **Format**: Organized spreadsheet (Excel or CSV) with:
+  - Rows: Years (one row per year)
+  - Columns: All financial metrics and stock prices
+  - Clear labeling with units (e.g., millions, billions)
+- **Documentation**: Note the source and date of data collection for each metric
+- **Completeness**: All selected variables should have data for all years (minimal missing values)
+
+## 3. Dataset Construction
+
+### Purpose
+
+Transform raw financial data into a structured analytical dataset with clearly defined dependent and independent variables. This step establishes the foundation for your regression model by identifying what you want to predict and which factors might drive that outcome.
+
+### Metrics
+
+**Dependent Variable (Target/Outcome):**
+
+Choose ONE of the following as your primary dependent variable:
+
+- **Stock Price**: Annual end-of-year closing price (adjusted for splits)
+- **Stock Price Change (%)**: Year-over-year percentage change in stock price
+- **Stock Return**: (Price_t - Price_t-1) / Price_t-1
+- **Market-Adjusted Return**: Stock return minus market index return
+
+**Independent Variables (Predictors):**
+
+Select 5-10 relevant financial metrics from the following categories:
+
+*Profitability Metrics:*
+
+- Revenue (or Revenue Growth %)
+- Net Income
+- Earnings Per Share (EPS)
+- Operating Margin (%)
+- Return on Equity (ROE)
+- Return on Assets (ROA)
+
+*Financial Health Metrics:*
+
+- Debt-to-Equity Ratio
+- Current Ratio
+- Total Assets
+- Total Debt
+
+*Investment & Growth Metrics:*
+
+- R&D Expense (or R&D as % of Revenue)
+- Capital Expenditure
+- Free Cash Flow
+- Operating Cash Flow
+
+*Market Context Variables:*
+
+- Market Index Return (control variable)
+- Industry-specific benchmark (optional)
+
+### Expected Output
+
+A clean, analysis-ready dataset structured as follows:
+
+**Table Structure:**
+
+| Year | Stock_Price | Revenue | Net_Income | EPS  | Debt_to_Equity | RD_Expense | ROE  | Market_Return |
+|------|-------------|---------|------------|------|----------------|------------|------|---------------|
+| 2015 | 185.50      | 95.2B   | 7.2B       | 3.10 | 1.45           | 1.8B       | 12.5 | 5.2           |
+| 2016 | 198.20      | 102.1B  | 7.8B       | 3.25 | 1.52           | 1.9B       | 13.1 | 6.8           |
+| 2017 | 210.75      | 108.5B  | 8.5B       | 3.45 | 1.48           | 2.1B       | 14.2 | 8.1           |
+| ...  | ...         | ...     | ...        | ...  | ...            | ...        | ...  | ...           |
+
+**Quality Checklist:**
+
+- [ ] Consistent units across all years (e.g., all revenue in billions)
+- [ ] Variables aligned with business logic and theoretical relationships
+- [ ] All variables historically available (no look-ahead bias)
+- [ ] Clear variable naming conventions
+- [ ] Data dictionary documenting each variable's definition and unit
+- [ ] Variables selected based on industry characteristics and research question
+
+## 4. Data Verification & Preprocessing
+
+### Purpose
+
+Ensure data quality and prepare the dataset for valid statistical analysis. This critical step identifies and corrects data issues that could compromise your regression results, including missing values, outliers, and inconsistencies.
+
+### Metrics
+
+**Data Quality Checks:**
+
+1. **Completeness Assessment**
+   - Missing value count per variable
+   - Percentage of missing data (< 10% acceptable, < 5% ideal)
+   - Pattern of missingness (random vs systematic)
+
+2. **Validity Checks**
+   - Range checks (e.g., ratios within plausible bounds)
+   - Sign checks (e.g., revenue should be positive)
+   - Consistency checks (e.g., Net Income = Revenue - Expenses)
+   - Stock split adjustments verified
+
+3. **Outlier Detection**
+   - Z-scores for continuous variables (|z| > 3 indicates potential outlier)
+   - Box plots for visual inspection
+   - Cook's Distance for influential observations
+   - Historical context (e.g., merger, restructuring may explain outliers)
+
+4. **Distributional Analysis**
+   - Skewness and kurtosis of variables
+   - Normality tests (Shapiro-Wilk, Q-Q plots)
+   - Identify variables requiring transformation
+
+**Preprocessing Steps:**
+
+1. **Missing Data Handling:**
+   - Document missing values and their causes
+   - Apply imputation if appropriate (mean, median, or forward-fill)
+   - Consider excluding variables with >15% missing data
+   - Justify your approach
+
+2. **Outlier Treatment:**
+   - Verify outliers are not data entry errors
+   - Investigate business context (legitimate vs error)
+   - Options: keep (if valid), winsorize (cap at percentile), or remove
+   - Document decisions
+
+3. **Variable Transformation:**
+   - Log transformation for right-skewed variables (revenue, assets)
+   - Percentage changes for growth rates
+   - Standardization (z-scores) if comparing variables on different scales
+   - Lag variables if testing time-delayed effects
+
+4. **Multicollinearity Check:**
+   - Correlation matrix of independent variables
+   - Variance Inflation Factor (VIF) calculation
+   - VIF > 10 indicates severe multicollinearity (consider removing variables)
+
+### Expected Output
+
+A clean, preprocessed dataset ready for regression analysis with:
+
+**Summary Statistics Table:**
+
+| Variable       | N   | Mean   | Std Dev | Min    | Max    | Missing | Outliers |
+|----------------|-----|--------|---------|--------|--------|---------|----------|
+| Stock_Price    | 10  | 205.3  | 18.5    | 175.2  | 235.8  | 0       | 0        |
+| Revenue        | 10  | 102.5B | 8.2B    | 90.1B  | 115.2B | 0       | 0        |
+| EPS            | 10  | 3.42   | 0.28    | 3.05   | 3.85   | 1       | 0        |
+| Debt_to_Equity | 10  | 1.52   | 0.15    | 1.28   | 1.75   | 0       | 1        |
+
+**Preprocessing Report:**
+
+- [ ] Data quality assessment completed with documented findings
+- [ ] Missing values handled with justification (e.g., "Revenue 2018 imputed using linear interpolation")
+- [ ] Outliers identified and addressed (e.g., "2020 Net Income outlier retained due to verified one-time gain")
+- [ ] Variables transformed as needed (e.g., "Log(Revenue) created due to right skew")
+- [ ] Stock splits and dividends adjusted in price data
+- [ ] Correlation matrix shows no severe multicollinearity (all r < 0.8)
+- [ ] Clean dataset saved with preprocessing log documenting all changes
+
+## 5. Regression Analysis
+
+### Purpose
+
+Build a statistical model to quantify the relationship between financial metrics and stock price, identifying which factors are significant predictors and estimating the magnitude of their effects. This transforms your research question into a testable mathematical model.
+
+### Metrics
+
+**Model Specification:**
+
+**Simple Linear Regression** (for preliminary analysis):
+
+$$\text{Stock Price}_t = \beta_0 + \beta_1 \times \text{Predictor}_t + \epsilon_t$$
+
+Example: Stock Price = β₀ + β₁ × EPS + ε
+
+**Multiple Linear Regression** (primary model):
+
+$$\text{Stock Price}_t = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + ... + \beta_k X_k + \epsilon_t$$
+
+Example:
+```
+Stock Price = β₀ + β₁(Revenue) + β₂(Net Income) + β₃(Debt/Equity)
+              + β₄(R&D Expense) + β₅(Market Return) + ε
+```
+
+**Key Regression Metrics to Report:**
+
+1. **Coefficients (β)**
+   - **Interpretation**: Change in dependent variable for one-unit change in independent variable
+   - **Sign**: Positive (+) or negative (-) relationship
+   - **Magnitude**: Strength of effect
+   - Example: β₁ = 15.5 means "Each $1B increase in revenue associates with $15.50 stock price increase"
+
+2. **Statistical Significance**
+   - **p-value**: Probability the relationship is due to chance
+     - p < 0.05: Statistically significant (conventional threshold)
+     - p < 0.01: Highly significant
+     - p ≥ 0.05: Not significant
+   - **t-statistic**: Coefficient divided by standard error (|t| > 2 generally significant)
+
+3. **Standard Error (SE)**
+   - Measures uncertainty in coefficient estimate
+   - Smaller SE = more precise estimate
+
+4. **Confidence Intervals (95% CI)**
+   - Range within which true coefficient likely falls
+   - Example: β₁ = 15.5, 95% CI [10.2, 20.8]
+
+**Model Selection Approach:**
+
+- Start with bivariate regressions (one predictor at a time) to understand individual relationships
+- Build multiple regression with theory-driven variable selection
+- Consider stepwise regression or best subsets for exploratory purposes
+- Justify final model based on theory, significance, and model fit
+
+### Expected Output
+
+**Regression Results Table:**
+
+| Variable       | Coefficient (β) | Std Error | t-value | p-value | 95% CI          | Significance |
+|----------------|-----------------|-----------|---------|---------|-----------------|--------------|
+| (Intercept)    | 45.30           | 12.50     | 3.62    | 0.008   | [18.2, 72.4]    | **          |
+| Revenue (B)    | 1.25            | 0.35      | 3.57    | 0.009   | [0.48, 2.02]    | **          |
+| EPS            | 12.80           | 4.20      | 3.05    | 0.018   | [3.45, 22.15]   | *           |
+| Debt_to_Equity | -8.50           | 6.30      | -1.35   | 0.219   | [-22.1, 5.1]    | NS          |
+| R&D_Expense(B) | 3.40            | 1.80      | 1.89    | 0.098   | [-0.75, 7.55]   | †           |
+| Market_Return  | 2.15            | 0.85      | 2.53    | 0.036   | [0.25, 4.05]    | *           |
+
+*Significance codes: ** p<0.01, * p<0.05, † p<0.10, NS not significant*
+
+**Model Summary:**
+
+- **R² (R-squared)**: Proportion of variance explained (e.g., R² = 0.75 means model explains 75% of stock price variation)
+- **Adjusted R²**: R² adjusted for number of predictors (penalizes overfitting)
+- **F-statistic**: Tests overall model significance (p < 0.05 indicates model is significant)
+- **Root Mean Square Error (RMSE)**: Average prediction error in original units
+- **Sample size**: Number of observations (years) used
+
+**Interpretation Example:**
+
+"The multiple regression model explains 75% of the variation in stock price (Adj. R² = 0.72). Revenue and EPS are statistically significant positive predictors (p < 0.05). Specifically:
+
+- Each $1 billion increase in revenue is associated with a $1.25 increase in stock price (p = 0.009)
+- Each $1 increase in EPS is associated with a $12.80 increase in stock price (p = 0.018)
+- Market return has a moderate positive effect (β = 2.15, p = 0.036)
+- Debt-to-Equity ratio shows no significant relationship (p = 0.219)
+
+These findings suggest that profitability metrics (Revenue, EPS) are the primary drivers of [Company]'s stock price."
+
+## 6. Model Evaluation
+
+### Purpose
+
+Validate that your regression model is statistically sound and meets the required assumptions for valid inference. This step ensures your conclusions are reliable and that the model can be trusted for business decision-making.
+
+### Metrics
+
+**Model Fit Assessment:**
+
+1. **R-squared (R²)**
+   - Interpretation: Percentage of variance in dependent variable explained by the model
+   - **Good**: R² > 0.60 for time series financial data
+   - **Acceptable**: 0.40 ≤ R² < 0.60
+   - **Weak**: R² < 0.40 (model has limited explanatory power)
+
+2. **Adjusted R-squared**
+   - Adjusts for number of predictors (penalizes overfitting)
+   - Should be close to R² (gap < 0.05)
+   - Use this for comparing models with different numbers of predictors
+
+3. **F-statistic**
+   - Tests overall model significance (all coefficients = 0?)
+   - **Requirement**: p-value < 0.05 (model is statistically significant)
+   - Higher F-value indicates stronger overall model
+
+4. **Root Mean Square Error (RMSE)**
+   - Average prediction error in original units (e.g., dollars)
+   - Lower is better
+   - Compare to standard deviation of dependent variable
+   - RMSE < 0.5 × SD indicates good fit
+
+**Regression Assumption Tests:**
+
+1. **Linearity**
+   - **Test**: Scatter plots of each predictor vs dependent variable
+   - **Check**: Residuals vs fitted values plot (should show no pattern)
+   - **Requirement**: Relationship should be approximately linear
+   - **Violation**: Non-random pattern suggests non-linear relationship
+
+2. **Normality of Residuals**
+   - **Test**: Q-Q plot (quantile-quantile plot)
+   - **Test**: Histogram of residuals
+   - **Test**: Shapiro-Wilk test (p > 0.05 indicates normality)
+   - **Requirement**: Residuals should be approximately normally distributed
+   - **Note**: Less critical with larger sample sizes (n > 30)
+
+3. **Homoscedasticity (Constant Variance)**
+   - **Test**: Residuals vs fitted values plot
+   - **Test**: Breusch-Pagan test (p > 0.05 indicates homoscedasticity)
+   - **Requirement**: Variance of residuals should be constant across all fitted values
+   - **Violation**: Funnel shape in residual plot
+
+4. **Independence of Errors**
+   - **Test**: Durbin-Watson statistic
+   - **Range**: 1.5 to 2.5 is acceptable (2.0 is ideal)
+   - **Issue**: Autocorrelation common in time series data
+   - **Note**: Document if present; may need time series methods
+
+5. **Multicollinearity**
+   - **Test**: Variance Inflation Factor (VIF) for each predictor
+   - **Threshold**: VIF < 5 (acceptable), VIF < 10 (maximum acceptable)
+   - **Test**: Correlation matrix (pairwise correlations < 0.80)
+   - **Violation**: High VIF inflates standard errors, making coefficients unreliable
+
+6. **Influential Observations**
+   - **Test**: Cook's Distance (D)
+   - **Threshold**: D > 1 indicates highly influential observation
+   - **Test**: Leverage values (high leverage points)
+   - **Action**: Investigate influential points; determine if they should be retained
+
+### Expected Output
+
+**Model Fit Summary:**
+
+```
+Multiple R-squared: 0.752
+Adjusted R-squared: 0.720
+F-statistic: 23.5 on 5 and 4 DF, p-value: 0.003
+RMSE: 8.42
+Residual standard error: 9.15 on 4 degrees of freedom
+```
+
+**Assumption Test Results Table:**
+
+| Assumption          | Test                | Result    | Interpretation          | Status |
+|---------------------|---------------------|-----------|-------------------------|--------|
+| Linearity           | Residual vs Fitted  | No pattern| Linear relationships    | ✓ Met  |
+| Normality           | Shapiro-Wilk        | p = 0.18  | Residuals normal        | ✓ Met  |
+| Homoscedasticity    | Breusch-Pagan       | p = 0.42  | Constant variance       | ✓ Met  |
+| Independence        | Durbin-Watson       | DW = 1.85 | No autocorrelation      | ✓ Met  |
+| Multicollinearity   | VIF                 | All < 5   | Low multicollinearity   | ✓ Met  |
+| Influential Cases   | Cook's D            | Max = 0.45| No influential outliers | ✓ Met  |
+
+**VIF Table (Multicollinearity Check):**
+
+| Variable       | VIF   | Status |
+|----------------|-------|--------|
+| Revenue        | 3.42  | ✓ OK   |
+| EPS            | 2.18  | ✓ OK   |
+| Debt_to_Equity | 1.85  | ✓ OK   |
+| R&D_Expense    | 4.15  | ✓ OK   |
+| Market_Return  | 1.22  | ✓ OK   |
+
+**Diagnostic Plots:**
+
+Include the following visualizations:
+
+1. **Residuals vs Fitted Values**: Check linearity and homoscedasticity
+2. **Q-Q Plot**: Check normality of residuals
+3. **Scale-Location Plot**: Check homoscedasticity
+4. **Residuals vs Leverage**: Identify influential observations
+5. **Histogram of Residuals**: Visual check of normality
+
+**Evaluation Checklist:**
+
+- [ ] Model is statistically significant (F-test p < 0.05)
+- [ ] R² indicates adequate explanatory power (> 0.40)
+- [ ] Adjusted R² is close to R² (difference < 0.05)
+- [ ] Linearity assumption met (no pattern in residuals)
+- [ ] Normality assumption met (Q-Q plot approximately linear, Shapiro-Wilk p > 0.05)
+- [ ] Homoscedasticity met (constant variance in residuals)
+- [ ] No severe multicollinearity (all VIF < 5)
+- [ ] No highly influential outliers (Cook's D < 1)
+- [ ] Key predictors are statistically significant (p < 0.05)
+- [ ] Coefficient signs align with theoretical expectations
+
+**If Assumptions Are Violated:**
+
+- **Linearity violation**: Try polynomial terms or log transformation
+- **Normality violation**: With n > 30, proceed with caution; consider robust regression
+- **Heteroscedasticity**: Use robust standard errors or weighted least squares
+- **Multicollinearity**: Remove correlated predictors or use dimension reduction
+- **Influential outliers**: Investigate and justify retention or removal
+- **Autocorrelation**: Consider time series models (ARIMA) or add lagged variables
+
+## 7. Insights & Recommendations
+
+### Purpose
+
+Translate statistical findings into actionable business insights and strategic recommendations. This step bridges the gap between analytical results and practical decision-making, demonstrating the real-world value of your regression analysis.
+
+### Metrics
+
+**Key Findings Synthesis:**
+
+1. **Significant Predictors Identification**
+   - List all statistically significant variables (p < 0.05)
+   - Rank by effect size (standardized coefficients or magnitude)
+   - Categorize: Strong drivers (p < 0.01), Moderate drivers (0.01 ≤ p < 0.05)
+
+2. **Effect Magnitude Interpretation**
+   - Quantify practical significance (not just statistical significance)
+   - Translate coefficients into business-relevant terms
+   - Example: "A 10% increase in R&D spending is associated with a $2.35 increase in stock price"
+
+3. **Comparative Analysis**
+   - Which financial metrics have the strongest impact?
+   - Which metrics are surprisingly non-significant?
+   - How do findings compare to industry norms or prior research?
+
+4. **Business Context Integration**
+   - Connect findings to company strategy and market conditions
+   - Explain why certain relationships exist (or don't exist)
+   - Consider industry-specific factors (e.g., R&D critical for tech, not for retail)
+
+**Stakeholder-Specific Insights:**
+
+- **For Investors**: Which financial signals predict stock performance?
+- **For Management**: Which operational levers drive shareholder value?
+- **For Analysts**: How does this company compare to industry benchmarks?
+
+### Expected Output
+
+**Executive Summary of Findings:**
+
+"This regression analysis examined 10 years of financial data to identify key drivers of [Company]'s stock price. The model explains 75% of stock price variation (R² = 0.75, p < 0.001). Three financial metrics emerged as significant predictors:"
+
+**Key Findings Table:**
+
+| Finding | Metric | Coefficient | p-value | Business Interpretation |
+|---------|--------|-------------|---------|-------------------------|
+| 1 | EPS | β = 12.80 | 0.018 | **Strongest driver**: Each $1 increase in EPS → $12.80 stock price increase |
+| 2 | Revenue | β = 1.25 | 0.009 | Revenue growth signals market expansion; $1B revenue → $1.25 price increase |
+| 3 | Market Return | β = 2.15 | 0.036 | Stock moves with overall market; 1% market gain → $2.15 price increase |
+| 4 | R&D Expense | β = 3.40 | 0.098 | Marginally significant; suggests market values innovation investment |
+| 5 | Debt-to-Equity | β = -8.50 | 0.219 | **Not significant**: Leverage doesn't significantly impact stock price |
+
+**Strategic Insights:**
+
+1. **Profitability is Paramount**
+   - EPS has the strongest effect on stock price
+   - Implication: Investors prioritize earnings quality over top-line growth
+   - Context: Aligns with mature company valuations focused on profitability
+
+2. **Revenue Growth Matters, But Less Than Earnings**
+   - Revenue coefficient positive but smaller than EPS
+   - Implication: Growth is valued, but not at expense of profitability
+   - Context: Market rewards sustainable, profitable growth
+
+3. **Market Sentiment Drives Performance**
+   - Positive market return coefficient confirms systematic risk
+   - Implication: Company performance tied to broader economic conditions
+   - Context: Beta analysis suggests moderate market sensitivity
+
+4. **Leverage Surprisingly Irrelevant**
+   - Debt-to-Equity ratio not significant predictor
+   - Implication: Market may view current debt levels as optimal or manageable
+   - Context: Industry norm or company's debt is within acceptable range
+
+**Actionable Recommendations:**
+
+**For Company Management:**
+
+1. **Prioritize Earnings Quality (EPS)**
+   - **Action**: Focus on margin improvement and operational efficiency
+   - **Expected Impact**: 10% EPS improvement could boost stock price by ~$1.28
+   - **Implementation**: Cost optimization, pricing strategy, productivity initiatives
+
+2. **Maintain Revenue Growth Trajectory**
+   - **Action**: Invest in market expansion and product development
+   - **Expected Impact**: $10B revenue increase → ~$12.50 stock price gain
+   - **Implementation**: Market penetration, new product launches, M&A
+
+3. **Consider Increasing R&D Investment**
+   - **Action**: Boost R&D spending by 15-20% (currently marginally significant)
+   - **Rationale**: May strengthen innovation perception and future growth potential
+   - **Risk**: Monitor profitability impact; avoid diluting earnings
+
+4. **Optimize Capital Structure (Lower Priority)**
+   - **Action**: Debt-to-Equity ratio is not a current concern
+   - **Strategy**: Maintain financial flexibility; use debt for value-creating investments
+   - **Note**: Monitor if market conditions change
+
+**For Investors:**
+
+1. **Key Metrics to Monitor**
+   - **Primary**: Quarterly EPS trends and guidance
+   - **Secondary**: Revenue growth rates and R&D pipeline
+   - **Context**: Market conditions and sector performance
+
+2. **Valuation Signals**
+   - Strong EPS growth likely to drive price appreciation
+   - Revenue stagnation may not severely impact price if profitability maintained
+   - Market downturns will affect stock despite strong fundamentals
+
+3. **Risk Factors**
+   - Model explains 75% of variation; 25% from other factors
+   - Market beta suggests moderate systematic risk
+   - Company-specific risks: competitive dynamics, regulation, technology shifts
+
+**Limitations and Caveats:**
+
+1. **Sample Size**
+   - Analysis based on 10 years of data (small sample for time series)
+   - Limited statistical power to detect weak effects
+   - Recommendation: Update analysis as more data becomes available
+
+2. **Model Limitations**
+   - Linear model may not capture non-linear relationships
+   - Annual data masks quarterly volatility
+   - Historical relationships may not persist in changing market conditions
+
+3. **Omitted Variables**
+   - Model doesn't include: competitive positioning, management quality, brand value
+   - Qualitative factors may influence stock price
+   - Industry-specific variables not captured
+
+4. **Causation vs Correlation**
+   - Regression shows association, not causation
+   - Cannot definitively claim improving EPS will cause stock price increase
+   - Recommendation: Use findings for hypothesis generation, validate with additional analysis
+
+**Future Research Directions:**
+
+1. **Extended Analysis**
+   - Incorporate quarterly data for more observations
+   - Add lagged variables to test time-delayed effects
+   - Include industry peer comparison analysis
+
+2. **Advanced Modeling**
+   - Test non-linear relationships (polynomial regression)
+   - Apply time series methods (ARIMA, VAR)
+   - Explore machine learning models for comparison
+
+3. **Qualitative Factors**
+   - Incorporate management quality metrics
+   - Add brand value or customer satisfaction scores
+   - Include ESG (Environmental, Social, Governance) metrics
+
+4. **Scenario Analysis**
+   - Stress test model under different economic conditions
+   - Simulate impact of strategic initiatives
+   - Develop forecasting model for future stock price
+
+**Final Recommendations Summary:**
+
+| Priority | Stakeholder | Recommendation | Expected Impact |
+|----------|-------------|----------------|-----------------|
+| HIGH | Management | Enhance EPS through operational efficiency | +$1.28 per 10% EPS increase |
+| HIGH | Management | Sustain revenue growth at current trajectory | +$12.50 per $10B revenue |
+| MEDIUM | Management | Evaluate R&D investment increase | Strengthen future growth signals |
+| MEDIUM | Investors | Monitor quarterly EPS trends closely | Primary valuation driver |
+| LOW | Management | Maintain current capital structure | Not a market concern currently |
+
+## 8. Report
+
+### Purpose
+
+Communicate your regression analysis findings in a clear, professional, and academically rigorous format. The report demonstrates your ability to conduct statistical analysis and present actionable insights to business stakeholders.
+
+### Report Structure
+
+Your 5-page report should follow this structure:
+
+#### 1. Abstract
+
+**Purpose**: Provide a concise summary of the entire project for busy executives.
+
+**Content to Include:**
+
+- **Research Question**: What business problem are you addressing?
+- **Methodology**: Brief mention of regression analysis approach
+- **Key Findings**: 2-3 most important results
+- **Main Recommendation**: Primary actionable insight
+
+**Example Abstract:**
+
+> "This study examines the financial drivers of Samsung Electronics' stock price using multiple regression analysis on 10 years of annual financial data (2014-2023). The analysis reveals that Earnings Per Share (EPS) is the strongest predictor of stock price (β = 12.80, p = 0.018), followed by revenue growth (β = 1.25, p = 0.009). The model explains 75% of stock price variation (R² = 0.75, p < 0.001). Key recommendation: Management should prioritize profitability improvement over revenue growth to maximize shareholder value. Investors should monitor quarterly EPS trends as the primary valuation signal."
+
+**Length**: 100 words (approximately 0.5 pages)
+
+#### 2. Introduction
+
+**Purpose**: Establish business context and research motivation.
+
+**Content to Include:**
+
+- **Company Background**: Brief overview of selected company, industry, and market position
+- **Business Problem**: Why is understanding stock price drivers important?
+- **Research Question**: State your specific research question clearly
+- **Significance**: Why should readers care about this analysis?
+- **Report Roadmap**: Preview of report sections
+
+**Example Structure:**
+
+> **2.1 Company Background**
+>
+> Samsung Electronics Co., Ltd. (KOSPI: 005930) is South Korea's leading technology conglomerate, operating in semiconductors, consumer electronics, and mobile devices. As the world's largest memory chip manufacturer, Samsung plays a critical role in global technology supply chains.
+>
+> **2.2 Research Motivation**
+>
+> Understanding which financial metrics drive Samsung's stock price is crucial for: (1) investors making buy/sell decisions, (2) management prioritizing strategic initiatives, and (3) analysts forecasting future performance.
+>
+> **2.3 Research Question**
+>
+> *What financial metrics most strongly predict changes in Samsung Electronics' annual stock price?*
+
+#### 3. Data
+
+**Purpose**: Describe data sources, variables, and preprocessing steps.
+
+**Content to Include:**
+
+**3.1 Data Sources**
+
+- Company financial statements source (e.g., Samsung Investor Relations, 10-K filings)
+- Stock price data source
+- Time period covered (e.g., 2014-2023, 10 observations)
+- Data collection date
+
+**3.2 Variable Definitions**
+
+Create a table documenting all variables:
+
+| Variable Type | Variable Name | Definition | Unit | Source |
+|---------------|---------------|------------|------|--------|
+| Dependent | Stock_Price | Year-end closing price, adjusted for splits | USD | Yahoo Finance |
+| Independent | Revenue | Total annual revenue | Billions USD | 10-K Filing |
+| Independent | EPS | Earnings per share (diluted) | USD | 10-K Filing |
+| Independent | Debt_to_Equity | Total debt / Total equity | Ratio | Calculated |
+| Independent | RD_Expense | Research & development spending | Billions USD | 10-K Filing |
+| Control | Market_Return | KOSPI annual return | Percent | Korea Exchange |
+
+**3.3 Data Preprocessing**
+
+Document cleaning steps:
+
+- **Missing Data**: "One missing EPS value for 2018 was imputed using linear interpolation"
+- **Outliers**: "2020 Net Income identified as outlier (z = 3.2) but retained due to verified one-time restructuring gain"
+- **Transformations**: "Revenue log-transformed to address right skew (skewness = 2.1)"
+- **Adjustments**: "Stock prices adjusted for 2-for-1 split in 2018"
+
+**3.4 Descriptive Statistics**
+
+Include summary statistics table (from Section 4 preprocessing output).
+
+**Length**: Approximately 1 page
+
+#### 4. Method
+
+**Purpose**: Explain your analytical approach.
+
+**Content to Include:**
+
+**4.1 Statistical Model**
+
+Present your regression equation:
+
+$$\text{Stock Price}_t = \beta_0 + \beta_1(\text{Revenue})_t + \beta_2(\text{EPS})_t + \beta_3(\text{Debt/Equity})_t + \beta_4(\text{R\&D Expense})_t + \beta_5(\text{Market Return})_t + \epsilon_t$$
+
+**4.2 Variable Selection Rationale**
+
+Explain why you chose these variables:
+
+- **Revenue**: Measures top-line growth and market expansion
+- **EPS**: Captures profitability and earnings quality
+- **Debt-to-Equity**: Reflects financial leverage and risk
+- **R&D Expense**: Indicates innovation investment (critical for tech companies)
+- **Market Return**: Controls for overall market conditions (systematic risk)
+
+**4.3 Estimation Technique**
+
+- **Method**: Ordinary Least Squares (OLS) regression
+- **Software**: Python (statsmodels), R (lm), or Excel (Data Analysis Toolpak)
+- **Significance Level**: α = 0.05 (95% confidence)
+
+**4.4 Assumption Testing**
+
+- Linearity (residual plots)
+- Normality (Shapiro-Wilk test, Q-Q plots)
+- Homoscedasticity (Breusch-Pagan test)
+- Multicollinearity (VIF < 5)
+- Independence (Durbin-Watson statistic)
+
+**Length**: Approximately 0.5 pages
+
+#### 5. Results
+
+**Purpose**: Present statistical findings objectively.
+
+**Content to Include:**
+
+**5.1 Regression Results**
+
+Present the main results table (from Section 5):
+
+| Variable | Coefficient (β) | Std Error | t-value | p-value | 95% CI | Significance |
+|----------|-----------------|-----------|---------|---------|--------|--------------|
+| (Intercept) | 45.30 | 12.50 | 3.62 | 0.008 | [18.2, 72.4] | ** |
+| Revenue (B) | 1.25 | 0.35 | 3.57 | 0.009 | [0.48, 2.02] | ** |
+| EPS | 12.80 | 4.20 | 3.05 | 0.018 | [3.45, 22.15] | * |
+| Debt_to_Equity | -8.50 | 6.30 | -1.35 | 0.219 | [-22.1, 5.1] | NS |
+| R&D_Expense (B) | 3.40 | 1.80 | 1.89 | 0.098 | [-0.75, 7.55] | † |
+| Market_Return | 2.15 | 0.85 | 2.53 | 0.036 | [0.25, 4.05] | * |
+
+*Note: ** p<0.01, * p<0.05, † p<0.10, NS not significant*
+
+**5.2 Model Fit**
+
+```
+Multiple R² = 0.752
+Adjusted R² = 0.720
+F-statistic = 23.5 (p = 0.003)
+RMSE = 8.42
+n = 10 observations
+```
+
+**5.3 Assumption Test Results**
+
+Present assumption test summary table (from Section 6):
+
+| Assumption | Test | Result | Status |
+|------------|------|--------|--------|
+| Linearity | Residual Plot | No pattern | ✓ Met |
+| Normality | Shapiro-Wilk | p = 0.18 | ✓ Met |
+| Homoscedasticity | Breusch-Pagan | p = 0.42 | ✓ Met |
+| Independence | Durbin-Watson | DW = 1.85 | ✓ Met |
+| Multicollinearity | VIF | All < 5 | ✓ Met |
+
+**5.4 Key Findings**
+
+Interpret the results in plain language:
+
+1. **EPS is the strongest driver**: Each $1 increase in EPS is associated with a $12.80 increase in stock price (p = 0.018)
+2. **Revenue growth matters**: Each $1 billion revenue increase associates with $1.25 price increase (p = 0.009)
+3. **Market sensitivity confirmed**: Stock moves with overall market (β = 2.15, p = 0.036)
+4. **Debt leverage not significant**: Debt-to-Equity ratio shows no significant relationship (p = 0.219)
+
+#### 6. Conclusion
+
+**Purpose**: Synthesize findings and provide actionable recommendations.
+
+**Content to Include:**
+
+**6.1 Summary of Findings**
+
+Restate key results concisely (2-3 sentences).
+
+**6.2 Business Implications**
+
+- **For Management**: Prioritize EPS improvement through operational efficiency and margin enhancement
+- **For Investors**: Monitor quarterly EPS trends as primary valuation signal; revenue growth is secondary
+- **Strategic Priority**: Profitability over growth
+
+**6.3 Recommendations**
+
+1. **High Priority**: Implement cost optimization initiatives to boost EPS by 10% (expected stock price impact: +$1.28)
+2. **Medium Priority**: Maintain revenue growth trajectory through market expansion
+3. **Low Priority**: Current capital structure is adequate; debt management is not a concern
+
+**6.4 Limitations**
+
+- Small sample size (n = 10) limits statistical power
+- Annual data masks quarterly volatility
+- Model doesn't capture qualitative factors (management quality, competitive position)
+- Correlation ≠ causation; findings should inform, not dictate, strategy
+
+**6.5 Future Research**
+
+- Extend analysis with quarterly data for more observations
+- Include industry peer comparison
+- Test non-linear relationships or machine learning models
+- Incorporate ESG metrics
+
+#### 7. Appendix
+
+**Purpose**: Provide transparency and reproducibility.
+
+**Content to Include:**
+
+**A. Source Code**
+
+Include complete, well-commented code for reproducibility:
+
+```python
+#
+# James, 2025/09/24
+# File: Samsung_Regression.py
+# Short description of the task
+#
+
+# 1. Input
+# Import libraries
+import pandas as pd
+import numpy as np
+import statsmodels.api as sm
+from scipy import stats
+
+# Load data
+df = pd.read_csv("samsung_financial_data.csv")
+
+# Data preprocessing
+# [Include all preprocessing steps with comments]
+
+# Regression analysis
+X = df[['Revenue', 'EPS', 'Debt_to_Equity', 'RD_Expense', 'Market_Return']]
+y = df['Stock_Price']
+
+# 2. Process
+X = sm.add_constant(X)
+model = sm.OLS(y, X).fit()
+
+# 3. Output
+# Display results
+print(model.summary())
+
+# Assumption testing
+# [Include diagnostic tests]
+
+# Visualization
+# [Include plots]
+```
+
+**B. Additional Tables** (if needed)
+
+- Correlation matrix
+- Full VIF table
+- Robustness checks
+
+**C. Data Sources Reference**
+
+- Full URLs and access dates for all data sources
+- Specific filing references (e.g., "Samsung Electronics 2023 Annual Report, page 45")
+
+**Length**: Code appendix doesn't count toward 5-page limit
+
+### Formatting Guidelines
+
+**Citations:**
+
+- Cite data sources and methodological references
+
+### Submission Requirements
+
+**Deadline**
+
+- December 12 (Friday) at 5:00 PM
+
+**1. Report**
+
+- [ ] Report is 6 pages long (excluding appendix)
+- [ ] All sections included (Abstract, Introduction, Data, Method, Results, Conclusion, Appendix)
+- [ ] Tables and figures are clearly labeled and referenced in text
+- [ ] Source code included in appendix
+- [ ] Use the template provided in the project materials
+- [ ] Use consistent formatting throughout
+- [ ] Proofread for grammar and spelling
+- [ ] Convert your completed report to PDF format before submission
+- [ ] File named appropriately: `ID_Name_Keyword_Report.pdf`
+
+**2. Slide**
+
+- [ ] Slide deck is 15 slides long
+- [ ] Use the presentation template provided in the project materials
+- [ ] Professional formatting applied
+- [ ] Proofread for grammar and spelling
+- [ ] Convert your completed slides to PDF format before submission
+- [ ] File named appropriately: `ID_Name_Keyword_Slide.pdf`
+
+**3. Video**
+
+- [ ] Record a 3-minute video of your presentation
+- [ ] Upload the video to your Google Drive
+- [ ] Submit the URL of the video to iLearn
+
+
+## 9. Presentation
+
+### Format
+- **Duration**: 3-minute presentation + 1-minute Q&A (4 minutes total)
+- **Style**: Verbal presentation only (TED talk format)
+- **Visual Aids**: No slides permitted
+
+### Key Points
+- Focus on clear verbal delivery and storytelling
+- Engage the audience through your voice, body language, and presence
+- Structure your content with a strong opening, clear main points, and memorable conclusion
+- Practice timing to ensure you stay within the 3-minute limit
+
+
+## 10. Submission
+
+- Submit both documents as PDF files through iLearn:
+  - Report (6 pages, PDF format)
+  - Presentation slides (15 slides, PDF format)
+
+
+# Example Project Ideas
+
+- "Regression Analysis of Earnings and Stock Price for Samsung Electronics"
+- "How Debt Influences Tata Motors' Stock Performance"
+- "R&D Expense as a Predictor of Novo Nordisk's Market Value"
