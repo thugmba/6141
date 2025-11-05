@@ -2399,7 +2399,11 @@ window.Quarto = {
   <li><a href="#formatting-guidelines" id="toc-formatting-guidelines" class="nav-link" data-scroll-target="#formatting-guidelines">Formatting Guidelines</a></li>
   <li><a href="#submission-requirements" id="toc-submission-requirements" class="nav-link" data-scroll-target="#submission-requirements">Submission Requirements</a></li>
   </ul></li>
-  <li><a href="#presentation" id="toc-presentation" class="nav-link" data-scroll-target="#presentation">9. Presentation</a></li>
+  <li><a href="#presentation" id="toc-presentation" class="nav-link" data-scroll-target="#presentation">9. Presentation</a>
+  <ul class="collapse">
+  <li><a href="#format" id="toc-format" class="nav-link" data-scroll-target="#format">Format</a></li>
+  <li><a href="#key-points" id="toc-key-points" class="nav-link" data-scroll-target="#key-points">Key Points</a></li>
+  </ul></li>
   <li><a href="#submission" id="toc-submission" class="nav-link" data-scroll-target="#submission">10. Submission</a></li>
   </ul></li>
   <li><a href="#example-project-ideas" id="toc-example-project-ideas" class="nav-link" data-scroll-target="#example-project-ideas">Example Project Ideas</a></li>
@@ -2518,7 +2522,7 @@ window.Quarto = {
 <p>A comprehensive dataset with the following characteristics:</p>
 <ul>
 <li><strong>Time Coverage</strong>: Minimum 5 years, preferably 10+ years of annual data</li>
-<li><strong>Data Sources</strong>: Official company filings (10-K, annual reports), financial databases (Yahoo Finance, Bloomberg, company investor relations websites)</li>
+<li><strong>Data Sources</strong>: Official company filings (10-K, annual reports), financial databases</li>
 <li><strong>Format</strong>: Organized spreadsheet (Excel or CSV) with:
 <ul>
 <li>Rows: Years (one row per year)</li>
@@ -3487,8 +3491,8 @@ Residual standard error: 9.15 on 4 degrees of freedom</code></pre>
 <section id="report-structure" class="level3">
 <h3 class="anchored" data-anchor-id="report-structure">Report Structure</h3>
 <p>Your 5-page report should follow this structure:</p>
-<section id="abstract-0.5-pages" class="level4">
-<h4 class="anchored" data-anchor-id="abstract-0.5-pages">1. Abstract (0.5 pages)</h4>
+<section id="abstract" class="level4">
+<h4 class="anchored" data-anchor-id="abstract">1. Abstract</h4>
 <p><strong>Purpose</strong>: Provide a concise summary of the entire project for busy executives.</p>
 <p><strong>Content to Include:</strong></p>
 <ul>
@@ -3503,8 +3507,8 @@ Residual standard error: 9.15 on 4 degrees of freedom</code></pre>
 </blockquote>
 <p><strong>Length</strong>: 100 words (approximately 0.5 pages)</p>
 </section>
-<section id="introduction-0.75-pages" class="level4">
-<h4 class="anchored" data-anchor-id="introduction-0.75-pages">2. Introduction (0.75 pages)</h4>
+<section id="introduction" class="level4">
+<h4 class="anchored" data-anchor-id="introduction">2. Introduction</h4>
 <p><strong>Purpose</strong>: Establish business context and research motivation.</p>
 <p><strong>Content to Include:</strong></p>
 <ul>
@@ -3523,16 +3527,15 @@ Residual standard error: 9.15 on 4 degrees of freedom</code></pre>
 <p><strong>2.3 Research Question</strong></p>
 <p><em>What financial metrics most strongly predict changes in Samsung Electronics’ annual stock price?</em></p>
 </blockquote>
-<p><strong>Length</strong>: Approximately 0.75 pages</p>
 </section>
-<section id="data-1-page" class="level4">
-<h4 class="anchored" data-anchor-id="data-1-page">3. Data (1 page)</h4>
+<section id="data" class="level4">
+<h4 class="anchored" data-anchor-id="data">3. Data</h4>
 <p><strong>Purpose</strong>: Describe data sources, variables, and preprocessing steps.</p>
 <p><strong>Content to Include:</strong></p>
 <p><strong>3.1 Data Sources</strong></p>
 <ul>
 <li>Company financial statements source (e.g., Samsung Investor Relations, 10-K filings)</li>
-<li>Stock price data source (e.g., Yahoo Finance, Korea Exchange)</li>
+<li>Stock price data source</li>
 <li>Time period covered (e.g., 2014-2023, 10 observations)</li>
 <li>Data collection date</li>
 </ul>
@@ -3612,8 +3615,8 @@ Residual standard error: 9.15 on 4 degrees of freedom</code></pre>
 <p>Include summary statistics table (from Section 4 preprocessing output).</p>
 <p><strong>Length</strong>: Approximately 1 page</p>
 </section>
-<section id="method-0.5-pages" class="level4">
-<h4 class="anchored" data-anchor-id="method-0.5-pages">4. Method (0.5 pages)</h4>
+<section id="method" class="level4">
+<h4 class="anchored" data-anchor-id="method">4. Method</h4>
 <p><strong>Purpose</strong>: Explain your analytical approach.</p>
 <p><strong>Content to Include:</strong></p>
 <p><strong>4.1 Statistical Model</strong></p>
@@ -3644,8 +3647,8 @@ Residual standard error: 9.15 on 4 degrees of freedom</code></pre>
 </ul>
 <p><strong>Length</strong>: Approximately 0.5 pages</p>
 </section>
-<section id="results-1.5-pages" class="level4">
-<h4 class="anchored" data-anchor-id="results-1.5-pages">5. Results (1.5 pages)</h4>
+<section id="results" class="level4">
+<h4 class="anchored" data-anchor-id="results">5. Results</h4>
 <p><strong>Purpose</strong>: Present statistical findings objectively.</p>
 <p><strong>Content to Include:</strong></p>
 <p><strong>5.1 Regression Results</strong></p>
@@ -3787,10 +3790,9 @@ n = 10 observations</code></pre>
 <li><strong>Market sensitivity confirmed</strong>: Stock moves with overall market (β = 2.15, p = 0.036)</li>
 <li><strong>Debt leverage not significant</strong>: Debt-to-Equity ratio shows no significant relationship (p = 0.219)</li>
 </ol>
-<p><strong>Length</strong>: Approximately 1.5 pages</p>
 </section>
-<section id="conclusion-0.5-pages" class="level4">
-<h4 class="anchored" data-anchor-id="conclusion-0.5-pages">6. Conclusion (0.5 pages)</h4>
+<section id="conclusion" class="level4">
+<h4 class="anchored" data-anchor-id="conclusion">6. Conclusion</h4>
 <p><strong>Purpose</strong>: Synthesize findings and provide actionable recommendations.</p>
 <p><strong>Content to Include:</strong></p>
 <p><strong>6.1 Summary of Findings</strong></p>
@@ -3821,46 +3823,49 @@ n = 10 observations</code></pre>
 <li>Test non-linear relationships or machine learning models</li>
 <li>Incorporate ESG metrics</li>
 </ul>
-<p><strong>Length</strong>: Approximately 0.5 pages</p>
 </section>
-<section id="appendix-0.25-pages-code" class="level4">
-<h4 class="anchored" data-anchor-id="appendix-0.25-pages-code">7. Appendix (0.25 pages + code)</h4>
+<section id="appendix" class="level4">
+<h4 class="anchored" data-anchor-id="appendix">7. Appendix</h4>
 <p><strong>Purpose</strong>: Provide transparency and reproducibility.</p>
 <p><strong>Content to Include:</strong></p>
 <p><strong>A. Source Code</strong></p>
 <p>Include complete, well-commented code for reproducibility:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Appendix A: Python Source Code for Regression Analysis</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Author: [Your Name]</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Date: [Date]</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Purpose: Stock price regression analysis for [Company Name]</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Import libraries</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&quot;samsung_financial_data.csv&quot;</span>)</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Data preprocessing</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co"># [Include all preprocessing steps with comments]</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Regression analysis</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df[[<span class="st">&#39;Revenue&#39;</span>, <span class="st">&#39;EPS&#39;</span>, <span class="st">&#39;Debt_to_Equity&#39;</span>, <span class="st">&#39;RD_Expense&#39;</span>, <span class="st">&#39;Market_Return&#39;</span>]]</span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[<span class="st">&#39;Stock_Price&#39;</span>]</span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> sm.add_constant(X)</span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> sm.OLS(y, X).fit()</span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Display results</span></span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(model.summary())</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># James, 2025/09/24</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># File: Samsung_Regression.py</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Short description of the task</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Input</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Import libraries</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&quot;samsung_financial_data.csv&quot;</span>)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Data preprocessing</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co"># [Include all preprocessing steps with comments]</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Regression analysis</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df[[<span class="st">&#39;Revenue&#39;</span>, <span class="st">&#39;EPS&#39;</span>, <span class="st">&#39;Debt_to_Equity&#39;</span>, <span class="st">&#39;RD_Expense&#39;</span>, <span class="st">&#39;Market_Return&#39;</span>]]</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[<span class="st">&#39;Stock_Price&#39;</span>]</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Process</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> sm.add_constant(X)</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> sm.OLS(y, X).fit()</span>
 <span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Assumption testing</span></span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="co"># [Include diagnostic tests]</span></span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualization</span></span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="co"># [Include plots]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Output</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Display results</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(model.summary())</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Assumption testing</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="co"># [Include diagnostic tests]</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualization</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a><span class="co"># [Include plots]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>B. Additional Tables</strong> (if needed)</p>
 <ul>
 <li>Correlation matrix</li>
@@ -3877,50 +3882,65 @@ n = 10 observations</code></pre>
 </section>
 <section id="formatting-guidelines" class="level3">
 <h3 class="anchored" data-anchor-id="formatting-guidelines">Formatting Guidelines</h3>
-<p><strong>Page Setup:</strong></p>
-<ul>
-<li><strong>Font</strong>: Times New Roman, 12pt</li>
-<li><strong>Margins</strong>: 1 inch (2.54 cm) all sides</li>
-<li><strong>Spacing</strong>: 1.5 line spacing</li>
-<li><strong>Pages</strong>: 6 pages main content (excluding appendix)</li>
-<li><strong>Sections</strong>: Use clear headings and subheadings</li>
-<li><strong>Tables/Figures</strong>: Number all tables and figures (e.g., Table 1, Figure 1)</li>
-</ul>
 <p><strong>Citations:</strong></p>
 <ul>
-<li>Use APA format for any references</li>
 <li>Cite data sources and methodological references</li>
-</ul>
-<p><strong>Professional Presentation:</strong></p>
-<ul>
-<li>Include page numbers</li>
-<li>Add a title page (doesn’t count toward 5 pages)</li>
-<li>Use consistent formatting throughout</li>
-<li>Proofread for grammar and spelling</li>
 </ul>
 </section>
 <section id="submission-requirements" class="level3">
 <h3 class="anchored" data-anchor-id="submission-requirements">Submission Requirements</h3>
+<p><strong>Deadline</strong></p>
+<ul>
+<li>December 12 (Friday) at 5:00 PM</li>
+</ul>
+<p><strong>1. Report</strong></p>
 <ul class="task-list">
 <li><label><input type="checkbox">Report is 6 pages long (excluding appendix)</label></li>
 <li><label><input type="checkbox">All sections included (Abstract, Introduction, Data, Method, Results, Conclusion, Appendix)</label></li>
 <li><label><input type="checkbox">Tables and figures are clearly labeled and referenced in text</label></li>
 <li><label><input type="checkbox">Source code included in appendix</label></li>
+<li><label><input type="checkbox">Use the template provided in the project materials</label></li>
+<li><label><input type="checkbox">Use consistent formatting throughout</label></li>
+<li><label><input type="checkbox">Proofread for grammar and spelling</label></li>
+<li><label><input type="checkbox">Convert your completed report to PDF format before submission</label></li>
+<li><label><input type="checkbox">File named appropriately: <code>ID_Name_Keyword_Report.pdf</code></label></li>
+</ul>
+<p><strong>2. Slide</strong></p>
+<ul class="task-list">
+<li><label><input type="checkbox">Slide deck is 15 slides long</label></li>
+<li><label><input type="checkbox">Use the presentation template provided in the project materials</label></li>
 <li><label><input type="checkbox">Professional formatting applied</label></li>
-<li><label><input type="checkbox">Proofread and spell-checked</label></li>
-<li><label><input type="checkbox"><strong>Converted to PDF format before submission</strong></label></li>
-<li><label><input type="checkbox">File named appropriately: <code>ID_Name_Keyword.pdf</code></label></li>
+<li><label><input type="checkbox">Proofread for grammar and spelling</label></li>
+<li><label><input type="checkbox">Convert your completed slides to PDF format before submission</label></li>
+<li><label><input type="checkbox">File named appropriately: <code>ID_Name_Keyword_Slide.pdf</code></label></li>
+</ul>
+<p><strong>3. Video</strong></p>
+<ul class="task-list">
+<li><label><input type="checkbox">Record a 3-minute video of your presentation</label></li>
+<li><label><input type="checkbox">Upload the video to your Google Drive</label></li>
+<li><label><input type="checkbox">Submit the URL of the video to iLearn</label></li>
 </ul>
 </section>
 </section>
 <section id="presentation" class="level2">
 <h2 class="anchored" data-anchor-id="presentation">9. Presentation</h2>
+<section id="format" class="level3">
+<h3 class="anchored" data-anchor-id="format">Format</h3>
 <ul>
-<li>Use the presentation template provided in the project materials</li>
-<li>Create a slide deck that is 15 slides long</li>
-<li>Present your findings to the class using these slides</li>
-<li>Convert your completed slides to PDF format before submission</li>
+<li><strong>Duration</strong>: 3-minute presentation + 1-minute Q&amp;A (4 minutes total)</li>
+<li><strong>Style</strong>: Verbal presentation only (TED talk format)</li>
+<li><strong>Visual Aids</strong>: No slides permitted</li>
 </ul>
+</section>
+<section id="key-points" class="level3">
+<h3 class="anchored" data-anchor-id="key-points">Key Points</h3>
+<ul>
+<li>Focus on clear verbal delivery and storytelling</li>
+<li>Engage the audience through your voice, body language, and presence</li>
+<li>Structure your content with a strong opening, clear main points, and memorable conclusion</li>
+<li>Practice timing to ensure you stay within the 3-minute limit</li>
+</ul>
+</section>
 </section>
 <section id="submission" class="level2">
 <h2 class="anchored" data-anchor-id="submission">10. Submission</h2>

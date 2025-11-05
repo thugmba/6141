@@ -108,7 +108,7 @@ Collect the following data for at least 5–10 consecutive years:
 A comprehensive dataset with the following characteristics:
 
 - **Time Coverage**: Minimum 5 years, preferably 10+ years of annual data
-- **Data Sources**: Official company filings (10-K, annual reports), financial databases (Yahoo Finance, Bloomberg, company investor relations websites)
+- **Data Sources**: Official company filings (10-K, annual reports), financial databases
 - **Format**: Organized spreadsheet (Excel or CSV) with:
   - Rows: Years (one row per year)
   - Columns: All financial metrics and stock prices
@@ -672,7 +672,7 @@ Communicate your regression analysis findings in a clear, professional, and acad
 
 Your 5-page report should follow this structure:
 
-#### 1. Abstract (0.5 pages)
+#### 1. Abstract
 
 **Purpose**: Provide a concise summary of the entire project for busy executives.
 
@@ -689,7 +689,7 @@ Your 5-page report should follow this structure:
 
 **Length**: 100 words (approximately 0.5 pages)
 
-#### 2. Introduction (0.75 pages)
+#### 2. Introduction
 
 **Purpose**: Establish business context and research motivation.
 
@@ -715,9 +715,7 @@ Your 5-page report should follow this structure:
 >
 > *What financial metrics most strongly predict changes in Samsung Electronics' annual stock price?*
 
-**Length**: Approximately 0.75 pages
-
-#### 3. Data (1 page)
+#### 3. Data
 
 **Purpose**: Describe data sources, variables, and preprocessing steps.
 
@@ -726,7 +724,7 @@ Your 5-page report should follow this structure:
 **3.1 Data Sources**
 
 - Company financial statements source (e.g., Samsung Investor Relations, 10-K filings)
-- Stock price data source (e.g., Yahoo Finance, Korea Exchange)
+- Stock price data source
 - Time period covered (e.g., 2014-2023, 10 observations)
 - Data collection date
 
@@ -758,7 +756,7 @@ Include summary statistics table (from Section 4 preprocessing output).
 
 **Length**: Approximately 1 page
 
-#### 4. Method (0.5 pages)
+#### 4. Method
 
 **Purpose**: Explain your analytical approach.
 
@@ -796,7 +794,7 @@ Explain why you chose these variables:
 
 **Length**: Approximately 0.5 pages
 
-#### 5. Results (1.5 pages)
+#### 5. Results
 
 **Purpose**: Present statistical findings objectively.
 
@@ -848,9 +846,7 @@ Interpret the results in plain language:
 3. **Market sensitivity confirmed**: Stock moves with overall market (β = 2.15, p = 0.036)
 4. **Debt leverage not significant**: Debt-to-Equity ratio shows no significant relationship (p = 0.219)
 
-**Length**: Approximately 1.5 pages
-
-#### 6. Conclusion (0.5 pages)
+#### 6. Conclusion
 
 **Purpose**: Synthesize findings and provide actionable recommendations.
 
@@ -886,9 +882,7 @@ Restate key results concisely (2-3 sentences).
 - Test non-linear relationships or machine learning models
 - Incorporate ESG metrics
 
-**Length**: Approximately 0.5 pages
-
-#### 7. Appendix (0.25 pages + code)
+#### 7. Appendix
 
 **Purpose**: Provide transparency and reproducibility.
 
@@ -899,11 +893,13 @@ Restate key results concisely (2-3 sentences).
 Include complete, well-commented code for reproducibility:
 
 ```python
-# Appendix A: Python Source Code for Regression Analysis
-# Author: [Your Name]
-# Date: [Date]
-# Purpose: Stock price regression analysis for [Company Name]
+#
+# James, 2025/09/24
+# File: Samsung_Regression.py
+# Short description of the task
+#
 
+# 1. Input
 # Import libraries
 import pandas as pd
 import numpy as np
@@ -920,9 +916,11 @@ df = pd.read_csv("samsung_financial_data.csv")
 X = df[['Revenue', 'EPS', 'Debt_to_Equity', 'RD_Expense', 'Market_Return']]
 y = df['Stock_Price']
 
+# 2. Process
 X = sm.add_constant(X)
 model = sm.OLS(y, X).fit()
 
+# 3. Output
 # Display results
 print(model.summary())
 
@@ -948,44 +946,57 @@ print(model.summary())
 
 ### Formatting Guidelines
 
-**Page Setup:**
-
-- **Font**: Times New Roman, 12pt
-- **Margins**: 1 inch (2.54 cm) all sides
-- **Spacing**: 1.5 line spacing
-- **Pages**: 6 pages main content (excluding appendix)
-- **Sections**: Use clear headings and subheadings
-- **Tables/Figures**: Number all tables and figures (e.g., Table 1, Figure 1)
-
 **Citations:**
 
-- Use APA format for any references
 - Cite data sources and methodological references
 
-**Professional Presentation:**
-
-- Include page numbers
-- Add a title page (doesn't count toward 5 pages)
-- Use consistent formatting throughout
-- Proofread for grammar and spelling
-
 ### Submission Requirements
+
+**Deadline**
+
+- December 12 (Friday) at 5:00 PM
+
+**1. Report**
 
 - [ ] Report is 6 pages long (excluding appendix)
 - [ ] All sections included (Abstract, Introduction, Data, Method, Results, Conclusion, Appendix)
 - [ ] Tables and figures are clearly labeled and referenced in text
 - [ ] Source code included in appendix
+- [ ] Use the template provided in the project materials
+- [ ] Use consistent formatting throughout
+- [ ] Proofread for grammar and spelling
+- [ ] Convert your completed report to PDF format before submission
+- [ ] File named appropriately: `ID_Name_Keyword_Report.pdf`
+
+**2. Slide**
+
+- [ ] Slide deck is 15 slides long
+- [ ] Use the presentation template provided in the project materials
 - [ ] Professional formatting applied
-- [ ] Proofread and spell-checked
-- [ ] **Converted to PDF format before submission**
-- [ ] File named appropriately: `ID_Name_Keyword.pdf`
+- [ ] Proofread for grammar and spelling
+- [ ] Convert your completed slides to PDF format before submission
+- [ ] File named appropriately: `ID_Name_Keyword_Slide.pdf`
+
+**3. Video**
+
+- [ ] Record a 3-minute video of your presentation
+- [ ] Upload the video to your Google Drive
+- [ ] Submit the URL of the video to iLearn
+
 
 ## 9. Presentation
 
-- Use the presentation template provided in the project materials
-- Create a slide deck that is 15 slides long
-- Present your findings to the class using these slides
-- Convert your completed slides to PDF format before submission
+### Format
+- **Duration**: 3-minute presentation + 1-minute Q&A (4 minutes total)
+- **Style**: Verbal presentation only (TED talk format)
+- **Visual Aids**: No slides permitted
+
+### Key Points
+- Focus on clear verbal delivery and storytelling
+- Engage the audience through your voice, body language, and presence
+- Structure your content with a strong opening, clear main points, and memorable conclusion
+- Practice timing to ensure you stay within the 3-minute limit
+
 
 ## 10. Submission
 
