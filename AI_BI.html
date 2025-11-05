@@ -5337,13 +5337,13 @@ display: inline-block;
 <p></p><figure class="figure"><p></p>
 <div>
 <pre class="mermaid mermaid-js">flowchart TD
-    A[Step 1: Data Preprocessing &amp; Quality Assurance]
-    B[Step 2: Exploratory Analysis]
-    C[Step 3: Visualize Relationships]
-    D[Step 4: Factor Analysis]
-    E[Step 5: Regression Modeling]
-    F[Step 6: Model Diagnostics &amp; Validation]
-    G[Step 7: Communicate Insights]
+    A[&quot;Step 1: Data Preprocessing &amp;&lt;br/&gt;Quality Assurance&quot;]
+    B[&quot;Step 2: Exploratory Analysis&quot;]
+    C[&quot;Step 3: Visualize Relationships&quot;]
+    D[&quot;Step 4: Factor Analysis&quot;]
+    E[&quot;Step 5: Regression Modeling&quot;]
+    F[&quot;Step 6: Model Diagnostics &amp;&lt;br/&gt;Validation&quot;]
+    G[&quot;Step 7: Communicate Insights&quot;]
 
     A --&gt; B --&gt; C --&gt; D --&gt; E --&gt; F --&gt; G
 </pre>
@@ -5645,7 +5645,7 @@ display: inline-block;
 <li><strong>Exploratory Analysis (Step 3)</strong>: Outcome variables pair with profile controls to uncover business-relevant relationships before modeling.</li>
 <li><strong>Regression Modeling (Steps 4-6)</strong>: <code>purchase_frequency</code> serves as the dependent variable; engineered factor scores and profile controls form the predictor set; <code>purchase_amount</code> and <code>conversion_rate</code> enable revenue-oriented sensitivity tests.</li>
 </ul>
-<div id="0182c9ae" class="cell" data-execution_count="1">
+<div id="6c34eba5" class="cell" data-execution_count="1">
 <details open class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -5662,7 +5662,7 @@ display: inline-block;
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    ]</span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>].head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="1">
+<div class="cell-output cell-output-display" data-execution_count="126">
 <div>
 
 
@@ -5752,7 +5752,7 @@ display: inline-block;
 <li><strong>Production failures</strong>: Model doesn’t generalize to real-world data</li>
 </ul>
 <p><strong>Business Impact</strong>: A model trained on flawed data will provide incorrect business recommendations, potentially costing millions in misallocated resources.</p>
-<div id="d2e9e8d3" class="cell" data-execution_count="2">
+<div id="7fe0e0f3" class="cell" data-execution_count="2">
 <details open class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -5765,7 +5765,7 @@ display: inline-block;
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>].describe().loc[[<span class="st">&quot;count&quot;</span>, <span class="st">&quot;mean&quot;</span>, <span class="st">&quot;std&quot;</span>, <span class="st">&quot;min&quot;</span>, <span class="st">&quot;max&quot;</span>]]</span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>summary</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="2">
+<div class="cell-output cell-output-display" data-execution_count="127">
 <div>
 
 
@@ -5820,7 +5820,7 @@ display: inline-block;
 <h2 class="anchored" data-anchor-id="process">1.2 Process</h2>
 <section id="data-validity-checks" class="level3">
 <h3 class="anchored" data-anchor-id="data-validity-checks">Data Validity Checks</h3>
-<div id="0a0cca6b" class="cell" data-execution_count="3">
+<div id="051a14c0" class="cell" data-execution_count="3">
 <details open class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -5856,7 +5856,7 @@ display: inline-block;
 <span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    }</span>
 <span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="3">
+<div class="cell-output cell-output-display" data-execution_count="128">
 <div>
 
 
@@ -5895,7 +5895,7 @@ display: inline-block;
 </section>
 <section id="missing-data-analysis" class="level3">
 <h3 class="anchored" data-anchor-id="missing-data-analysis">Missing Data Analysis</h3>
-<div id="0fe89204" class="cell" data-execution_count="4">
+<div id="16d8aeb1" class="cell" data-execution_count="4">
 <details open class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -5906,7 +5906,7 @@ display: inline-block;
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>missing_counts <span class="op">=</span> df.isna().<span class="bu">sum</span>()</span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>missing_counts[missing_counts <span class="op">&gt;</span> <span class="dv">0</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="4">
+<div class="cell-output cell-output-display" data-execution_count="129">
 <pre><code>customer_age    5
 income          5
 dtype: int64</code></pre>
@@ -5922,7 +5922,7 @@ dtype: int64</code></pre>
 </section>
 <section id="outlier-detection" class="level3">
 <h3 class="anchored" data-anchor-id="outlier-detection">Outlier Detection</h3>
-<div id="0f1be06c" class="cell" data-execution_count="5">
+<div id="525d5d86" class="cell" data-execution_count="5">
 <details open class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -5942,7 +5942,7 @@ dtype: int64</code></pre>
 <span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    [<span class="st">&quot;customer_id&quot;</span>, <span class="st">&quot;purchase_amount&quot;</span>, <span class="st">&quot;purchase_frequency&quot;</span>],</span>
 <span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="5">
+<div class="cell-output cell-output-display" data-execution_count="130">
 <div>
 
 
@@ -5987,7 +5987,7 @@ dtype: int64</code></pre>
 <p><strong>Purpose</strong>: Ensure your measurement scales are internally consistent.</p>
 <section id="cronbachs-alpha-test" class="level3">
 <h3 class="anchored" data-anchor-id="cronbachs-alpha-test">Cronbach’s Alpha Test</h3>
-<div id="649a4762" class="cell" data-execution_count="6">
+<div id="8328b279" class="cell" data-execution_count="6">
 <details open class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -6007,7 +6007,7 @@ dtype: int64</code></pre>
 <span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="bu">round</span>(alpha, <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="6">
+<div class="cell-output cell-output-display" data-execution_count="131">
 <pre><code>-0.007</code></pre>
 </div>
 </div>
@@ -6025,7 +6025,7 @@ dtype: int64</code></pre>
 </section>
 <section id="test-retest-reliability-if-applicable" class="level3">
 <h3 class="anchored" data-anchor-id="test-retest-reliability-if-applicable">Test-Retest Reliability (if applicable)</h3>
-<div id="6db386bd" class="cell" data-execution_count="7">
+<div id="a1812769" class="cell" data-execution_count="7">
 <details open class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -6035,7 +6035,7 @@ dtype: int64</code></pre>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="bu">round</span>(df[<span class="st">&quot;satisfaction_t1&quot;</span>].corr(df[<span class="st">&quot;satisfaction_t2&quot;</span>]), <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="7">
+<div class="cell-output cell-output-display" data-execution_count="132">
 <pre><code>-0.028</code></pre>
 </div>
 </div>
@@ -6045,7 +6045,7 @@ dtype: int64</code></pre>
 </section>
 <section id="validation-checklist" class="level2">
 <h2 class="anchored" data-anchor-id="validation-checklist">1.4 Validation Checklist</h2>
-<div id="7f7276eb" class="cell" data-execution_count="8">
+<div id="3eb1caa3" class="cell" data-execution_count="8">
 <details open class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -6064,7 +6064,7 @@ dtype: int64</code></pre>
 <span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    }</span>
 <span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="8">
+<div class="cell-output cell-output-display" data-execution_count="133">
 <pre><code>rows                 500
 features              29
 numeric_columns       29
@@ -6115,7 +6115,7 @@ dtype: int64</code></pre>
 <li>Improves generalization (less overfitting)</li>
 <li>Provides clearer business insights (which dimension drives outcomes)</li>
 </ul>
-<div id="2db813c3" class="cell" data-execution_count="9">
+<div id="086a9491" class="cell" data-execution_count="9">
 <details open class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -6129,7 +6129,7 @@ dtype: int64</code></pre>
 <span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>pairwise_stats <span class="op">=</span> pd.Series(exp_corr.where(mask).stack()).describe()</span>
 <span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>pairwise_stats</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="9">
+<div class="cell-output cell-output-display" data-execution_count="134">
 <pre><code>count    105.000000
 mean       0.031580
 std        0.025835
@@ -6144,7 +6144,7 @@ dtype: float64</code></pre>
 </section>
 <section id="process-1" class="level2">
 <h2 class="anchored" data-anchor-id="process-1">2.2 Process</h2>
-<div id="c40867f1" class="cell" data-execution_count="10">
+<div id="905ffa52" class="cell" data-execution_count="10">
 <details open class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -6154,7 +6154,7 @@ dtype: float64</code></pre>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>df.<span class="bu">filter</span>(like<span class="op">=</span><span class="st">&quot;exp_&quot;</span>).agg([<span class="st">&quot;mean&quot;</span>, <span class="st">&quot;std&quot;</span>]).T.<span class="bu">round</span>(<span class="dv">2</span>).head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="10">
+<div class="cell-output cell-output-display" data-execution_count="135">
 <div>
 
 
@@ -6200,7 +6200,7 @@ dtype: float64</code></pre>
 </div>
 <section id="check-assumptions" class="level3">
 <h3 class="anchored" data-anchor-id="check-assumptions">Check Assumptions</h3>
-<div id="e46a5e03" class="cell" data-execution_count="11">
+<div id="92ee88be" class="cell" data-execution_count="11">
 <details open class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -6222,7 +6222,7 @@ dtype: float64</code></pre>
 <span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>    }</span>
 <span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="11">
+<div class="cell-output cell-output-display" data-execution_count="136">
 <pre><code>determinant       0.8400
 min_eigenvalue    0.7581
 max_eigenvalue    1.2918
@@ -6243,7 +6243,7 @@ dtype: float64</code></pre>
 </section>
 <section id="determine-number-of-factors" class="level3">
 <h3 class="anchored" data-anchor-id="determine-number-of-factors">Determine Number of Factors</h3>
-<div id="c39b7dbe" class="cell" data-execution_count="12">
+<div id="89d82f07" class="cell" data-execution_count="12">
 <details open class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -6263,7 +6263,7 @@ dtype: float64</code></pre>
 <span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>factor_table.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="12">
+<div class="cell-output cell-output-display" data-execution_count="137">
 <div>
 
 
@@ -6316,7 +6316,7 @@ dtype: float64</code></pre>
 </section>
 <section id="run-factor-analysis" class="level3">
 <h3 class="anchored" data-anchor-id="run-factor-analysis">Run Factor Analysis</h3>
-<div id="076c6831" class="cell" data-execution_count="13">
+<div id="e21830e0" class="cell" data-execution_count="13">
 <details open class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -6336,7 +6336,7 @@ dtype: float64</code></pre>
 <span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>factor_loadings.<span class="bu">round</span>(<span class="dv">3</span>).head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="13">
+<div class="cell-output cell-output-display" data-execution_count="138">
 <div>
 
 
@@ -6398,7 +6398,7 @@ dtype: float64</code></pre>
 </section>
 <section id="create-factor-scores" class="level3">
 <h3 class="anchored" data-anchor-id="create-factor-scores">Create Factor Scores</h3>
-<div id="f1147397" class="cell" data-execution_count="14">
+<div id="ad92f681" class="cell" data-execution_count="14">
 <details open class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -6417,7 +6417,7 @@ dtype: float64</code></pre>
 <span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>factor_scores_df.head().<span class="bu">round</span>(<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="14">
+<div class="cell-output cell-output-display" data-execution_count="139">
 <div>
 
 
@@ -6471,7 +6471,7 @@ dtype: float64</code></pre>
 </section>
 <section id="validation" class="level2">
 <h2 class="anchored" data-anchor-id="validation">2.3 Validation</h2>
-<div id="7cce9bef" class="cell" data-execution_count="15">
+<div id="00965ba2" class="cell" data-execution_count="15">
 <details open class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -6500,7 +6500,7 @@ dtype: float64</code></pre>
 <span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>validation_table.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="15">
+<div class="cell-output cell-output-display" data-execution_count="140">
 <div>
 
 
@@ -6557,7 +6557,7 @@ dtype: float64</code></pre>
 <p>After establishing that your factors are reliable and well-defined, you must test whether they are <strong>valid</strong> - meaning they actually measure what they’re supposed to measure.</p>
 <section id="convergent-validity" class="level3">
 <h3 class="anchored" data-anchor-id="convergent-validity">Convergent Validity</h3>
-<div id="961a48a6" class="cell" data-execution_count="16">
+<div id="55886175" class="cell" data-execution_count="16">
 <details open class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -6578,7 +6578,7 @@ dtype: float64</code></pre>
 <span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>).<span class="bu">abs</span>().mean()</span>
 <span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>avg_abs_loadings.to_frame(name<span class="op">=</span><span class="st">&quot;avg_abs_loading&quot;</span>).<span class="bu">round</span>(<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="16">
+<div class="cell-output cell-output-display" data-execution_count="141">
 <div>
 
 
@@ -6623,7 +6623,7 @@ dtype: float64</code></pre>
 </section>
 <section id="discriminant-validity" class="level3">
 <h3 class="anchored" data-anchor-id="discriminant-validity">Discriminant Validity</h3>
-<div id="8e4bb00f" class="cell" data-execution_count="17">
+<div id="118f3f12" class="cell" data-execution_count="17">
 <details open class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -6645,7 +6645,7 @@ dtype: float64</code></pre>
 <span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>factor_scores_df.corr().<span class="bu">round</span>(<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="17">
+<div class="cell-output cell-output-display" data-execution_count="142">
 <div>
 
 
@@ -6703,7 +6703,7 @@ dtype: float64</code></pre>
 </section>
 <section id="validity-summary-report" class="level3">
 <h3 class="anchored" data-anchor-id="validity-summary-report">Validity Summary Report</h3>
-<div id="094a38f2" class="cell" data-execution_count="18">
+<div id="33cff69a" class="cell" data-execution_count="18">
 <details open class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -6739,7 +6739,7 @@ dtype: float64</code></pre>
 <span id="cb26-31"><a href="#cb26-31" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-32"><a href="#cb26-32" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(summary_rows)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="18">
+<div class="cell-output cell-output-display" data-execution_count="143">
 <div>
 
 
@@ -6871,7 +6871,7 @@ dtype: float64</code></pre>
 <li>Understand which business levers have the strongest relationships with outcomes</li>
 <li>Inform data collection priorities (focus on high-correlation features)</li>
 </ul>
-<div id="0b3b520d" class="cell" data-execution_count="19">
+<div id="37acfebe" class="cell" data-execution_count="19">
 <details open class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -6887,7 +6887,7 @@ dtype: float64</code></pre>
 <span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>target_corr.<span class="bu">round</span>(<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="19">
+<div class="cell-output cell-output-display" data-execution_count="144">
 <pre><code>purchase_amount           0.057
 service_responsiveness    0.055
 satisfaction_t1           0.052
@@ -6899,7 +6899,7 @@ Name: purchase_frequency, dtype: float64</code></pre>
 </section>
 <section id="process-2" class="level2">
 <h2 class="anchored" data-anchor-id="process-2">3.2 Process</h2>
-<div id="2c2e39f0" class="cell" data-execution_count="20">
+<div id="67b7aa01" class="cell" data-execution_count="20">
 <details open class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -6925,7 +6925,7 @@ Name: purchase_frequency, dtype: float64</code></pre>
 <span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>eda_frame.describe().loc[[<span class="st">&quot;mean&quot;</span>, <span class="st">&quot;std&quot;</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="20">
+<div class="cell-output cell-output-display" data-execution_count="145">
 <div>
 
 
@@ -6968,7 +6968,7 @@ Name: purchase_frequency, dtype: float64</code></pre>
 </div>
 <section id="correlation-matrix" class="level3">
 <h3 class="anchored" data-anchor-id="correlation-matrix">Correlation Matrix</h3>
-<div id="5d53f8a8" class="cell" data-execution_count="21">
+<div id="d262bc1a" class="cell" data-execution_count="21">
 <details open class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -6995,7 +6995,7 @@ Name: purchase_frequency, dtype: float64</code></pre>
 <span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>corr_frame <span class="op">=</span> pd.concat([df[corr_cols], factor_scores_df], axis<span class="op">=</span><span class="dv">1</span>).corr()</span>
 <span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>corr_frame.<span class="bu">round</span>(<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="21">
+<div class="cell-output cell-output-display" data-execution_count="146">
 <div>
 
 
@@ -7092,7 +7092,7 @@ Name: purchase_frequency, dtype: float64</code></pre>
 </section>
 <section id="statistical-significance-testing" class="level3">
 <h3 class="anchored" data-anchor-id="statistical-significance-testing">Statistical Significance Testing</h3>
-<div id="26c02c6e" class="cell" data-execution_count="22">
+<div id="cb96cd89" class="cell" data-execution_count="22">
 <details open class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -7121,7 +7121,7 @@ Name: purchase_frequency, dtype: float64</code></pre>
 <span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(tests)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="22">
+<div class="cell-output cell-output-display" data-execution_count="147">
 <div>
 
 
@@ -7181,7 +7181,7 @@ Name: purchase_frequency, dtype: float64</code></pre>
 </section>
 <section id="partial-correlations" class="level3">
 <h3 class="anchored" data-anchor-id="partial-correlations">Partial Correlations</h3>
-<div id="e93c454e" class="cell" data-execution_count="23">
+<div id="71d3eca5" class="cell" data-execution_count="23">
 <details open class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -7219,7 +7219,7 @@ Name: purchase_frequency, dtype: float64</code></pre>
 <span id="cb32-33"><a href="#cb32-33" aria-hidden="true" tabindex="-1"></a>).<span class="bu">round</span>(<span class="dv">3</span>)</span>
 <span id="cb32-34"><a href="#cb32-34" aria-hidden="true" tabindex="-1"></a>partial_summary</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="23">
+<div class="cell-output cell-output-display" data-execution_count="148">
 <pre><code>pf_vs_satisfaction|income    0.029
 pf_vs_service_resp|income    0.059
 dtype: float64</code></pre>
@@ -7232,7 +7232,7 @@ dtype: float64</code></pre>
 <h2 class="anchored" data-anchor-id="validation-and-checks">3.3 Validation and Checks</h2>
 <section id="check-for-multicollinearity" class="level3">
 <h3 class="anchored" data-anchor-id="check-for-multicollinearity">Check for Multicollinearity</h3>
-<div id="bc6e7b7b" class="cell" data-execution_count="24">
+<div id="e6337fc3" class="cell" data-execution_count="24">
 <details open class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -7268,7 +7268,7 @@ dtype: float64</code></pre>
 <span id="cb34-31"><a href="#cb34-31" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb34-32"><a href="#cb34-32" aria-hidden="true" tabindex="-1"></a>vif_table.<span class="bu">round</span>(<span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="24">
+<div class="cell-output cell-output-display" data-execution_count="149">
 <div>
 
 
@@ -7326,7 +7326,7 @@ dtype: float64</code></pre>
 </section>
 <section id="assumption-checking" class="level3">
 <h3 class="anchored" data-anchor-id="assumption-checking">Assumption Checking</h3>
-<div id="5df19cf8" class="cell" data-execution_count="25">
+<div id="8521b97c" class="cell" data-execution_count="25">
 <details open class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -7361,7 +7361,7 @@ dtype: float64</code></pre>
 <span id="cb35-30"><a href="#cb35-30" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb35-31"><a href="#cb35-31" aria-hidden="true" tabindex="-1"></a>pd.Series({<span class="st">&quot;shapiro_p&quot;</span>: <span class="bu">round</span>(shapiro_p, <span class="dv">3</span>), <span class="st">&quot;breusch_p&quot;</span>: <span class="bu">round</span>(bp_test, <span class="dv">3</span>)})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="25">
+<div class="cell-output cell-output-display" data-execution_count="150">
 <pre><code>shapiro_p    0.003
 breusch_p    0.704
 dtype: float64</code></pre>
