@@ -1,7 +1,7 @@
 ---
 title: "AI for Business Insights"
 # subtitle: "A Step-by-Step Guide for MBA Students"
-author: "Instructor"
+# author: "Instructor"
 format:
   html:
     toc: true
