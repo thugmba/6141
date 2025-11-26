@@ -7,6 +7,8 @@ Students in this course will develop a comprehensive understanding of businessan
 ## Course Materials
 
 - [Machine Learning for Business Analytics](AI_BI.html)
+- [Casuation](Casuation.pdf)
+  - [Excercise](Casuation.ipynb)
 
 ## Final Project
 
