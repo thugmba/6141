@@ -14,4 +14,5 @@ Students in this course will develop a comprehensive understanding of businessan
 
 - [Project](Project.html)
 - [Report Template](template.docx)
+  - [Example](https://www.mdpi.com/2673-4591/55/1/33)
 - [Slide Template](https://thugmba.github.io/1169/template.pptx)
