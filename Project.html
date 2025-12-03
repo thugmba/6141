@@ -3491,6 +3491,9 @@ Residual standard error: 9.15 on 4 degrees of freedom</code></pre>
 <section id="report-structure" class="level3">
 <h3 class="anchored" data-anchor-id="report-structure">Report Structure</h3>
 <p>Your 5-page report should follow this structure:</p>
+<ul>
+<li>This is a guideline and final results will vary based on your analysis.</li>
+</ul>
 <section id="abstract" class="level4">
 <h4 class="anchored" data-anchor-id="abstract">1. Abstract</h4>
 <p><strong>Purpose</strong>: Provide a concise summary of the entire project for busy executives.</p>
@@ -3528,18 +3531,18 @@ Residual standard error: 9.15 on 4 degrees of freedom</code></pre>
 <p><em>What financial metrics most strongly predict changes in Samsung Electronics’ annual stock price?</em></p>
 </blockquote>
 </section>
-<section id="data" class="level4">
-<h4 class="anchored" data-anchor-id="data">3. Data</h4>
+<section id="data-and-methods" class="level4">
+<h4 class="anchored" data-anchor-id="data-and-methods">3. Data and Methods</h4>
 <p><strong>Purpose</strong>: Describe data sources, variables, and preprocessing steps.</p>
 <p><strong>Content to Include:</strong></p>
-<p><strong>3.1 Data Sources</strong></p>
+<p><strong>Data Sources</strong></p>
 <ul>
 <li>Company financial statements source (e.g., Samsung Investor Relations, 10-K filings)</li>
 <li>Stock price data source</li>
 <li>Time period covered (e.g., 2014-2023, 10 observations)</li>
 <li>Data collection date</li>
 </ul>
-<p><strong>3.2 Variable Definitions</strong></p>
+<p><strong>Variable Definitions</strong></p>
 <p>Create a table documenting all variables:</p>
 <table class="caption-top table">
 <colgroup>
@@ -3603,7 +3606,7 @@ Residual standard error: 9.15 on 4 degrees of freedom</code></pre>
 </tr>
 </tbody>
 </table>
-<p><strong>3.3 Data Preprocessing</strong></p>
+<p><strong>Data Preprocessing</strong></p>
 <p>Document cleaning steps:</p>
 <ul>
 <li><strong>Missing Data</strong>: “One missing EPS value for 2018 was imputed using linear interpolation”</li>
@@ -3611,18 +3614,15 @@ Residual standard error: 9.15 on 4 degrees of freedom</code></pre>
 <li><strong>Transformations</strong>: “Revenue log-transformed to address right skew (skewness = 2.1)”</li>
 <li><strong>Adjustments</strong>: “Stock prices adjusted for 2-for-1 split in 2018”</li>
 </ul>
-<p><strong>3.4 Descriptive Statistics</strong></p>
+<p><strong>Descriptive Statistics</strong></p>
 <p>Include summary statistics table (from Section 4 preprocessing output).</p>
 <p><strong>Length</strong>: Approximately 1 page</p>
-</section>
-<section id="method" class="level4">
-<h4 class="anchored" data-anchor-id="method">4. Method</h4>
 <p><strong>Purpose</strong>: Explain your analytical approach.</p>
 <p><strong>Content to Include:</strong></p>
-<p><strong>4.1 Statistical Model</strong></p>
+<p><strong>Statistical Model</strong></p>
 <p>Present your regression equation:</p>
 <p><span class="math display">\[\text{Stock Price}_t = \beta_0 + \beta_1(\text{Revenue})_t + \beta_2(\text{EPS})_t + \beta_3(\text{Debt/Equity})_t + \beta_4(\text{R\&amp;D Expense})_t + \beta_5(\text{Market Return})_t + \epsilon_t\]</span></p>
-<p><strong>4.2 Variable Selection Rationale</strong></p>
+<p><strong>Variable Selection Rationale</strong></p>
 <p>Explain why you chose these variables:</p>
 <ul>
 <li><strong>Revenue</strong>: Measures top-line growth and market expansion</li>
@@ -3631,13 +3631,13 @@ Residual standard error: 9.15 on 4 degrees of freedom</code></pre>
 <li><strong>R&amp;D Expense</strong>: Indicates innovation investment (critical for tech companies)</li>
 <li><strong>Market Return</strong>: Controls for overall market conditions (systematic risk)</li>
 </ul>
-<p><strong>4.3 Estimation Technique</strong></p>
+<p><strong>Estimation Technique</strong></p>
 <ul>
 <li><strong>Method</strong>: Ordinary Least Squares (OLS) regression</li>
 <li><strong>Software</strong>: Python (statsmodels), R (lm), or Excel (Data Analysis Toolpak)</li>
 <li><strong>Significance Level</strong>: α = 0.05 (95% confidence)</li>
 </ul>
-<p><strong>4.4 Assumption Testing</strong></p>
+<p><strong>Assumption Testing</strong></p>
 <ul>
 <li>Linearity (residual plots)</li>
 <li>Normality (Shapiro-Wilk test, Q-Q plots)</li>
@@ -3648,10 +3648,10 @@ Residual standard error: 9.15 on 4 degrees of freedom</code></pre>
 <p><strong>Length</strong>: Approximately 0.5 pages</p>
 </section>
 <section id="results" class="level4">
-<h4 class="anchored" data-anchor-id="results">5. Results</h4>
+<h4 class="anchored" data-anchor-id="results">4. Results</h4>
 <p><strong>Purpose</strong>: Present statistical findings objectively.</p>
 <p><strong>Content to Include:</strong></p>
-<p><strong>5.1 Regression Results</strong></p>
+<p><strong>4.1 Regression Results</strong></p>
 <p>Present the main results table (from Section 5):</p>
 <table class="caption-top table">
 <colgroup>
@@ -3732,13 +3732,13 @@ Residual standard error: 9.15 on 4 degrees of freedom</code></pre>
 </tbody>
 </table>
 <p>*Note: ** p&lt;0.01, * p&lt;0.05, † p&lt;0.10, NS not significant*</p>
-<p><strong>5.2 Model Fit</strong></p>
+<p><strong>4.2 Model Fit</strong></p>
 <pre><code>Multiple R² = 0.752
 Adjusted R² = 0.720
 F-statistic = 23.5 (p = 0.003)
 RMSE = 8.42
 n = 10 observations</code></pre>
-<p><strong>5.3 Assumption Test Results</strong></p>
+<p><strong>4.3 Assumption Test Results</strong></p>
 <p>Present assumption test summary table (from Section 6):</p>
 <table class="caption-top table">
 <thead>
@@ -3782,7 +3782,7 @@ n = 10 observations</code></pre>
 </tr>
 </tbody>
 </table>
-<p><strong>5.4 Key Findings</strong></p>
+<p><strong>4.4 Key Findings</strong></p>
 <p>Interpret the results in plain language:</p>
 <ol type="1">
 <li><strong>EPS is the strongest driver</strong>: Each $1 increase in EPS is associated with a $12.80 increase in stock price (p = 0.018)</li>
@@ -3792,31 +3792,31 @@ n = 10 observations</code></pre>
 </ol>
 </section>
 <section id="conclusion" class="level4">
-<h4 class="anchored" data-anchor-id="conclusion">6. Conclusion</h4>
+<h4 class="anchored" data-anchor-id="conclusion">5. Conclusion</h4>
 <p><strong>Purpose</strong>: Synthesize findings and provide actionable recommendations.</p>
 <p><strong>Content to Include:</strong></p>
-<p><strong>6.1 Summary of Findings</strong></p>
+<p><strong>5.1 Summary of Findings</strong></p>
 <p>Restate key results concisely (2-3 sentences).</p>
-<p><strong>6.2 Business Implications</strong></p>
+<p><strong>5.2 Business Implications</strong></p>
 <ul>
 <li><strong>For Management</strong>: Prioritize EPS improvement through operational efficiency and margin enhancement</li>
 <li><strong>For Investors</strong>: Monitor quarterly EPS trends as primary valuation signal; revenue growth is secondary</li>
 <li><strong>Strategic Priority</strong>: Profitability over growth</li>
 </ul>
-<p><strong>6.3 Recommendations</strong></p>
+<p><strong>5.3 Recommendations</strong></p>
 <ol type="1">
 <li><strong>High Priority</strong>: Implement cost optimization initiatives to boost EPS by 10% (expected stock price impact: +$1.28)</li>
 <li><strong>Medium Priority</strong>: Maintain revenue growth trajectory through market expansion</li>
 <li><strong>Low Priority</strong>: Current capital structure is adequate; debt management is not a concern</li>
 </ol>
-<p><strong>6.4 Limitations</strong></p>
+<p><strong>5.4 Limitations</strong></p>
 <ul>
 <li>Small sample size (n = 10) limits statistical power</li>
 <li>Annual data masks quarterly volatility</li>
 <li>Model doesn’t capture qualitative factors (management quality, competitive position)</li>
 <li>Correlation ≠ causation; findings should inform, not dictate, strategy</li>
 </ul>
-<p><strong>6.5 Future Research</strong></p>
+<p><strong>5.5 Future Research</strong></p>
 <ul>
 <li>Extend analysis with quarterly data for more observations</li>
 <li>Include industry peer comparison</li>
@@ -3825,7 +3825,7 @@ n = 10 observations</code></pre>
 </ul>
 </section>
 <section id="appendix" class="level4">
-<h4 class="anchored" data-anchor-id="appendix">7. Appendix</h4>
+<h4 class="anchored" data-anchor-id="appendix">6. Appendix</h4>
 <p><strong>Purpose</strong>: Provide transparency and reproducibility.</p>
 <p><strong>Content to Include:</strong></p>
 <p><strong>A. Source Code</strong></p>
