@@ -10,6 +10,7 @@ Students in this course will develop a comprehensive understanding of businessan
 - [Casuation](Casuation.pdf)
   - [Excercise](Casuation.ipynb)
 - [Data Visualization](Data_Viz.html)
+- [Vibe Coding](Vibe_Coding/Vibe_Coding.html)
 
 ## Final Project
 
