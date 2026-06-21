@@ -6,7 +6,7 @@ Students in this course will develop a comprehensive understanding of business a
 
 ## Course Materials
 
-- [Machine Learning for Business Analytics](AI_BI.html)
+- [Python for Business Analytics](AI_BI.html)
 - [Casuation](Casuation.pdf)
   - [Excercise](Casuation.ipynb)
 - [Data Visualization](Data_Viz.html)
