@@ -1,0 +1,13 @@
+Fiscal_Year_Count,Segment_Name,Net_Sales_USD_M,Operating_Expense_USD_M,Operating_Income_USD_M,Operating_Margin_Pct,YoY_Growth_Pct,Filing_Source
+2021,North America,279833.00,272562.00,7271.00,2.60,0.00,SEC Form 10-K Item 8 Note 15
+2021,International,127787.00,128711.00,-924.00,-0.72,0.00,SEC Form 10-K Item 8 Note 15
+2021,AWS,62202.00,43670.00,18532.00,29.79,0.00,SEC Form 10-K Item 8 Note 15
+2021,Consolidated Total,469822.00,444943.00,24879.00,5.30,0.00,SEC Form 10-K Item 8 Note 15
+2022,North America,315880.00,318727.00,-2847.00,-0.90,12.88,SEC Form 10-K Item 8 Note 15
+2022,International,118016.00,125765.00,-7749.00,-6.57,-7.65,SEC Form 10-K Item 8 Note 15
+2022,AWS,80096.00,57255.00,22841.00,28.52,28.77,SEC Form 10-K Item 8 Note 15
+2022,Consolidated Total,513983.00,501735.00,12248.00,2.38,9.40,SEC Form 10-K Item 8 Note 15
+2023,North America,352828.00,337951.00,14877.00,4.22,11.70,SEC Form 10-K Item 8 Note 15
+2023,International,131200.00,133864.00,-2664.00,-2.03,11.17,SEC Form 10-K Item 8 Note 15
+2023,AWS,90757.00,66126.00,24631.00,27.14,13.31,SEC Form 10-K Item 8 Note 15
+2023,Consolidated Total,574785.00,537933.00,36852.00,6.41,11.83,SEC Form 10-K Item 8 Note 15

@@ -1,0 +1,17 @@
+Applicant_ID,Demographic_Group,Credit_Score_Count,Debt_To_Income_Pct,Algorithmic_Approval_Score,Adverse_Action_Notice_Flag
+APP-6000,Group_A,720,28.5,0.85,0
+APP-6001,Group_B,680,34.2,0.62,1
+APP-6002,Group_A,740,24.1,0.91,0
+APP-6003,Group_B,650,38.5,0.54,1
+APP-6004,Group_A,710,29.0,0.82,0
+APP-6005,Group_B,690,32.8,0.68,1
+APP-6006,Group_A,760,22.0,0.94,0
+APP-6007,Group_B,640,41.2,0.49,1
+APP-6008,Group_A,730,26.5,0.88,0
+APP-6009,Group_B,670,35.0,0.6,1
+APP-6010,Group_A,750,23.5,0.92,0
+APP-6011,Group_B,660,39.0,0.56,1
+APP-6012,Group_A,705,30.2,0.8,0
+APP-6013,Group_B,685,33.5,0.65,1
+APP-6014,Group_A,745,25.0,0.9,0
+APP-6015,Group_B,655,40.5,0.52,1

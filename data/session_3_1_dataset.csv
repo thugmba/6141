@@ -1,0 +1,11 @@
+Project_ID,Department_Name,Implementation_Cost_USD,Annual_Labor_Hours_Saved_Count,Projected_Cost_Savings_USD,Payback_Period_Months_Count
+AI-PRJ-101,Supply Chain,150000.0,4200,294000.0,6.1
+AI-PRJ-102,Customer Service,80000.0,3100,155000.0,6.2
+AI-PRJ-103,Marketing,120000.0,2800,196000.0,7.3
+AI-PRJ-104,Finance,200000.0,5600,392000.0,6.1
+AI-PRJ-105,Fraud Operations,175000.0,6200,496000.0,4.2
+AI-PRJ-106,Supply Chain,160000.0,4500,315000.0,6.1
+AI-PRJ-107,Customer Service,90000.0,3400,170000.0,6.4
+AI-PRJ-108,Marketing,130000.0,3000,210000.0,7.4
+AI-PRJ-109,Finance,220000.0,6100,427000.0,6.2
+AI-PRJ-110,Fraud Operations,190000.0,6800,544000.0,4.2

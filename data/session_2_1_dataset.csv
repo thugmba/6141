@@ -1,0 +1,13 @@
+Product_SKU,Competitor_Name,Category_Name,List_Price_USD,Promotion_Discount_Pct,Stock_Availability_Units
+SKU-800,AlphaRetail,Electronics,299.99,10.0,45
+SKU-801,BetaMart,Office Supplies,49.5,5.0,120
+SKU-802,GammaGlobal,Hardware,189.0,15.0,18
+SKU-803,AlphaRetail,Appliances,450.0,8.0,62
+SKU-804,BetaMart,Electronics,320.0,12.0,38
+SKU-805,GammaGlobal,Office Supplies,45.0,0.0,95
+SKU-806,AlphaRetail,Hardware,175.0,10.0,24
+SKU-807,BetaMart,Appliances,429.0,5.0,50
+SKU-808,GammaGlobal,Electronics,310.0,15.0,40
+SKU-809,AlphaRetail,Office Supplies,52.0,8.0,110
+SKU-810,BetaMart,Hardware,195.0,0.0,15
+SKU-811,GammaGlobal,Appliances,460.0,10.0,58

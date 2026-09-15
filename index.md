@@ -6,6 +6,7 @@ Students in this course will develop a comprehensive understanding of business a
 
 ## Course Materials
 
+- [Master Course Curriculum (Syllabus & Standards)](6141.md)
 - [Python for Business Analytics](AI_BI.html)
 - [Casuation](Casuation.pdf)
   - [Excercise](Casuation.ipynb)

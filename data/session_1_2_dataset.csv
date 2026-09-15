@@ -1,0 +1,11 @@
+Customer_ID,Industry_Segment,Annual_Spend_USD,Order_Count,Avg_Order_Value_USD,Payment_Terms_Days_Count,Risk_Score_Count
+CUST-101,Retail,145000.0,120,1208.33,30,15
+CUST-102,Technology,82000.0,45,1822.22,30,22
+CUST-103,Healthcare,31000.0,28,1107.14,60,38
+CUST-104,Finance,215000.0,85,2529.41,30,12
+CUST-105,Manufacturing,64000.0,32,2000.0,60,45
+CUST-106,Retail,18500.0,19,973.68,90,62
+CUST-107,Technology,128000.0,94,1361.7,30,18
+CUST-108,Healthcare,49000.0,35,1400.0,60,31
+CUST-109,Finance,95000.0,50,1900.0,30,25
+CUST-110,Manufacturing,12500.0,10,1250.0,90,74

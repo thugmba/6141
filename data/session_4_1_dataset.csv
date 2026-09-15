@@ -1,0 +1,13 @@
+Batch_Run_ID,Pipeline_Stage,Record_Throughput_Count,Latency_Milliseconds,Model_Accuracy_Score,Pipeline_Health_Status
+RUN-2024-10,Ingestion,120000,350,1.0,Normal
+RUN-2024-11,Validation,119850,180,0.999,Normal
+RUN-2024-12,Inference,119850,840,0.942,Normal
+RUN-2024-13,Action_Trigger,4820,120,0.942,Normal
+RUN-2024-14,Ingestion,120000,340,1.0,Normal
+RUN-2024-15,Validation,119850,175,0.999,Normal
+RUN-2024-16,Inference,119850,820,0.945,Normal
+RUN-2024-17,Action_Trigger,4820,115,0.945,Normal
+RUN-2024-18,Ingestion,120000,360,1.0,Normal
+RUN-2024-19,Validation,119850,190,0.998,Normal
+RUN-2024-20,Inference,119850,860,0.938,Normal
+RUN-2024-21,Action_Trigger,4820,125,0.938,Normal

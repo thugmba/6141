@@ -1,0 +1,17 @@
+Transaction_ID,Division_Name,Cost_Center_Code,Fiscal_Quarter,Budget_Expense_USD,Actual_Expense_USD,Audit_Status
+TXN-5000,Cloud,CC-101,Q1,450000.0,435000.0,Verified
+TXN-5001,Consumer,CC-202,Q1,780000.0,810000.0,Variance_Flag
+TXN-5002,Enterprise,CC-303,Q1,320000.0,315000.0,Verified
+TXN-5003,Logistics,CC-404,Q1,610000.0,625000.0,Variance_Flag
+TXN-5004,Cloud,CC-101,Q2,450000.0,448000.0,Verified
+TXN-5005,Consumer,CC-202,Q2,780000.0,795000.0,Verified
+TXN-5006,Enterprise,CC-303,Q2,320000.0,330000.0,Variance_Flag
+TXN-5007,Logistics,CC-404,Q2,610000.0,598000.0,Verified
+TXN-5008,Cloud,CC-101,Q3,450000.0,460000.0,Variance_Flag
+TXN-5009,Consumer,CC-202,Q3,780000.0,825000.0,Variance_Flag
+TXN-5010,Enterprise,CC-303,Q3,320000.0,310000.0,Verified
+TXN-5011,Logistics,CC-404,Q3,610000.0,640000.0,Variance_Flag
+TXN-5012,Cloud,CC-101,Q4,450000.0,442000.0,Verified
+TXN-5013,Consumer,CC-202,Q4,780000.0,775000.0,Verified
+TXN-5014,Enterprise,CC-303,Q4,320000.0,325000.0,Verified
+TXN-5015,Logistics,CC-404,Q4,610000.0,605000.0,Verified

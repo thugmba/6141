@@ -1,0 +1,15 @@
+Subscriber_ID,Tenure_Months_Count,Monthly_Subscription_Fee_USD,Customer_Support_Calls_Count,Usage_Drop_Last_30_Days_Pct,Churned_Within_60_Days_Binary
+SUB-900,4,79.99,5,45.0,1
+SUB-901,28,149.99,1,5.0,0
+SUB-902,12,79.99,3,28.0,1
+SUB-903,48,199.99,0,2.0,0
+SUB-904,6,99.99,6,55.0,1
+SUB-905,36,149.99,1,8.0,0
+SUB-906,18,99.99,2,18.0,0
+SUB-907,54,199.99,0,1.0,0
+SUB-908,3,79.99,4,62.0,1
+SUB-909,42,149.99,1,6.0,0
+SUB-910,9,99.99,5,40.0,1
+SUB-911,31,149.99,2,12.0,0
+SUB-912,15,79.99,3,30.0,0
+SUB-913,60,199.99,0,3.0,0

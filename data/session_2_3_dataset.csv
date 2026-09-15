@@ -1,0 +1,16 @@
+Account_ID,Enterprise_Client,Contract_Value_USD,SLA_Compliance_Pct,Billing_Discrepancy_Count,Client_Retention_Risk
+ACC-300,Titan Tech,750000.0,99.2,0,Low
+ACC-301,Beacon Health,420000.0,95.8,2,Medium
+ACC-302,Vanguard Retail,890000.0,98.4,1,Low
+ACC-303,Pinnacle Logistics,310000.0,91.5,5,High
+ACC-304,Aero Dynamics,1200000.0,99.8,0,Low
+ACC-305,Titan Tech,750000.0,97.5,1,Medium
+ACC-306,Beacon Health,420000.0,94.2,3,Medium
+ACC-307,Vanguard Retail,890000.0,98.9,0,Low
+ACC-308,Pinnacle Logistics,310000.0,89.4,7,High
+ACC-309,Aero Dynamics,1200000.0,99.1,0,Low
+ACC-310,Titan Tech,750000.0,98.0,1,Low
+ACC-311,Beacon Health,420000.0,96.1,2,Medium
+ACC-312,Vanguard Retail,890000.0,97.8,0,Low
+ACC-313,Pinnacle Logistics,310000.0,92.0,4,High
+ACC-314,Aero Dynamics,1200000.0,99.5,0,Low

@@ -1,0 +1,13 @@
+Client_ID,Age_Years_Count,Annual_Income_USD,Credit_Utilization_Pct,Education_Tier,Defaulted_Binary
+CLI-700,28,65000.0,24.5,Bachelor,0
+CLI-701,45,125000.0,48.2,Master,0
+CLI-702,34,82000.0,18.9,Bachelor,0
+CLI-703,52,165000.0,62.1,Doctorate,1
+CLI-704,41,94000.0,33.4,Master,0
+CLI-705,29,58000.0,15.2,Bachelor,0
+CLI-706,63,185000.0,54.0,Doctorate,1
+CLI-707,38,88000.0,29.8,Master,0
+CLI-708,49,142000.0,41.5,Master,0
+CLI-709,31,72000.0,22.0,Bachelor,0
+CLI-710,56,175000.0,58.4,Doctorate,1
+CLI-711,44,110000.0,36.5,Master,0
