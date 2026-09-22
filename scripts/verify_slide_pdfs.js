@@ -21,9 +21,9 @@ for (const file of files) {
   const embedded = images.split('\n')
     .map((line) => line.trim().split(/\s+/))
     .filter((columns) => columns[2] === 'image');
-  if (embedded.length !== 8 || embedded.some((columns) => columns[3] !== '2400' || columns[4] !== '1350' || columns[12] !== '150' || columns[13] !== '150')) {
-    throw new Error(`${file}: expected eight 2400 x 1350 images embedded at 150dpi.`);
+  if (embedded.length && (embedded.length !== 8 || embedded.some((columns) => columns[3] !== '2400' || columns[4] !== '1350' || columns[12] !== '150' || columns[13] !== '150'))) {
+    throw new Error(`${file}: raster PDF pages must contain eight 2400 x 1350 images at 150dpi.`);
   }
 }
 
-console.log(`Verified ${files.length} lecture PDFs: 8 pages each, 1152 x 648pt, 2400 x 1350 at 150dpi.`);
+console.log(`Verified ${files.length} lecture PDFs: 8 pages each, 1152 x 648pt, with vector output or 2400 x 1350 raster pages at 150dpi.`);

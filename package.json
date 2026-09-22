@@ -1,0 +1,26 @@
+{
+  "name": "6141",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "render:01:02": "node scripts/render_with_playwright.js 01_02",
+    "verify:pdf": "node scripts/verify_slide_pdfs.js",
+    "verify:python": "node scripts/verify_python_examples.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thugmba/6141.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/thugmba/6141/issues"
+  },
+  "homepage": "https://github.com/thugmba/6141#readme",
+  "devDependencies": {
+    "playwright": "^1.63.0"
+  }
+}

@@ -1,2 +1,1 @@
-*.qmd
-*.src
+node_modules/
