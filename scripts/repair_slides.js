@@ -73,7 +73,7 @@ for (const session of sessions) {
   const pdf = `${root}/slides/session_0${session.module}_0${session.session}_lecture.pdf`;
   const pages = Array.from({ length: 8 }, (_, index) => `${directory}/slide_${index + 1}.png`);
   run('convert', [
-    ...pages, '-resize', '1152x648!', '-units', 'PixelsPerInch', '-density', '72',
+    ...pages, '-units', 'PixelsPerInch', '-density', '150',
     '-compress', 'Zip', pdf,
   ]);
 }
