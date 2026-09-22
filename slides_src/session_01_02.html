@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<title>Session 1.2 Lecture</title>
+<style>
+@page { size: 16in 9in; margin: 0; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "Times New Roman", serif; color: #18181B; }
+.slide { width: 16in; height: 9in; padding: .45in .8in .4in; display: flex; flex-direction: column; background: #FFF; page-break-after: always; }
+.eyebrow { color: #991B1B; font-size: 15pt; font-weight: bold; letter-spacing: .02em; }
+.kicker { color: #64748B; font-size: 15pt; margin-left: .25in; }
+.title { font-size: 35pt; line-height: 1.05; font-weight: bold; margin: .12in 0 .08in; }
+.rule { height: 4px; background: #991B1B; width: 1.2in; margin-bottom: .18in; flex-shrink: 0; }
+.body { flex: 1; min-height: 0; display: flex; gap: .3in; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: .22in; width: 100%; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: .18in; width: 100%; }
+.card { border: 1px solid #CBD5E1; border-radius: 10px; padding: .2in; background: #FFF; }
+.card h2 { font-size: 21pt; margin: .04in 0 .1in; }
+.card p, .card li { font-size: 17pt; line-height: 1.25; margin: .06in 0; }
+.tag { color: #991B1B; font-size: 14pt; font-weight: bold; }
+.footer { border-top: 1px solid #CBD5E1; min-height: .42in; margin-top: .18in; display: flex; align-items: end; justify-content: space-between; color: #475569; font-size: 15pt; }
+.code-panel { width: 58%; background: #18181B; border-radius: 10px; color: #E5E7EB; padding: .18in .22in; display: flex; flex-direction: column; }
+.code-header { color: #CBD5E1; font: 14pt "DejaVu Sans Mono", monospace; border-bottom: 1px solid #3F3F46; padding-bottom: .1in; }
+pre { white-space: pre; font: 15.5pt/1.35 "DejaVu Sans Mono", monospace; margin: .16in 0 0; overflow: hidden; }
+.terminal { margin-top: auto; color: #34D399; font: 14pt "DejaVu Sans Mono", monospace; border-top: 1px solid #3F3F46; padding-top: .1in; }
+.notes { flex: 1; display: flex; flex-direction: column; gap: .14in; }
+.notes .card { flex: 1; }
+.protocol { margin-top: .14in; background: #FEF2F2; border: 1px solid #FCA5A5; border-radius: 10px; padding: .16in .2in; }
+.protocol p { font-size: 16pt; margin: .04in 0; }
+</style>
+</head>
+<body>
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1: COMPUTATIONAL FOUNDATIONS &amp; PYTHON</span><span class="kicker">Session Overview</span></div>
+  <div class="title">Session 1.2: Essential Python Syntax Completion, Control Flow, Collections, and Business Automation</div><div class="rule"></div>
+  <div class="body grid2"><div class="card"><div class="tag">1:2 DELIVERY RHYTHM</div><h2>From Rules to Automation</h2><p>60 minutes of concise instruction followed by 120 minutes of guided coding and debugging.</p><p>Students turn a customer policy into clear, repeatable Python logic.</p></div><div class="card"><div class="tag">SESSION OUTCOME</div><h2>Operational Competency</h2><p>Use conditionals, lists, dictionaries, and loops to process a small client portfolio without spreadsheet formula drift.</p></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 1 / 8</span></div>
+</section>
+<section class="slide"><div><span class="eyebrow">MODULE 1</span><span class="kicker">Core Vocabulary</span></div><div class="title">Five Concepts That Make Business Rules Executable</div><div class="rule"></div><div class="body grid3"><div class="card"><div class="tag">01</div><h2>Boolean Expression</h2><p>A comparison that becomes <code>True</code> or <code>False</code>, such as a spend threshold.</p><h2>Conditional Branching</h2><p><code>if</code>, <code>elif</code>, and <code>else</code> select the right business action.</p></div><div class="card"><div class="tag">02</div><h2>List Collection</h2><p>An ordered, mutable sequence of records processed from first item to last.</p><h2>Dictionary Collection</h2><p>A labeled record that retrieves values by useful names, such as <code>"annual_spend_USD"</code>.</p></div><div class="card"><div class="tag">03</div><h2>Definite Iteration</h2><p>A <code>for</code> loop applies the same policy to every record with consistent logic and speed.</p></div></div><div class="footer"><span>Core Programming Concepts</span><span>Slide 2 / 8</span></div></section>
+<section class="slide"><div><span class="eyebrow">MODULE 1</span><span class="kicker">Computational Foundations</span></div><div class="title">Readable Rules Are Auditable Rules</div><div class="rule"></div><div class="body grid2"><div class="card"><div class="tag">FROM SPREADSHEETS</div><h2>Replace Nested Formulas</h2><p>Long nested spreadsheet formulas are difficult to audit. Python uses visible vertical branches that mirror a manager's decision tree.</p></div><div class="card"><div class="tag">TO PROGRAMS</div><h2>Use Whitespace Deliberately</h2><p>Python indentation defines the scope of a branch or loop. Four aligned spaces make logic readable and prevent accidental rule changes.</p></div><div class="card"><div class="tag">AT SCALE</div><h2>Repeat Without Fatigue</h2><p>A loop applies one policy to ten or one million records with the same calculation every time.</p></div><div class="card"><div class="tag">WITH CONTEXT</div><h2>Model Real Entities</h2><p>Dictionaries preserve customer attributes such as industry, spend, credit limit, and risk score in one record.</p></div></div><div class="footer"><span>Execution Flow and Program Structure</span><span>Slide 3 / 8</span></div></section>
+<section class="slide"><div><span class="eyebrow">MODULE 1</span><span class="kicker">Development Environment</span></div><div class="title">Use the IDE to Build, Test, and Diagnose</div><div class="rule"></div><div class="body grid2"><div class="card"><div class="tag">[1] FILE EXPLORER</div><h2>Organize Inputs</h2><p>Store the session dataset in <code>data/session_01_02_dataset.csv</code>.</p><div class="tag">[2] CODE EDITOR</div><h2>Author the Script</h2><p>Write one small, executable segment at a time.</p></div><div class="card"><div class="tag">[3] AI AGENT CHAT</div><h2>Explain the Error</h2><p>Paste a traceback and ask for the cause, the correction, and how to verify it.</p><div class="tag">[4] INTEGRATED TERMINAL</div><h2>Confirm the Result</h2><p>Run the script and verify return code 0 after every correction.</p></div></div><div class="protocol"><p><strong>Capture protocol:</strong> Identify the final error line in Terminal, capture it with Windows Key + Shift + S or Command + Shift + 4, paste it into AI Chat, apply the verified fix, and run again.</p></div><div class="footer"><span>Google Antigravity IDE Workflow</span><span>Slide 4 / 8</span></div></section>
+<section class="slide"><div><span class="eyebrow">MODULE 1</span><span class="kicker">Style 2 Harvard Dual-Pane Editor</span></div><div class="title">Script Demonstration 1: Conditional Customer Tiering</div><div class="rule"></div><div class="body"><div class="code-panel"><div class="code-header">session_01_02_demo_1.py | Python 3.10</div><pre>annual_spend = 82000.0
+
+if annual_spend >= 100000.0:
+    tier = "Platinum"
+    discount_rate = 0.15
+elif annual_spend >= 50000.0:
+    tier = "Gold"
+    discount_rate = 0.10
+else:
+    tier = "Standard"
+    discount_rate = 0.0
+
+print(f"Customer Tier: {tier}")</pre><div class="terminal">$ python session_01_02_demo_1.py  [Exit 0]</div></div><div class="notes"><div class="card"><div class="tag">SYNTAX</div><h2>Aligned Branches</h2><p><code>if</code>, <code>elif</code>, and <code>else</code> begin at the same indentation level.</p></div><div class="card"><div class="tag">RUNTIME</div><h2>One Rule Applies</h2><p>Only the first matching branch runs, assigning one tier and discount rate.</p></div><div class="card"><div class="tag">BUSINESS VALUE</div><h2>Auditable Policy</h2><p>The rule can be reviewed line by line and changed without rewriting a nested formula.</p></div></div></div><div class="footer"><span>Executable Python Demonstration</span><span>Slide 5 / 8</span></div></section>
+<section class="slide"><div><span class="eyebrow">MODULE 1</span><span class="kicker">Style 2 Harvard Dual-Pane Editor</span></div><div class="title">Script Demonstration 2: Iterative Revenue Accumulation</div><div class="rule"></div><div class="body"><div class="code-panel"><div class="code-header">session_01_02_demo_2.py | Python 3.10</div><pre>daily_sales = [4200.0, 5100.0, 3900.0, 6200.0]
+total_revenue = 0.0
+
+for sale in daily_sales:
+    total_revenue += sale
+
+average_sales = total_revenue / len(daily_sales)
+print("Total Revenue:", total_revenue)
+print("Average Daily Sales:", average_sales)</pre><div class="terminal">$ python session_01_02_demo_2.py  [Exit 0]</div></div><div class="notes"><div class="card"><div class="tag">SYNTAX</div><h2>Loop Header</h2><p>The colon opens a block; the indented statement executes once for each sale.</p></div><div class="card"><div class="tag">RUNTIME</div><h2>Accumulator State</h2><p><code>total_revenue</code> retains its updated value as the loop advances.</p></div><div class="card"><div class="tag">BUSINESS VALUE</div><h2>Consistent Aggregation</h2><p>The same calculation works whether the list has four transactions or four million.</p></div></div></div><div class="footer"><span>Executable Python Demonstration</span><span>Slide 6 / 8</span></div></section>
+<section class="slide"><div><span class="eyebrow">MODULE 1</span><span class="kicker">Style 2 Harvard Dual-Pane Editor</span></div><div class="title">Script Demonstration 3: Dictionary-Based Credit Review</div><div class="rule"></div><div class="body"><div class="code-panel"><div class="code-header">session_01_02_demo_3.py | Python 3.10</div><pre>client = {
+    "company_name": "Apex Logistics",
+    "credit_limit_USD": 75000.0,
+    "outstanding_balance_USD": 23400.0,
+}
+
+available_credit = (
+    client["credit_limit_USD"]
+    - client["outstanding_balance_USD"]
+)
+print(client["company_name"], available_credit)</pre><div class="terminal">$ python session_01_02_demo_3.py  [Exit 0]</div></div><div class="notes"><div class="card"><div class="tag">SYNTAX</div><h2>Named Attributes</h2><p>Dictionary keys make the meaning of each number explicit.</p></div><div class="card"><div class="tag">RUNTIME</div><h2>Safe Calculation</h2><p>The calculation retrieves two labeled values before subtracting them.</p></div><div class="card"><div class="tag">BUSINESS VALUE</div><h2>Useful Record Model</h2><p>One customer object keeps related operational information together.</p></div></div></div><div class="footer"><span>Executable Python Demonstration</span><span>Slide 7 / 8</span></div></section>
+<section class="slide"><div><span class="eyebrow">MODULE 1</span><span class="kicker">Hands-On Practice</span></div><div class="title">Lab: Automate a Client Portfolio</div><div class="rule"></div><div class="body grid2"><div class="card"><div class="tag">EXERCISE 1: GUIDED</div><h2>Client Portfolio Automation</h2><p>Load the session dataset, build customer dictionaries, assign a tier using spend and risk, and print each approved credit limit.</p><p>Success criterion: every client receives one tier and the script finishes with return code 0.</p></div><div class="card"><div class="tag">EXERCISE 2: DEBUGGING</div><h2>Commission Pipeline</h2><p>Write a loop for three sales representatives. Intentionally misalign one line, capture the resulting <code>IndentationError</code>, obtain an explanation, correct the code, and verify clean execution.</p><p>Deliverable: a formatted compensation summary with commission payouts.</p></div></div><div class="footer"><span>Practice, Debugging, and Verification</span><span>Slide 8 / 8</span></div></section>
+</body></html>
