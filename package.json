@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "render:01:02": "node scripts/render_with_playwright.js 01_02",
+    "generate:sources": "node scripts/generate_slide_sources.js",
     "verify:pdf": "node scripts/verify_slide_pdfs.js",
     "verify:python": "node scripts/verify_python_examples.js"
   },
