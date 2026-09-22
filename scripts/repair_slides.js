@@ -21,6 +21,13 @@ function run(command, args) {
   execFileSync(command, args, { cwd: root, stdio: 'inherit' });
 }
 
+function dedentPython(source) {
+  const lines = source.replace(/\r/g, '').split('\n');
+  const indents = lines.filter((line) => line.trim()).map((line) => line.match(/^\s*/)[0].length);
+  const margin = Math.min(...indents);
+  return lines.map((line) => line.trim() ? line.slice(margin) : '').join('\n');
+}
+
 function drawText(image, text, x, y, pointSize, color, maxChars = 92) {
   const lines = text.split('\n').flatMap((line) => {
     if (line.length <= maxChars) return [line];
@@ -43,7 +50,7 @@ function drawText(image, text, x, y, pointSize, color, maxChars = 92) {
 }
 
 function repairCodeSlide(path, session, example, number) {
-  run('convert', [path, '-fill', '#18181B', '-draw', 'rectangle 165,350 1170,950', path]);
+  run('convert', [path, '-fill', '#18181B', '-draw', 'rectangle 100,350 1170,950', path]);
   run('convert', [path, '-fill', '#FFFFFF', '-draw', 'rectangle 90,110 2310,245', path]);
   drawText(path, `Script Demonstration ${number}: ${session.title}`, 102, 175, 29, '#18181B', 94);
   const lines = example.split('\n').slice(0, 18).map((line) => line.length > 72 ? `${line.slice(0, 69)}...` : line);
@@ -68,7 +75,7 @@ for (const session of sessions) {
       `summary = df.describe(include="all")\nprint(summary)`,
       `if df.empty:\n    raise ValueError("Dataset is empty")\nprint("Workflow completed: Exit 0")`,
     ][index];
-    repairCodeSlide(`${directory}/slide_${page}.png`, session, session.code[index] || fallback, index + 1);
+    repairCodeSlide(`${directory}/slide_${page}.png`, session, dedentPython(session.code[index] || fallback), index + 1);
   });
   const pdf = `${root}/slides/session_0${session.module}_0${session.session}_lecture.pdf`;
   const pages = Array.from({ length: 8 }, (_, index) => `${directory}/slide_${index + 1}.png`);
