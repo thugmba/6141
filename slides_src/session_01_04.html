@@ -1,25 +1,831 @@
-<!doctype html><html lang="en-US"><meta charset="utf-8"><title>Session 1.4</title><style>
-@page{size:16in 9in;margin:0}*{box-sizing:border-box}body{margin:0;font-family:"Times New Roman",serif;color:#18181B}.slide{width:16in;height:9in;padding:.45in .8in .4in;display:flex;flex-direction:column;background:#fff;page-break-after:always}header{font-size:15pt;color:#991B1B;font-weight:bold}header span{margin-left:.25in;color:#64748B;font-weight:normal}h1{font-size:34pt;line-height:1.08;margin:.13in 0 .08in}h2{font-size:21pt;margin:.06in 0}.slide>i{display:block;width:1.2in;height:4px;background:#991B1B;margin-bottom:.2in}main{flex:1;min-height:0;display:grid;grid-template-columns:repeat(2,1fr);gap:.2in}main.three{grid-template-columns:repeat(3,1fr);gap:.18in}article{border:1px solid #CBD5E1;border-radius:10px;padding:.18in;overflow:hidden}article b{font-size:14pt;color:#991B1B}p,li{font-size:17pt;line-height:1.25;margin:.06in 0}footer{margin-top:.18in;border-top:1px solid #CBD5E1;padding-top:.1in;font-size:15pt;color:#64748B;display:flex;justify-content:space-between}.code{display:flex;gap:.3in}.code pre{width:58%;margin:0;background:#18181B;border-radius:10px;color:#E5E7EB;padding:.22in;font:13.5pt/1.28 "DejaVu Sans Mono",monospace;white-space:pre-wrap;overflow-wrap:anywhere;overflow:hidden}.code aside{flex:1;display:flex;flex-direction:column;gap:.13in}.code aside article{flex:1}</style><body>
-<section class="slide"><header><b>MODULE 1</b><span>Session Overview</span></header><h1>Session 1.4: Tabular Data Wrangling Part 2: Advanced Filtering, Multi-Segment GroupBy, and Financial Auditing</h1><i></i><main><article><b>1:2 DELIVERY RHYTHM</b><h2>Applied Learning</h2><p>60 minutes of focused instruction followed by 120 minutes of guided coding and debugging.</p></article><article><b>SESSION OUTCOME</b><h2>Operational Competency</h2><p>Students apply the session concept to a small, verifiable business dataset.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 1 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 1</b><span>Core Vocabulary</span></header><h1>Concepts for This Session</h1><i></i><main class="three"><article><b>CONCEPT 1</b><h2>Boolean Masking</h2><p> Filtering tabular rows using boolean condition vectors combined with bitwise logical operators (&amp; for AND, | for OR, ~ for NOT).</p></article><article><b>CONCEPT 2</b><h2>Split-Apply-Combine Pattern</h2><p> The computational workflow of splitting data into operational groups, applying analytical functions, and combining results into an aggregated table.</p></article><article><b>CONCEPT 3</b><h2>Multi-Metric Aggregation (.agg())</h2><p> Computing different statistical metrics simultaneously across multiple columns (e.g., total expenses, average variance, maximum transaction size).</p></article><article><b>CONCEPT 4</b><h2>Relational Merging</h2><p> Joining two DataFrames based on common business keys (such as Cost_Center_Code), replacing error-prone spreadsheet VLOOKUP and XLOOKUP functions.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 2 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 1</b><span>Computational Foundations</span></header><h1>How the Concept Works in Practice</h1><i></i><main><article><b>FOUNDATION 1</b><h2>Boolean Indexing at Enterprise Scale</h2><p> In business reporting, filtering data across multiple conditions requires bitwise operators (&amp;, |) because standard Python and/or operate on single scalar booleans, whereas Pandas evaluates element-wise boolean arrays.</p></article><article><b>FOUNDATION 2</b><h2>The Split-Apply-Combine Paradigm</h2><p> Grouping data by corporate dimensions (e.g., Division_Name, Fiscal_Quarter) to calculate sub-totals and unit economics without manually building pivot tables.</p></article><article><b>FOUNDATION 3</b><h2>Relational Joins vs. Fragile Spreadsheet Lookups</h2><p> Spreadsheet lookup formulas fail when columns are rearranged or when duplicate keys exist. A Pandas merge (how="inner", how="left") explicitly specifies match criteria and logs unmapped rows automatically.</p></article><article><b>FOUNDATION 4</b><h2>Automated Audit Exception Flags</h2><p> Constructing conditional categorical flags (e.g., Variance_Flag when Actual_Expense &gt; Budget_Expense 1.05) to route financial discrepancies directly to corporate controllers.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 3 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 1</b><span>Development Workflow</span></header><h1>Build, Test, and Diagnose in the IDE</h1><i></i><main><article><b>[1] FILE EXPLORER</b><h2>Organize Assets</h2><p>Use the session dataset and keep scripts in a clear workspace.</p></article><article><b>[2] CODE EDITOR</b><h2>Write Small Segments</h2><p>Run each completed segment before expanding the program.</p></article><article><b>[3] AI AGENT CHAT</b><h2>Diagnose Errors</h2><p>Capture the traceback, request an explanation, and review the fix.</p></article><article><b>[4] INTEGRATED TERMINAL</b><h2>Verify Execution</h2><p>Confirm the final program completes with return code 0.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 4 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE</b><span>Style 2 Harvard Dual-Pane Editor</span></header><h1>Script Demonstration 1: Tabular Data Wrangling Part 2: Advanced Filtering, Multi-Segment GroupBy, and Financial Auditing</h1><i></i><main class="code"><pre>import pandas as pd
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<title>Session 1.4 Lecture</title>
+<style>
+@page { size: 16in 9in; margin: 0; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "Times New Roman", serif; color: #18181B; }
+.slide { width: 16in; height: 9in; padding: .45in .8in .4in; display: flex; flex-direction: column; background: #FFF; page-break-after: always; }
+.eyebrow { color: #991B1B; font-size: 15pt; font-weight: bold; letter-spacing: .02em; }
+.kicker { color: #64748B; font-size: 15pt; margin-left: .25in; }
+.title { font-size: 36pt; line-height: 1.05; font-weight: bold; margin: .12in 0 .08in; }
+.rule { height: 4px; background: #991B1B; width: 1.2in; margin-bottom: .18in; flex-shrink: 0; }
+.body { flex: 1; min-height: 0; display: flex; gap: .25in; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: .2in; width: 100%; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: .18in; width: 100%; }
+.card { border: 1px solid #CBD5E1; border-radius: 10px; padding: .16in .2in; background: #FFF; min-height: 0; overflow: hidden; }
+.card h2 { font-size: 22pt; margin: .04in 0 .08in; }
+.card p, .card li { font-size: 18pt; line-height: 1.25; margin: .05in 0; }
+.card ul { margin: .04in 0 0; padding-left: .3in; }
+.tag { color: #991B1B; font-size: 15pt; font-weight: bold; }
+.what, .why { font-size: 18pt; line-height: 1.25; margin: .05in 0; }
+.what b, .why b { color: #991B1B; }
+code { font-family: "DejaVu Sans Mono", monospace; font-size: .86em; background: #F1F5F9; border: 1px solid #E2E8F0; border-radius: 4px; padding: 0 .04in; white-space: nowrap; }
+h2 code { font-size: .82em; }
+.footer { border-top: 1px solid #CBD5E1; min-height: .42in; margin-top: .18in; display: flex; align-items: end; justify-content: space-between; color: #475569; font-size: 15pt; flex-shrink: 0; }
 
-    df = pd.read_csv("data/session_01_04_dataset.csv")
-    mask = (df["Division_Name"] == "Consumer") &amp; (df["Actual_Expense_USD"] &gt; df["Budget_Expense_USD"])
-    overrun_txns = df[mask]
-    print(f"Consumer Overrun Transactions Count: {len(overrun_txns)}")</pre><aside><article><b>SYNTAX</b><h2>Readable Structure</h2><p>Observe the syntax and indentation that control execution.</p></article><article><b>RUNTIME</b><h2>Verified Execution</h2><p>Run the example in the integrated terminal and inspect the output.</p></article><article><b>BUSINESS VALUE</b><h2>Applied Automation</h2><p>Use the pattern to automate a repeatable business decision.</p></article></aside></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 5 / 8</span></footer></section><section class="slide"><header><b>MODULE</b><span>Style 2 Harvard Dual-Pane Editor</span></header><h1>Script Demonstration 2: Tabular Data Wrangling Part 2: Advanced Filtering, Multi-Segment GroupBy, and Financial Auditing</h1><i></i><main class="code"><pre>div_summary = df.groupby("Division_Name").agg(
-        Total_Budget_USD=("Budget_Expense_USD", "sum"),
-        Total_Actual_USD=("Actual_Expense_USD", "sum"),
-        Transaction_Count=("Transaction_ID", "count")
-    )
-    div_summary["Variance_USD"] = div_summary["Total_Actual_USD"] - div_summary["Total_Budget_USD"]
-    div_summary["Variance_Pct"] = (div_summary["Variance_USD"] / div_summary["Total_Budget_USD"]) * 100.0
-    print(div_summary[["Total_Actual_USD", "Variance_USD", "Variance_Pct"]])</pre><aside><article><b>SYNTAX</b><h2>Readable Structure</h2><p>Observe the syntax and indentation that control execution.</p></article><article><b>RUNTIME</b><h2>Verified Execution</h2><p>Run the example in the integrated terminal and inspect the output.</p></article><article><b>BUSINESS VALUE</b><h2>Applied Automation</h2><p>Use the pattern to automate a repeatable business decision.</p></article></aside></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 6 / 8</span></footer></section><section class="slide"><header><b>MODULE</b><span>Style 2 Harvard Dual-Pane Editor</span></header><h1>Script Demonstration 3: Tabular Data Wrangling Part 2: Advanced Filtering, Multi-Segment GroupBy, and Financial Auditing</h1><i></i><main class="code"><pre>dept_info = pd.DataFrame({
-        "Cost_Center_Code": ["CC-101", "CC-202", "CC-303", "CC-404"],
-        "VP_Lead": ["Sarah Chen", "Marcus Vance", "Elena Rostova", "David Kim"]
-    })
-    merged_ledger = pd.merge(df, dept_info, on="Cost_Center_Code", how="left")
-    print(merged_ledger[["Transaction_ID", "Division_Name", "VP_Lead", "Actual_Expense_USD"]].head(3))</pre><aside><article><b>SYNTAX</b><h2>Readable Structure</h2><p>Observe the syntax and indentation that control execution.</p></article><article><b>RUNTIME</b><h2>Verified Execution</h2><p>Run the example in the integrated terminal and inspect the output.</p></article><article><b>BUSINESS VALUE</b><h2>Applied Automation</h2><p>Use the pattern to automate a repeatable business decision.</p></article></aside></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 7 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 1</b><span>Hands-On Practice</span></header><h1>Exercise 1 and Exercise 2</h1><i></i><main><article><b>EXERCISE 1: GUIDED</b><h2>Foundational Practice</h2><p>Follow the lab protocol, run the script, and verify its output with the session dataset.</p></article><article><b>EXERCISE 2: DEBUGGING</b><h2>Applied Challenge</h2><p>Extend the program, diagnose an intentional error, apply the verified correction, and confirm return code 0.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 8 / 8</span></footer></section></body></html>
+/* Slide 1 */
+.overview { grid-template-columns: 2fr 3fr; }
+.overview .card { display: flex; flex-direction: column; }
+.overview ul.lead { margin: .1in 0 0; padding-left: .32in; }
+.overview ul.lead li { font-size: 20pt; line-height: 1.25; margin: 0 0 .1in; }
+.overview .card .flow { margin-top: auto; font-size: 16pt; color: #64748B; border-top: 1px solid #CBD5E1; padding-top: .1in; }
+.overview ol { margin: .06in 0 0; padding-left: .38in; }
+.overview ol > li { font-size: 21pt; line-height: 1.25; margin: 0 0 .12in; }
+.gloss { display: block; font-size: 18pt; color: #475569; margin-top: .03in; }
+
+/* Code slides */
+.code-panel { width: 60%; background: #18181B; border-radius: 10px; color: #E5E7EB; padding: .16in .22in; display: flex; flex-direction: column; flex-shrink: 0; }
+.code-header { color: #CBD5E1; font: 14pt "DejaVu Sans Mono", monospace; border-bottom: 1px solid #3F3F46; padding-bottom: .08in; display: flex; align-items: center; gap: .08in; }
+.dot { width: .13in; height: .13in; border-radius: 50%; display: inline-block; }
+pre { white-space: pre; font: 14.5pt/1.38 "DejaVu Sans Mono", monospace; margin: .12in 0 0; overflow: hidden; }
+.cm { color: #94A3B8; }
+.sec { color: #FBBF24; font-weight: bold; }
+.ipo { margin-left: auto; color: #FBBF24; font-size: 13pt; }
+.notes .card.wide { flex: 1.6; }
+
+/* Rows and columns slide */
+.table-wrap { width: 60%; flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; }
+table.df { border-collapse: collapse; font: 16pt/1.3 "DejaVu Sans Mono", monospace; }
+table.df td, table.df th { padding: .07in .14in; text-align: left; white-space: nowrap; }
+table.df thead th { border-bottom: 2px solid #18181B; }
+table.df tbody td { border-bottom: 1px solid #E2E8F0; }
+table.df .num { text-align: right; }
+table.df .idx { color: #64748B; }
+table.df .lbl { font: bold 15pt "Times New Roman", serif; border: none; padding: 0 .1in .04in; }
+.row-lbl { color: #1D4ED8; text-align: right !important; }
+.col-lbl { color: #B45309; text-align: center !important; }
+table.df .hl-row td { background: #DBEAFE; }
+table.df .hl-col { background: #FEF3C7; }
+table.df .hl-row td.hl-col { background: #FDE68A; outline: 3px solid #991B1B; outline-offset: -3px; font-weight: bold; }
+table.df .more { color: #64748B; font-family: "Times New Roman", serif; font-style: italic; }
+.card .tag.blue { color: #1D4ED8; }
+.card .tag.amber { color: #B45309; }
+.card.row-card { border: 2px solid #93C5FD; }
+.card.col-card { border: 2px solid #FCD34D; }
+.card.cell-card { border: 2px solid #991B1B; }
+.notes { flex: 1; display: flex; flex-direction: column; gap: .12in; min-width: 0; }
+.notes .card { flex: 1; }
+.notes .card h2 { font-size: 20pt; }
+
+.check { margin-top: .14in; background: #FEF2F2; border: 1px solid #FCA5A5; border-radius: 10px; padding: .12in .2in; font-size: 18pt; flex-shrink: 0; }
+
+/* Six terms visual map */
+.fit { flex: 1; min-height: 0; display: grid; grid-template-rows: 1fr 1fr; gap: .16in; }
+.fit-row { display: flex; gap: .14in; align-items: stretch; min-height: 0; }
+.fit-box { border: 1px solid #CBD5E1; border-radius: 10px; padding: .12in .16in; display: flex; flex-direction: column; min-width: 0; }
+.fit-box .tag { margin-bottom: .04in; }
+.fit-box .cap { font-size: 18pt; margin: .06in 0 0; line-height: 1.2; }
+.fit-arrow { display: flex; flex-direction: column; justify-content: center; align-items: center; color: #991B1B; flex-shrink: 0; }
+.fit-arrow .big { font-size: 40pt; line-height: 1; }
+.fit-arrow code { font-size: 14pt; }
+.rawcsv { background: #18181B; color: #E5E7EB; border-radius: 8px; padding: .1in .14in; font: 15pt/1.4 "DejaVu Sans Mono", monospace; white-space: pre; }
+.rawcsv b { color: #FBBF24; }
+table.mini { border-collapse: collapse; font: 15pt/1.3 "DejaVu Sans Mono", monospace; }
+table.mini th, table.mini td { padding: .03in .1in; text-align: left; white-space: nowrap; border-bottom: 1px solid #E2E8F0; }
+table.mini th { border-bottom: 2px solid #18181B; }
+table.mini .num { text-align: right; }
+table.mini .idx { color: #64748B; }
+table.mini .ser { background: #FEF3C7; }
+table.mini .new { background: #DCFCE7; font-weight: bold; }
+table.mini tr.keep td { background: #DBEAFE; font-weight: bold; }
+table.mini tr.drop td { color: #CBD5E1; }
+.op { font: bold 26pt "DejaVu Sans Mono", monospace; color: #991B1B; align-self: center; padding: 0 .06in; }
+.toolbar { font-size: 17pt; color: #475569; margin-bottom: .1in; flex-shrink: 0; }
+.toolbar b { color: #991B1B; }
+
+/* DataFrame visual map */
+.xl th, .xl td { font-size: 15pt; }
+.xl .rn { background: #F1F5F9; color: #64748B; text-align: center; }
+.xl .bad { background: #FEE2E2; color: #B91C1C; font-weight: bold; }
+.side { display: flex; gap: .22in; align-items: flex-start; }
+.side .lab { font-size: 17pt; font-weight: bold; margin-bottom: .04in; }
+.brace { border-left: 4px solid #16A34A; padding-left: .1in; }
+.anat .ix { background: #DBEAFE; color: #1D4ED8; }
+.anat .hd { background: #FEF3C7; }
+.anat .vl { background: #DCFCE7; }
+.chips { display: flex; gap: .12in; flex-wrap: wrap; margin-top: .08in; }
+.chip { font-size: 16pt; padding: .02in .1in; border-radius: 6px; }
+.dt { font-size: 14pt; padding: .01in .08in; border-radius: 5px; background: #18181B; color: #FBBF24; font-family: "DejaVu Sans Mono", monospace; }
+.insp td { font-size: 15pt; vertical-align: top; }
+.insp td:first-child { color: #991B1B; }
+.pr, .insp td.pr { font: 18pt/1.3 "Times New Roman", serif; }
+td.pr { white-space: normal !important; }
+
+/* IDE slide */
+.shot { width: 60%; flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; }
+.shot img { width: 100%; border: 1px solid #CBD5E1; border-radius: 10px; display: block; }
+.shot .cap { font-size: 17pt; margin: .1in 0 0; }
+.steps { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .1in; justify-content: center; }
+.step { display: flex; gap: .14in; align-items: flex-start; border: 1px solid #CBD5E1; border-radius: 10px; padding: .1in .14in; }
+.badge { background: #991B1B; color: #FFF; font: bold 16pt "DejaVu Sans Mono", monospace; border-radius: 6px; padding: .02in .08in; flex-shrink: 0; }
+.step h3 { font-size: 20pt; margin: 0 0 .02in; }
+.step p { font-size: 18pt; line-height: 1.22; margin: .02in 0; }
+.step p.eg { font-size: 16pt; color: #475569; }
+
+/* Quick check slides */
+.qc { grid-template-columns: 1fr 1.15fr; }
+.qc .card { display: flex; flex-direction: column; }
+.snip { background: #18181B; color: #E5E7EB; border-radius: 8px; padding: .1in .16in; font: 16pt/1.4 "DejaVu Sans Mono", monospace; white-space: pre; margin: .04in 0 .1in; }
+.snip .blank { background: #FBBF24; color: #18181B; padding: 0 .06in; border-radius: 3px; font-weight: bold; }
+.snip .cm { color: #94A3B8; }
+.snip-lab { font-size: 17pt; font-weight: bold; margin-top: .06in; }
+.strip { display: flex; gap: .05in; margin: .1in 0 .04in; }
+.strip span { flex: 1; text-align: center; font: 15pt "DejaVu Sans Mono", monospace; padding: .06in 0; border-radius: 5px; background: #F1F5F9; color: #94A3B8; }
+.strip .h { background: #DBEAFE; color: #1D4ED8; font-weight: bold; }
+.strip .t { background: #DCFCE7; color: #15803D; font-weight: bold; }
+.strip-lab { display: flex; justify-content: space-between; font-size: 16pt; }
+.flowline { display: flex; align-items: center; gap: .14in; margin: .1in 0; font: 17pt "DejaVu Sans Mono", monospace; }
+.flowline .box { background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 6px; padding: .04in .12in; }
+.flowline .arr { color: #991B1B; font-size: 22pt; }
+.flowline .res { background: #DCFCE7; border: 1px solid #86EFAC; border-radius: 6px; padding: .04in .12in; font-weight: bold; }
+.vstack { margin-top: .08in; }
+.vstack td, .vstack th { padding: .02in .12in; }
+.vstack tr.h td:not(.side-lab) { background: #DBEAFE; color: #1D4ED8; font-weight: bold; }
+.vstack tr.t td:not(.side-lab) { background: #DCFCE7; color: #15803D; font-weight: bold; }
+.vstack tr.gap td { color: #94A3B8; font-family: "Times New Roman", serif; font-style: italic; }
+.vstack .side-lab { border: none; font: 17pt "Times New Roman", serif; vertical-align: middle; }
+.vstack .h-lab { color: #1D4ED8; }
+.vstack .t-lab { color: #15803D; }
+table.mini th.plain { font: bold 17pt "Times New Roman", serif; }
+.overview ol.biz > li { font-size: 20pt; margin: 0 0 .1in; }
+.overview .q { display: block; color: #991B1B; font-style: italic; font-weight: bold; }
+.overview .sit-note { font-size: 19pt; font-weight: bold; margin: .04in 0 0; }
+
+/* CSV intro slide */
+.csvflow { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr auto 1.25fr auto 1fr; gap: .14in; align-items: stretch; }
+.csvflow .col { border: 1px solid #CBD5E1; border-radius: 10px; padding: .14in .18in; display: flex; flex-direction: column; gap: .1in; }
+.csvflow .item { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: .08in .12in; font-size: 18pt; line-height: 1.2; }
+.csvflow .item small { display: block; font-size: 16pt; color: #475569; }
+.csvflow .mid { border: 2px solid #991B1B; }
+.csvflow .arrow { display: flex; align-items: center; color: #991B1B; font-size: 40pt; }
+.csvflow li { font-size: 18pt; line-height: 1.3; margin: .04in 0; }
+.csvflow .fname { font: bold 15pt "DejaVu Sans Mono", monospace; color: #18181B; }
+
+/* CSV vs XLSX */
+.src-row { display: flex; gap: .14in; align-items: stretch; flex-shrink: 0; }
+.src-box { flex: 1; border: 1px solid #CBD5E1; border-radius: 10px; padding: .1in .16in; }
+.chips2 { display: flex; gap: .1in; flex-wrap: wrap; margin-top: .06in; }
+.chips2 span { background: #F1F5F9; border: 1px solid #E2E8F0; border-radius: 6px; padding: .03in .12in; font-size: 18pt; }
+.arrow2 { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #991B1B; font-size: 34pt; line-height: 1; }
+.arrow2 small { font-size: 15pt; }
+.files { display: flex; gap: .12in; align-items: center; margin-top: .06in; }
+.file { font: bold 16pt "DejaVu Sans Mono", monospace; padding: .03in .12in; border-radius: 6px; color: #FFF; }
+.file.xlsx { background: #64748B; }
+.file.csv { background: #15803D; }
+.vs { flex: 1; min-height: 0; display: flex; gap: .16in; }
+.vs-col { flex: 1; border-radius: 12px; padding: .14in .2in; display: flex; flex-direction: column; }
+.vs-col.bad { border: 2px solid #CBD5E1; background: #F8FAFC; }
+.vs-col.good { border: 3px solid #15803D; background: #F0FDF4; flex: 1.35; }
+.vs-head { font-size: 24pt; font-weight: bold; display: flex; align-items: center; gap: .12in; }
+.vs-sub { font-size: 18pt; margin: .06in 0 .1in; color: #334155; }
+.vs-mid { align-self: center; font: bold 26pt "Times New Roman", serif; color: #64748B; }
+.apps { display: flex; flex-wrap: wrap; gap: .1in; }
+.app { font-size: 18pt; background: #FFF; border-radius: 8px; padding: .06in .14in; display: flex; flex-direction: column; min-width: 1.5in; }
+.app b { font-size: 24pt; line-height: 1; }
+.app small { font-size: 15pt; color: #64748B; }
+.rawcsv.garbled { color: #94A3B8; }
+.app.ok { border: 2px solid #86EFAC; }
+.app.ok b { color: #15803D; }
+.app.no { border: 2px solid #FCA5A5; }
+.app.no b { color: #B91C1C; }
+
+/* Session 1.4 additions */
+table.terms { border-collapse: collapse; width: 100%; margin: .04in 0 .1in; }
+table.terms td { font-size: 18pt; padding: .05in .08in; border-bottom: 1px solid #E2E8F0; }
+table.terms td.num { text-align: right; }
+.vbars { display: flex; flex-direction: column; gap: .1in; margin-top: .12in; }
+.vrow { display: flex; align-items: center; gap: .12in; }
+.vq { width: .45in; font: bold 17pt "DejaVu Sans Mono", monospace; }
+.vval { width: 1.1in; font: 16pt "DejaVu Sans Mono", monospace; text-align: right; }
+.vtrack { flex: 1; height: .42in; position: relative; background: #F8FAFC; border-radius: 4px; }
+.vzero { position: absolute; left: 40%; top: 0; bottom: 0; border-left: 2px solid #18181B; }
+.vth { position: absolute; left: 52%; top: -.04in; bottom: -.04in; border-left: 2px dashed #B91C1C; }
+.vbar { position: absolute; top: .07in; bottom: .07in; border-radius: 3px; }
+.vbar.over { background: #EF4444; }
+.vbar.warn { background: #F59E0B; }
+.vbar.under { background: #22C55E; }
+.vtrack-lab { flex: 1; position: relative; height: .3in; }
+.vtrack-lab span { position: absolute; transform: translateX(-50%); font-size: 15pt; color: #475569; white-space: nowrap; }
+.bridge { flex: 1; min-height: 0; display: flex; gap: .16in; align-items: stretch; }
+.bridge .b-xl, .bridge .b-pd { border-radius: 10px; padding: .1in .18in; display: flex; flex-direction: column; justify-content: center; }
+.bridge .b-xl { flex: 1; border: 2px solid #CBD5E1; background: #F8FAFC; }
+.bridge .b-pd { flex: 1.5; border: 2px solid #15803D; background: #F0FDF4; }
+.bridge h2 { font-size: 22pt; margin: .02in 0; }
+.bridge p { font-size: 18pt; margin: .02in 0; }
+.b-arrow { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #991B1B; font-size: 40pt; line-height: 1; }
+.b-arrow.small { font-size: 30pt; }
+.b-arrow small { font-size: 15pt; }
+.sac { display: flex; gap: .16in; align-items: center; flex-wrap: wrap; }
+.sac-col { display: flex; flex-direction: column; gap: .06in; }
+.sac-lab { font-size: 16pt; color: #475569; }
+.grp { font: 15pt "DejaVu Sans Mono", monospace; padding: .03in .1in; border-radius: 5px; }
+.g1 { background: #DBEAFE; } .g2 { background: #FEF3C7; } .g3 { background: #EDE9FE; } .g4 { background: #DCFCE7; }
+table.mini .keycol { background: #FEF3C7; }
+table.mini .hl-c { background: #DCFCE7; font-weight: bold; }
+table.mini .bad-c { background: #FEE2E2; color: #B91C1C; font-weight: bold; }
+table.mini tr.nan-row td { background: #FEF3C7; font-style: italic; }
+.snip .bad-t { color: #F87171; font-weight: bold; }
+.snip .ok-t { color: #4ADE80; font-weight: bold; }
+table.mini td.tcell { background: #DBEAFE; color: #1D4ED8; font-weight: bold; }
+table.mini td.fcell { color: #94A3B8; }
+.qc { grid-template-columns: 1fr 1.4fr; }
+.qc .snip { font-size: 14.5pt; }
+.fit-box .snip { font-size: 14.5pt; margin: .04in 0; }
+.flip { display: flex; gap: .1in; align-items: center; font: 16pt "DejaVu Sans Mono", monospace; margin: .08in 0; }
+.flip .t { background: #DBEAFE; padding: .03in .1in; border-radius: 5px; }
+.flip .f { background: #F1F5F9; padding: .03in .1in; border-radius: 5px; }
+
+/* session map + exercise 3 */
+.sm-q { border: 3px solid #991B1B; border-radius: 14px; padding: .1in .2in; font-size: 24pt; font-style: italic; background: #FEF2F2; align-self: flex-start; flex-shrink: 0; }
+.sm-q b { font-style: normal; color: #991B1B; }
+.sm-phases { flex: 1; min-height: 0; display: flex; gap: .14in; align-items: stretch; }
+.sm-phase { flex: 1; border: 2px solid #CBD5E1; border-radius: 12px; padding: .14in .2in; }
+.sm-phase.sm-p3 { border: 3px solid #15803D; background: #F0FDF4; }
+.sm-head { display: flex; gap: .14in; align-items: center; border-bottom: 2px solid #E2E8F0; padding-bottom: .08in; margin-bottom: .08in; }
+.sm-head b { font-size: 26pt; display: block; line-height: 1.1; }
+.sm-head small { font-size: 16pt; color: #64748B; }
+.sm-step { background: #991B1B; color: #FFF; border-radius: 50%; width: .5in; height: .5in; display: flex; align-items: center; justify-content: center; font-size: 20pt; font-weight: bold; flex-shrink: 0; }
+.sm-p3 .sm-step { background: #15803D; }
+.sm-phase p { font-size: 22pt; margin: .1in 0; line-height: 1.2; display: flex; }
+.sm-phase i { font-style: normal; font-family: "DejaVu Sans Mono", monospace; font-weight: bold; color: #991B1B; min-width: .6in; flex-shrink: 0; }
+.sm-p3 i { color: #15803D; }
+.sm-arrow { align-self: center; font-size: 34pt; color: #991B1B; }
+ol.ex3 { margin: .06in 0 0; padding-left: .36in; }
+ol.ex3 li { font-size: 18pt; line-height: 1.25; margin: .06in 0; }
+table.cols { border-collapse: collapse; width: 100%; }
+table.cols td { font-size: 17pt; padding: .04in .08in; border-bottom: 1px solid #E2E8F0; vertical-align: top; }
+</style>
+
+</head>
+<body>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">1-2. Purpose and Outcomes</span></div>
+  <div class="title">Session 1.4: Tabular Data Wrangling Part 2: Advanced Filtering, Multi-Segment GroupBy, and Financial Auditing</div><div class="rule"></div>
+  <div class="body grid2 overview">
+    <div class="card">
+      <div class="tag">THE BUSINESS SITUATION</div><h2>The Quarterly Budget Review</h2>
+      <ul class="lead">
+        <li>Each division gets a spending budget every quarter</li>
+        <li>Finance compares the budget with what was actually spent</li>
+        <li>Our case: 4 divisions &#215; 4 quarters = 16 rows in one CSV file</li>
+        <li>The finance director asks: who overspent, by how much, and who is responsible?</li>
+      </ul>
+      <p class="sit-note">Today, Python answers this for the whole year at once.</p>
+      <p class="flow">Today's flow: 60 min lecture, then 120 min hands-on lab</p>
+    </div>
+    <div class="card">
+      <div class="tag">EXPECTED OUTCOMES</div><h2>By the end of today, you will be able to:</h2>
+      <ol class="biz">
+        <li><span class="q">"Which quarters went over budget?"</span>
+          Filter rows with a Boolean mask and <code>&amp;</code>
+          <span class="gloss">Boolean mask: a <code>True</code>/<code>False</code> value for every row</span></li>
+        <li><span class="q">"How much did each division overspend this year?"</span>
+          Summarize groups with <code>groupby()</code> and <code>.agg()</code>
+          <span class="gloss"><code>groupby()</code>: split rows into groups, like an Excel pivot table (a summary with one row per group)</span></li>
+        <li><span class="q">"Who is responsible?"</span>
+          Join tables with <code>pd.merge()</code> and fix a <code>KeyError</code>
+          <span class="gloss"><code>pd.merge()</code>: join two tables on a shared column, like Excel's <code>VLOOKUP</code> lookup formula</span></li>
+      </ol>
+    </div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 1 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">Session Map</span></div>
+  <div class="title">Session Map: Follow the Numbers</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: .14in;">
+    <div class="sm-q"><b>Today's question:</b> Who overspent, by how much, and who is responsible?</div>
+    <div class="sm-phases">
+      <div class="sm-phase "><div class="sm-head"><span class="sm-step">1</span><span><b>Why it matters</b><small>Lecture, part 1</small></span></div><p><i>1.</i> Session Purpose</p><p><i>2.</i> Learning Outcomes</p><p><i>3.</i> Business Context: Budget vs Actual</p><p><i>4.</i> Data Basics: From Excel Tools You Know to pandas</p></div>
+      <div class="sm-arrow">&#8594;</div>
+      <div class="sm-phase "><div class="sm-head"><span class="sm-step">2</span><span><b>Learn the tools</b><small>Lecture, part 2</small></span></div><p><i>5.</i> Lab Practice Dataset</p><p><i>6.</i> Keywords </p><p><i>7.</i> Core Foundations</p><p><i>8.</i> IDE Workflow</p><p><i>9.</i> Code Examples + Quick Checks</p><p><i>10.</i> Official References</p></div>
+      <div class="sm-arrow">&#8594;</div>
+      <div class="sm-phase sm-p3"><div class="sm-head"><span class="sm-step">3</span><span><b>Practice</b><small>Lab</small></span></div><p><i>11.</i> Exercise 1: Guided - Quarterly Division Audit</p><p><i>12.</i> Exercise 2: Applied - Annual Cost Center Overruns</p><p><i>13.</i> Exercise 3: Advanced - VP Exception Report</p></div>
+    </div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 2 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">3. Business Context</span></div>
+  <div class="title">Budget vs Actual: How Finance Spots Overspending</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid2" style="flex: 1; min-height: 0; grid-template-columns: 1fr 1.1fr;">
+      <div class="card"><div class="tag">FOUR TERMS, ONE EXAMPLE</div><h2>Consumer Division, Q1</h2>
+        <table class="terms">
+          <tr><td><b>Budget</b></td><td>planned spending</td><td class="num"><code>780,000</code></td></tr>
+          <tr><td><b>Actual</b></td><td>real spending</td><td class="num"><code>810,000</code></td></tr>
+          <tr><td><b>Variance</b></td><td>Actual - Budget</td><td class="num"><code>+30,000</code></td></tr>
+          <tr><td><b>Variance %</b></td><td>Variance / Budget &#215; 100</td><td class="num"><code>+3.85%</code></td></tr>
+        </table>
+        <ul>
+          <li>Positive variance = <b>overspent</b>; negative = under budget</li>
+          <li>Cost center: the accounting code spending is charged to; each has a VP (Vice President)</li>
+          <li>Company rule in our data: flag a quarter when variance is <b>more than 2%</b> (column <code>Audit_Status</code>)</li>
+        </ul>
+      </div>
+      <div class="card"><div class="tag">CONSUMER DIVISION: VARIANCE % BY QUARTER</div>
+        <div class="vbars">
+          <div class="vrow"><span class="vq">Q1</span><div class="vtrack"><div class="vzero"></div><div class="vth"></div><div class="vbar over" style="left: 40%; width: 23.1%;"></div></div><span class="vval">+3.85%</span></div>
+          <div class="vrow"><span class="vq">Q2</span><div class="vtrack"><div class="vzero"></div><div class="vth"></div><div class="vbar warn" style="left: 40%; width: 11.5%;"></div></div><span class="vval">+1.92%</span></div>
+          <div class="vrow"><span class="vq">Q3</span><div class="vtrack"><div class="vzero"></div><div class="vth"></div><div class="vbar over" style="left: 40%; width: 34.6%;"></div></div><span class="vval">+5.77%</span></div>
+          <div class="vrow"><span class="vq">Q4</span><div class="vtrack"><div class="vzero"></div><div class="vth"></div><div class="vbar under" style="left: 36.2%; width: 3.8%;"></div></div><span class="vval">-0.64%</span></div>
+          <div class="vrow vaxis"><span class="vq"></span><div class="vtrack-lab"><span style="left: 40%;">0%</span><span style="left: 52%;">2% rule</span></div><span class="vval"></span></div>
+        </div>
+        <div class="chips" style="margin-top: .12in;">
+          <span class="chip" style="background:#FEE2E2; color:#B91C1C;"><b>Red</b>: flagged (over 2%)</span>
+          <span class="chip" style="background:#FEF3C7; color:#92400E;"><b>Amber</b>: over, within rule</span>
+          <span class="chip" style="background:#DCFCE7; color:#15803D;"><b>Green</b>: under budget</span>
+        </div>
+      </div>
+    </div>
+    <div class="check"><b>Today's job:</b> find these overruns for all 4 divisions, add up the year, and name the person responsible.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 3 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">4. Data Basics</span></div>
+  <div class="title">From Excel Tools You Know to pandas</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: .14in;">
+    <div class="bridge">
+      <div class="b-xl"><div class="tag">EXCEL</div><h2>Filter</h2><p>Click the column arrow, tick the boxes</p></div>
+      <div class="b-arrow">&#8594;</div>
+      <div class="b-pd"><div class="tag">PANDAS</div><h2>Boolean mask: <code>df[mask]</code></h2><p>The rule is written in code, so it repeats exactly next quarter</p></div>
+    </div>
+    <div class="bridge">
+      <div class="b-xl"><div class="tag">EXCEL</div><h2>Pivot Table</h2><p>A summary by group: <code>Division_Name</code> in Rows, spending in Values = 4 rows instead of 16</p></div>
+      <div class="b-arrow">&#8594;</div>
+      <div class="b-pd"><div class="tag">PANDAS</div><h2><code>df.groupby().agg()</code></h2><p>One line; run it again when new data arrives</p></div>
+    </div>
+    <div class="bridge">
+      <div class="b-xl"><div class="tag">EXCEL</div><h2>VLOOKUP</h2><p>A formula that looks up a code in another table and returns column <b>number</b> N, such as the 2nd</p></div>
+      <div class="b-arrow">&#8594;</div>
+      <div class="b-pd"><div class="tag">PANDAS</div><h2><code>pd.merge()</code></h2><p>Matches rows by column <b>name</b>, such as <code>Cost_Center_Code</code></p></div>
+    </div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 4 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">5. Lab Practice Dataset</span></div>
+  <div class="title">One File and One Small Table</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid2" style="flex: 1; min-height: 0; grid-template-columns: 1.6fr 1fr;">
+      <div class="card"><div class="tag">THE FILE: <code>session_01_04_dataset.csv</code> (16 ROWS)</div>
+        <table class="cols">
+          <tr><td><code>Transaction_ID</code></td><td>Record code, such as <code>TXN-5001</code></td></tr>
+          <tr><td><code>Division_Name</code></td><td>Cloud, Consumer, Enterprise, Logistics</td></tr>
+          <tr><td><code>Cost_Center_Code</code></td><td>Accounting code, such as <code>CC-202</code></td></tr>
+          <tr><td><code>Fiscal_Quarter</code></td><td>Q1 to Q4</td></tr>
+          <tr><td><code>Budget_Expense_USD</code></td><td>Planned spending</td></tr>
+          <tr><td><code>Actual_Expense_USD</code></td><td>Real spending</td></tr>
+          <tr><td><code>Audit_Status</code></td><td><code>Variance_Flag</code> if more than 2% over budget</td></tr>
+        </table></div>
+      <div class="card"><div class="tag">THE SMALL TABLE: <code>vp_info</code></div>
+        <ul><li>Built in code in Demo 3 with <code>pd.DataFrame({...})</code></li><li>4 rows: one VP (Vice President) per cost center</li><li>VP names are fictional</li><li>Used in: Demo 3, Exercises 2-3</li></ul></div>
+    </div>
+    <div class="check">Each CSV row is one division's spending in one quarter: 4 divisions &#215; 4 quarters = 16 rows.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 5 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">6. Keywords</span></div>
+  <div class="title">Six Terms You Need Today</div><div class="rule"></div>
+  <div class="body grid3" style="grid-template-rows: 1fr 1fr;">
+    <div class="card"><div class="tag">FILTER</div><h2>Boolean Mask</h2>
+      <p class="what"><b>What:</b> one <code>True</code> or <code>False</code> per row</p>
+      <p class="why"><b>Why:</b> picks exactly the rows that meet a rule</p></div>
+    <div class="card"><div class="tag">COMBINE RULES</div><h2><code>&amp;</code> <code>|</code> <code>~</code></h2>
+      <p class="what"><b>What:</b> "and", "or", "not" for masks</p>
+      <p class="why"><b>Why:</b> Python's <code>and</code> / <code>or</code> fail on whole columns</p></div>
+    <div class="card"><div class="tag">PATTERN</div><h2>Split-Apply-Combine</h2>
+      <p class="what"><b>What:</b> split rows into groups, calculate each group, combine the results</p>
+      <p class="why"><b>Why:</b> the idea behind every pivot table</p></div>
+    <div class="card"><div class="tag">SUMMARY</div><h2><code>groupby()</code> + <code>.agg()</code></h2>
+      <p class="what"><b>What:</b> <code>groupby()</code> splits; <code>.agg()</code> sums, counts, or averages each group</p>
+      <p class="why"><b>Why:</b> yearly totals per division in one step</p></div>
+    <div class="card"><div class="tag">JOIN</div><h2><code>pd.merge()</code></h2>
+      <p class="what"><b>What:</b> joins two tables row by row</p>
+      <p class="why"><b>Why:</b> adds facts from another table, such as the VP's name, with no copy-paste</p></div>
+    <div class="card"><div class="tag">MATCH</div><h2>Key Column</h2>
+      <p class="what"><b>What:</b> a column both tables share, such as <code>Cost_Center_Code</code></p>
+      <p class="why"><b>Why:</b> tells pandas which rows belong together</p></div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 6 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">6. Keywords: Visual Map</span></div>
+  <div class="title">How the Six Terms Fit Together</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="fit" style="grid-template-rows: 1fr 1fr;">
+      <div class="fit-row">
+        <div class="fit-box" style="flex: 1;">
+          <div class="tag">STEP 1: BOOLEAN MASK (CONSUMER ROWS)</div>
+          <table class="mini">
+            <tr><th>Fiscal_Quarter</th><th class="plain">Over budget?</th></tr>
+            <tr class="keep"><td>Q1</td><td>True</td></tr>
+            <tr class="keep"><td>Q2</td><td>True</td></tr>
+            <tr class="keep"><td>Q3</td><td>True</td></tr>
+            <tr class="drop"><td>Q4</td><td>False</td></tr>
+          </table>
+          <p class="cap">Blue = <code>True</code>, kept by <code>df[mask]</code></p>
+        </div>
+        <div class="fit-box" style="flex: 1.3;">
+          <div class="tag">STEP 2: SPLIT, APPLY, COMBINE</div>
+          <div class="sac">
+            <div class="sac-col"><div class="sac-lab">Split: 16 rows</div>
+              <span class="grp g1">Cloud &#215; 4</span><span class="grp g2">Consumer &#215; 4</span><span class="grp g3">Enterprise &#215; 4</span><span class="grp g4">Logistics &#215; 4</span></div>
+            <div class="b-arrow small">&#8594;<small>sum</small></div>
+            <table class="mini">
+              <tr><th>Division_Name</th><th>Variance_USD</th></tr>
+              <tr><td>Cloud</td><td class="num">-15000.0</td></tr>
+              <tr><td>Consumer</td><td class="num">85000.0</td></tr>
+              <tr><td>Enterprise</td><td class="num">0.0</td></tr>
+              <tr><td>Logistics</td><td class="num">28000.0</td></tr>
+            </table>
+          </div>
+          <p class="cap">Combine: one row per division for the whole year</p>
+        </div>
+      </div>
+      <div class="fit-row">
+        <div class="fit-box" style="flex: 1;">
+          <div class="tag">STEP 3: MERGE ON A KEY COLUMN</div>
+          <div class="sac">
+            <table class="mini">
+              <tr><th class="keycol">Cost_Center_Code</th><th>Variance_USD</th></tr>
+              <tr><td class="keycol">CC-202</td><td class="num">85000.0</td></tr>
+              <tr><td class="keycol">CC-404</td><td class="num">28000.0</td></tr>
+            </table>
+            <span class="op">+</span>
+            <table class="mini">
+              <tr><th class="keycol">Cost_Center_Code</th><th>VP_Lead</th></tr>
+              <tr><td class="keycol">CC-202</td><td>Marcus Vance</td></tr>
+              <tr><td class="keycol">CC-404</td><td>David Kim</td></tr>
+            </table>
+          </div>
+          <div class="sac" style="margin-top: .08in;">
+            <span class="op">=</span>
+            <table class="mini">
+              <tr><th class="keycol">Cost_Center_Code</th><th>Variance_USD</th><th class="new">VP_Lead</th></tr>
+              <tr><td class="keycol">CC-202</td><td class="num">85000.0</td><td class="new">Marcus Vance</td></tr>
+              <tr><td class="keycol">CC-404</td><td class="num">28000.0</td><td class="new">David Kim</td></tr>
+            </table>
+          </div>
+          <p class="cap">Yellow = the key column both tables share; green = the new information. VP names are fictional.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 7 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">7. Core Foundations</span></div>
+  <div class="title">How Filtering, Grouping, and Joining Work</div><div class="rule"></div>
+  <div class="body grid2" style="grid-template-rows: 1fr 1fr;">
+    <div class="card"><div class="tag">1. <code>&amp;</code>, NOT <code>and</code></div><h2>Rules Are Checked Row by Row</h2>
+      <ul>
+        <li>Python's <code>and</code> expects one <code>True</code> or <code>False</code></li>
+        <li>A mask holds 16 of them, one per row</li>
+        <li><code>&amp;</code> compares row by row; wrap each rule in <code>( )</code></li>
+      </ul></div>
+    <div class="card"><div class="tag">2. SPLIT-APPLY-COMBINE</div><h2>A Pivot Table Written as Code</h2>
+      <ul>
+        <li>Split: one group per <code>Division_Name</code></li>
+        <li>Apply: <code>"sum"</code>, <code>"count"</code>, or <code>"mean"</code> in each group</li>
+        <li>Combine: one result row per group</li>
+      </ul></div>
+    <div class="card"><div class="tag">3. MERGE vs VLOOKUP</div><h2>Match by Name, Not by Position</h2>
+      <ul>
+        <li><code>VLOOKUP</code> returns "the 2nd column"; insert a column and it returns the wrong one</li>
+        <li><code>pd.merge()</code> uses column names, so moving columns does not matter</li>
+      </ul></div>
+    <div class="card"><div class="tag">4. <code>how="left"</code></div><h2>Keep Every Row of the Main Table</h2>
+      <ul>
+        <li>Rows with no match stay, with an empty value: <code>NaN</code> ("Not a Number")</li>
+        <li>Why: a cost center with no VP still appears, so you can see who is missing</li>
+        <li><code>how="inner"</code> would drop that row from the result</li>
+      </ul></div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 8 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">7. Core Foundations: Visual Map</span></div>
+  <div class="title">Filtering, Grouping, and Joining, Seen Up Close</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="fit" style="grid-template-rows: 1fr 1fr;">
+      <div class="fit-row">
+        <div class="fit-box" style="flex: 1.45;">
+          <div class="tag">1. <code>and</code> FAILS, <code>&amp;</code> WORKS</div>
+<div class="snip">is_consumer = df["Division_Name"] == "Consumer"
+is_over = df["Actual_Expense_USD"] &gt; df["Budget_Expense_USD"]</div>
+<div class="snip">is_consumer <span class="bad-t">and</span> is_over</div>
+          <p class="cap" style="color:#B91C1C; margin-top:0;"><code>ValueError: The truth value of a Series is ambiguous</code></p>
+<div class="snip">is_consumer <span class="ok-t">&amp;</span> is_over</div>
+          <p class="cap" style="color:#15803D; margin-top:0;">One <code>True</code> / <code>False</code> per row</p>
+        </div>
+        <div class="fit-box" style="flex: 1;">
+          <div class="tag">2. APPLY: CONSUMER ACTUAL SPENDING</div>
+          <div class="sac">
+            <table class="mini">
+              <tr><th>Actual_Expense_USD</th></tr>
+              <tr><td class="num">810000.0</td></tr>
+              <tr><td class="num">795000.0</td></tr>
+              <tr><td class="num">825000.0</td></tr>
+              <tr><td class="num">775000.0</td></tr>
+            </table>
+            <div class="b-arrow small">&#8594;<small><code>"sum"</code></small></div>
+            <table class="mini"><tr><th class="new">Total</th></tr><tr><td class="num new">3205000.0</td></tr></table>
+          </div>
+          <p class="cap">Same step for all 4 divisions</p>
+        </div>
+      </div>
+      <div class="fit-row">
+        <div class="fit-box" style="flex: 1.3;">
+          <div class="tag">3. VLOOKUP BREAKS WHEN A COLUMN IS INSERTED</div>
+          <div class="sac">
+            <div><div class="cap" style="margin:0 0 .04in;">Before</div>
+              <table class="mini"><tr><th class="plain">Code</th><th class="hl-c plain">VP</th></tr><tr><td>CC-202</td><td class="hl-c">Marcus Vance</td></tr></table></div>
+            <div><div class="cap" style="margin:0 0 .04in;">After inserting Region</div>
+              <table class="mini"><tr><th class="plain">Code</th><th class="bad-c plain">Region</th><th class="plain">VP</th></tr><tr><td>CC-202</td><td class="bad-c">North</td><td>Marcus Vance</td></tr></table></div>
+          </div>
+          <p class="cap">"2nd column" now returns "North": wrong, and easy to miss</p>
+        </div>
+        <div class="fit-box" style="flex: 1;">
+          <div class="tag">4. <code>how="left"</code> KEEPS UNMATCHED ROWS</div>
+          <table class="mini">
+            <tr><th>Cost_Center_Code</th><th>VP_Lead</th></tr>
+            <tr><td>CC-202</td><td>Marcus Vance</td></tr>
+            <tr><td>CC-404</td><td>David Kim</td></tr>
+            <tr class="nan-row"><td>CC-505</td><td>NaN</td></tr>
+          </table>
+          <p class="cap">A code with no VP (example <code>CC-505</code>) stays, with <code>NaN</code></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 9 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">8. Development Workflow</span></div>
+  <div class="title">Build, Test, and Diagnose in the IDE</div><div class="rule"></div>
+  <div class="body">
+    <div class="shot">
+      <img src="../assets/antigravity_ide_interface.png" alt="Google Antigravity IDE with its four labeled panels">
+      <p class="cap">Example: Terminal <code>[4]</code> shows a <code>NameError</code>; AI Chat <code>[3]</code> explains the fix</p>
+    </div>
+    <div class="steps">
+      <div class="step"><span class="badge">[1]</span><div><h3>File Explorer</h3><p>Name it <code>YourName_S14_demo_1.py</code></p><p class="eg">Example: <code>Reacher_S14_demo_1.py</code></p><p>Check the dataset is in <code>data/</code></p></div></div>
+      <div class="step"><span class="badge">[2]</span><div><h3>Code Editor</h3><p>Write a few lines, run, repeat</p><p>Small steps keep errors small</p></div></div>
+      <div class="step"><span class="badge">[3]</span><div><h3>AI Agent Chat</h3><p>Error? Capture the traceback (Python's error report) with <code>Win + Shift + S</code></p><p>Paste with <code>Ctrl + V</code>, ask why</p></div></div>
+      <div class="step"><span class="badge">[4]</span><div><h3>Terminal</h3><p>Run <code>python</code> + your script name</p><p>Return code <code>0</code> = no errors</p></div></div>
+    </div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 10 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">9. Code Demonstration 1</span></div>
+  <div class="title">Find Overspending with a Boolean Mask</div><div class="rule"></div>
+  <div class="body">
+    <div class="code-panel">
+      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S14_demo_1.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
+<pre><span class="sec"># 1. Input: load the quarterly budget data</span>
+import pandas as pd
+df = pd.read_csv("data/session_01_04_dataset.csv")
+
+<span class="sec"># 2. Process: Consumer quarters that spent more than budget</span>
+mask = (
+    (df["Division_Name"] == "Consumer")
+    &amp; (df["Actual_Expense_USD"] &gt; df["Budget_Expense_USD"])
+)
+overruns = df[mask]
+
+<span class="sec"># 3. Output: count and list them</span>
+print("Consumer overrun quarters:", len(overruns))
+print(overruns[["Fiscal_Quarter", "Budget_Expense_USD",
+                "Actual_Expense_USD"]])</pre>
+    </div>
+    <div class="notes">
+      <div class="card"><div class="tag">1. INPUT</div><h2>Same load step as Session 1.3</h2><p><code>pd.read_csv()</code> reads the 16 rows into <code>df</code></p></div>
+      <div class="card wide"><div class="tag">2. PROCESS</div><h2><code>mask</code> and <code>df[mask]</code></h2><ul><li><code>mask</code>: one <code>True</code> / <code>False</code> per row</li><li><code>&amp;</code>: both rules must be <code>True</code></li><li><code>df[mask]</code> keeps only the <code>True</code> rows</li></ul></div>
+      <div class="card"><div class="tag">3. OUTPUT</div><h2><code>len()</code> and a short table</h2><p>The count, then the matching quarters</p></div>
+    </div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 11 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">9. Quick Check 1</span></div>
+  <div class="title">Flip a Rule with <code>~</code></div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid2 qc" style="flex: 1; min-height: 0;">
+      <div class="card"><div class="tag">NEW TOOL</div><h2><code>~</code> (not)</h2>
+        <p class="what"><b>What:</b> turns every <code>True</code> into <code>False</code>, and every <code>False</code> into <code>True</code></p>
+        <p class="why"><b>Why:</b> find the opposite group, such as quarters that stayed within budget</p>
+        <table class="mini" style="margin-top:.08in;"><tr><th>Fiscal_Quarter</th><th class="plain">Over budget?</th><th class="plain">After <code>~</code></th></tr><tr><td>Q1</td><td class="tcell">True</td><td class="fcell">False</td></tr><tr><td>Q2</td><td class="tcell">True</td><td class="fcell">False</td></tr><tr><td>Q3</td><td class="tcell">True</td><td class="fcell">False</td></tr><tr><td>Q4</td><td class="fcell">False</td><td class="tcell">True</td></tr></table><p style="font-size:16pt; color:#475569;">Consumer division; blue = <code>True</code> (kept)</p>
+      </div>
+      <div class="card"><div class="tag">YOUR TASK</div><h2>Change One Line</h2>
+        <p>In <code>YourName_S14_demo_1.py</code>, part <b>2. Process</b>: find Consumer quarters that did <b>not</b> go over budget.</p>
+        <div class="snip-lab">Now</div>
+<div class="snip">    &amp; (df["Actual_Expense_USD"] &gt; df["Budget_Expense_USD"])</div>
+        <div class="snip-lab">Your change: fill in the yellow blank</div>
+<div class="snip">    &amp; <span class="blank">_</span>(df["Actual_Expense_USD"] &gt; df["Budget_Expense_USD"])</div>
+      </div>
+    </div>
+    <div class="check"><b>Check:</b> the script prints <code>Consumer overrun quarters: 1</code>, and the table shows <code>Q4</code> (budget <code>780000.0</code>, actual <code>775000.0</code>). The label still says "overrun", since only the rule changed.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 12 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">9. Code Demonstration 2</span></div>
+  <div class="title">Total Each Division with <code>groupby()</code></div><div class="rule"></div>
+  <div class="body">
+    <div class="code-panel">
+      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S14_demo_2.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
+<pre><span class="sec"># 1. Input: load the quarterly budget data</span>
+import pandas as pd
+df = pd.read_csv("data/session_01_04_dataset.csv")
+
+<span class="sec"># 2. Process: yearly totals for each division</span>
+div_summary = df.groupby("Division_Name").agg(
+    Total_Budget_USD=("Budget_Expense_USD", "sum"),
+    Total_Actual_USD=("Actual_Expense_USD", "sum"),
+    Quarters=("Transaction_ID", "count"),
+)
+div_summary["Variance_USD"] = (
+    div_summary["Total_Actual_USD"]
+    - div_summary["Total_Budget_USD"]
+)
+
+<span class="sec"># 3. Output: one row per division</span>
+print(div_summary[["Total_Actual_USD", "Variance_USD"]])</pre>
+    </div>
+    <div class="notes">
+      <div class="card"><div class="tag">1. INPUT</div><h2>Same load step</h2><p>Every script loads its own data</p></div>
+      <div class="card wide"><div class="tag">2. PROCESS</div><h2><code>groupby()</code> + <code>.agg()</code></h2><ul><li><code>groupby("Division_Name")</code>: 4 groups</li><li>Inside <code>.agg()</code>: <code>New_Name=("Column", "sum")</code></li><li>Then one subtraction per division</li></ul></div>
+      <div class="card"><div class="tag">3. OUTPUT</div><h2>One row per division</h2><p>4 rows instead of 16</p></div>
+    </div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 13 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">9. Quick Check 2</span></div>
+  <div class="title">Rank Results with <code>.sort_values()</code></div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid2 qc" style="flex: 1; min-height: 0;">
+      <div class="card"><div class="tag">NEW TOOL</div><h2><code>.sort_values()</code></h2>
+        <p class="what"><b>What:</b> reorders rows by one column; <code>ascending=False</code> puts the largest first</p>
+        <p class="why"><b>Why:</b> the director reads the biggest overspender first</p>
+        <div class="sac" style="margin-top:.08in;"><table class="mini"><tr><th>Division_Name</th></tr><tr><td>Cloud</td></tr><tr><td>Consumer</td></tr><tr><td>Enterprise</td></tr><tr><td>Logistics</td></tr></table><div class="b-arrow small">&#8594;</div><table class="mini"><tr><th class="new">Division_Name</th></tr><tr><td class="new">?</td></tr><tr><td class="new">?</td></tr><tr><td class="new">?</td></tr><tr><td class="new">?</td></tr></table></div><p style="font-size:16pt; color:#475569;">Now: A to Z. After sorting: largest variance on top</p>
+      </div>
+      <div class="card"><div class="tag">YOUR TASK</div><h2>Add One Line</h2>
+        <p>In <code>YourName_S14_demo_2.py</code>, add one line at the end of <b>2. Process</b>: largest <code>Variance_USD</code> first.</p>
+        <div class="snip-lab">Now</div>
+<div class="snip"><span class="cm"># (new line goes here)</span></div>
+        <div class="snip-lab">Your change: fill in the yellow blank</div>
+<div class="snip">div_summary = div_summary.<span class="blank">___________</span>(
+    "Variance_USD", ascending=False
+)</div>
+      </div>
+    </div>
+    <div class="check"><b>Check:</b> the first row is <code>Consumer</code> (<code>85000.0</code>), then <code>Logistics</code> (<code>28000.0</code>).</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 14 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">9. Code Demonstration 3</span></div>
+  <div class="title">Add VP Names with <code>pd.merge()</code></div><div class="rule"></div>
+  <div class="body">
+    <div class="code-panel">
+      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S14_demo_3.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
+<pre><span class="sec"># 1. Input: budget data and a VP list (fictional names)</span>
+import pandas as pd
+df = pd.read_csv("data/session_01_04_dataset.csv")
+vp_info = pd.DataFrame({
+    "Cost_Center_Code": ["CC-101", "CC-202", "CC-303", "CC-404"],
+    "VP_Lead": ["Sarah Chen", "Marcus Vance",
+                "Elena Rostova", "David Kim"],
+})
+
+<span class="sec"># 2. Process: add VP names, then flag spending over budget</span>
+ledger = pd.merge(df, vp_info, on="Cost_Center_Code", how="left")
+ledger["Over_Budget"] = (
+    ledger["Actual_Expense_USD"] &gt; ledger["Budget_Expense_USD"]
+)
+
+<span class="sec"># 3. Output: show the first three rows</span>
+print(ledger[["Transaction_ID", "VP_Lead", "Over_Budget"]].head(3))</pre>
+    </div>
+    <div class="notes">
+      <div class="card wide"><div class="tag">1. INPUT</div><h2>Two tables</h2><ul><li>The CSV file</li><li><code>pd.DataFrame({...})</code> builds a small table in code: column name, then its list of values</li></ul></div>
+      <div class="card wide"><div class="tag">2. PROCESS</div><h2><code>pd.merge()</code> + a flag</h2><ul><li><code>on=</code> names the key column</li><li><code>how="left"</code> keeps all 16 rows</li><li><code>&gt;</code> makes a <code>True</code> / <code>False</code> column</li></ul></div>
+      <div class="card"><div class="tag">3. OUTPUT</div><h2><code>.head(3)</code></h2><p>The first rows, now with <code>VP_Lead</code></p></div>
+    </div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 15 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">9. Quick Check 3</span></div>
+  <div class="title">Count Categories with <code>.value_counts()</code></div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid2 qc" style="flex: 1; min-height: 0;">
+      <div class="card"><div class="tag">NEW TOOL</div><h2><code>.value_counts()</code></h2>
+        <p class="what"><b>What:</b> counts how often each value appears in a column</p>
+        <p class="why"><b>Why:</b> answers "how many quarters were over budget?" in one line</p>
+        <div class="sac" style="margin-top:.08in;"><table class="mini"><tr><th>Over_Budget</th></tr><tr><td>False</td></tr><tr><td>True</td></tr><tr><td>False</td></tr><tr><td class="more">... 16 rows</td></tr></table><div class="b-arrow small">&#8594;</div><table class="mini"><tr><th class="plain">Value</th><th class="new plain">Count</th></tr><tr><td>False</td><td class="new">?</td></tr><tr><td>True</td><td class="new">?</td></tr></table></div><p style="font-size:16pt; color:#475569;">One count per distinct value</p>
+      </div>
+      <div class="card"><div class="tag">YOUR TASK</div><h2>Add One Line</h2>
+        <p>In <code>YourName_S14_demo_3.py</code>, add one line to <b>3. Output</b>: count the <code>Over_Budget</code> values.</p>
+        <div class="snip-lab">Now</div>
+<div class="snip"><span class="cm"># (new line goes here)</span></div>
+        <div class="snip-lab">Your change: fill in the yellow blank</div>
+<div class="snip">print(ledger["Over_Budget"].<span class="blank">____________</span>())</div>
+      </div>
+    </div>
+    <div class="check"><b>Check:</b> the Terminal shows <code>False 8</code> and <code>True 8</code>: half of the 16 quarters went over budget.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 16 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">10. Official References</span></div>
+  <div class="title">Where to Look Things Up</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: .16in;">
+    <div class="card"><div class="tag">PANDAS</div><h2>GroupBy: Split-Apply-Combine</h2><p>Everything <code>groupby()</code> and <code>.agg()</code> can do. pandas.pydata.org/docs/user_guide/groupby.html</p></div>
+    <div class="card"><div class="tag">PANDAS</div><h2>Merge, Join, Concatenate and Compare</h2><p>All the options of <code>pd.merge()</code>, including <code>how=</code>. pandas.pydata.org/docs/user_guide/merging.html</p></div>
+    <div class="card"><div class="tag">PYTHON STYLE GUIDE</div><h2>PEP 8: Line Breaks Around Operators</h2><p>Why we start a new line with <code>&amp;</code> or <code>-</code> in long rules. peps.python.org/pep-0008</p></div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 17 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">11-12. Exercises</span></div>
+  <div class="title">Exercise 1 and Exercise 2</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid2" style="flex: 1; min-height: 0;">
+      <div class="card"><div class="tag">EXERCISE 1: GUIDED PRACTICE</div><h2>Quarterly Division Audit</h2>
+        <ul>
+          <li>Create <code>YourName_S14_audit.py</code></li>
+          <li>Add <code>Variance_USD</code> and <code>Variance_Pct</code> columns</li>
+          <li>Group by two columns: <code>["Division_Name", "Fiscal_Quarter"]</code></li>
+          <li>Sum actual spending and variance with <code>.agg()</code></li>
+          <li>Run it in Terminal <code>[4]</code></li>
+        </ul></div>
+      <div class="card"><div class="tag">EXERCISE 2: APPLIED PRACTICE</div><h2>Annual Cost Center Overruns</h2>
+        <ul>
+          <li>In <code>YourName_S14_practice.py</code>, group by <code>Cost_Center_Code</code> and compute the yearly variance %</li>
+          <li>Keep cost centers more than <code>1.0</code>% over budget</li>
+          <li>Merge with <code>vp_info</code>, but type <code>on="Cost_Center"</code> on purpose; read the <code>KeyError</code> and ask AI Chat <code>[3]</code></li>
+          <li>Fix the key and print cost center, VP, and overrun</li>
+        </ul></div>
+    </div>
+    <div class="check"><b>Success check:</b> 2 cost centers: <code>CC-202</code> (Marcus Vance, <code>85000.0</code>, 2.72%) and <code>CC-404</code> (David Kim, <code>28000.0</code>, 1.15%); return code <code>0</code>.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 18 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">13. Exercise 3: Advanced Practice</span></div>
+  <div class="title">VP Exception Report: Who Must Explain?</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid2" style="flex: 1; min-height: 0; grid-template-columns: 1.2fr 1fr;">
+      <div class="card"><div class="tag">WHAT TO BUILD: <code>YourName_S14_challenge.py</code></div>
+        <ol class="ex3">
+          <li><code>Variance_USD</code>, <code>Variance_Pct</code> (2 decimals); <code>My_Flag</code> = <code>Variance_Pct &gt; 2.0</code>; check it agrees with <code>Audit_Status</code></li>
+          <li>Flagged rows only, by cost center: count, overrun sum, worst %</li>
+          <li>All rows, by cost center: <code>Year_Variance_Pct</code></li>
+          <li>Merge both into <code>vp_info</code> (<code>how="left"</code>)</li>
+          <li><code>Escalate</code> = 2+ flagged quarters <b>and</b> year variance <code>&gt; 1.0</code></li>
+          <li>Sort, print, save <code>data/vp_exception_report.csv</code></li>
+        </ol></div>
+      <div class="card"><div class="tag">NEW TOOLS</div>
+        <ul><li><code>.reset_index()</code>: group names back into a normal column</li><li><code>.fillna(0)</code>: empty values become <code>0</code></li><li><code>"max"</code> in <code>.agg()</code>: the largest value</li><li>Two sort keys:</li></ul>
+<div class="snip">.sort_values(
+    ["Flagged_Overrun_USD",
+     "Worst_Variance_Pct"],
+    ascending=False,
+)</div>
+      </div>
+    </div>
+    <div class="check"><b>Self-check:</b> 0 disagreements; Escalate only for Marcus Vance (2.72%) and David Kim (1.15%). Full steps: section 13 of the course page.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 19 / 19</span></div>
+</section>
+
+</body>
+</html>

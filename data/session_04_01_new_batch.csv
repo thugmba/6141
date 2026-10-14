@@ -1,0 +1,9 @@
+Transaction_ID,Transaction_Amount_USD,Foreign_IP_Flag,Failed_Login_Attempts_Count
+N-TXN-9001,2850.0,1,3
+N-TXN-9002,640.0,0,0
+N-TXN-9003,5200.0,1,5
+N-TXN-9004,980.0,0,0
+N-TXN-9005,3900.0,1,1
+N-TXN-9006,1450.0,0,1
+N-TXN-9007,4700.0,1,4
+N-TXN-9008,720.0,0,0

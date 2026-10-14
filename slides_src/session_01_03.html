@@ -1,21 +1,830 @@
-<!doctype html><html lang="en-US"><meta charset="utf-8"><title>Session 1.3</title><style>
-@page{size:16in 9in;margin:0}*{box-sizing:border-box}body{margin:0;font-family:"Times New Roman",serif;color:#18181B}.slide{width:16in;height:9in;padding:.45in .8in .4in;display:flex;flex-direction:column;background:#fff;page-break-after:always}header{font-size:15pt;color:#991B1B;font-weight:bold}header span{margin-left:.25in;color:#64748B;font-weight:normal}h1{font-size:34pt;line-height:1.08;margin:.13in 0 .08in}h2{font-size:21pt;margin:.06in 0}.slide>i{display:block;width:1.2in;height:4px;background:#991B1B;margin-bottom:.2in}main{flex:1;min-height:0;display:grid;grid-template-columns:repeat(2,1fr);gap:.2in}main.three{grid-template-columns:repeat(3,1fr);gap:.18in}article{border:1px solid #CBD5E1;border-radius:10px;padding:.18in;overflow:hidden}article b{font-size:14pt;color:#991B1B}p,li{font-size:17pt;line-height:1.25;margin:.06in 0}footer{margin-top:.18in;border-top:1px solid #CBD5E1;padding-top:.1in;font-size:15pt;color:#64748B;display:flex;justify-content:space-between}.code{display:flex;gap:.3in}.code pre{width:58%;margin:0;background:#18181B;border-radius:10px;color:#E5E7EB;padding:.22in;font:13.5pt/1.28 "DejaVu Sans Mono",monospace;white-space:pre-wrap;overflow-wrap:anywhere;overflow:hidden}.code aside{flex:1;display:flex;flex-direction:column;gap:.13in}.code aside article{flex:1}</style><body>
-<section class="slide"><header><b>MODULE 1</b><span>Session Overview</span></header><h1>Session 1.3: Tabular Data Wrangling Part 1: NumPy Arrays, Pandas DataFrames, and CSV Ingestion</h1><i></i><main><article><b>1:2 DELIVERY RHYTHM</b><h2>Applied Learning</h2><p>60 minutes of focused instruction followed by 120 minutes of guided coding and debugging.</p></article><article><b>SESSION OUTCOME</b><h2>Operational Competency</h2><p>Students apply the session concept to a small, verifiable business dataset.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 1 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 1</b><span>Core Vocabulary</span></header><h1>Concepts for This Session</h1><i></i><main class="three"><article><b>CONCEPT 1</b><h2>Vectorized Computation</h2><p> Executing mathematical operations across entire numeric arrays or data columns simultaneously in compiled C memory, replacing slow Python row-by-row loops.</p></article><article><b>CONCEPT 2</b><h2>Pandas Series</h2><p> A one-dimensional labeled array in Pandas capable of holding any data type, representing a single column in an enterprise tabular dataset.</p></article><article><b>CONCEPT 3</b><h2>Pandas DataFrame</h2><p> A two-dimensional, size-mutable tabular data structure with labeled axes (rows and columns), serving as the primary analytical workhorse for commercial data.</p></article><article><b>CONCEPT 4</b><h2>Tabular CSV Ingestion</h2><p> Reading structured comma-separated corporate ledgers directly into memory using pd.read_csv(), parsing data types and column headers automatically.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 2 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 1</b><span>Computational Foundations</span></header><h1>How the Concept Works in Practice</h1><i></i><main><article><b>FOUNDATION 1</b><h2>Vectorized Array Math vs. Row-by-Row Iteration</h2><p> While Python for loops are intuitive, calculating metrics across 500,000 retail records using a loop is computationally slow. NumPy and Pandas use vectorized execution, operating on entire memory blocks in parallel, reducing execution time from seconds to milliseconds.</p></article><article><b>FOUNDATION 2</b><h2>The Two-Dimensional DataFrame Structure</h2><p> Bridging spreadsheet grids into structured programmatic objects. A Pandas DataFrame consists of an Index (row identifiers), Columns (attribute headers), and Values (underlying two-dimensional NumPy array).</p></article><article><b>FOUNDATION 3</b><h2>Explicit Data Types and Memory Management</h2><p> Unlike spreadsheets where a cell can silently mix text and numbers, Pandas enforces explicit column data types (float64, int64, object, datetime64). This prevents silent financial corruption during aggregation.</p></article><article><b>FOUNDATION 4</b><h2>Declarative Data Inspection</h2><p> Mastering instantaneous programmatic diagnostics using .info() (data types and null counts), .describe() (descriptive summary statistics), and .shape (row and column dimensions).</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 3 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 1</b><span>Development Workflow</span></header><h1>Build, Test, and Diagnose in the IDE</h1><i></i><main><article><b>[1] FILE EXPLORER</b><h2>Organize Assets</h2><p>Use the session dataset and keep scripts in a clear workspace.</p></article><article><b>[2] CODE EDITOR</b><h2>Write Small Segments</h2><p>Run each completed segment before expanding the program.</p></article><article><b>[3] AI AGENT CHAT</b><h2>Diagnose Errors</h2><p>Capture the traceback, request an explanation, and review the fix.</p></article><article><b>[4] INTEGRATED TERMINAL</b><h2>Verify Execution</h2><p>Confirm the final program completes with return code 0.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 4 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE</b><span>Style 2 Harvard Dual-Pane Editor</span></header><h1>Script Demonstration 1: Tabular Data Wrangling Part 1: NumPy Arrays, Pandas DataFrames, and CSV Ingestion</h1><i></i><main class="code"><pre>import pandas as pd
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<title>Session 1.3 Lecture</title>
+<style>
+@page { size: 16in 9in; margin: 0; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "Times New Roman", serif; color: #18181B; }
+.slide { width: 16in; height: 9in; padding: .45in .8in .4in; display: flex; flex-direction: column; background: #FFF; page-break-after: always; }
+.eyebrow { color: #991B1B; font-size: 15pt; font-weight: bold; letter-spacing: .02em; }
+.kicker { color: #64748B; font-size: 15pt; margin-left: .25in; }
+.title { font-size: 36pt; line-height: 1.05; font-weight: bold; margin: .12in 0 .08in; }
+.rule { height: 4px; background: #991B1B; width: 1.2in; margin-bottom: .18in; flex-shrink: 0; }
+.body { flex: 1; min-height: 0; display: flex; gap: .25in; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: .2in; width: 100%; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: .18in; width: 100%; }
+.card { border: 1px solid #CBD5E1; border-radius: 10px; padding: .16in .2in; background: #FFF; min-height: 0; overflow: hidden; }
+.card h2 { font-size: 22pt; margin: .04in 0 .08in; }
+.card p, .card li { font-size: 18pt; line-height: 1.25; margin: .05in 0; }
+.card ul { margin: .04in 0 0; padding-left: .3in; }
+.tag { color: #991B1B; font-size: 15pt; font-weight: bold; }
+.what, .why { font-size: 18pt; line-height: 1.25; margin: .05in 0; }
+.what b, .why b { color: #991B1B; }
+code { font-family: "DejaVu Sans Mono", monospace; font-size: .86em; background: #F1F5F9; border: 1px solid #E2E8F0; border-radius: 4px; padding: 0 .04in; white-space: nowrap; }
+h2 code { font-size: .82em; }
+.footer { border-top: 1px solid #CBD5E1; min-height: .42in; margin-top: .18in; display: flex; align-items: end; justify-content: space-between; color: #475569; font-size: 15pt; flex-shrink: 0; }
 
-    df = pd.read_csv("data/session_01_03_dataset.csv")
-    print("Dataset Dimensions (Rows, Columns):", df.shape)
-    print("Column Data Types:\\n", df.dtypes)
-    print(df.head(3))</pre><aside><article><b>SYNTAX</b><h2>Readable Structure</h2><p>Observe the syntax and indentation that control execution.</p></article><article><b>RUNTIME</b><h2>Verified Execution</h2><p>Run the example in the integrated terminal and inspect the output.</p></article><article><b>BUSINESS VALUE</b><h2>Applied Automation</h2><p>Use the pattern to automate a repeatable business decision.</p></article></aside></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 5 / 8</span></footer></section><section class="slide"><header><b>MODULE</b><span>Style 2 Harvard Dual-Pane Editor</span></header><h1>Script Demonstration 2: Tabular Data Wrangling Part 1: NumPy Arrays, Pandas DataFrames, and CSV Ingestion</h1><i></i><main class="code"><pre>df["Operating_Profit_USD"] = df["Monthly_Sales_USD"] - df["Operating_Cost_USD"]
-    df["Operating_Margin_Pct"] = (df["Operating_Profit_USD"] / df["Monthly_Sales_USD"]) * 100.0
-    print(df[["Store_ID", "Monthly_Sales_USD", "Operating_Margin_Pct"]].head(3))</pre><aside><article><b>SYNTAX</b><h2>Readable Structure</h2><p>Observe the syntax and indentation that control execution.</p></article><article><b>RUNTIME</b><h2>Verified Execution</h2><p>Run the example in the integrated terminal and inspect the output.</p></article><article><b>BUSINESS VALUE</b><h2>Applied Automation</h2><p>Use the pattern to automate a repeatable business decision.</p></article></aside></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 6 / 8</span></footer></section><section class="slide"><header><b>MODULE</b><span>Style 2 Harvard Dual-Pane Editor</span></header><h1>Script Demonstration 3: Tabular Data Wrangling Part 1: NumPy Arrays, Pandas DataFrames, and CSV Ingestion</h1><i></i><main class="code"><pre># Select high-revenue stores in the West region
-    west_high_sales = df.loc[(df["Region_Name"] == "West") &amp; (df["Monthly_Sales_USD"] &gt;= 150000.0)]
+/* Slide 1 */
+.overview { grid-template-columns: 2fr 3fr; }
+.overview .card { display: flex; flex-direction: column; }
+.overview ul.lead { margin: .1in 0 0; padding-left: .32in; }
+.overview ul.lead li { font-size: 20pt; line-height: 1.25; margin: 0 0 .1in; }
+.overview .card .flow { margin-top: auto; font-size: 16pt; color: #64748B; border-top: 1px solid #CBD5E1; padding-top: .1in; }
+.overview ol { margin: .06in 0 0; padding-left: .38in; }
+.overview ol > li { font-size: 21pt; line-height: 1.25; margin: 0 0 .12in; }
+.gloss { display: block; font-size: 18pt; color: #475569; margin-top: .03in; }
 
-    # Impute missing satisfaction scores with median value
-    median_score = df["Customer_Satisfaction_Score"].median()
-    df["Customer_Satisfaction_Score"] = df["Customer_Satisfaction_Score"].fillna(median_score)
-    print("Median Satisfaction Score Imputed:", median_score)</pre><aside><article><b>SYNTAX</b><h2>Readable Structure</h2><p>Observe the syntax and indentation that control execution.</p></article><article><b>RUNTIME</b><h2>Verified Execution</h2><p>Run the example in the integrated terminal and inspect the output.</p></article><article><b>BUSINESS VALUE</b><h2>Applied Automation</h2><p>Use the pattern to automate a repeatable business decision.</p></article></aside></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 7 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 1</b><span>Hands-On Practice</span></header><h1>Exercise 1 and Exercise 2</h1><i></i><main><article><b>EXERCISE 1: GUIDED</b><h2>Foundational Practice</h2><p>Follow the lab protocol, run the script, and verify its output with the session dataset.</p></article><article><b>EXERCISE 2: DEBUGGING</b><h2>Applied Challenge</h2><p>Extend the program, diagnose an intentional error, apply the verified correction, and confirm return code 0.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 8 / 8</span></footer></section></body></html>
+/* Code slides */
+.code-panel { width: 60%; background: #18181B; border-radius: 10px; color: #E5E7EB; padding: .16in .22in; display: flex; flex-direction: column; flex-shrink: 0; }
+.code-header { color: #CBD5E1; font: 14pt "DejaVu Sans Mono", monospace; border-bottom: 1px solid #3F3F46; padding-bottom: .08in; display: flex; align-items: center; gap: .08in; }
+.dot { width: .13in; height: .13in; border-radius: 50%; display: inline-block; }
+pre { white-space: pre; font: 14.5pt/1.38 "DejaVu Sans Mono", monospace; margin: .12in 0 0; overflow: hidden; }
+.cm { color: #94A3B8; }
+.sec { color: #FBBF24; font-weight: bold; }
+.ipo { margin-left: auto; color: #FBBF24; font-size: 13pt; }
+.notes .card.wide { flex: 1.6; }
+
+/* Rows and columns slide */
+.table-wrap { width: 60%; flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; }
+table.df { border-collapse: collapse; font: 16pt/1.3 "DejaVu Sans Mono", monospace; }
+table.df td, table.df th { padding: .07in .14in; text-align: left; white-space: nowrap; }
+table.df thead th { border-bottom: 2px solid #18181B; }
+table.df tbody td { border-bottom: 1px solid #E2E8F0; }
+table.df .num { text-align: right; }
+table.df .idx { color: #64748B; }
+table.df .lbl { font: bold 15pt "Times New Roman", serif; border: none; padding: 0 .1in .04in; }
+.row-lbl { color: #1D4ED8; text-align: right !important; }
+.col-lbl { color: #B45309; text-align: center !important; }
+table.df .hl-row td { background: #DBEAFE; }
+table.df .hl-col { background: #FEF3C7; }
+table.df .hl-row td.hl-col { background: #FDE68A; outline: 3px solid #991B1B; outline-offset: -3px; font-weight: bold; }
+table.df .more { color: #64748B; font-family: "Times New Roman", serif; font-style: italic; }
+.card .tag.blue { color: #1D4ED8; }
+.card .tag.amber { color: #B45309; }
+.card.row-card { border: 2px solid #93C5FD; }
+.card.col-card { border: 2px solid #FCD34D; }
+.card.cell-card { border: 2px solid #991B1B; }
+.notes { flex: 1; display: flex; flex-direction: column; gap: .12in; min-width: 0; }
+.notes .card { flex: 1; }
+.notes .card h2 { font-size: 20pt; }
+
+.check { margin-top: .14in; background: #FEF2F2; border: 1px solid #FCA5A5; border-radius: 10px; padding: .12in .2in; font-size: 18pt; flex-shrink: 0; }
+
+/* Six terms visual map */
+.fit { flex: 1; min-height: 0; display: grid; grid-template-rows: 1fr 1fr; gap: .16in; }
+.fit-row { display: flex; gap: .14in; align-items: stretch; min-height: 0; }
+.fit-box { border: 1px solid #CBD5E1; border-radius: 10px; padding: .12in .16in; display: flex; flex-direction: column; min-width: 0; }
+.fit-box .tag { margin-bottom: .04in; }
+.fit-box .cap { font-size: 18pt; margin: .06in 0 0; line-height: 1.2; }
+.fit-arrow { display: flex; flex-direction: column; justify-content: center; align-items: center; color: #991B1B; flex-shrink: 0; }
+.fit-arrow .big { font-size: 40pt; line-height: 1; }
+.fit-arrow code { font-size: 14pt; }
+.rawcsv { background: #18181B; color: #E5E7EB; border-radius: 8px; padding: .1in .14in; font: 15pt/1.4 "DejaVu Sans Mono", monospace; white-space: pre; }
+.rawcsv b { color: #FBBF24; }
+table.mini { border-collapse: collapse; font: 15pt/1.3 "DejaVu Sans Mono", monospace; }
+table.mini th, table.mini td { padding: .03in .1in; text-align: left; white-space: nowrap; border-bottom: 1px solid #E2E8F0; }
+table.mini th { border-bottom: 2px solid #18181B; }
+table.mini .num { text-align: right; }
+table.mini .idx { color: #64748B; }
+table.mini .ser { background: #FEF3C7; }
+table.mini .new { background: #DCFCE7; font-weight: bold; }
+table.mini tr.keep td { background: #DBEAFE; font-weight: bold; }
+table.mini tr.drop td { color: #CBD5E1; }
+.op { font: bold 26pt "DejaVu Sans Mono", monospace; color: #991B1B; align-self: center; padding: 0 .06in; }
+.toolbar { font-size: 17pt; color: #475569; margin-bottom: .1in; flex-shrink: 0; }
+.toolbar b { color: #991B1B; }
+
+/* DataFrame visual map */
+.xl th, .xl td { font-size: 15pt; }
+.xl .rn { background: #F1F5F9; color: #64748B; text-align: center; }
+.xl .bad { background: #FEE2E2; color: #B91C1C; font-weight: bold; }
+.side { display: flex; gap: .22in; align-items: flex-start; }
+.side .lab { font-size: 17pt; font-weight: bold; margin-bottom: .04in; }
+.brace { border-left: 4px solid #16A34A; padding-left: .1in; }
+.anat .ix { background: #DBEAFE; color: #1D4ED8; }
+.anat .hd { background: #FEF3C7; }
+.anat .vl { background: #DCFCE7; }
+.chips { display: flex; gap: .12in; flex-wrap: wrap; margin-top: .08in; }
+.chip { font-size: 16pt; padding: .02in .1in; border-radius: 6px; }
+.dt { font-size: 14pt; padding: .01in .08in; border-radius: 5px; background: #18181B; color: #FBBF24; font-family: "DejaVu Sans Mono", monospace; }
+.insp td { font-size: 15pt; vertical-align: top; }
+.insp td:first-child { color: #991B1B; }
+.pr, .insp td.pr { font: 18pt/1.3 "Times New Roman", serif; }
+td.pr { white-space: normal !important; }
+
+/* IDE slide */
+.shot { width: 60%; flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; }
+.shot img { width: 100%; border: 1px solid #CBD5E1; border-radius: 10px; display: block; }
+.shot .cap { font-size: 17pt; margin: .1in 0 0; }
+.steps { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .1in; justify-content: center; }
+.step { display: flex; gap: .14in; align-items: flex-start; border: 1px solid #CBD5E1; border-radius: 10px; padding: .1in .14in; }
+.badge { background: #991B1B; color: #FFF; font: bold 16pt "DejaVu Sans Mono", monospace; border-radius: 6px; padding: .02in .08in; flex-shrink: 0; }
+.step h3 { font-size: 20pt; margin: 0 0 .02in; }
+.step p { font-size: 18pt; line-height: 1.22; margin: .02in 0; }
+.step p.eg { font-size: 16pt; color: #475569; }
+
+/* Quick check slides */
+.qc { grid-template-columns: 1fr 1.15fr; }
+.qc .card { display: flex; flex-direction: column; }
+.snip { background: #18181B; color: #E5E7EB; border-radius: 8px; padding: .1in .16in; font: 16pt/1.4 "DejaVu Sans Mono", monospace; white-space: pre; margin: .04in 0 .1in; }
+.snip .blank { background: #FBBF24; color: #18181B; padding: 0 .06in; border-radius: 3px; font-weight: bold; }
+.snip .cm { color: #94A3B8; }
+.snip-lab { font-size: 17pt; font-weight: bold; margin-top: .06in; }
+.strip { display: flex; gap: .05in; margin: .1in 0 .04in; }
+.strip span { flex: 1; text-align: center; font: 15pt "DejaVu Sans Mono", monospace; padding: .06in 0; border-radius: 5px; background: #F1F5F9; color: #94A3B8; }
+.strip .h { background: #DBEAFE; color: #1D4ED8; font-weight: bold; }
+.strip .t { background: #DCFCE7; color: #15803D; font-weight: bold; }
+.strip-lab { display: flex; justify-content: space-between; font-size: 16pt; }
+.flowline { display: flex; align-items: center; gap: .14in; margin: .1in 0; font: 17pt "DejaVu Sans Mono", monospace; }
+.flowline .box { background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 6px; padding: .04in .12in; }
+.flowline .arr { color: #991B1B; font-size: 22pt; }
+.flowline .res { background: #DCFCE7; border: 1px solid #86EFAC; border-radius: 6px; padding: .04in .12in; font-weight: bold; }
+.vstack { margin-top: .08in; }
+.vstack td, .vstack th { padding: .02in .12in; }
+.vstack tr.h td:not(.side-lab) { background: #DBEAFE; color: #1D4ED8; font-weight: bold; }
+.vstack tr.t td:not(.side-lab) { background: #DCFCE7; color: #15803D; font-weight: bold; }
+.vstack tr.gap td { color: #94A3B8; font-family: "Times New Roman", serif; font-style: italic; }
+.vstack .side-lab { border: none; font: 17pt "Times New Roman", serif; vertical-align: middle; }
+.vstack .h-lab { color: #1D4ED8; }
+.vstack .t-lab { color: #15803D; }
+table.mini th.plain { font: bold 17pt "Times New Roman", serif; }
+.overview ol.biz > li { font-size: 20pt; margin: 0 0 .1in; }
+.overview .q { display: block; color: #991B1B; font-style: italic; font-weight: bold; }
+.overview .sit-note { font-size: 19pt; font-weight: bold; margin: .04in 0 0; }
+
+/* CSV intro slide */
+.csvflow { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr auto 1.25fr auto 1fr; gap: .14in; align-items: stretch; }
+.csvflow .col { border: 1px solid #CBD5E1; border-radius: 10px; padding: .14in .18in; display: flex; flex-direction: column; gap: .1in; }
+.csvflow .item { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: .08in .12in; font-size: 18pt; line-height: 1.2; }
+.csvflow .item small { display: block; font-size: 16pt; color: #475569; }
+.csvflow .mid { border: 2px solid #991B1B; }
+.csvflow .arrow { display: flex; align-items: center; color: #991B1B; font-size: 40pt; }
+.csvflow li { font-size: 18pt; line-height: 1.3; margin: .04in 0; }
+.csvflow .fname { font: bold 15pt "DejaVu Sans Mono", monospace; color: #18181B; }
+
+/* CSV vs XLSX */
+.src-row { display: flex; gap: .14in; align-items: stretch; flex-shrink: 0; }
+.src-box { flex: 1; border: 1px solid #CBD5E1; border-radius: 10px; padding: .1in .16in; }
+.chips2 { display: flex; gap: .1in; flex-wrap: wrap; margin-top: .06in; }
+.chips2 span { background: #F1F5F9; border: 1px solid #E2E8F0; border-radius: 6px; padding: .03in .12in; font-size: 18pt; }
+.arrow2 { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #991B1B; font-size: 34pt; line-height: 1; }
+.arrow2 small { font-size: 15pt; }
+.files { display: flex; gap: .12in; align-items: center; margin-top: .06in; }
+.file { font: bold 16pt "DejaVu Sans Mono", monospace; padding: .03in .12in; border-radius: 6px; color: #FFF; }
+.file.xlsx { background: #64748B; }
+.file.csv { background: #15803D; }
+.vs { flex: 1; min-height: 0; display: flex; gap: .16in; }
+.vs-col { flex: 1; border-radius: 12px; padding: .14in .2in; display: flex; flex-direction: column; }
+.vs-col.bad { border: 2px solid #CBD5E1; background: #F8FAFC; }
+.vs-col.good { border: 3px solid #15803D; background: #F0FDF4; flex: 1.35; }
+.vs-head { font-size: 24pt; font-weight: bold; display: flex; align-items: center; gap: .12in; }
+.vs-sub { font-size: 18pt; margin: .06in 0 .1in; color: #334155; }
+.vs-mid { align-self: center; font: bold 26pt "Times New Roman", serif; color: #64748B; }
+.apps { display: flex; flex-wrap: wrap; gap: .1in; }
+.app { font-size: 18pt; background: #FFF; border-radius: 8px; padding: .06in .14in; display: flex; flex-direction: column; min-width: 1.5in; }
+.app b { font-size: 24pt; line-height: 1; }
+.app small { font-size: 15pt; color: #64748B; }
+.rawcsv.garbled { color: #94A3B8; }
+.app.ok { border: 2px solid #86EFAC; }
+.app.ok b { color: #15803D; }
+.app.no { border: 2px solid #FCA5A5; }
+.app.no b { color: #B91C1C; }
+
+/* session map + exercise 3 */
+.sm-q { border: 3px solid #991B1B; border-radius: 14px; padding: .1in .2in; font-size: 24pt; font-style: italic; background: #FEF2F2; align-self: flex-start; flex-shrink: 0; }
+.sm-q b { font-style: normal; color: #991B1B; }
+.sm-phases { flex: 1; min-height: 0; display: flex; gap: .14in; align-items: stretch; }
+.sm-phase { flex: 1; border: 2px solid #CBD5E1; border-radius: 12px; padding: .14in .2in; }
+.sm-phase.sm-p3 { border: 3px solid #15803D; background: #F0FDF4; }
+.sm-head { display: flex; gap: .14in; align-items: center; border-bottom: 2px solid #E2E8F0; padding-bottom: .08in; margin-bottom: .08in; }
+.sm-head b { font-size: 26pt; display: block; line-height: 1.1; }
+.sm-head small { font-size: 16pt; color: #64748B; }
+.sm-step { background: #991B1B; color: #FFF; border-radius: 50%; width: .5in; height: .5in; display: flex; align-items: center; justify-content: center; font-size: 20pt; font-weight: bold; flex-shrink: 0; }
+.sm-p3 .sm-step { background: #15803D; }
+.sm-phase p { font-size: 22pt; margin: .1in 0; line-height: 1.2; display: flex; }
+.sm-phase i { font-style: normal; font-family: "DejaVu Sans Mono", monospace; font-weight: bold; color: #991B1B; min-width: .6in; flex-shrink: 0; }
+.sm-p3 i { color: #15803D; }
+.sm-arrow { align-self: center; font-size: 34pt; color: #991B1B; }
+ol.ex3 { margin: .06in 0 0; padding-left: .36in; }
+ol.ex3 li { font-size: 18pt; line-height: 1.25; margin: .06in 0; }
+table.cols { border-collapse: collapse; width: 100%; }
+table.cols td { font-size: 17pt; padding: .04in .08in; border-bottom: 1px solid #E2E8F0; vertical-align: top; }
+</style>
+</head>
+<body>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">1-2. Purpose and Outcomes</span></div>
+  <div class="title">Session 1.3: Tabular Data Wrangling Part 1: NumPy Arrays, Pandas DataFrames, and CSV Ingestion</div><div class="rule"></div>
+  <div class="body grid2 overview">
+    <div class="card">
+      <div class="tag">THE BUSINESS SITUATION</div><h2>12 Stores, One Monthly Report</h2>
+      <ul class="lead">
+        <li>Business systems share tables as Comma-Separated Values (CSV) files</li>
+        <li>Our case: a retail chain exports monthly results for its 12 stores as a CSV file</li>
+        <li>Each row: sales, costs, visitors, and rating for one store</li>
+        <li>Your manager asks: which stores are most profitable, and which meet the target?</li>
+      </ul>
+      <p class="sit-note">Today, Python answers these questions for every store at once.</p>
+      <p class="flow">Today's flow: 60 min lecture, then 120 min hands-on lab</p>
+    </div>
+    <div class="card">
+      <div class="tag">EXPECTED OUTCOMES</div><h2>By the end of today, you will be able to:</h2>
+      <ol class="biz">
+        <li><span class="q">"Did the store data load correctly?"</span>
+          Read and inspect a <code>DataFrame</code>
+          <span class="gloss"><code>DataFrame</code>: a table in Python, like one Excel sheet</span></li>
+        <li><span class="q">"What is each store's profit margin?"</span>
+          Create new columns with vectorized math
+          <span class="gloss">Vectorized: one formula runs on every row at once</span></li>
+        <li><span class="q">"Which stores meet our target?"</span>
+          Filter rows with <code>.loc[]</code> and fix a <code>KeyError</code>
+          <span class="gloss"><code>.loc[]</code>: keep rows that match a condition</span>
+          <span class="gloss"><code>KeyError</code>: the column name you typed does not exist</span></li>
+      </ol>
+    </div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 1 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">Session Map</span></div>
+  <div class="title">Session Map: Follow the Numbers</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: .14in;">
+    <div class="sm-q"><b>Today's question:</b> Which stores are most profitable, and which meet the target?</div>
+    <div class="sm-phases">
+      <div class="sm-phase "><div class="sm-head"><span class="sm-step">1</span><span><b>Why it matters</b><small>Lecture, part 1</small></span></div><p><i>1.</i> Session Purpose</p><p><i>2.</i> Learning Outcomes</p><p><i>3.</i> Business Context: Why CSV?</p><p><i>4.</i> Data Basics: Rows and Columns</p></div>
+      <div class="sm-arrow">&#8594;</div>
+      <div class="sm-phase "><div class="sm-head"><span class="sm-step">2</span><span><b>Learn the tools</b><small>Lecture, part 2</small></span></div><p><i>5.</i> Lab Practice Dataset</p><p><i>6.</i> Keywords </p><p><i>7.</i> Core Foundations</p><p><i>8.</i> IDE Workflow</p><p><i>9.</i> Code Examples + Quick Checks</p><p><i>10.</i> Official References</p></div>
+      <div class="sm-arrow">&#8594;</div>
+      <div class="sm-phase sm-p3"><div class="sm-head"><span class="sm-step">3</span><span><b>Practice</b><small>Lab</small></span></div><p><i>11.</i> Exercise 1: Guided - Retail Performance Wrangling</p><p><i>12.</i> Exercise 2: Applied - Find the Top Stores</p><p><i>13.</i> Exercise 3: Advanced - Store Scorecard</p></div>
+    </div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 2 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">3. Business Context</span></div>
+  <div class="title">Why CSV? The Everyday Format of Business Data</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: .16in;">
+    <div class="src-row">
+      <div class="src-box"><div class="tag">WHERE DATA COMES FROM</div>
+        <div class="chips2"><span>Sales registers</span><span>Accounting system</span><span>Customer database</span><span>Excel reports</span></div>
+      </div>
+      <div class="arrow2">&#8594;<small>export</small></div>
+      <div class="src-box" style="flex: 0 0 auto;"><div class="tag">ONE SHARED FILE</div>
+        <div class="files"><span class="file xlsx">stores.xlsx</span><span style="font-size: 18pt;">or</span><span class="file csv">stores.csv</span></div>
+      </div>
+    </div>
+    <div class="vs">
+      <div class="vs-col bad"><div class="vs-head"><span class="file xlsx">.xlsx</span> Excel file</div>
+        <p class="vs-sub">Packed format: needs a spreadsheet program such as Excel</p>
+        <div class="apps">
+          <div class="app ok">Excel<b>&#10003;</b></div>
+          <div class="app no">Notepad<b>&#10007;</b><small>unreadable symbols</small></div>
+          <div class="app no">Any text tool<b>&#10007;</b><small>cannot read it</small></div>
+        </div>
+<div class="rawcsv garbled" style="margin-top: .1in;">PK&#9633;&#9633;&#9633;&#9633; &#9618;&#9618;[Content_Types].xml
+&#9633;&#9618;&#9617;&#9633;&#9618;&#9617;&#9617;&#9633;&#9618;&#9633;&#9617;&#9618;&#9633;&#9633;&#9617;&#9618;</div>
+        <p class="vs-sub" style="margin-top: .06in;">Same data opened in Notepad: unreadable</p>
+      </div>
+      <div class="vs-mid">vs</div>
+      <div class="vs-col good"><div class="vs-head"><span class="file csv">.csv</span> CSV file</div>
+        <p class="vs-sub">Plain text: opens almost anywhere</p>
+        <div class="apps">
+          <div class="app ok">Notepad<b>&#10003;</b></div>
+          <div class="app ok">Excel<b>&#10003;</b></div>
+          <div class="app ok">Google Sheets<b>&#10003;</b></div>
+          <div class="app ok">Python <code>pandas</code><b>&#10003;</b></div>
+          <div class="app ok">AI assistants<b>&#10003;</b></div>
+        </div>
+<div class="rawcsv" style="margin-top: .1in;">Store_ID,Region_Name,Monthly_Sales_USD
+STR-1000,East,142000.0</div>
+        <p class="vs-sub" style="margin-top: .06in;">Same file opened in Notepad: still readable</p>
+        <p class="vs-sub" style="margin-top: auto; color: #475569; font-size: 16pt;">Trade-off: CSV keeps only values, with no formulas and no formatting</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 3 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">4. Data Basics</span></div>
+  <div class="title">What Are Rows and Columns?</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div style="flex: 1; min-height: 0; display: flex; gap: .3in;">
+      <div class="table-wrap">
+        <table class="df">
+          <thead>
+            <tr><th class="lbl"></th><th class="lbl"></th><th class="lbl"></th><th class="lbl"></th><th class="lbl col-lbl">COLUMN &#8595;</th><th class="lbl"></th></tr>
+            <tr><th class="lbl"></th><th class="idx">index</th><th>Store_ID</th><th>Region_Name</th><th class="hl-col">Monthly_Sales_USD</th><th class="more">+3 more</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="lbl"></td><td class="idx">0</td><td>STR-1000</td><td>East</td><td class="num hl-col">142000.0</td><td class="more">...</td></tr>
+            <tr class="hl-row"><td class="lbl row-lbl">ROW &#8594;</td><td class="idx">1</td><td>STR-1001</td><td>West</td><td class="num hl-col">185000.0</td><td class="more">...</td></tr>
+            <tr><td class="lbl"></td><td class="idx">2</td><td>STR-1002</td><td>North</td><td class="num hl-col">98000.0</td><td class="more">...</td></tr>
+            <tr><td class="lbl"></td><td class="idx">3</td><td>STR-1003</td><td>South</td><td class="num hl-col">115000.0</td><td class="more">...</td></tr>
+            <tr><td class="lbl"></td><td class="idx">4</td><td>STR-1004</td><td>East</td><td class="num hl-col">210000.0</td><td class="more">...</td></tr>
+            <tr><td class="lbl"></td><td class="idx">5</td><td>STR-1005</td><td>West</td><td class="num hl-col">175000.0</td><td class="more">...</td></tr>
+            <tr><td class="lbl"></td><td colspan="5" class="more">... 6 more rows</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="notes">
+        <div class="card row-card"><div class="tag blue">ROW: READ ACROSS &#8594;</div><h2>One record</h2>
+          <p>All the facts about one item: here, one store</p><p>Row <code>1</code> = everything about <code>STR-1001</code></p></div>
+        <div class="card col-card"><div class="tag amber">COLUMN: READ DOWN &#8595;</div><h2>One type of information</h2>
+          <p>The same fact for every store</p><p>In pandas, one column is a <code>Series</code></p></div>
+        <div class="card cell-card"><div class="tag">CELL</div><h2>One value</h2>
+          <p>Where a row and a column meet: <code>185000.0</code></p></div>
+      </div>
+    </div>
+    <div class="check"><b>Size of a table:</b> <code>df.shape</code> returns <code>(12, 6)</code> = 12 rows, 6 columns. Row labels (the <code>index</code>) start at <code>0</code>, not 1.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 4 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">5. Lab Practice Dataset</span></div>
+  <div class="title">One File, 12 Stores</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid2" style="flex: 1; min-height: 0; grid-template-columns: 1fr 1.6fr;">
+      <div class="card"><div class="tag">THE FILE</div><h2><code>session_01_03_dataset.csv</code></h2>
+        <ul><li>In the <code>data/</code> folder</li><li>12 rows: one row per store</li><li>6 columns, listed on the right</li><li>Used in: all demos and Exercises 1-3</li></ul></div>
+      <div class="card"><div class="tag">THE COLUMNS</div>
+        <table class="cols">
+          <tr><td><code>Store_ID</code></td><td>Store code, such as <code>STR-1001</code></td></tr>
+          <tr><td><code>Region_Name</code></td><td>East, West, North, or South</td></tr>
+          <tr><td><code>Monthly_Sales_USD</code></td><td>Revenue for the month, in U.S. Dollars</td></tr>
+          <tr><td><code>Operating_Cost_USD</code></td><td>Monthly cost to run the store</td></tr>
+          <tr><td><code>Customer_Footfall_Count</code></td><td>Number of visitors in the month</td></tr>
+          <tr><td><code>Customer_Satisfaction_Score</code></td><td>Customer rating, 1.0 to 5.0</td></tr>
+        </table></div>
+    </div>
+    <div class="check">The store data is fictional teaching data, checked with a script before class.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 5 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">6. Keywords</span></div>
+  <div class="title">Six Terms You Need Today</div><div class="rule"></div>
+  <div class="body grid3" style="grid-template-rows: 1fr 1fr;">
+    <div class="card"><div class="tag">TOOLS</div><h2><code>pandas</code> and <code>NumPy</code></h2>
+      <p class="what"><b>What:</b> free Python libraries for tables (<code>pandas</code>) and fast number arrays (<code>NumPy</code>)</p>
+      <p class="why"><b>Why:</b> they sort, filter, and calculate tables of any size</p></div>
+    <div class="card"><div class="tag">INPUT</div><h2>CSV file and <code>pd.read_csv()</code></h2>
+      <p class="what"><b>What:</b> a plain-text table where commas separate values; <code>pd.read_csv()</code> loads it</p>
+      <p class="why"><b>Why:</b> most business systems export data as CSV</p></div>
+    <div class="card"><div class="tag">TABLE</div><h2><code>DataFrame</code></h2>
+      <p class="what"><b>What:</b> a whole table in Python, with row labels and column names</p>
+      <p class="why"><b>Why:</b> it is the main object you clean, calculate, and filter</p></div>
+    <div class="card"><div class="tag">COLUMN</div><h2><code>Series</code></h2>
+      <p class="what"><b>What:</b> one column of a DataFrame, such as <code>df["Monthly_Sales_USD"]</code></p>
+      <p class="why"><b>Why:</b> most calculations work column by column</p></div>
+    <div class="card"><div class="tag">SPEED</div><h2>Vectorized Computation</h2>
+      <p class="what"><b>What:</b> one formula applied to every row at once, with no loop</p>
+      <p class="why"><b>Why:</b> fast, and nothing to drag down row by row</p></div>
+    <div class="card"><div class="tag">SELECTION</div><h2><code>.loc[]</code> vs <code>.iloc[]</code></h2>
+      <p class="what"><b>What:</b> <code>.loc[]</code> selects by label or condition; <code>.iloc[]</code> by position number</p>
+      <p class="why"><b>Why:</b> pull out exactly the rows a question needs</p>
+      <p>Example: <code>df.iloc[0:2, 0:3]</code> = first 2 rows, first 3 columns</p></div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 6 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">6. Keywords: Visual Map</span></div>
+  <div class="title">How the Six Terms Fit Together</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="toolbar"><b>Toolbox:</b> every step below uses <code>pandas</code>, which runs its math on <code>NumPy</code> arrays.</div>
+    <div class="fit">
+      <div class="fit-row">
+        <div class="fit-box" style="flex: 1;">
+          <div class="tag">STEP 1: CSV FILE</div>
+<div class="rawcsv"><b>Store_ID,Region_Name,Monthly_Sales_USD</b>
+STR-1000,East,142000.0
+STR-1001,West,185000.0
+STR-1002,North,98000.0</div>
+          <p class="cap">Plain text: one line per row, commas between values</p>
+        </div>
+        <div class="fit-arrow"><span class="big">&#8594;</span><code>pd.read_csv()</code></div>
+        <div class="fit-box" style="flex: 1;">
+          <div class="tag">STEP 2: DATAFRAME, WITH ONE SERIES</div>
+          <table class="mini">
+            <tr><th class="idx"></th><th>Store_ID</th><th>Region_Name</th><th class="ser">Monthly_Sales_USD</th></tr>
+            <tr><td class="idx">0</td><td>STR-1000</td><td>East</td><td class="num ser">142000.0</td></tr>
+            <tr><td class="idx">1</td><td>STR-1001</td><td>West</td><td class="num ser">185000.0</td></tr>
+            <tr><td class="idx">2</td><td>STR-1002</td><td>North</td><td class="num ser">98000.0</td></tr>
+          </table>
+          <p class="cap">The whole table is a <code>DataFrame</code>; the yellow column is a <code>Series</code></p>
+        </div>
+      </div>
+      <div class="fit-row">
+        <div class="fit-box" style="flex: 1;">
+          <div class="tag">STEP 3: VECTORIZED COMPUTATION</div>
+          <div style="display: flex; align-items: center;">
+            <table class="mini"><tr><th class="plain">Sales</th></tr><tr><td class="num">142000.0</td></tr><tr><td class="num">185000.0</td></tr><tr><td class="num">98000.0</td></tr></table>
+            <span class="op">-</span>
+            <table class="mini"><tr><th class="plain">Cost</th></tr><tr><td class="num">98000.0</td></tr><tr><td class="num">122000.0</td></tr><tr><td class="num">71000.0</td></tr></table>
+            <span class="op">=</span>
+            <table class="mini"><tr><th class="new plain">Profit</th></tr><tr><td class="num new">44000.0</td></tr><tr><td class="num new">63000.0</td></tr><tr><td class="num new">27000.0</td></tr></table>
+          </div>
+          <p class="cap">One line subtracts every row at once: no loop, no dragging</p>
+          <p class="cap" style="font-size: 16pt; color: #475569;">Real code: <code>df["Monthly_Sales_USD"] - df["Operating_Cost_USD"]</code></p>
+        </div>
+        <div class="fit-box" style="flex: 1.25;">
+          <div class="tag">STEP 4: SELECTION</div>
+          <div style="display: flex; gap: .2in;">
+            <div>
+              <div class="cap" style="margin: 0 0 .04in;">By condition: <code>df.loc[df["Region_Name"] == "West"]</code></div>
+              <table class="mini">
+                <tr><th class="idx"></th><th>Region_Name</th></tr>
+                <tr class="drop"><td class="idx">0</td><td>East</td></tr>
+                <tr class="keep"><td class="idx">1</td><td>West</td></tr>
+                <tr class="drop"><td class="idx">2</td><td>North</td></tr>
+              </table>
+            </div>
+            <div>
+              <div class="cap" style="margin: 0 0 .04in;">By position: <code>df.iloc[0:2]</code></div>
+              <table class="mini">
+                <tr><th class="idx"></th><th>Store_ID</th></tr>
+                <tr class="keep"><td class="idx">0</td><td>STR-1000</td></tr>
+                <tr class="keep"><td class="idx">1</td><td>STR-1001</td></tr>
+                <tr class="drop"><td class="idx">2</td><td>STR-1002</td></tr>
+              </table>
+            </div>
+          </div>
+          <p class="cap">Blue = kept, grey = left out. <code>0:2</code> starts at 0 and stops <b>before</b> 2.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 7 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">7. Core Foundations</span></div>
+  <div class="title">How a DataFrame Works</div><div class="rule"></div>
+  <div class="body grid2" style="grid-template-rows: 1fr 1fr;">
+    <div class="card"><div class="tag">1. COLUMNS, NOT CELLS</div><h2>One Line Replaces a Dragged Formula</h2>
+      <ul>
+        <li>Excel: type <code>=(C2-D2)/C2*100</code> in <code>E2</code>, then drag it down; every row gets its own copy</li>
+        <li>Risk: someone types a number over <code>E5</code>, and that wrong row is easy to miss</li>
+        <li>pandas: one line covers all rows, so there is no copy to overwrite</li>
+      </ul></div>
+    <div class="card"><div class="tag">2. TABLE ANATOMY</div><h2>Index, Columns, Values</h2>
+      <ul>
+        <li><b>Index:</b> row labels (<code>0</code>, <code>1</code>, <code>2</code> ...)</li>
+        <li><b>Columns:</b> header names, such as <code>Store_ID</code></li>
+        <li><b>Values:</b> the data, stored as a <code>NumPy</code> array</li>
+      </ul></div>
+    <div class="card"><div class="tag">3. DATA TYPES</div><h2>Each Column Has One Type (<code>dtype</code>)</h2>
+      <ul>
+        <li><code>float64</code>: decimal numbers; <code>int64</code>: whole numbers</li>
+        <li><code>object</code> / <code>str</code>: text</li>
+        <li>Why: one text value in a number column changes the type, so <code>.dtypes</code> reveals it</li>
+      </ul></div>
+    <div class="card"><div class="tag">4. QUICK INSPECTION</div><h2>Check Before You Calculate</h2>
+      <ul>
+        <li><code>.shape</code>: number of rows and columns</li>
+        <li><code>.info()</code>: column types and missing values</li>
+        <li><code>.describe()</code>: count, mean, min, max</li>
+        <li><code>.head()</code>: first few rows</li>
+      </ul></div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 8 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">7. Core Foundations: Visual Map</span></div>
+  <div class="title">A DataFrame, Seen Up Close</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="fit" style="grid-template-rows: 1.2fr 1fr;">
+      <div class="fit-row">
+        <div class="fit-box" style="flex: 1;">
+          <div class="tag">1. COLUMNS, NOT CELLS</div>
+          <div class="side">
+            <div>
+              <div class="lab">Excel: a copy in every row</div>
+              <table class="mini xl">
+                <tr><th class="rn"></th><th>E (Margin %)</th></tr>
+                <tr><td class="rn">2</td><td>=(C2-D2)/C2*100</td></tr>
+                <tr><td class="rn">3</td><td>=(C3-D3)/C3*100</td></tr>
+                <tr><td class="rn">4</td><td>=(C4-D4)/C4*100</td></tr>
+                <tr><td class="rn">5</td><td class="bad">30</td></tr>
+              </table>
+            </div>
+            <div>
+              <div class="lab">pandas: one formula</div>
+              <div class="brace">
+                <table class="mini">
+                  <tr><th>Operating_Margin_Pct</th></tr>
+                  <tr><td class="num">31.0</td></tr><tr><td class="num">34.1</td></tr><tr><td class="num">27.6</td></tr><tr><td class="num">...</td></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+          <p class="cap">Red: <code>E5</code> was typed over, and the mistake is easy to miss</p><p class="cap">Green: one line of code fills every row (values rounded)</p>
+        </div>
+        <div class="fit-box" style="flex: 1;">
+          <div class="tag">2. TABLE ANATOMY</div>
+          <table class="mini anat">
+            <tr><th class="ix"></th><th class="hd">Store_ID</th><th class="hd">Region_Name</th><th class="hd">Monthly_Sales_USD</th></tr>
+            <tr><td class="ix">0</td><td class="vl">STR-1000</td><td class="vl">East</td><td class="vl num">142000.0</td></tr>
+            <tr><td class="ix">1</td><td class="vl">STR-1001</td><td class="vl">West</td><td class="vl num">185000.0</td></tr>
+            <tr><td class="ix">2</td><td class="vl">STR-1002</td><td class="vl">North</td><td class="vl num">98000.0</td></tr>
+          </table>
+          <div class="chips">
+            <span class="chip" style="background:#DBEAFE; color:#1D4ED8;"><b>Index</b>: row labels</span>
+            <span class="chip" style="background:#FEF3C7;"><b>Columns</b>: names</span>
+            <span class="chip" style="background:#DCFCE7;"><b>Values</b>: the data</span>
+          </div>
+        </div>
+      </div>
+      <div class="fit-row">
+        <div class="fit-box" style="flex: 1;">
+          <div class="tag">3. DATA TYPES (<code>dtype</code>)</div>
+          <table class="mini">
+            <tr><td>Store_ID</td><td><span class="dt">str</span> <span class="pr">text</span></td></tr>
+            <tr><td>Monthly_Sales_USD</td><td><span class="dt">float64</span> <span class="pr">decimal number</span></td></tr>
+            <tr><td>Customer_Footfall_Count</td><td><span class="dt">int64</span> <span class="pr">whole number</span></td></tr>
+          </table>
+          <p class="cap">Excel: <code>"1,200"</code> saved as text is quietly skipped by <code>SUM</code></p>
+          <p class="cap">pandas: that column turns into text, and <code>.dtypes</code> shows it</p>
+          <p class="cap" style="font-size: 16pt; color: #475569;">Older pandas versions show <code>object</code> instead of <code>str</code></p>
+        </div>
+        <div class="fit-box" style="flex: 1;">
+          <div class="tag">4. QUICK INSPECTION: REAL RESULTS</div>
+          <table class="mini insp">
+            <tr><td>df.shape</td><td class="pr"><code>(12, 6)</code>: 12 rows, 6 columns</td></tr>
+            <tr><td>df.head(2)</td><td class="pr">first 2 rows: <code>STR-1000</code>, <code>STR-1001</code></td></tr>
+            <tr><td>df.info()</td><td class="pr"><code>12 non-null</code> in every column: no gaps</td></tr>
+            <tr><td>df.describe()</td><td class="pr">Sales: mean <code>152416.67</code>, min <code>89000.0</code>, max <code>225000.0</code></td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 9 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">8. Development Workflow</span></div>
+  <div class="title">Build, Test, and Diagnose in the IDE</div><div class="rule"></div>
+  <div class="body">
+    <div class="shot">
+      <img src="../assets/antigravity_ide_interface.png" alt="Google Antigravity IDE with its four labeled panels">
+      <p class="cap">Example: Terminal <code>[4]</code> shows a <code>NameError</code>; AI Chat <code>[3]</code> explains the fix</p>
+    </div>
+    <div class="steps">
+      <div class="step"><span class="badge">[1]</span><div><h3>File Explorer</h3><p>Name it <code>YourName_S13_demo_1.py</code></p><p class="eg">Example: <code>Reacher_S13_demo_1.py</code></p><p>Check the dataset is in <code>data/</code></p></div></div>
+      <div class="step"><span class="badge">[2]</span><div><h3>Code Editor</h3><p>Write a few lines, run, repeat</p><p>Small steps keep errors small</p></div></div>
+      <div class="step"><span class="badge">[3]</span><div><h3>AI Agent Chat</h3><p>Error? Capture the traceback (Python's error report) with <code>Win + Shift + S</code></p><p>Paste with <code>Ctrl + V</code>, ask why</p></div></div>
+      <div class="step"><span class="badge">[4]</span><div><h3>Terminal</h3><p>Run <code>python</code> + your script name</p><p>Return code <code>0</code> = no errors</p></div></div>
+    </div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 10 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">9. Code Demonstration 1</span></div>
+  <div class="title">Load a CSV File and Inspect It</div><div class="rule"></div>
+  <div class="body">
+    <div class="code-panel">
+      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S13_demo_1.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
+<pre><span class="sec"># 1. Input: load the tool and the data</span>
+import pandas as pd
+df = pd.read_csv("data/session_01_03_dataset.csv")
+
+<span class="sec"># 2. Process: measure the table and take a preview</span>
+dimensions = df.shape
+column_types = df.dtypes
+preview = df.head(3)
+
+<span class="sec"># 3. Output: show the results</span>
+print("Dataset Dimensions (Rows, Columns):", dimensions)
+print("Column Data Types:\n", column_types)
+print(preview)</pre>
+    </div>
+    <div class="notes">
+      <div class="card"><div class="tag">1. INPUT</div><h2><code>import</code> and <code>pd.read_csv()</code></h2><p><code>import pandas as pd</code> loads pandas as <code>pd</code></p><p><code>pd.read_csv()</code> reads the file into a DataFrame <code>df</code></p></div>
+      <div class="card"><div class="tag">2. PROCESS</div><h2><code>.shape</code>, <code>.dtypes</code>, <code>.head(3)</code></h2><p>Size, column types, and the first 3 rows</p><p>Why: confirm the data loaded correctly</p></div>
+      <div class="card"><div class="tag">3. OUTPUT</div><h2><code>print()</code></h2><p>Shows each result in the Terminal</p><p>Why: without <code>print()</code>, a script shows nothing</p></div>
+    </div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 11 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">9. Quick Check 1</span></div>
+  <div class="title">See the Last Rows with <code>.tail()</code></div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid2 qc" style="flex: 1; min-height: 0;">
+      <div class="card"><div class="tag">NEW TOOL</div><h2><code>.tail(n)</code></h2>
+        <p class="what"><b>What:</b> shows the last <code>n</code> rows of a DataFrame</p>
+        <p class="why"><b>Why:</b> new records are often added at the bottom, so this is where you check them</p>
+        <table class="mini vstack">
+          <tr><th class="idx"></th><th>Store_ID</th><th class="side-lab"></th></tr>
+          <tr class="h"><td class="idx">0</td><td>STR-1000</td><td class="side-lab h-lab" rowspan="3">&#8592; <code>.head(3)</code>: first 3</td></tr>
+          <tr class="h"><td class="idx">1</td><td>STR-1001</td></tr>
+          <tr class="h"><td class="idx">2</td><td>STR-1002</td></tr>
+          <tr class="gap"><td class="idx">&#8942;</td><td>6 rows</td><td class="side-lab"></td></tr>
+          <tr class="t"><td class="idx">9</td><td>STR-1009</td><td class="side-lab t-lab" rowspan="3">&#8592; <code>.tail(3)</code>: last 3</td></tr>
+          <tr class="t"><td class="idx">10</td><td>STR-1010</td></tr>
+          <tr class="t"><td class="idx">11</td><td>STR-1011</td></tr>
+        </table>
+      </div>
+      <div class="card"><div class="tag">YOUR TASK</div><h2>Change One Line</h2>
+        <p>In <code>YourName_S13_demo_1.py</code>, part <b>2. Process</b>: show the <b>last</b> 3 rows instead of the first 3.</p>
+        <div class="snip-lab">Now</div>
+<div class="snip">preview = df.head(3)</div>
+        <div class="snip-lab">Your change: fill in the yellow blank</div>
+<div class="snip">preview = df.<span class="blank">____</span>(3)</div>
+      </div>
+    </div>
+    <div class="check"><b>Check:</b> run the script; the preview shows index <code>9</code>, <code>10</code>, <code>11</code> (<code>STR-1009</code>, <code>STR-1010</code>, <code>STR-1011</code>).</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 12 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">9. Code Demonstration 2</span></div>
+  <div class="title">Calculate New Columns Without a Loop</div><div class="rule"></div>
+  <div class="body">
+    <div class="code-panel">
+      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S13_demo_2.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
+<pre><span class="sec"># 1. Input: load the store data</span>
+import pandas as pd
+df = pd.read_csv("data/session_01_03_dataset.csv")
+
+<span class="sec"># 2. Process: profit and margin for every store at once</span>
+df["Operating_Profit_USD"] = (
+    df["Monthly_Sales_USD"] - df["Operating_Cost_USD"]
+)
+df["Operating_Margin_Pct"] = (
+    df["Operating_Profit_USD"] / df["Monthly_Sales_USD"] * 100.0
+)
+
+<span class="sec"># 3. Output: show the first three stores</span>
+print(df[["Store_ID", "Monthly_Sales_USD",
+          "Operating_Margin_Pct"]].head(3))</pre>
+    </div>
+    <div class="notes">
+      <div class="card"><div class="tag">1. INPUT</div><h2>Same load step as Demo 1</h2><p>Why: every script loads its own data before it can calculate</p></div>
+      <div class="card wide"><div class="tag">2. PROCESS</div><h2><code>df["Column_Name"]</code> with <code>-</code> <code>/</code> <code>*</code></h2><p>Picks a column (a <code>Series</code>); the math runs on all 12 stores at once</p><p>Why: no loop and no dragging a formula down</p></div>
+      <div class="card"><div class="tag">3. OUTPUT</div><h2><code>df[[ ... ]]</code> double brackets</h2><p>A list of column names returns a smaller table</p><p>Why: show only what your reader needs</p></div>
+    </div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 13 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">9. Quick Check 2</span></div>
+  <div class="title">Round Numbers with <code>.round()</code></div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid2 qc" style="flex: 1; min-height: 0;">
+      <div class="card"><div class="tag">NEW TOOL</div><h2><code>.round(n)</code></h2>
+        <p class="what"><b>What:</b> rounds every number in a column to <code>n</code> decimal places</p>
+        <p class="why"><b>Why:</b> long decimals are hard to read in a report</p>
+        <div class="flowline"><span class="box">30.985915</span><span class="arr">&#8594;</span><span class="box">.round(1)</span><span class="arr">&#8594;</span><span class="res">31.0</span></div>
+      </div>
+      <div class="card"><div class="tag">YOUR TASK</div><h2>Add One Line</h2>
+        <p>In <code>YourName_S13_demo_2.py</code>, add one line at the end of <b>2. Process</b> so the margin has 1 decimal place.</p>
+        <div class="snip-lab">Now</div>
+<div class="snip"><span class="cm"># (new line goes here)</span></div>
+        <div class="snip-lab">Your change: fill in the yellow blank</div>
+<div class="snip">df["Operating_Margin_Pct"] = (
+    df["Operating_Margin_Pct"].<span class="blank">_____</span>(1)
+)</div>
+      </div>
+    </div>
+    <div class="check"><b>Check:</b> the margins print as <code>31.0</code>, <code>34.1</code>, and <code>27.6</code>.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 14 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">9. Code Demonstration 3</span></div>
+  <div class="title">Filter Rows and Fill Missing Values</div><div class="rule"></div>
+  <div class="body">
+    <div class="code-panel">
+      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S13_demo_3.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
+<pre><span class="sec"># 1. Input: load the store data</span>
+import pandas as pd
+df = pd.read_csv("data/session_01_03_dataset.csv")
+
+<span class="sec"># 2. Process: keep West stores with sales of $150,000+</span>
+west_high_sales = df.loc[
+    (df["Region_Name"] == "West")
+    &amp; (df["Monthly_Sales_USD"] &gt;= 150000.0)
+]
+<span class="cm">#    then fill missing satisfaction scores with the median</span>
+median_score = df["Customer_Satisfaction_Score"].median()
+df["Customer_Satisfaction_Score"] = (
+    df["Customer_Satisfaction_Score"].fillna(median_score)
+)
+
+<span class="sec"># 3. Output: show the filtered stores and the median</span>
+print(west_high_sales[["Store_ID", "Monthly_Sales_USD"]])
+print("Median Satisfaction Score Imputed:", median_score)</pre>
+    </div>
+    <div class="notes">
+      <div class="card"><div class="tag">1. INPUT</div><h2>Same load step as Demo 1</h2><p>Why: every script loads its own data first</p></div>
+      <div class="card wide"><div class="tag">2. PROCESS</div><h2><code>.loc[]</code>, <code>&amp;</code>, <code>.fillna()</code></h2><ul><li><code>df.loc[condition]</code> keeps rows where the condition is <code>True</code></li><li><code>&amp;</code> means "and"; wrap each condition in <code>( )</code></li><li><code>.fillna()</code> fills empty cells (<code>NaN</code>) with the middle value (today's dataset has none)</li></ul></div>
+      <div class="card"><div class="tag">3. OUTPUT</div><h2><code>print()</code> the answer</h2><p>Shows the filtered stores and the median score</p></div>
+    </div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 15 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">9. Quick Check 3</span></div>
+  <div class="title">Count Rows with <code>len()</code></div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid2 qc" style="flex: 1; min-height: 0;">
+      <div class="card"><div class="tag">NEW TOOL</div><h2><code>len()</code></h2>
+        <p class="what"><b>What:</b> counts items; for a DataFrame, it returns the number of rows</p>
+        <p class="why"><b>Why:</b> it answers "how many?" questions in one step</p>
+        <div class="flowline"><span class="box">df</span><span class="arr">&#8594;</span><span class="box">len(df)</span><span class="arr">&#8594;</span><span class="res">12</span></div>
+        <p style="font-size: 16pt; color: #475569;">The full table has 12 rows</p>
+      </div>
+      <div class="card"><div class="tag">YOUR TASK</div><h2>Add One Line</h2>
+        <p>In <code>YourName_S13_demo_3.py</code>, part <b>3. Output</b>: print how many stores passed the filter.</p>
+        <div class="snip-lab">Now</div>
+<div class="snip"><span class="cm"># (new line goes here)</span></div>
+        <div class="snip-lab">Your change: fill in the yellow blank</div>
+<div class="snip">print("Stores found:", <span class="blank">___</span>(west_high_sales))</div>
+      </div>
+    </div>
+    <div class="check"><b>Check:</b> the Terminal shows <code>Stores found: 3</code>.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 16 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">10. Official References</span></div>
+  <div class="title">Where to Look Things Up</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: .16in;">
+    <div class="card"><div class="tag">PANDAS</div><h2>10 Minutes to pandas</h2><p>A short tour: loading data, selecting columns, and simple math. pandas.pydata.org/docs/user_guide/10min.html</p></div>
+    <div class="card"><div class="tag">PANDAS</div><h2>Indexing and Selecting Data</h2><p>All the details of <code>.loc[]</code> and <code>.iloc[]</code>. pandas.pydata.org/docs/user_guide/indexing.html</p></div>
+    <div class="card"><div class="tag">NUMPY</div><h2>NumPy Quickstart</h2><p>The arrays that run under every pandas column. numpy.org/doc/stable/user/quickstart.html</p></div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 17 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">11-12. Exercises</span></div>
+  <div class="title">Exercise 1 and Exercise 2</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid2" style="flex: 1; min-height: 0;">
+      <div class="card"><div class="tag">EXERCISE 1: GUIDED PRACTICE</div><h2>Retail Performance Wrangling</h2>
+        <ul>
+          <li>Create <code>YourName_S13_wrangling.py</code></li>
+          <li>Load the data with <code>pd.read_csv()</code></li>
+          <li>Add <code>Operating_Profit_USD</code> and <code>Operating_Margin_Pct</code></li>
+          <li>Print <code>df.describe()</code> for sales and margin</li>
+          <li>Run it in Terminal <code>[4]</code></li>
+        </ul></div>
+      <div class="card"><div class="tag">EXERCISE 2: APPLIED PRACTICE</div><h2>Find the Top Stores</h2>
+        <ul>
+          <li>In <code>YourName_S13_practice.py</code>, use <code>.loc[]</code>: margin <code>&gt;= 30.0</code> and satisfaction <code>&gt;= 4.5</code></li>
+          <li>Misspell <code>"Monthly_Sale_USD"</code> on purpose, read the <code>KeyError</code>, and ask AI Chat <code>[3]</code></li>
+          <li>Fix it, then sort with <code>.sort_values()</code>; add <code>ascending=False</code> for highest first</li>
+          <li>Save with <code>.to_csv()</code> to <code>data/top_performing_stores.csv</code></li>
+        </ul></div>
+    </div>
+    <div class="check"><b>Success check:</b> Exercise 2 returns 5 stores, led by <code>STR-1011</code> (South, 36.89%), and the script ends with return code <code>0</code>.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 18 / 19</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">13. Exercise 3: Advanced Practice</span></div>
+  <div class="title">Store Scorecard: Gold, Standard, or Watch?</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid2" style="flex: 1; min-height: 0; grid-template-columns: 1.2fr 1fr;">
+      <div class="card"><div class="tag">WHAT TO BUILD: <code>YourName_S13_challenge.py</code></div>
+        <ol class="ex3">
+          <li>Add <code>Operating_Profit_USD</code>, <code>Operating_Margin_Pct</code> (1 decimal), and <code>Sales_per_Visitor_USD</code> = sales / visitors (2 decimals)</li>
+          <li><code>Tier</code>: start as <code>"Standard"</code>; <code>"Gold"</code> if margin <code>&gt;= 33.0</code> and rating <code>&gt;= 4.5</code>; <code>"Watch"</code> if margin <code>&lt; 30.0</code></li>
+          <li>Print how many stores are in each tier</li>
+          <li>Sort by margin, highest first; save <code>data/store_scorecard.csv</code></li>
+          <li>In a comment: which tier holds the highest sales per visitor?</li>
+        </ol></div>
+      <div class="card"><div class="tag">NEW TOOL</div>
+        <ul><li><code>df["Tier"] = "Standard"</code>: one value in every row</li><li>Then change selected rows only:</li></ul>
+<div class="snip">df.loc[mask, "Tier"] = "Gold"</div>
+        <div class="tag" style="margin-top:.1in;">HINT</div>
+        <ul><li>Count a tier: <code>len(df.loc[df["Tier"] == "Gold"])</code></li></ul>
+      </div>
+    </div>
+    <div class="check"><b>Self-check:</b> Gold 4, Watch 5, Standard 3. The top sales per visitor (<code>STR-1002</code>, <code>11.95</code>) is a Watch store. Full steps: section 13 of the course page.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 19 / 19</span></div>
+</section>
+
+</body>
+</html>

@@ -25,7 +25,11 @@ if (!fs.existsSync(source)) throw new Error(`Missing HTML source: ${source}`);
   await page.evaluate(() => document.fonts.ready);
   const slides = page.locator('.slide');
   const count = await slides.count();
-  if (count !== 8) throw new Error(`${source} must contain exactly 8 .slide elements; found ${count}.`);
+  if (count < 1) throw new Error(`${source} contains no .slide elements.`);
+  const footers = await page.evaluate(() => [...document.querySelectorAll('.slide')].map((slide) => slide.textContent.match(/Slide (\d+) \/ (\d+)/)));
+  footers.forEach((match, index) => {
+    if (!match || Number(match[1]) !== index + 1 || Number(match[2]) !== count) throw new Error(`${source}: slide ${index + 1} footer must read "Slide ${index + 1} / ${count}".`);
+  });
 
   await page.pdf({ path: pdf, width: '16in', height: '9in', preferCSSPageSize: true, printBackground: true });
   for (let index = 0; index < count; index += 1) {
