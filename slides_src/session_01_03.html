@@ -211,6 +211,11 @@ ol.ex3 { margin: .06in 0 0; padding-left: .36in; }
 ol.ex3 li { font-size: 18pt; line-height: 1.25; margin: .06in 0; }
 table.cols { border-collapse: collapse; width: 100%; }
 table.cols td { font-size: 17pt; padding: .04in .08in; border-bottom: 1px solid #E2E8F0; vertical-align: top; }
+.card p.remember { font-size: 17pt; margin-top: .08in; color: #991B1B; }
+.card p.remember b { color: #991B1B; }
+.f7 .card ul { margin-top: .02in; }
+.f7 .card li { font-size: 17pt; }
+.f7 .card h2 { font-size: 21pt; }
 </style>
 </head>
 <body>
@@ -468,32 +473,12 @@ STR-1002,North,98000.0</div>
 <section class="slide">
   <div><span class="eyebrow">MODULE 1</span><span class="kicker">7. Core Foundations</span></div>
   <div class="title">How a DataFrame Works</div><div class="rule"></div>
-  <div class="body grid2" style="grid-template-rows: 1fr 1fr;">
-    <div class="card"><div class="tag">1. COLUMNS, NOT CELLS</div><h2>One Line Replaces a Dragged Formula</h2>
-      <ul>
-        <li>Excel: type <code>=(C2-D2)/C2*100</code> in <code>E2</code>, then drag it down; every row gets its own copy</li>
-        <li>Risk: someone types a number over <code>E5</code>, and that wrong row is easy to miss</li>
-        <li>pandas: one line covers all rows, so there is no copy to overwrite</li>
-      </ul></div>
-    <div class="card"><div class="tag">2. TABLE ANATOMY</div><h2>Index, Columns, Values</h2>
-      <ul>
-        <li><b>Index:</b> row labels (<code>0</code>, <code>1</code>, <code>2</code> ...)</li>
-        <li><b>Columns:</b> header names, such as <code>Store_ID</code></li>
-        <li><b>Values:</b> the data, stored as a <code>NumPy</code> array</li>
-      </ul></div>
-    <div class="card"><div class="tag">3. DATA TYPES</div><h2>Each Column Has One Type (<code>dtype</code>)</h2>
-      <ul>
-        <li><code>float64</code>: decimal numbers; <code>int64</code>: whole numbers</li>
-        <li><code>object</code> / <code>str</code>: text</li>
-        <li>Why: one text value in a number column changes the type, so <code>.dtypes</code> reveals it</li>
-      </ul></div>
-    <div class="card"><div class="tag">4. QUICK INSPECTION</div><h2>Check Before You Calculate</h2>
-      <ul>
-        <li><code>.shape</code>: number of rows and columns</li>
-        <li><code>.info()</code>: column types and missing values</li>
-        <li><code>.describe()</code>: count, mean, min, max</li>
-        <li><code>.head()</code>: first few rows</li>
-      </ul></div>
+  <div class="body f7" style="display:grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: .16in;">
+    <div class="card"><div class="tag">7.1</div><h2>Columns, Not Cells</h2><ul><li>Excel: 12 copies of a formula, one per row</li><li>pandas: one rule for the whole column</li></ul><p class="remember"><b>Remember:</b> write the rule once; pandas applies it to every row</p></div>
+    <div class="card"><div class="tag">7.2</div><h2>Index, Columns, Values</h2><ul><li>Index: row labels on the left, from <code>0</code></li><li><code>df["A"]</code> = one column; <code>df[["A", "B"]]</code> = a smaller table</li></ul><p class="remember"><b>Remember:</b> counting starts at <code>0</code></p></div>
+    <div class="card"><div class="tag">7.3</div><h2>One Type per Column</h2><ul><li><code>float64</code>, <code>int64</code>: numbers; <code>str</code>: text</li><li><code>"1,200"</code> makes the column text: it "sums" to <code>"1,200800"</code></li></ul><p class="remember"><b>Remember:</b> check <code>df.dtypes</code> first</p></div>
+    <div class="card"><div class="tag">7.4</div><h2>Check Before You Calculate</h2><ul><li><code>.shape</code>, <code>.head()</code>, <code>.info()</code>, <code>.describe()</code></li><li><code>df.shape()</code> fails: it is a value, not an action</li></ul><p class="remember"><b>Remember:</b> look first, calculate second</p></div>
+    <div class="card"><div class="tag">7.5</div><h2><code>.loc[]</code> vs <code>.iloc[]</code></h2><ul><li><code>.loc[]</code>: label or condition</li><li><code>.iloc[]</code>: position; after sorting, the two differ</li></ul><p class="remember"><b>Remember:</b> misspelled column name = <code>KeyError</code></p></div>
   </div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 8 / 19</span></div>
 </section>

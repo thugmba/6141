@@ -257,6 +257,11 @@ ol.ex3 { margin: .06in 0 0; padding-left: .36in; }
 ol.ex3 li { font-size: 18pt; line-height: 1.25; margin: .06in 0; }
 table.cols { border-collapse: collapse; width: 100%; }
 table.cols td { font-size: 17pt; padding: .04in .08in; border-bottom: 1px solid #E2E8F0; vertical-align: top; }
+.card p.remember { font-size: 17pt; margin-top: .08in; color: #991B1B; }
+.card p.remember b { color: #991B1B; }
+.f7 .card ul { margin-top: .02in; }
+.f7 .card li { font-size: 17pt; }
+.f7 .card h2 { font-size: 21pt; }
 </style>
 
 </head>
@@ -490,30 +495,11 @@ table.cols td { font-size: 17pt; padding: .04in .08in; border-bottom: 1px solid 
 <section class="slide">
   <div><span class="eyebrow">MODULE 1</span><span class="kicker">7. Core Foundations</span></div>
   <div class="title">How Filtering, Grouping, and Joining Work</div><div class="rule"></div>
-  <div class="body grid2" style="grid-template-rows: 1fr 1fr;">
-    <div class="card"><div class="tag">1. <code>&amp;</code>, NOT <code>and</code></div><h2>Rules Are Checked Row by Row</h2>
-      <ul>
-        <li>Python's <code>and</code> expects one <code>True</code> or <code>False</code></li>
-        <li>A mask holds 16 of them, one per row</li>
-        <li><code>&amp;</code> compares row by row; wrap each rule in <code>( )</code></li>
-      </ul></div>
-    <div class="card"><div class="tag">2. SPLIT-APPLY-COMBINE</div><h2>A Pivot Table Written as Code</h2>
-      <ul>
-        <li>Split: one group per <code>Division_Name</code></li>
-        <li>Apply: <code>"sum"</code>, <code>"count"</code>, or <code>"mean"</code> in each group</li>
-        <li>Combine: one result row per group</li>
-      </ul></div>
-    <div class="card"><div class="tag">3. MERGE vs VLOOKUP</div><h2>Match by Name, Not by Position</h2>
-      <ul>
-        <li><code>VLOOKUP</code> returns "the 2nd column"; insert a column and it returns the wrong one</li>
-        <li><code>pd.merge()</code> uses column names, so moving columns does not matter</li>
-      </ul></div>
-    <div class="card"><div class="tag">4. <code>how="left"</code></div><h2>Keep Every Row of the Main Table</h2>
-      <ul>
-        <li>Rows with no match stay, with an empty value: <code>NaN</code> ("Not a Number")</li>
-        <li>Why: a cost center with no VP still appears, so you can see who is missing</li>
-        <li><code>how="inner"</code> would drop that row from the result</li>
-      </ul></div>
+  <div class="body f7" style="display:grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); gap: .16in;">
+    <div class="card"><div class="tag">7.1</div><h2><code>&amp;</code>, Not <code>and</code></h2><ul><li>A rule gives one <code>True</code> / <code>False</code> per row</li><li><code>and</code> raises <code>ValueError</code>; no brackets raises <code>TypeError</code></li></ul><p class="remember"><b>Remember:</b> combine with <code>&amp;</code> <code>|</code> <code>~</code>, each rule in <code>( )</code></p></div>
+    <div class="card"><div class="tag">7.2</div><h2>Split, Apply, Combine</h2><ul><li>Consumer: 4 quarters, summed to <code>3205000.0</code></li><li>16 rows become 4, one per division</li></ul><p class="remember"><b>Remember:</b> <code>groupby()</code> splits, <code>.agg()</code> applies</p></div>
+    <div class="card"><div class="tag">7.3</div><h2>Match by Name, Not Position</h2><ul><li><code>VLOOKUP</code> returns "column 2": breaks if a column is inserted</li><li><code>pd.merge()</code> matches the key column by name</li></ul><p class="remember"><b>Remember:</b> the key needs the same name in both tables</p></div>
+    <div class="card"><div class="tag">7.4</div><h2><code>how="left"</code> vs <code>"inner"</code></h2><ul><li><code>left</code>: an unmatched row stays, with <code>NaN</code></li><li><code>inner</code>: the row disappears from the report</li></ul><p class="remember"><b>Remember:</b> use <code>left</code>, then look for <code>NaN</code></p></div>
   </div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 8 / 19</span></div>
 </section>

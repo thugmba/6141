@@ -285,6 +285,11 @@ table.mini td.fcell { color: #94A3B8; }
 ol.ex3 { margin: .06in 0 0; padding-left: .36in; }
 ol.ex3 li { font-size: 18pt; line-height: 1.25; margin: .06in 0; }
 
+.card p.remember { font-size: 17pt; margin-top: .08in; color: #991B1B; }
+.card p.remember b { color: #991B1B; }
+.f7 .card ul { margin-top: .02in; }
+.f7 .card li { font-size: 17pt; }
+.f7 .card h2 { font-size: 21pt; }
 </style>
 
 </head>
@@ -510,15 +515,13 @@ ol.ex3 li { font-size: 18pt; line-height: 1.25; margin: .06in 0; }
 <section class="slide">
   <div><span class="eyebrow">MODULE 2</span><span class="kicker">7. Core Foundations</span></div>
   <div class="title">How Scraping Works</div><div class="rule"></div>
-  <div class="body grid2" style="grid-template-rows: 1fr 1fr;">
-    <div class="card"><div class="tag">1. TEXT TO TABLE</div><h2>From Tags to Rows and Columns</h2>
-      <ul><li>A web page is text with tags, not a table</li><li>Scraping picks out the values and lines them up as rows and columns</li></ul></div>
-    <div class="card"><div class="tag">2. REPEATED CARDS</div><h2>One Product Card = One Row</h2>
-      <ul><li>Every product sits in the same kind of tag: <code>div.product</code></li><li>A <code>for</code> loop visits each card and builds one row</li></ul></div>
-    <div class="card"><div class="tag">3. SELECT BY CLASS</div><h2>Use Names, Not Positions</h2>
-      <ul><li>"The 3rd tag" breaks if the site adds a tag before it</li><li><code>.price</code> follows the class name, so it is more likely to keep working</li><li>Still recheck after a site redesign</li></ul></div>
-    <div class="card"><div class="tag">4. MISSING TAGS</div><h2>Nothing Found = <code>None</code></h2>
-      <ul><li><code>.select_one()</code> returns <code>None</code> when a tag is missing</li><li><code>None.text</code> stops the script with an <code>AttributeError</code></li><li>Check first: <code>if tag is not None:</code></li></ul></div>
+  <div class="body f7" style="display:grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: .16in;">
+    <div class="card"><div class="tag">7.1</div><h2>Text with Tags</h2><ul><li><code>&lt;span class="price"&gt;$49.50&lt;/span&gt;</code></li><li>The class label tells you where the value is</li></ul><p class="remember"><b>Remember:</b> find the tag, take the text</p></div>
+    <div class="card"><div class="tag">7.2</div><h2>Tags Inside Tags</h2><ul><li>Whole page: 4 prices; inside one card: 1</li><li>Loop over cards, then search inside each</li></ul><p class="remember"><b>Remember:</b> values stay with their product</p></div>
+    <div class="card"><div class="tag">7.3</div><h2>Four Ways to Find Tags</h2><ul><li>First: <code>.find()</code>, <code>.select_one()</code></li><li>All: <code>.find_all()</code>, <code>.select()</code></li></ul><p class="remember"><b>Remember:</b> then <code>.text</code> for the words</p></div>
+    <div class="card"><div class="tag">7.4</div><h2>Text Is Not a Number Yet</h2><ul><li><code>"$49.50"</code> &#8594; <code>.replace("$", "")</code> &#8594; <code>float()</code> &#8594; <code>49.5</code></li><li><code>float("$49.50")</code> raises <code>ValueError</code></li></ul><p class="remember"><b>Remember:</b> clean first, then convert</p></div>
+    <div class="card"><div class="tag">7.5</div><h2>Class, Not Position</h2><ul><li>"2nd tag" breaks when a SALE badge appears</li><li><code>.price</code> follows the label</li></ul><p class="remember"><b>Remember:</b> recheck after a redesign</p></div>
+    <div class="card"><div class="tag">7.6</div><h2>Missing Tag = <code>None</code></h2><ul><li><code>SKU-807</code> has no stock tag</li><li><code>None.text</code> raises <code>AttributeError</code></li></ul><p class="remember"><b>Remember:</b> check <code>is not None</code> first</p></div>
   </div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 8 / 19</span></div>
 </section>
