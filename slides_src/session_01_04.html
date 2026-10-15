@@ -262,6 +262,22 @@ table.cols td { font-size: 17pt; padding: .04in .08in; border-bottom: 1px solid 
 .f7 .card ul { margin-top: .02in; }
 .f7 .card li { font-size: 17pt; }
 .f7 .card h2 { font-size: 21pt; }
+
+/* session map with content */
+.sm-phase.fitbox { display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
+.sm-phase p.sm-item { display: flex; gap: .1in; margin: .06in 0; line-height: 1.15; }
+.sm-item i { font-style: normal; font-family: "DejaVu Sans Mono", monospace; font-weight: bold; color: #991B1B; min-width: .5in; flex-shrink: 0; }
+.sm-p3 .sm-item i { color: #15803D; }
+.sm-item b { display: block; font-size: 1em; }
+.sm-item span.d { display: block; font-size: .9em; color: #334155; }
+.sm-item code { font-size: .85em; white-space: normal; overflow-wrap: anywhere; }
+/* end session map */
+
+/* lean slides: bigger text */
+.f7 .card h2, .exg .card h2 { font-size: 25pt; margin-bottom: .14in; }
+.f7 .card p, .exg .card p { font-size: 21pt; line-height: 1.3; margin: .1in 0; }
+.f7 .card p.remember, .exg .card p.remember { font-size: 21pt; margin-top: .2in; }
+.f7 .card .tag, .exg .card .tag { font-size: 18pt; }
 </style>
 
 </head>
@@ -297,23 +313,14 @@ table.cols td { font-size: 17pt; padding: .04in .08in; border-bottom: 1px solid 
       </ol>
     </div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 1 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 1 / 16</span></div>
 </section>
 
 <section class="slide">
   <div><span class="eyebrow">MODULE 1</span><span class="kicker">Session Map</span></div>
   <div class="title">Session Map: Follow the Numbers</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: .14in;">
-    <div class="sm-q"><b>Today's question:</b> Who overspent, by how much, and who is responsible?</div>
-    <div class="sm-phases">
-      <div class="sm-phase "><div class="sm-head"><span class="sm-step">1</span><span><b>Why it matters</b><small>Lecture, part 1</small></span></div><p><i>1.</i> Session Purpose</p><p><i>2.</i> Learning Outcomes</p><p><i>3.</i> Business Context: Budget vs Actual</p><p><i>4.</i> Data Basics: From Excel Tools You Know to pandas</p></div>
-      <div class="sm-arrow">&#8594;</div>
-      <div class="sm-phase "><div class="sm-head"><span class="sm-step">2</span><span><b>Learn the tools</b><small>Lecture, part 2</small></span></div><p><i>5.</i> Lab Practice Dataset</p><p><i>6.</i> Keywords </p><p><i>7.</i> Core Foundations</p><p><i>8.</i> IDE Workflow</p><p><i>9.</i> Code Examples + Quick Checks</p><p><i>10.</i> Official References</p></div>
-      <div class="sm-arrow">&#8594;</div>
-      <div class="sm-phase sm-p3"><div class="sm-head"><span class="sm-step">3</span><span><b>Practice</b><small>Lab</small></span></div><p><i>11.</i> Exercise 1: Guided - Quarterly Division Audit</p><p><i>12.</i> Exercise 2: Applied - Annual Cost Center Overruns</p><p><i>13.</i> Exercise 3: Advanced - VP Exception Report</p></div>
-    </div>
-  </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 2 / 19</span></div>
+    <div class="body" style="flex-direction: column; gap: .14in;"><div class="sm-q"><b>Today's question:</b> Who overspent, by how much, and who is responsible?</div><div class="sm-phases"><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">1</span><span><b>Why it matters</b><small>Lecture, part 1</small></span></div><p class="sm-item"><i>1.</i><span><b>Session Purpose</b><span class="d">answer today&#x27;s question</span></span></p><p class="sm-item"><i>2.</i><span><b>Learning Outcomes</b><span class="d">3 skills you will show today</span></span></p><p class="sm-item"><i>3.</i><span><b>Business Context</b><span class="d">Budget vs Actual</span></span></p><p class="sm-item"><i>4.</i><span><b>Data Basics</b><span class="d">From Excel Tools You Know to pandas</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">2</span><span><b>Learn the tools</b><small>Lecture, part 2</small></span></div><p class="sm-item"><i>5.</i><span><b>Lab Dataset</b><span class="d">1 CSV</span></span></p><p class="sm-item"><i>6.</i><span><b>Keywords</b><span class="d">6 terms</span></span></p><p class="sm-item"><i>7.</i><span><b>Core Foundations</b><span class="d">4 ideas, one at a time</span></span></p><p class="sm-item"><i>8.</i><span><b>IDE Setup</b><span class="d">name files, run in the Terminal</span></span></p><p class="sm-item"><i>9.</i><span><b>Code Examples</b><span class="d">3 demos + Quick Checks</span></span></p><p class="sm-item"><i>10.</i><span><b>References</b><span class="d">2 official docs</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox sm-p3" data-start="22"><div class="sm-head"><span class="sm-step">3</span><span><b>Practice</b><small>Lab</small></span></div><p class="sm-item"><i>11.</i><span><b>Exercise 1: Guided</b><span class="d">Quarterly Division Audit</span></span></p><p class="sm-item"><i>12.</i><span><b>Exercise 2: Applied</b><span class="d">Annual Cost Center Overruns</span></span></p><p class="sm-item"><i>13.</i><span><b>Exercise 3: Advanced</b><span class="d">VP Exception Report</span></span></p></div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 2 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -351,7 +358,7 @@ table.cols td { font-size: 17pt; padding: .04in .08in; border-bottom: 1px solid 
     </div>
     <div class="check"><b>Today's job:</b> find these overruns for all 4 divisions, add up the year, and name the person responsible.</div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 3 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 3 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -374,7 +381,7 @@ table.cols td { font-size: 17pt; padding: .04in .08in; border-bottom: 1px solid 
       <div class="b-pd"><div class="tag">PANDAS</div><h2><code>pd.merge()</code></h2><p>Matches rows by column <b>name</b>, such as <code>Cost_Center_Code</code></p></div>
     </div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 4 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 4 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -397,7 +404,7 @@ table.cols td { font-size: 17pt; padding: .04in .08in; border-bottom: 1px solid 
     </div>
     <div class="check">Each CSV row is one division's spending in one quarter: 4 divisions &#215; 4 quarters = 16 rows.</div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 5 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 5 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -423,85 +430,19 @@ table.cols td { font-size: 17pt; padding: .04in .08in; border-bottom: 1px solid 
       <p class="what"><b>What:</b> a column both tables share, such as <code>Cost_Center_Code</code></p>
       <p class="why"><b>Why:</b> tells pandas which rows belong together</p></div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 6 / 19</span></div>
-</section>
-
-<section class="slide">
-  <div><span class="eyebrow">MODULE 1</span><span class="kicker">6. Keywords: Visual Map</span></div>
-  <div class="title">How the Six Terms Fit Together</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="fit" style="grid-template-rows: 1fr 1fr;">
-      <div class="fit-row">
-        <div class="fit-box" style="flex: 1;">
-          <div class="tag">STEP 1: BOOLEAN MASK (CONSUMER ROWS)</div>
-          <table class="mini">
-            <tr><th>Fiscal_Quarter</th><th class="plain">Over budget?</th></tr>
-            <tr class="keep"><td>Q1</td><td>True</td></tr>
-            <tr class="keep"><td>Q2</td><td>True</td></tr>
-            <tr class="keep"><td>Q3</td><td>True</td></tr>
-            <tr class="drop"><td>Q4</td><td>False</td></tr>
-          </table>
-          <p class="cap">Blue = <code>True</code>, kept by <code>df[mask]</code></p>
-        </div>
-        <div class="fit-box" style="flex: 1.3;">
-          <div class="tag">STEP 2: SPLIT, APPLY, COMBINE</div>
-          <div class="sac">
-            <div class="sac-col"><div class="sac-lab">Split: 16 rows</div>
-              <span class="grp g1">Cloud &#215; 4</span><span class="grp g2">Consumer &#215; 4</span><span class="grp g3">Enterprise &#215; 4</span><span class="grp g4">Logistics &#215; 4</span></div>
-            <div class="b-arrow small">&#8594;<small>sum</small></div>
-            <table class="mini">
-              <tr><th>Division_Name</th><th>Variance_USD</th></tr>
-              <tr><td>Cloud</td><td class="num">-15000.0</td></tr>
-              <tr><td>Consumer</td><td class="num">85000.0</td></tr>
-              <tr><td>Enterprise</td><td class="num">0.0</td></tr>
-              <tr><td>Logistics</td><td class="num">28000.0</td></tr>
-            </table>
-          </div>
-          <p class="cap">Combine: one row per division for the whole year</p>
-        </div>
-      </div>
-      <div class="fit-row">
-        <div class="fit-box" style="flex: 1;">
-          <div class="tag">STEP 3: MERGE ON A KEY COLUMN</div>
-          <div class="sac">
-            <table class="mini">
-              <tr><th class="keycol">Cost_Center_Code</th><th>Variance_USD</th></tr>
-              <tr><td class="keycol">CC-202</td><td class="num">85000.0</td></tr>
-              <tr><td class="keycol">CC-404</td><td class="num">28000.0</td></tr>
-            </table>
-            <span class="op">+</span>
-            <table class="mini">
-              <tr><th class="keycol">Cost_Center_Code</th><th>VP_Lead</th></tr>
-              <tr><td class="keycol">CC-202</td><td>Marcus Vance</td></tr>
-              <tr><td class="keycol">CC-404</td><td>David Kim</td></tr>
-            </table>
-          </div>
-          <div class="sac" style="margin-top: .08in;">
-            <span class="op">=</span>
-            <table class="mini">
-              <tr><th class="keycol">Cost_Center_Code</th><th>Variance_USD</th><th class="new">VP_Lead</th></tr>
-              <tr><td class="keycol">CC-202</td><td class="num">85000.0</td><td class="new">Marcus Vance</td></tr>
-              <tr><td class="keycol">CC-404</td><td class="num">28000.0</td><td class="new">David Kim</td></tr>
-            </table>
-          </div>
-          <p class="cap">Yellow = the key column both tables share; green = the new information. VP names are fictional.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 7 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 6 / 16</span></div>
 </section>
 
 <section class="slide">
   <div><span class="eyebrow">MODULE 1</span><span class="kicker">7. Core Foundations</span></div>
   <div class="title">How Filtering, Grouping, and Joining Work</div><div class="rule"></div>
   <div class="body f7" style="display:grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); gap: .16in;">
-    <div class="card"><div class="tag">7.1</div><h2><code>&amp;</code>, Not <code>and</code></h2><ul><li>A rule gives one <code>True</code> / <code>False</code> per row</li><li><code>and</code> raises <code>ValueError</code>; no brackets raises <code>TypeError</code></li></ul><p class="remember"><b>Remember:</b> combine with <code>&amp;</code> <code>|</code> <code>~</code>, each rule in <code>( )</code></p></div>
-    <div class="card"><div class="tag">7.2</div><h2>Split, Apply, Combine</h2><ul><li>Consumer: 4 quarters, summed to <code>3205000.0</code></li><li>16 rows become 4, one per division</li></ul><p class="remember"><b>Remember:</b> <code>groupby()</code> splits, <code>.agg()</code> applies</p></div>
-    <div class="card"><div class="tag">7.3</div><h2>Match by Name, Not Position</h2><ul><li><code>VLOOKUP</code> returns "column 2": breaks if a column is inserted</li><li><code>pd.merge()</code> matches the key column by name</li></ul><p class="remember"><b>Remember:</b> the key needs the same name in both tables</p></div>
-    <div class="card"><div class="tag">7.4</div><h2><code>how="left"</code> vs <code>"inner"</code></h2><ul><li><code>left</code>: an unmatched row stays, with <code>NaN</code></li><li><code>inner</code>: the row disappears from the report</li></ul><p class="remember"><b>Remember:</b> use <code>left</code>, then look for <code>NaN</code></p></div>
+    <div class="card"><div class="tag">7.1</div><h2><code>&amp;</code>, Not <code>and</code></h2><p>A rule gives one <code>True</code> / <code>False</code> per row</p><p class="remember"><b>Remember:</b> combine with <code>&amp;</code> <code>|</code> <code>~</code>, each rule in <code>( )</code></p></div>
+    <div class="card"><div class="tag">7.2</div><h2>Split, Apply, Combine</h2><p>Consumer: 4 quarters, summed to <code>3205000.0</code></p><p class="remember"><b>Remember:</b> <code>groupby()</code> splits, <code>.agg()</code> applies</p></div>
+    <div class="card"><div class="tag">7.3</div><h2>Match by Name, Not Position</h2><p><code>VLOOKUP</code> returns "column 2": breaks if a column is inserted</p><p class="remember"><b>Remember:</b> the key needs the same name in both tables</p></div>
+    <div class="card"><div class="tag">7.4</div><h2><code>how="left"</code> vs <code>"inner"</code></h2><p><code>left</code>: an unmatched row stays, with <code>NaN</code></p><p class="remember"><b>Remember:</b> use <code>left</code>, then look for <code>NaN</code></p></div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 8 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 7 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -559,25 +500,7 @@ is_over = df["Actual_Expense_USD"] &gt; df["Budget_Expense_USD"]</div>
       </div>
     </div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 9 / 19</span></div>
-</section>
-
-<section class="slide">
-  <div><span class="eyebrow">MODULE 1</span><span class="kicker">8. Development Workflow</span></div>
-  <div class="title">Build, Test, and Diagnose in the IDE</div><div class="rule"></div>
-  <div class="body">
-    <div class="shot">
-      <img src="../assets/antigravity_ide_interface.png" alt="Google Antigravity IDE with its four labeled panels">
-      <p class="cap">Example: Terminal <code>[4]</code> shows a <code>NameError</code>; AI Chat <code>[3]</code> explains the fix</p>
-    </div>
-    <div class="steps">
-      <div class="step"><span class="badge">[1]</span><div><h3>File Explorer</h3><p>Name it <code>YourName_S14_demo_1.py</code></p><p class="eg">Example: <code>Reacher_S14_demo_1.py</code></p><p>Check the dataset is in <code>data/</code></p></div></div>
-      <div class="step"><span class="badge">[2]</span><div><h3>Code Editor</h3><p>Write a few lines, run, repeat</p><p>Small steps keep errors small</p></div></div>
-      <div class="step"><span class="badge">[3]</span><div><h3>AI Agent Chat</h3><p>Error? Capture the traceback (Python's error report) with <code>Win + Shift + S</code></p><p>Paste with <code>Ctrl + V</code>, ask why</p></div></div>
-      <div class="step"><span class="badge">[4]</span><div><h3>Terminal</h3><p>Run <code>python</code> + your script name</p><p>Return code <code>0</code> = no errors</p></div></div>
-    </div>
-  </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 10 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 8 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -608,7 +531,7 @@ print(overruns[["Fiscal_Quarter", "Budget_Expense_USD",
       <div class="card"><div class="tag">3. OUTPUT</div><h2><code>len()</code> and a short table</h2><p>The count, then the matching quarters</p></div>
     </div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 11 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 9 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -631,7 +554,7 @@ print(overruns[["Fiscal_Quarter", "Budget_Expense_USD",
     </div>
     <div class="check"><b>Check:</b> the script prints <code>Consumer overrun quarters: 1</code>, and the table shows <code>Q4</code> (budget <code>780000.0</code>, actual <code>775000.0</code>). The label still says "overrun", since only the rule changed.</div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 12 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 10 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -664,7 +587,7 @@ print(div_summary[["Total_Actual_USD", "Variance_USD"]])</pre>
       <div class="card"><div class="tag">3. OUTPUT</div><h2>One row per division</h2><p>4 rows instead of 16</p></div>
     </div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 13 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 11 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -689,7 +612,7 @@ print(div_summary[["Total_Actual_USD", "Variance_USD"]])</pre>
     </div>
     <div class="check"><b>Check:</b> the first row is <code>Consumer</code> (<code>85000.0</code>), then <code>Logistics</code> (<code>28000.0</code>).</div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 14 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 12 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -722,7 +645,7 @@ print(ledger[["Transaction_ID", "VP_Lead", "Over_Budget"]].head(3))</pre>
       <div class="card"><div class="tag">3. OUTPUT</div><h2><code>.head(3)</code></h2><p>The first rows, now with <code>VP_Lead</code></p></div>
     </div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 15 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 13 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -745,7 +668,7 @@ print(ledger[["Transaction_ID", "VP_Lead", "Over_Budget"]].head(3))</pre>
     </div>
     <div class="check"><b>Check:</b> the Terminal shows <code>False 8</code> and <code>True 8</code>: half of the 16 quarters went over budget.</div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 16 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 14 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -756,62 +679,61 @@ print(ledger[["Transaction_ID", "VP_Lead", "Over_Budget"]].head(3))</pre>
     <div class="card"><div class="tag">PANDAS</div><h2>Merge, Join, Concatenate and Compare</h2><p>All the options of <code>pd.merge()</code>, including <code>how=</code>. pandas.pydata.org/docs/user_guide/merging.html</p></div>
     <div class="card"><div class="tag">PYTHON STYLE GUIDE</div><h2>PEP 8: Line Breaks Around Operators</h2><p>Why we start a new line with <code>&amp;</code> or <code>-</code> in long rules. peps.python.org/pep-0008</p></div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 17 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 15 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 1</span><span class="kicker">11-12. Exercises</span></div>
-  <div class="title">Exercise 1 and Exercise 2</div><div class="rule"></div>
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">11-13. Exercises</span></div>
+  <div class="title">Three Exercises</div><div class="rule"></div>
   <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid2" style="flex: 1; min-height: 0;">
-      <div class="card"><div class="tag">EXERCISE 1: GUIDED PRACTICE</div><h2>Quarterly Division Audit</h2>
-        <ul>
-          <li>Create <code>YourName_S14_audit.py</code></li>
-          <li>Add <code>Variance_USD</code> and <code>Variance_Pct</code> columns</li>
-          <li>Group by two columns: <code>["Division_Name", "Fiscal_Quarter"]</code></li>
-          <li>Sum actual spending and variance with <code>.agg()</code></li>
-          <li>Run it in Terminal <code>[4]</code></li>
-        </ul></div>
-      <div class="card"><div class="tag">EXERCISE 2: APPLIED PRACTICE</div><h2>Annual Cost Center Overruns</h2>
-        <ul>
-          <li>In <code>YourName_S14_practice.py</code>, group by <code>Cost_Center_Code</code> and compute the yearly variance %</li>
-          <li>Keep cost centers more than <code>1.0</code>% over budget</li>
-          <li>Merge with <code>vp_info</code>, but type <code>on="Cost_Center"</code> on purpose; read the <code>KeyError</code> and ask AI Chat <code>[3]</code></li>
-          <li>Fix the key and print cost center, VP, and overrun</li>
-        </ul></div>
+    <div class="grid3 exg" style="flex: 1; min-height: 0;">
+      <div class="card"><div class="tag">EXERCISE 1: GUIDED</div><h2>Quarterly Division Audit</h2>
+        <p><b>Goal:</b> Total each division&#x27;s budget and actual spend by quarter</p>
+        <p><b>File:</b> <code>YourName_S14_audit.py</code></p>
+        <p class="remember"><b>Check:</b> 16 rows; 8 with a positive <code>Total_Variance</code></p></div>
+      <div class="card"><div class="tag">EXERCISE 2: APPLIED</div><h2>Annual Cost Center Overruns</h2>
+        <p><b>Goal:</b> Find the cost centers that overspent for the whole year</p>
+        <p><b>File:</b> <code>YourName_S14_practice.py</code></p>
+        <p class="remember"><b>Check:</b> <code>CC-202</code> (<code>85000.0</code>) and <code>CC-404</code> (<code>28000.0</code>)</p></div>
+      <div class="card"><div class="tag">EXERCISE 3: ADVANCED</div><h2>VP Exception Report</h2>
+        <p><b>Goal:</b> Tell the finance director which VPs must explain their spending</p>
+        <p><b>File:</b> <code>YourName_S14_challenge.py</code></p>
+        <p class="remember"><b>Check:</b> <code>0</code> disagreements; 6 of 16 quarters flagged</p></div>
     </div>
-    <div class="check"><b>Success check:</b> 2 cost centers: <code>CC-202</code> (Marcus Vance, <code>85000.0</code>, 2.72%) and <code>CC-404</code> (David Kim, <code>28000.0</code>, 1.15%); return code <code>0</code>.</div>
+    <div class="check">Full steps for all three exercises: sections 11-13 of the course page.</div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 18 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 16 / 16</span></div>
 </section>
 
-<section class="slide">
-  <div><span class="eyebrow">MODULE 1</span><span class="kicker">13. Exercise 3: Advanced Practice</span></div>
-  <div class="title">VP Exception Report: Who Must Explain?</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid2" style="flex: 1; min-height: 0; grid-template-columns: 1.2fr 1fr;">
-      <div class="card"><div class="tag">WHAT TO BUILD: <code>YourName_S14_challenge.py</code></div>
-        <ol class="ex3">
-          <li><code>Variance_USD</code>, <code>Variance_Pct</code> (2 decimals); <code>My_Flag</code> = <code>Variance_Pct &gt; 2.0</code>; check it agrees with <code>Audit_Status</code></li>
-          <li>Flagged rows only, by cost center: count, overrun sum, worst %</li>
-          <li>All rows, by cost center: <code>Year_Variance_Pct</code></li>
-          <li>Merge both into <code>vp_info</code> (<code>how="left"</code>)</li>
-          <li><code>Escalate</code> = 2+ flagged quarters <b>and</b> year variance <code>&gt; 1.0</code></li>
-          <li>Sort, print, save <code>data/vp_exception_report.csv</code></li>
-        </ol></div>
-      <div class="card"><div class="tag">NEW TOOLS</div>
-        <ul><li><code>.reset_index()</code>: group names back into a normal column</li><li><code>.fillna(0)</code>: empty values become <code>0</code></li><li><code>"max"</code> in <code>.agg()</code>: the largest value</li><li>Two sort keys:</li></ul>
-<div class="snip">.sort_values(
-    ["Flagged_Overrun_USD",
-     "Worst_Variance_Pct"],
-    ascending=False,
-)</div>
-      </div>
-    </div>
-    <div class="check"><b>Self-check:</b> 0 disagreements; Escalate only for Marcus Vance (2.72%) and David Kim (1.15%). Full steps: section 13 of the course page.</div>
-  </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 19 / 19</span></div>
-</section>
+<script>
+window.__fitDone = false;
+function fitAll() {
+  document.querySelectorAll('.fitbox').forEach((box) => {
+    let size = parseFloat(box.dataset.start || '18');
+    const floor = parseFloat(box.dataset.floor || '15');
+    const apply = () => box.querySelectorAll('p, li, td, th, .outbox, pre').forEach((el) => {
+      if (el.tagName === 'PRE') { el.style.fontSize = Math.max(9.5, size - 3.5) + 'pt'; return; }
+      if (el.classList.contains('outbox')) { el.style.fontSize = Math.max(11, size - 4.5) + 'pt'; return; }
+      el.style.fontSize = size + 'pt';
+    });
+    apply();
+    const over = () => box.scrollHeight > box.clientHeight + 1 || box.scrollWidth > box.clientWidth + 1
+      || [...box.querySelectorAll('pre')].some((pre) => pre.scrollHeight > pre.clientHeight + 6 || pre.scrollWidth > pre.clientWidth + 6);
+    while (over() && size > floor) { size -= 0.5; apply(); }
+    if (over()) box.dataset.overflow = 'yes';
+    box.__apply = (v) => { size = v; apply(); };
+    box.dataset.size = size;
+  });
+  // cards on one slide share one size, so they read as a set
+  document.querySelectorAll('[data-uniform]').forEach((group) => {
+    const boxes = [...group.querySelectorAll('.fitbox')];
+    const min = Math.min(...boxes.map((b) => parseFloat(b.dataset.size)));
+    boxes.forEach((b) => b.__apply(min));
+  });
+  window.__fitDone = true;
+}
+document.fonts.ready.then(() => { fitAll(); document.querySelectorAll('[data-overflow]').forEach((el) => el.removeAttribute('data-overflow')); fitAll(); });
+</script>
 
 </body>
 </html>

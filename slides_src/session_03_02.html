@@ -1,28 +1,565 @@
-<!doctype html><html lang="en-US"><meta charset="utf-8"><title>Session 3.2</title><style>
-@page{size:16in 9in;margin:0}*{box-sizing:border-box}body{margin:0;font-family:"Times New Roman",serif;color:#18181B}.slide{width:16in;height:9in;padding:.45in .8in .4in;display:flex;flex-direction:column;background:#fff;page-break-after:always}header{font-size:15pt;color:#991B1B;font-weight:bold}header span{margin-left:.25in;color:#64748B;font-weight:normal}h1{font-size:34pt;line-height:1.08;margin:.13in 0 .08in}h2{font-size:21pt;margin:.06in 0}.slide>i{display:block;width:1.2in;height:4px;background:#991B1B;margin-bottom:.2in}main{flex:1;min-height:0;display:grid;grid-template-columns:repeat(2,1fr);gap:.2in}main.three{grid-template-columns:repeat(3,1fr);gap:.18in}article{border:1px solid #CBD5E1;border-radius:10px;padding:.18in;overflow:hidden}article b{font-size:14pt;color:#991B1B}p,li{font-size:17pt;line-height:1.25;margin:.06in 0}footer{margin-top:.18in;border-top:1px solid #CBD5E1;padding-top:.1in;font-size:15pt;color:#64748B;display:flex;justify-content:space-between}main.overview{grid-template-columns:2fr 3fr}main.overview article{display:flex;flex-direction:column}.overview ul.lead{margin:.12in 0 0;padding-left:.32in}.overview ul.lead li{font-size:21pt}.overview .flow{margin-top:auto;font-size:16pt;color:#64748B;border-top:1px solid #CBD5E1;padding-top:.1in}.overview ol{margin:.1in 0 0;padding-left:.38in}.overview li{font-size:20pt;line-height:1.3;margin:0 0 .16in}.code{display:flex;gap:.3in}.code pre{width:58%;margin:0;background:#18181B;border-radius:10px;color:#E5E7EB;padding:.22in;font:13.5pt/1.28 "DejaVu Sans Mono",monospace;white-space:pre-wrap;overflow-wrap:anywhere;overflow:hidden}.code aside{flex:1;display:flex;flex-direction:column;gap:.13in}.code aside article{flex:1}</style><body>
-<section class="slide"><header><b>MODULE 3</b><span>Session Overview</span></header><h1>Session 3.2: Advanced Data Analysis: Feature Engineering, Scaling, and Business Data Preprocessing</h1><i></i><main class="overview"><article><b>TODAY'S PURPOSE</b><h2>Why This Session Matters</h2><ul class="lead"><li>Prepare raw business data for machine learning</li><li>Convert text and missing values into model-ready numbers</li><li>Keep test data separate to get honest results</li></ul><p class="flow">Today's flow: 60 min lecture, then 120 min hands-on lab</p></article><article><b>EXPECTED OUTCOMES</b><h2>By the end of today, you will be able to:</h2><ol><li>Split data into features (X) and target (y)</li><li>Impute, encode, and scale features</li><li>Split train / test data without leakage</li></ol></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 1 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 3</b><span>Core Vocabulary</span></header><h1>Concepts for This Session</h1><i></i><main class="three"><article><b>CONCEPT 1</b><h2>Feature Matrix &amp; Target Vector (X &amp; y)</h2><p> The standardized machine learning mathematical representation where X is a two-dimensional matrix of input attributes and y is a one-dimensional vector of ground-truth outcomes.</p></article><article><b>CONCEPT 2</b><h2>One-Hot Categorical Encoding</h2><p> Transforming text categories (e.g., Bachelor, Master, Doctorate) into binary numerical indicator columns (0 or 1) for machine learning models.</p></article><article><b>CONCEPT 3</b><h2>Feature Standardization (StandardScaler)</h2><p> Rescaling continuous numeric features to have a mean of 0 and a standard deviation of 1, preventing high-magnitude columns from dominating distance calculations.</p></article><article><b>CONCEPT 4</b><h2>Missing Value Imputation (SimpleImputer)</h2><p> Statistically replacing missing data with median or mean values to prevent model training crashes.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 2 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 3</b><span>Computational Foundations</span></header><h1>How the Concept Works in Practice</h1><i></i><main><article><b>FOUNDATION 1</b><h2>Garbage-In, Garbage-Out (The Preprocessing Mandate)</h2><p> Machine learning algorithms are purely mathematical optimization functions; they cannot ingest raw text strings or missing fields. 80% of enterprise data science time is spent structuring and cleaning features.</p></article><article><b>FOUNDATION 2</b><h2>Dimensionality &amp; Categorical Encoding</h2><p> When encoding categories with high cardinality, avoid naive label encoding (which implies an artificial mathematical hierarchy like Master = 2 Bachelor). Use One-Hot Encoding (pd.get_dummies or OneHotEncoder) with drop_first=True to prevent multicollinearity.</p></article><article><b>FOUNDATION 3</b><h2>Feature Magnitude &amp; Distance Sensitivity</h2><p> If Annual_Income ranges from $50,000 to $200,000 while Credit_Utilization ranges from 0.1 to 0.9, distance-based models (such as K-Nearest Neighbors, Support Vector Machines, and regularized regressions) will prioritize income entirely. Standardization ensures fair feature weighting.</p></article><article><b>FOUNDATION 4</b><h2>Preventing Data Leakage across Train-Test Splits</h2><p> Never fit standardizers or imputers on the full dataset before splitting. Always split first, fit preprocessing transformers strictly on X_train, and transform X_test using the learned training parameters.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 3 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 3</b><span>Development Workflow</span></header><h1>Build, Test, and Diagnose in the IDE</h1><i></i><main><article><b>[1] FILE EXPLORER</b><h2>Organize Assets</h2><p>Use the session dataset and keep scripts in a clear workspace.</p></article><article><b>[2] CODE EDITOR</b><h2>Write Small Segments</h2><p>Run each completed segment before expanding the program.</p></article><article><b>[3] AI AGENT CHAT</b><h2>Diagnose Errors</h2><p>Capture the traceback, request an explanation, and review the fix.</p></article><article><b>[4] INTEGRATED TERMINAL</b><h2>Verify Execution</h2><p>Confirm the final program completes with return code 0.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 4 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE</b><span>Style 2 Harvard Dual-Pane Editor</span></header><h1>Script Demonstration 1: Advanced Data Analysis: Feature Engineering, Scaling, and Business Data Preprocessing</h1><i></i><main class="code"><pre>import pandas as pd
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<title>Session 3.2 Lecture</title>
+<style>
+@page { size: 16in 9in; margin: 0; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "Times New Roman", serif; color: #18181B; }
+.slide { width: 16in; height: 9in; padding: .45in .8in .4in; display: flex; flex-direction: column; background: #FFF; page-break-after: always; }
+.eyebrow { color: #991B1B; font-size: 15pt; font-weight: bold; letter-spacing: .02em; }
+.kicker { color: #64748B; font-size: 15pt; margin-left: .25in; }
+.title { font-size: 36pt; line-height: 1.05; font-weight: bold; margin: .12in 0 .08in; }
+.rule { height: 4px; background: #991B1B; width: 1.2in; margin-bottom: .18in; flex-shrink: 0; }
+.body { flex: 1; min-height: 0; display: flex; gap: .25in; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: .2in; width: 100%; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: .18in; width: 100%; }
+.card { border: 1px solid #CBD5E1; border-radius: 10px; padding: .16in .2in; background: #FFF; min-height: 0; overflow: hidden; }
+.card h2 { font-size: 22pt; margin: .04in 0 .08in; }
+.card p, .card li { font-size: 18pt; line-height: 1.25; margin: .05in 0; }
+.card ul { margin: .04in 0 0; padding-left: .3in; }
+.tag { color: #991B1B; font-size: 15pt; font-weight: bold; }
+.what, .why { font-size: 18pt; line-height: 1.25; margin: .05in 0; }
+.what b, .why b { color: #991B1B; }
+code { font-family: "DejaVu Sans Mono", monospace; font-size: .86em; background: #F1F5F9; border: 1px solid #E2E8F0; border-radius: 4px; padding: 0 .04in; white-space: nowrap; }
+h2 code { font-size: .82em; }
+.footer { border-top: 1px solid #CBD5E1; min-height: .42in; margin-top: .18in; display: flex; align-items: end; justify-content: space-between; color: #475569; font-size: 15pt; flex-shrink: 0; }
 
-    df = pd.read_csv("data/session_03_02_dataset.csv")
+/* Slide 1 */
+.overview { grid-template-columns: 2fr 3fr; }
+.overview .card { display: flex; flex-direction: column; }
+.overview ul.lead { margin: .1in 0 0; padding-left: .32in; }
+.overview ul.lead li { font-size: 20pt; line-height: 1.25; margin: 0 0 .1in; }
+.overview .card .flow { margin-top: auto; font-size: 16pt; color: #64748B; border-top: 1px solid #CBD5E1; padding-top: .1in; }
+.overview ol { margin: .06in 0 0; padding-left: .38in; }
+.overview ol > li { font-size: 21pt; line-height: 1.25; margin: 0 0 .12in; }
+.gloss { display: block; font-size: 18pt; color: #475569; margin-top: .03in; }
 
-    X_raw = df.drop(columns=["Client_ID", "Defaulted_Binary"])
-    y = df["Defaulted_Binary"]
-    print("Feature Matrix Shape:", X_raw.shape)
-    print("Target Vector Distribution:\\n", y.value_counts())</pre><aside><article><b>SYNTAX</b><h2>Readable Structure</h2><p>Observe the syntax and indentation that control execution.</p></article><article><b>RUNTIME</b><h2>Verified Execution</h2><p>Run the example in the integrated terminal and inspect the output.</p></article><article><b>BUSINESS VALUE</b><h2>Applied Automation</h2><p>Use the pattern to automate a repeatable business decision.</p></article></aside></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 5 / 8</span></footer></section><section class="slide"><header><b>MODULE</b><span>Style 2 Harvard Dual-Pane Editor</span></header><h1>Script Demonstration 2: Advanced Data Analysis: Feature Engineering, Scaling, and Business Data Preprocessing</h1><i></i><main class="code"><pre>X_encoded = pd.get_dummies(X_raw, columns=["Education_Tier"], drop_first=True, dtype=float)
-    print("Encoded Feature Columns:\\n", X_encoded.columns.tolist())
-    print(X_encoded.head(2))</pre><aside><article><b>SYNTAX</b><h2>Readable Structure</h2><p>Observe the syntax and indentation that control execution.</p></article><article><b>RUNTIME</b><h2>Verified Execution</h2><p>Run the example in the integrated terminal and inspect the output.</p></article><article><b>BUSINESS VALUE</b><h2>Applied Automation</h2><p>Use the pattern to automate a repeatable business decision.</p></article></aside></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 6 / 8</span></footer></section><section class="slide"><header><b>MODULE</b><span>Style 2 Harvard Dual-Pane Editor</span></header><h1>Script Demonstration 3: Advanced Data Analysis: Feature Engineering, Scaling, and Business Data Preprocessing</h1><i></i><main class="code"><pre>from sklearn.model_selection import train_test_split
-    from sklearn.preprocessing import StandardScaler
+/* Code slides */
+.code-panel { width: 60%; background: #18181B; border-radius: 10px; color: #E5E7EB; padding: .16in .22in; display: flex; flex-direction: column; flex-shrink: 0; }
+.code-header { color: #CBD5E1; font: 14pt "DejaVu Sans Mono", monospace; border-bottom: 1px solid #3F3F46; padding-bottom: .08in; display: flex; align-items: center; gap: .08in; }
+.dot { width: .13in; height: .13in; border-radius: 50%; display: inline-block; }
+pre { white-space: pre; font: 14.5pt/1.38 "DejaVu Sans Mono", monospace; margin: .12in 0 0; overflow: hidden; }
+.cm { color: #94A3B8; }
+.sec { color: #FBBF24; font-weight: bold; }
+.ipo { margin-left: auto; color: #FBBF24; font-size: 13pt; }
+.notes .card.wide { flex: 1.6; }
 
-    # Split into 80% Train and 20% Test sets
-    X_train, X_test, y_train, y_test = train_test_split(X_encoded, y, test_size=0.25, random_state=42, stratify=y)
+/* Rows and columns slide */
+.table-wrap { width: 60%; flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; }
+table.df { border-collapse: collapse; font: 16pt/1.3 "DejaVu Sans Mono", monospace; }
+table.df td, table.df th { padding: .07in .14in; text-align: left; white-space: nowrap; }
+table.df thead th { border-bottom: 2px solid #18181B; }
+table.df tbody td { border-bottom: 1px solid #E2E8F0; }
+table.df .num { text-align: right; }
+table.df .idx { color: #64748B; }
+table.df .lbl { font: bold 15pt "Times New Roman", serif; border: none; padding: 0 .1in .04in; }
+.row-lbl { color: #1D4ED8; text-align: right !important; }
+.col-lbl { color: #B45309; text-align: center !important; }
+table.df .hl-row td { background: #DBEAFE; }
+table.df .hl-col { background: #FEF3C7; }
+table.df .hl-row td.hl-col { background: #FDE68A; outline: 3px solid #991B1B; outline-offset: -3px; font-weight: bold; }
+table.df .more { color: #64748B; font-family: "Times New Roman", serif; font-style: italic; }
+.card .tag.blue { color: #1D4ED8; }
+.card .tag.amber { color: #B45309; }
+.card.row-card { border: 2px solid #93C5FD; }
+.card.col-card { border: 2px solid #FCD34D; }
+.card.cell-card { border: 2px solid #991B1B; }
+.notes { flex: 1; display: flex; flex-direction: column; gap: .12in; min-width: 0; }
+.notes .card { flex: 1; }
+.notes .card h2 { font-size: 20pt; }
 
-    # Fit scaler strictly on X_train
-    scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
-    X_test_scaled = scaler.transform(X_test)
+.check { margin-top: .14in; background: #FEF2F2; border: 1px solid #FCA5A5; border-radius: 10px; padding: .12in .2in; font-size: 18pt; flex-shrink: 0; }
 
-    print(f"X_train scaled shape: {X_train_scaled.shape} | X_test scaled shape: {X_test_scaled.shape}")</pre><aside><article><b>SYNTAX</b><h2>Readable Structure</h2><p>Observe the syntax and indentation that control execution.</p></article><article><b>RUNTIME</b><h2>Verified Execution</h2><p>Run the example in the integrated terminal and inspect the output.</p></article><article><b>BUSINESS VALUE</b><h2>Applied Automation</h2><p>Use the pattern to automate a repeatable business decision.</p></article></aside></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 7 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 3</b><span>Hands-On Practice</span></header><h1>Exercise 1 and Exercise 2</h1><i></i><main><article><b>EXERCISE 1: GUIDED</b><h2>Foundational Practice</h2><p>Follow the lab protocol, run the script, and verify its output with the session dataset.</p></article><article><b>EXERCISE 2: DEBUGGING</b><h2>Applied Challenge</h2><p>Extend the program, diagnose an intentional error, apply the verified correction, and confirm return code 0.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 8 / 8</span></footer></section></body></html>
+/* Six terms visual map */
+.fit { flex: 1; min-height: 0; display: grid; grid-template-rows: 1fr 1fr; gap: .16in; }
+.fit-row { display: flex; gap: .14in; align-items: stretch; min-height: 0; }
+.fit-box { border: 1px solid #CBD5E1; border-radius: 10px; padding: .12in .16in; display: flex; flex-direction: column; min-width: 0; }
+.fit-box .tag { margin-bottom: .04in; }
+.fit-box .cap { font-size: 18pt; margin: .06in 0 0; line-height: 1.2; }
+.fit-arrow { display: flex; flex-direction: column; justify-content: center; align-items: center; color: #991B1B; flex-shrink: 0; }
+.fit-arrow .big { font-size: 40pt; line-height: 1; }
+.fit-arrow code { font-size: 14pt; }
+.rawcsv { background: #18181B; color: #E5E7EB; border-radius: 8px; padding: .1in .14in; font: 15pt/1.4 "DejaVu Sans Mono", monospace; white-space: pre; }
+.rawcsv b { color: #FBBF24; }
+table.mini { border-collapse: collapse; font: 15pt/1.3 "DejaVu Sans Mono", monospace; }
+table.mini th, table.mini td { padding: .03in .1in; text-align: left; white-space: nowrap; border-bottom: 1px solid #E2E8F0; }
+table.mini th { border-bottom: 2px solid #18181B; }
+table.mini .num { text-align: right; }
+table.mini .idx { color: #64748B; }
+table.mini .ser { background: #FEF3C7; }
+table.mini .new { background: #DCFCE7; font-weight: bold; }
+table.mini tr.keep td { background: #DBEAFE; font-weight: bold; }
+table.mini tr.drop td { color: #CBD5E1; }
+.op { font: bold 26pt "DejaVu Sans Mono", monospace; color: #991B1B; align-self: center; padding: 0 .06in; }
+.toolbar { font-size: 17pt; color: #475569; margin-bottom: .1in; flex-shrink: 0; }
+.toolbar b { color: #991B1B; }
+
+/* DataFrame visual map */
+.xl th, .xl td { font-size: 15pt; }
+.xl .rn { background: #F1F5F9; color: #64748B; text-align: center; }
+.xl .bad { background: #FEE2E2; color: #B91C1C; font-weight: bold; }
+.side { display: flex; gap: .22in; align-items: flex-start; }
+.side .lab { font-size: 17pt; font-weight: bold; margin-bottom: .04in; }
+.brace { border-left: 4px solid #16A34A; padding-left: .1in; }
+.anat .ix { background: #DBEAFE; color: #1D4ED8; }
+.anat .hd { background: #FEF3C7; }
+.anat .vl { background: #DCFCE7; }
+.chips { display: flex; gap: .12in; flex-wrap: wrap; margin-top: .08in; }
+.chip { font-size: 16pt; padding: .02in .1in; border-radius: 6px; }
+.dt { font-size: 14pt; padding: .01in .08in; border-radius: 5px; background: #18181B; color: #FBBF24; font-family: "DejaVu Sans Mono", monospace; }
+.insp td { font-size: 15pt; vertical-align: top; }
+.insp td:first-child { color: #991B1B; }
+.pr, .insp td.pr { font: 18pt/1.3 "Times New Roman", serif; }
+td.pr { white-space: normal !important; }
+
+/* IDE slide */
+.shot { width: 60%; flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; }
+.shot img { width: 100%; border: 1px solid #CBD5E1; border-radius: 10px; display: block; }
+.shot .cap { font-size: 17pt; margin: .1in 0 0; }
+.steps { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .1in; justify-content: center; }
+.step { display: flex; gap: .14in; align-items: flex-start; border: 1px solid #CBD5E1; border-radius: 10px; padding: .1in .14in; }
+.badge { background: #991B1B; color: #FFF; font: bold 16pt "DejaVu Sans Mono", monospace; border-radius: 6px; padding: .02in .08in; flex-shrink: 0; }
+.step h3 { font-size: 20pt; margin: 0 0 .02in; }
+.step p { font-size: 18pt; line-height: 1.22; margin: .02in 0; }
+.step p.eg { font-size: 16pt; color: #475569; }
+
+/* Quick check slides */
+.qc { grid-template-columns: 1fr 1.15fr; }
+.qc .card { display: flex; flex-direction: column; }
+.snip { background: #18181B; color: #E5E7EB; border-radius: 8px; padding: .1in .16in; font: 16pt/1.4 "DejaVu Sans Mono", monospace; white-space: pre; margin: .04in 0 .1in; }
+.snip .blank { background: #FBBF24; color: #18181B; padding: 0 .06in; border-radius: 3px; font-weight: bold; }
+.snip .cm { color: #94A3B8; }
+.snip-lab { font-size: 17pt; font-weight: bold; margin-top: .06in; }
+.strip { display: flex; gap: .05in; margin: .1in 0 .04in; }
+.strip span { flex: 1; text-align: center; font: 15pt "DejaVu Sans Mono", monospace; padding: .06in 0; border-radius: 5px; background: #F1F5F9; color: #94A3B8; }
+.strip .h { background: #DBEAFE; color: #1D4ED8; font-weight: bold; }
+.strip .t { background: #DCFCE7; color: #15803D; font-weight: bold; }
+.strip-lab { display: flex; justify-content: space-between; font-size: 16pt; }
+.flowline { display: flex; align-items: center; gap: .14in; margin: .1in 0; font: 17pt "DejaVu Sans Mono", monospace; }
+.flowline .box { background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 6px; padding: .04in .12in; }
+.flowline .arr { color: #991B1B; font-size: 22pt; }
+.flowline .res { background: #DCFCE7; border: 1px solid #86EFAC; border-radius: 6px; padding: .04in .12in; font-weight: bold; }
+.vstack { margin-top: .08in; }
+.vstack td, .vstack th { padding: .02in .12in; }
+.vstack tr.h td:not(.side-lab) { background: #DBEAFE; color: #1D4ED8; font-weight: bold; }
+.vstack tr.t td:not(.side-lab) { background: #DCFCE7; color: #15803D; font-weight: bold; }
+.vstack tr.gap td { color: #94A3B8; font-family: "Times New Roman", serif; font-style: italic; }
+.vstack .side-lab { border: none; font: 17pt "Times New Roman", serif; vertical-align: middle; }
+.vstack .h-lab { color: #1D4ED8; }
+.vstack .t-lab { color: #15803D; }
+table.mini th.plain { font: bold 17pt "Times New Roman", serif; }
+.overview ol.biz > li { font-size: 20pt; margin: 0 0 .1in; }
+.overview .q { display: block; color: #991B1B; font-style: italic; font-weight: bold; }
+.overview .sit-note { font-size: 19pt; font-weight: bold; margin: .04in 0 0; }
+
+/* CSV intro slide */
+.csvflow { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr auto 1.25fr auto 1fr; gap: .14in; align-items: stretch; }
+.csvflow .col { border: 1px solid #CBD5E1; border-radius: 10px; padding: .14in .18in; display: flex; flex-direction: column; gap: .1in; }
+.csvflow .item { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: .08in .12in; font-size: 18pt; line-height: 1.2; }
+.csvflow .item small { display: block; font-size: 16pt; color: #475569; }
+.csvflow .mid { border: 2px solid #991B1B; }
+.csvflow .arrow { display: flex; align-items: center; color: #991B1B; font-size: 40pt; }
+.csvflow li { font-size: 18pt; line-height: 1.3; margin: .04in 0; }
+.csvflow .fname { font: bold 15pt "DejaVu Sans Mono", monospace; color: #18181B; }
+
+/* CSV vs XLSX */
+.src-row { display: flex; gap: .14in; align-items: stretch; flex-shrink: 0; }
+.src-box { flex: 1; border: 1px solid #CBD5E1; border-radius: 10px; padding: .1in .16in; }
+.chips2 { display: flex; gap: .1in; flex-wrap: wrap; margin-top: .06in; }
+.chips2 span { background: #F1F5F9; border: 1px solid #E2E8F0; border-radius: 6px; padding: .03in .12in; font-size: 18pt; }
+.arrow2 { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #991B1B; font-size: 34pt; line-height: 1; }
+.arrow2 small { font-size: 15pt; }
+.files { display: flex; gap: .12in; align-items: center; margin-top: .06in; }
+.file { font: bold 16pt "DejaVu Sans Mono", monospace; padding: .03in .12in; border-radius: 6px; color: #FFF; }
+.file.xlsx { background: #64748B; }
+.file.csv { background: #15803D; }
+.vs { flex: 1; min-height: 0; display: flex; gap: .16in; }
+.vs-col { flex: 1; border-radius: 12px; padding: .14in .2in; display: flex; flex-direction: column; }
+.vs-col.bad { border: 2px solid #CBD5E1; background: #F8FAFC; }
+.vs-col.good { border: 3px solid #15803D; background: #F0FDF4; flex: 1.35; }
+.vs-head { font-size: 24pt; font-weight: bold; display: flex; align-items: center; gap: .12in; }
+.vs-sub { font-size: 18pt; margin: .06in 0 .1in; color: #334155; }
+.vs-mid { align-self: center; font: bold 26pt "Times New Roman", serif; color: #64748B; }
+.apps { display: flex; flex-wrap: wrap; gap: .1in; }
+.app { font-size: 18pt; background: #FFF; border-radius: 8px; padding: .06in .14in; display: flex; flex-direction: column; min-width: 1.5in; }
+.app b { font-size: 24pt; line-height: 1; }
+.app small { font-size: 15pt; color: #64748B; }
+.rawcsv.garbled { color: #94A3B8; }
+.app.ok { border: 2px solid #86EFAC; }
+.app.ok b { color: #15803D; }
+.app.no { border: 2px solid #FCA5A5; }
+.app.no b { color: #B91C1C; }
+
+/* Session 1.4 additions */
+table.terms { border-collapse: collapse; width: 100%; margin: .04in 0 .1in; }
+table.terms td { font-size: 18pt; padding: .05in .08in; border-bottom: 1px solid #E2E8F0; }
+table.terms td.num { text-align: right; }
+.vbars { display: flex; flex-direction: column; gap: .1in; margin-top: .12in; }
+.vrow { display: flex; align-items: center; gap: .12in; }
+.vq { width: .45in; font: bold 17pt "DejaVu Sans Mono", monospace; }
+.vval { width: 1.1in; font: 16pt "DejaVu Sans Mono", monospace; text-align: right; }
+.vtrack { flex: 1; height: .42in; position: relative; background: #F8FAFC; border-radius: 4px; }
+.vzero { position: absolute; left: 40%; top: 0; bottom: 0; border-left: 2px solid #18181B; }
+.vth { position: absolute; left: 52%; top: -.04in; bottom: -.04in; border-left: 2px dashed #B91C1C; }
+.vbar { position: absolute; top: .07in; bottom: .07in; border-radius: 3px; }
+.vbar.over { background: #EF4444; }
+.vbar.warn { background: #F59E0B; }
+.vbar.under { background: #22C55E; }
+.vtrack-lab { flex: 1; position: relative; height: .3in; }
+.vtrack-lab span { position: absolute; transform: translateX(-50%); font-size: 15pt; color: #475569; white-space: nowrap; }
+.bridge { flex: 1; min-height: 0; display: flex; gap: .16in; align-items: stretch; }
+.bridge .b-xl, .bridge .b-pd { border-radius: 10px; padding: .1in .18in; display: flex; flex-direction: column; justify-content: center; }
+.bridge .b-xl { flex: 1; border: 2px solid #CBD5E1; background: #F8FAFC; }
+.bridge .b-pd { flex: 1.5; border: 2px solid #15803D; background: #F0FDF4; }
+.bridge h2 { font-size: 22pt; margin: .02in 0; }
+.bridge p { font-size: 18pt; margin: .02in 0; }
+.b-arrow { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #991B1B; font-size: 40pt; line-height: 1; }
+.b-arrow.small { font-size: 30pt; }
+.b-arrow small { font-size: 15pt; }
+.sac { display: flex; gap: .16in; align-items: center; flex-wrap: wrap; }
+.sac-col { display: flex; flex-direction: column; gap: .06in; }
+.sac-lab { font-size: 16pt; color: #475569; }
+.grp { font: 15pt "DejaVu Sans Mono", monospace; padding: .03in .1in; border-radius: 5px; }
+.g1 { background: #DBEAFE; } .g2 { background: #FEF3C7; } .g3 { background: #EDE9FE; } .g4 { background: #DCFCE7; }
+table.mini .keycol { background: #FEF3C7; }
+table.mini .hl-c { background: #DCFCE7; font-weight: bold; }
+table.mini .bad-c { background: #FEE2E2; color: #B91C1C; font-weight: bold; }
+table.mini tr.nan-row td { background: #FEF3C7; font-style: italic; }
+.snip .bad-t { color: #F87171; font-weight: bold; }
+.snip .ok-t { color: #4ADE80; font-weight: bold; }
+table.mini td.tcell { background: #DBEAFE; color: #1D4ED8; font-weight: bold; }
+table.mini td.fcell { color: #94A3B8; }
+.qc { grid-template-columns: 1fr 1.4fr; }
+.qc .snip { font-size: 14.5pt; }
+.fit-box .snip { font-size: 14.5pt; margin: .04in 0; }
+.flip { display: flex; gap: .1in; align-items: center; font: 16pt "DejaVu Sans Mono", monospace; margin: .08in 0; }
+.flip .t { background: #DBEAFE; padding: .03in .1in; border-radius: 5px; }
+.flip .f { background: #F1F5F9; padding: .03in .1in; border-radius: 5px; }
+
+/* Session 2.1 additions */
+.big-li { font-size: 22pt; margin: .1in 0; }
+.notes .card.xwide { flex: 2.4; }
+.rules { border: 2px solid #991B1B; border-radius: 10px; padding: .1in .18in; flex-shrink: 0; }
+.rule-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: .12in; margin-top: .06in; }
+.rule-row span { font-size: 17pt; background: #FEF2F2; border-radius: 6px; padding: .06in .1in; }
+.http { display: flex; align-items: center; gap: .2in; flex-shrink: 0; }
+.http .node { border: 2px solid #18181B; border-radius: 10px; padding: .12in .2in; font-size: 20pt; font-weight: bold; text-align: center; min-width: 2.4in; }
+.http .node small { font: 15pt "DejaVu Sans Mono", monospace; font-weight: normal; color: #475569; }
+.msgs { flex: 1; display: flex; flex-direction: column; gap: .1in; }
+.msg { display: flex; align-items: center; gap: .1in; font-size: 19pt; border-radius: 8px; padding: .06in .14in; }
+.msg b { font-size: 28pt; color: #991B1B; }
+.msg.req { background: #DBEAFE; justify-content: space-between; }
+.msg.res { background: #DCFCE7; }
+.render { border: 1px solid #CBD5E1; border-radius: 10px; padding: .16in; background: #FFF; box-shadow: 0 2px 6px rgba(0,0,0,.08); width: 3.6in; margin: .08in 0; }
+.render .r-name { font: bold 22pt Arial, sans-serif; }
+.render .r-price { font: bold 26pt Arial, sans-serif; color: #B91C1C; margin: .04in 0; }
+.render .r-stock { font: 16pt Arial, sans-serif; color: #15803D; }
+.rawcsv.small { font-size: 13.5pt; }
+.rawcsv b { color: #FBBF24; }
+.tree { font: 16pt/1.6 "DejaVu Sans Mono", monospace; margin-top: .08in; }
+.tn { border-left: 2px solid #CBD5E1; padding-left: .1in; }
+.tn.t1 { margin-left: .3in; }
+.tn.t2 { margin-left: .6in; }
+.tn small { color: #64748B; font-size: 14pt; }
+.tn.hit { background: #FEF3C7; font-weight: bold; }
+.cards4 { display: flex; flex-direction: column; gap: .06in; }
+.cards4 span { font: 15pt "DejaVu Sans Mono", monospace; border: 1px solid #CBD5E1; border-radius: 6px; padding: .04in .1in; background: #F8FAFC; }
+
+/* session map + exercise 3 */
+.sm-q { border: 3px solid #991B1B; border-radius: 14px; padding: .1in .2in; font-size: 24pt; font-style: italic; background: #FEF2F2; align-self: flex-start; flex-shrink: 0; }
+.sm-q b { font-style: normal; color: #991B1B; }
+.sm-phases { flex: 1; min-height: 0; display: flex; gap: .14in; align-items: stretch; }
+.sm-phase { flex: 1; border: 2px solid #CBD5E1; border-radius: 12px; padding: .14in .2in; }
+.sm-phase.sm-p3 { border: 3px solid #15803D; background: #F0FDF4; }
+.sm-head { display: flex; gap: .14in; align-items: center; border-bottom: 2px solid #E2E8F0; padding-bottom: .08in; margin-bottom: .08in; }
+.sm-head b { font-size: 26pt; display: block; line-height: 1.1; }
+.sm-head small { font-size: 16pt; color: #64748B; }
+.sm-step { background: #991B1B; color: #FFF; border-radius: 50%; width: .5in; height: .5in; display: flex; align-items: center; justify-content: center; font-size: 20pt; font-weight: bold; flex-shrink: 0; }
+.sm-p3 .sm-step { background: #15803D; }
+.sm-phase p { font-size: 22pt; margin: .1in 0; line-height: 1.2; display: flex; }
+.sm-phase i { font-style: normal; font-family: "DejaVu Sans Mono", monospace; font-weight: bold; color: #991B1B; min-width: .6in; flex-shrink: 0; }
+.sm-p3 i { color: #15803D; }
+.sm-arrow { align-self: center; font-size: 34pt; color: #991B1B; }
+ol.ex3 { margin: .06in 0 0; padding-left: .36in; }
+ol.ex3 li { font-size: 18pt; line-height: 1.25; margin: .06in 0; }
+
+.card p.remember { font-size: 17pt; margin-top: .08in; color: #991B1B; }
+.card p.remember b { color: #991B1B; }
+.f7 .card ul { margin-top: .02in; }
+.f7 .card li { font-size: 17pt; }
+.f7 .card h2 { font-size: 21pt; }
+
+
+.fitbox { min-height: 0; overflow: hidden; }
+.card.fitbox p, .card.fitbox li { font-size: 18pt; }
+.mdtable { border-collapse: collapse; width: 100%; margin: .06in 0; }
+.mdtable th, .mdtable td { text-align: left; padding: .05in .1in; border-bottom: 1px solid #E2E8F0; font-size: 17pt; vertical-align: top; }
+.mdtable th { border-bottom: 2px solid #18181B; font-weight: bold; }
+.mdtable code { white-space: normal; }
+.card ul.tight { margin: .04in 0 0; padding-left: .3in; }
+.card ul.tight li { margin: .05in 0; line-height: 1.25; }
+.outbox { background: #18181B; color: #34D399; border-radius: 8px; padding: .1in .14in; font: 13.5pt/1.35 "DejaVu Sans Mono", monospace; white-space: pre; overflow: hidden; }
+.card p.remember { color: #991B1B; margin-top: .06in; }
+.card p.remember b { color: #991B1B; }
+.f7 .card h2 { font-size: 24pt; margin-bottom: .12in; }
+.f7 .card p.remember { margin-top: .16in; }
+.exg .card h2 { font-size: 24pt; }
+.exg .card p { margin: .1in 0; }
+.exg .card p code { font-size: .88em; }
+.big-q { font-size: 20pt; }
+.mdtable.cols td:first-child code { white-space: nowrap; overflow-wrap: normal; }
+.card code, .check code, .mdtable code, .card h2 { white-space: normal; overflow-wrap: anywhere; }
+.notes .card.how { flex: 1 1 auto; }
+.notes .card.out { flex: 0 0 auto; }
+
+
+/* session map with content */
+.sm-phase.fitbox { display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
+.sm-phase p.sm-item { display: flex; gap: .1in; margin: .06in 0; line-height: 1.15; }
+.sm-item i { font-style: normal; font-family: "DejaVu Sans Mono", monospace; font-weight: bold; color: #991B1B; min-width: .5in; flex-shrink: 0; }
+.sm-p3 .sm-item i { color: #15803D; }
+.sm-item b { display: block; font-size: 1em; }
+.sm-item span.d { display: block; font-size: .9em; color: #334155; }
+.sm-item code { font-size: .85em; white-space: normal; overflow-wrap: anywhere; }
+/* end session map */
+
+</style>
+</head>
+<body>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">1-2. Purpose and Outcomes</span></div>
+  <div class="title">Session 3.2: Advanced Data Analysis: Feature Engineering, Scaling, and Business Data Preprocessing</div><div class="rule"></div>
+  <div class="body grid2 overview"><div class="card fitbox"><div class="tag">THE BUSINESS SITUATION</div><ul class="tight"><li>A bank&#x27;s credit team wants a model that predicts which loan applicants will default (fail to repay their loan)</li><li>Its applicant records mix text, gaps, and numbers on very different scales, such as an income of <code>65,000</code> next to a utilization of <code>24.5</code></li><li>The credit risk manager asks: can we turn our applicant records into data a model can learn from, without cheating on the test? Today, you prepare the data step by step, so that Session 3.3 can train a model on it</li></ul><p class="flow">Today's flow: 60 min lecture, then 120 min hands-on lab</p></div><div class="card fitbox"><div class="tag">EXPECTED OUTCOMES</div><h2>By the end of today, you will be able to:</h2><ol class="biz"><li><span class="q">"What do we predict, and from what?"</span> Split a table into features <code>X</code> (the inputs) and the target <code>y</code> (the answer to predict)</li><li><span class="q">"How do text and gaps become numbers?"</span> Fill missing values (imputation), turn text categories into 0/1 columns (one-hot encoding), and put numbers on a common scale (standardization)</li><li><span class="q">"How do we test honestly?"</span> Split the data into a training set and a test set before learning anything from it, so that no test information leaks into training (data leakage)</li></ol></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 1 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Session Map</span></div>
+  <div class="title">Session Map: Follow the Numbers</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: .14in;"><div class="sm-q"><b>Today's question:</b> Can we turn our applicant records into data a model can learn from, without cheating on the test?</div><div class="sm-phases"><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">1</span><span><b>Why it matters</b><small>Lecture, part 1</small></span></div><p class="sm-item"><i>1.</i><span><b>Session Purpose</b><span class="d">answer today&#x27;s question</span></span></p><p class="sm-item"><i>2.</i><span><b>Learning Outcomes</b><span class="d">3 skills you will show today</span></span></p><p class="sm-item"><i>3.</i><span><b>Business Context</b><span class="d">Why Data Preparation Decides Model Quality</span></span></p><p class="sm-item"><i>4.</i><span><b>Data Basics</b><span class="d">From a Raw Row to a Model-Ready Row</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">2</span><span><b>Learn the tools</b><small>Lecture, part 2</small></span></div><p class="sm-item"><i>5.</i><span><b>Lab Dataset</b><span class="d">1 CSV</span></span></p><p class="sm-item"><i>6.</i><span><b>Keywords</b><span class="d">6 terms</span></span></p><p class="sm-item"><i>7.</i><span><b>Core Foundations</b><span class="d">5 ideas, one at a time</span></span></p><p class="sm-item"><i>8.</i><span><b>IDE Setup</b><span class="d"><code>pip install scikit-learn</code></span></span></p><p class="sm-item"><i>9.</i><span><b>Code Examples</b><span class="d">3 demos + Quick Checks</span></span></p><p class="sm-item"><i>10.</i><span><b>References</b><span class="d">4 official docs</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox sm-p3" data-start="22"><div class="sm-head"><span class="sm-step">3</span><span><b>Practice</b><small>Lab</small></span></div><p class="sm-item"><i>11.</i><span><b>Exercise 1: Guided</b><span class="d">Credit Data Preparation Pipeline</span></span></p><p class="sm-item"><i>12.</i><span><b>Exercise 2: Applied</b><span class="d">Feature Engineering and a Leakage Check</span></span></p><p class="sm-item"><i>13.</i><span><b>Exercise 3: Advanced</b><span class="d">A Reusable Preparation Pipeline</span></span></p></div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 2 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">3. Business Context</span></div>
+  <div class="title">Why Data Preparation Decides Model Quality</div><div class="rule"></div>
+  <div class="body"><div class="card fitbox"><div class="tag">KEY POINTS</div><ul class="tight"><li>A model is only as good as the data it learns from (&quot;garbage in, garbage out&quot;).</li><li>A model reads only numbers, with no gaps.<ul class="tight"><li><code>Education_Tier</code> is text (<code>Bachelor</code>, <code>Master</code>, <code>Doctorate</code>)</li><li>One income and one utilization value are missing</li></ul></li><li>A model must be tested on applicants it has never seen, just as a student is tested on new exam questions, not on the practice questions.</li><li>Credit utilization: the share of an applicant&#x27;s credit limit that is in use.</li></ul></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 3 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">4. Data Basics</span></div>
+  <div class="title">From a Raw Row to a Model-Ready Row</div><div class="rule"></div>
+  <div class="body grid2" style="grid-template-columns: 1fr 1.15fr;"><div class="card fitbox"><div class="tag">KEY POINTS</div><ul class="tight"><li>Applicant <code>CLI-701</code>, before and after preparation:</li><li>The standardized values use the training rows&#x27; averages and spreads (Micro-Example 3).</li><li><b>One-hot encoding:</b> one 0/1 column per category.</li><li><b>Standardization:</b> <code>(value - average) / standard deviation</code>.</li><li><b>Train/test split:</b> the model learns from the training set; the test set is kept aside and used once, at the end, to measure the model honestly.</li></ul></div><div class="card fitbox"><div class="tag">AT A GLANCE</div><table class="mdtable"><tr><th>Column</th><th>Raw value</th><th>Model-ready value</th><th>Step</th></tr><tr><td><code>Age_Years_Count</code></td><td><code>45</code></td><td><code>0.41</code></td><td>standardized</td></tr><tr><td><code>Annual_Income_USD</code></td><td><code>125000.0</code></td><td><code>0.44</code></td><td>standardized</td></tr><tr><td><code>Credit_Utilization_Pct</code></td><td><code>48.2</code></td><td><code>0.82</code></td><td>standardized</td></tr><tr><td><code>Education_Tier</code></td><td><code>Master</code></td><td><code>Education_Tier_Master</code> = <code>1</code>, <code>Education_Tier_Doctorate</code> = <code>0</code></td><td>one-hot encoded</td></tr></table></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 4 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">5. Lab Practice Dataset</span></div>
+  <div class="title">The Data for Today</div><div class="rule"></div>
+  <div class="body grid2" style="grid-template-columns: 1fr 2.2fr;"><div class="card fitbox"><div class="tag">FILES</div><ul class="tight"><li><code>data/session_03_02_dataset.csv</code></li></ul><p>Audited 12-row loan applicant dataset (fictional teaching data), one row per applicant, with 2 missing values on purpose:</p></div><div class="card fitbox"><div class="tag">COLUMNS</div><table class="mdtable cols"><tr><td><code>Client_ID</code></td><td>Applicant code (e.g., <code>CLI-701</code>). An ID, not a feature: it says nothing about the applicant.</td></tr><tr><td><code>Age_Years_Count</code></td><td>Age in years.</td></tr><tr><td><code>Annual_Income_USD</code></td><td>Yearly income in U.S. Dollars (missing for <code>CLI-707</code>).</td></tr><tr><td><code>Credit_Utilization_Pct</code></td><td>Share of the credit limit in use, in percent (missing for <code>CLI-709</code>).</td></tr><tr><td><code>Education_Tier</code></td><td>Highest education: <code>Bachelor</code>, <code>Master</code>, or <code>Doctorate</code>.</td></tr><tr><td><code>Defaulted_Binary</code></td><td>The target: <code>1</code> = defaulted, <code>0</code> = repaid. 3 of the 12 applicants defaulted.</td></tr></table></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 5 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">6. Keywords</span></div>
+  <div class="title">6 Terms You Need Today</div><div class="rule"></div>
+  <div class="body grid3" style="grid-template-rows: repeat(2, 1fr);"><div class="card fitbox"><div class="tag">TERM 1</div><h2><code>Features (X)</code> and <code>Target (y)</code></h2><p class="what"><b>What:</b> <code>X</code> holds the input columns; <code>y</code> holds the outcome to predict</p><p class="why"><b>Why:</b> every Scikit-Learn model expects this split</p></div><div class="card fitbox"><div class="tag">TERM 2</div><h2><code>Imputation</code></h2><p class="what"><b>What:</b> filling missing values, for example with the column&#x27;s median (the middle value)</p><p class="why"><b>Why:</b> models cannot learn from rows with gaps</p></div><div class="card fitbox"><div class="tag">TERM 3</div><h2><code>One-Hot Encoding</code></h2><p class="what"><b>What:</b> one 0/1 column per text category</p><p class="why"><b>Why:</b> turns text into numbers without inventing an order</p></div><div class="card fitbox"><div class="tag">TERM 4</div><h2><code>Standardization</code></h2><p class="what"><b>What:</b> rescaling a column to an average of 0 and a standard deviation of 1</p><p class="why"><b>Why:</b> stops large-unit columns, such as income, from drowning out small ones</p></div><div class="card fitbox"><div class="tag">TERM 5</div><h2><code>Train/Test Split</code></h2><p class="what"><b>What:</b> keeping some rows aside to test the model at the end</p><p class="why"><b>Why:</b> the only honest measure of how the model will do on new applicants</p></div><div class="card fitbox"><div class="tag">TERM 6</div><h2><code>Data Leakage</code></h2><p class="what"><b>What:</b> information from the test set slipping into training</p><p class="why"><b>Why:</b> makes a model look better than it really is</p></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 6 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">7. Core Foundations</span></div>
+  <div class="title">How It Works</div><div class="rule"></div>
+  <div class="body f7" data-uniform style="display:grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: .16in;"><div class="card fitbox" data-start="24"><div class="tag">7.1</div><h2>Features and target</h2><p class="remember"><b>Remember:</b> <code>X</code> = what you know in advance; <code>y</code> = what you want to predict.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.2</div><h2>Filling gaps</h2><p class="remember"><b>Remember:</b> fill gaps with the median, learned from the training rows.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.3</div><h2>Text categories become 0/1 columns</h2><p class="remember"><b>Remember:</b> one 0/1 column per category, never 1-2-3 codes.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.4</div><h2>Putting numbers on one scale</h2><p class="remember"><b>Remember:</b> standardized value = (value - average) / standard deviation.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.5</div><h2>Honest testing</h2><p class="remember"><b>Remember:</b> split, fit on train, transform both.</p></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 7 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">7. Core Foundations: On Real Data</span></div>
+  <div class="title">7.1 Features and target: On Real Data</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: .12in;"><div class="card fitbox" data-start="19"><div class="tag">SEE IT ON REAL DATA</div><table class="mdtable"><tr><th>Column</th><th>Role</th><th>Why</th></tr><tr><td><code>Age_Years_Count</code>, <code>Annual_Income_USD</code>, <code>Credit_Utilization_Pct</code>, <code>Education_Tier</code></td><td>features (<code>X</code>)</td><td>facts known when the application arrives</td></tr><tr><td><code>Defaulted_Binary</code></td><td>target (<code>y</code>)</td><td>the outcome we want to predict</td></tr><tr><td><code>Client_ID</code></td><td>neither</td><td>a label; it says nothing about risk</td></tr></table></div><div class="check"><b>Remember:</b> <code>X</code> = what you know in advance; <code>y</code> = what you want to predict.</div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 8 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Code Demonstration 1</span></div>
+  <div class="title">Features, Target, and Gaps</div><div class="rule"></div>
+  <div class="body">
+    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
+      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S32_demo_1.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
+<pre><span class="sec"># 1. Input: load the applicants</span>
+import pandas as pd
+df = pd.read_csv(&quot;data/session_03_02_dataset.csv&quot;)
+
+<span class="sec"># 2. Process: inputs (X) and the answer to predict (y)</span>
+X = df.drop(columns=[&quot;Client_ID&quot;, &quot;Defaulted_Binary&quot;])
+y = df[&quot;Defaulted_Binary&quot;]
+
+<span class="sec"># 3. Output: size, outcome counts, and missing values</span>
+print(&quot;X shape (rows, columns):&quot;, X.shape)
+print(&quot;Defaults (1) and repaid (0):\n&quot;, y.value_counts())
+print(&quot;Missing values per column:\n&quot;, X.isnull().sum())
+</pre>
+    </div>
+    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li>First time only, in the Terminal: <code>pip install scikit-learn</code></li><li><code>df.drop(columns=[&quot;Client_ID&quot;, &quot;Defaulted_Binary&quot;])</code> returns a copy of the table without the ID and the answer: the features <code>X</code> (section 7.1).</li><li><code>df[&quot;Defaulted_Binary&quot;]</code> picks the answer column: the target <code>y</code>.</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><div class="outbox">X shape (rows, columns): (12, 4)
+Defaults (1) and repaid (0):
+ Defaulted_Binary
+...</div><ul class="tight"><li>4 features for 12 applicants.</li></ul></div></div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 9 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Quick Check 1</span></div>
+  <div class="title">Quick Check 1: <code>value_counts(normalize=True)</code></div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid2 qc" style="flex: 1; min-height: 0;">
+      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>value_counts(normalize=True)</code></h2><p><code>.value_counts(normalize=True)</code> gives each value&#x27;s share instead of its count. Why: the default rate is the first number a credit manager asks for.</p></div>
+      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add one line to part <b>3. Output</b>: <code>print(y.value_counts(_________=True))</code></p></div>
+    </div>
+    <div class="check"><b>Check:</b> <code>0</code> has <code>0.75</code> and <code>1</code> has <code>0.25</code>: a 25% default rate.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 10 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Code Demonstration 2</span></div>
+  <div class="title">One-Hot Encoding</div><div class="rule"></div>
+  <div class="body">
+    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
+      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S32_demo_2.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
+<pre><span class="sec"># 1. Input: load the applicants and keep the features</span>
+import pandas as pd
+df = pd.read_csv(&quot;data/session_03_02_dataset.csv&quot;)
+X = df.drop(columns=[&quot;Client_ID&quot;, &quot;Defaulted_Binary&quot;])
+
+<span class="sec"># 2. Process: one 0/1 column per education level, except the first</span>
+X_encoded = pd.get_dummies(X, columns=[&quot;Education_Tier&quot;],
+                           drop_first=True, dtype=float)
+
+<span class="sec"># 3. Output: the new column names and two rows</span>
+print(X_encoded.columns.tolist())
+print(X_encoded.head(2))
+</pre>
+    </div>
+    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>pd.get_dummies(X, columns=[&quot;Education_Tier&quot;], drop_first=True, dtype=float)</code> replaces the text column with 0/1 columns (section 7.3).</li><li><code>X_encoded.columns.tolist()</code> lists the new column names.</li><li><code>.head(2)</code> shows the first two applicants, a Bachelor and a Master.</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><ul class="tight"><li><code>Education_Tier</code> is gone; two number columns took its place.</li></ul></div></div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 11 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Quick Check 2</span></div>
+  <div class="title">Quick Check 2: <code>drop_first</code></div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid2 qc" style="flex: 1; min-height: 0;">
+      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>drop_first</code></h2><p>the <code>drop_first</code> setting. <code>True</code> leaves out the first category; <code>False</code> keeps a column for every category. Why: shows what &quot;the first category is implied&quot; means.</p></div>
+      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>In part <b>2. Process</b>, change <code>drop_first=True</code> to <code>drop_first=_____</code>.</p></div>
+    </div>
+    <div class="check"><b>Check:</b> a third column, <code>Education_Tier_Bachelor</code>, appears, and each row has exactly one <code>1.0</code> among the three education columns. Change it back to <code>True</code> afterwards.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 12 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Code Demonstration 3</span></div>
+  <div class="title">Split First, Then Fill and Scale</div><div class="rule"></div>
+  <div class="body">
+    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
+      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S32_demo_3.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
+<pre><span class="sec"># 1. Input: load, encode, and split before learning anything</span>
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import StandardScaler
+df = pd.read_csv(&quot;data/session_03_02_dataset.csv&quot;)
+X = pd.get_dummies(df.drop(columns=[&quot;Client_ID&quot;, &quot;Defaulted_Binary&quot;]),
+                   columns=[&quot;Education_Tier&quot;], drop_first=True, dtype=float)
+y = df[&quot;Defaulted_Binary&quot;]
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.25, random_state=42, stratify=y
+)
+
+<span class="sec"># 2. Process: learn medians and scales from the training rows only</span>
+imputer = SimpleImputer(strategy=&quot;median&quot;)
+X_train_filled = imputer.fit_transform(X_train)
+X_test_filled = imputer.transform(X_test)
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train_filled)
+X_test_scaled = scaler.transform(X_test_filled)
+
+<span class="sec"># 3. Output: sizes and the medians used to fill the gaps</span>
+print(&quot;Train rows:&quot;, len(X_train), &quot;| Test rows:&quot;, len(X_test))
+print(&quot;Medians learned from training rows:&quot;, imputer.statistics_.round(2).tolist())
+</pre>
+    </div>
+    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li>Part 1 encodes the text column, then splits the rows <b>before</b> anything is learned (section 7.5).</li><li><code>SimpleImputer(strategy=&quot;median&quot;)</code> creates an empty gap-filler.</li><li><code>StandardScaler()</code> works the same way: it learns each column&#x27;s training average and standard deviation, then applies them to both sets (section 7.4).</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><ul class="tight"><li>9 applicants for training and 3 kept aside for the final test.</li></ul></div></div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 13 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Quick Check 3</span></div>
+  <div class="title">Quick Check 3: <code>scaler.mean_</code></div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid2 qc" style="flex: 1; min-height: 0;">
+      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>scaler.mean_</code></h2><p><code>scaler.mean_</code> holds the column averages the scaler learned from the training rows. Why: shows exactly what &quot;fit on the training set&quot; means.</p></div>
+      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add one line to part <b>3. Output</b>: <code>print(&quot;Averages learned by the scaler:&quot;, scaler._____.round(2).tolist())</code></p></div>
+    </div>
+    <div class="check"><b>Check:</b> the first three values are <code>40.44</code> (age), <code>106444.44</code> (income), and <code>35.82</code> (utilization).</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 14 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">10. Official References</span></div>
+  <div class="title">Where to Look Things Up</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: .14in;"><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Scikit-Learn Preprocessing Guide: StandardScaler and OneHotEncoder</h2><p>https://scikit-learn.org/stable/modules/preprocessing.html</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Scikit-Learn Imputation of Missing Values: SimpleImputer</h2><p>https://scikit-learn.org/stable/modules/impute.html</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Scikit-Learn Model Selection: train_test_split</h2><p>https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Scikit-Learn: Common Pitfalls (Data Leakage)</h2><p>https://scikit-learn.org/stable/common_pitfalls.html</p></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 15 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">11-13. Exercises</span></div>
+  <div class="title">Three Exercises</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid3 exg" data-uniform style="flex: 1; min-height: 0;"><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 1: GUIDED</div><h2>Credit Data Preparation Pipeline</h2><p><b>Goal:</b> Encode, split, fill, and scale the credit data</p><p><b>File:</b> <code>YourName_S32_preprocessing.py</code></p><p class="remember"><b>Check:</b> every training average <code>0.0</code>, spread <code>1.0</code></p></div><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 2: APPLIED</div><h2>Feature Engineering and a Leakage Check</h2><p><b>Goal:</b> Add one feature, then see what data leakage hides</p><p><b>File:</b> <code>YourName_S32_practice.py</code></p><p class="remember"><b>Check:</b> leaky test averages are all <code>0.0</code></p></div><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 3: ADVANCED</div><h2>A Reusable Preparation Pipeline</h2><p><b>Goal:</b> Build one pipeline that also handles unseen categories</p><p><b>File:</b> <code>YourName_S32_challenge.py</code></p><p class="remember"><b>Check:</b> 6 output columns; no crash on the new applicant</p></div></div>
+    <div class="check">Full steps for all three exercises: sections 11-13 of the course page.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 16 / 16</span></div>
+</section>
+
+<script>
+window.__fitDone = false;
+function fitAll() {
+  document.querySelectorAll('.fitbox').forEach((box) => {
+    let size = parseFloat(box.dataset.start || '18');
+    const floor = parseFloat(box.dataset.floor || '15');
+    const apply = () => box.querySelectorAll('p, li, td, th, .outbox, pre').forEach((el) => {
+      if (el.tagName === 'PRE') { el.style.fontSize = Math.max(9.5, size - 3.5) + 'pt'; return; }
+      if (el.classList.contains('outbox')) { el.style.fontSize = Math.max(11, size - 4.5) + 'pt'; return; }
+      el.style.fontSize = size + 'pt';
+    });
+    apply();
+    const over = () => box.scrollHeight > box.clientHeight + 1 || box.scrollWidth > box.clientWidth + 1
+      || [...box.querySelectorAll('pre')].some((pre) => pre.scrollHeight > pre.clientHeight + 6 || pre.scrollWidth > pre.clientWidth + 6);
+    while (over() && size > floor) { size -= 0.5; apply(); }
+    if (over()) box.dataset.overflow = 'yes';
+    box.__apply = (v) => { size = v; apply(); };
+    box.dataset.size = size;
+  });
+  // cards on one slide share one size, so they read as a set
+  document.querySelectorAll('[data-uniform]').forEach((group) => {
+    const boxes = [...group.querySelectorAll('.fitbox')];
+    const min = Math.min(...boxes.map((b) => parseFloat(b.dataset.size)));
+    boxes.forEach((b) => b.__apply(min));
+  });
+  window.__fitDone = true;
+}
+document.fonts.ready.then(() => { fitAll(); document.querySelectorAll('[data-overflow]').forEach((el) => el.removeAttribute('data-overflow')); fitAll(); });
+</script>
+
+</body>
+</html>

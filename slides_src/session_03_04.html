@@ -1,37 +1,561 @@
-<!doctype html><html lang="en-US"><meta charset="utf-8"><title>Session 3.4</title><style>
-@page{size:16in 9in;margin:0}*{box-sizing:border-box}body{margin:0;font-family:"Times New Roman",serif;color:#18181B}.slide{width:16in;height:9in;padding:.45in .8in .4in;display:flex;flex-direction:column;background:#fff;page-break-after:always}header{font-size:15pt;color:#991B1B;font-weight:bold}header span{margin-left:.25in;color:#64748B;font-weight:normal}h1{font-size:34pt;line-height:1.08;margin:.13in 0 .08in}h2{font-size:21pt;margin:.06in 0}.slide>i{display:block;width:1.2in;height:4px;background:#991B1B;margin-bottom:.2in}main{flex:1;min-height:0;display:grid;grid-template-columns:repeat(2,1fr);gap:.2in}main.three{grid-template-columns:repeat(3,1fr);gap:.18in}article{border:1px solid #CBD5E1;border-radius:10px;padding:.18in;overflow:hidden}article b{font-size:14pt;color:#991B1B}p,li{font-size:17pt;line-height:1.25;margin:.06in 0}footer{margin-top:.18in;border-top:1px solid #CBD5E1;padding-top:.1in;font-size:15pt;color:#64748B;display:flex;justify-content:space-between}main.overview{grid-template-columns:2fr 3fr}main.overview article{display:flex;flex-direction:column}.overview ul.lead{margin:.12in 0 0;padding-left:.32in}.overview ul.lead li{font-size:21pt}.overview .flow{margin-top:auto;font-size:16pt;color:#64748B;border-top:1px solid #CBD5E1;padding-top:.1in}.overview ol{margin:.1in 0 0;padding-left:.38in}.overview li{font-size:20pt;line-height:1.3;margin:0 0 .16in}.code{display:flex;gap:.3in}.code pre{width:58%;margin:0;background:#18181B;border-radius:10px;color:#E5E7EB;padding:.22in;font:13.5pt/1.28 "DejaVu Sans Mono",monospace;white-space:pre-wrap;overflow-wrap:anywhere;overflow:hidden}.code aside{flex:1;display:flex;flex-direction:column;gap:.13in}.code aside article{flex:1}</style><body>
-<section class="slide"><header><b>MODULE 3</b><span>Session Overview</span></header><h1>Session 3.4: Core Concepts of Machine Learning: Supervised vs. Unsupervised Learning and Evaluation Metrics</h1><i></i><main class="overview"><article><b>TODAY'S PURPOSE</b><h2>Why This Session Matters</h2><ul class="lead"><li>Judge whether a model is good enough for a decision</li><li>Look beyond a single accuracy number</li><li>Connect model errors to business cost</li></ul><p class="flow">Today's flow: 60 min lecture, then 120 min hands-on lab</p></article><article><b>EXPECTED OUTCOMES</b><h2>By the end of today, you will be able to:</h2><ol><li>Compare supervised and unsupervised learning</li><li>Read a confusion matrix: precision, recall, and ROC-AUC</li><li>Pick the threshold with the lowest business cost</li></ol></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 1 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 3</b><span>Core Vocabulary</span></header><h1>Concepts for This Session</h1><i></i><main class="three"><article><b>CONCEPT 1</b><h2>Supervised vs. Unsupervised Learning</h2><p> Supervised learning trains on labeled historical targets (y), whereas unsupervised learning identifies natural groupings and structural patterns in unlabeled data (X).</p></article><article><b>CONCEPT 2</b><h2>Confusion Matrix</h2><p> A 2x2 contingency table tabulating classification outcomes into True Positives (TP), False Positives (FP), True Negatives (TN), and False Negatives (FN).</p></article><article><b>CONCEPT 3</b><h2>Precision &amp; Recall Trade-Off</h2><p> Precision measures how many flagged cases were truly positive, while Recall measures what percentage of all actual positives were caught.</p></article><article><b>CONCEPT 4</b><h2>Receiver Operating Characteristic (ROC-AUC)</h2><p> A graphical plot illustrating the diagnostic ability of a binary classifier across all classification thresholds, summarized by the Area Under the Curve (AUC).</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 2 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 3</b><span>Computational Foundations</span></header><h1>How the Concept Works in Practice</h1><i></i><main><article><b>FOUNDATION 1</b><h2>Supervised Target Labels vs Unsupervised Structure Discovery</h2><p> When predicting fraud or customer churn, historical outcomes exist to train supervised classifiers. When discovering new customer personas or product segments, unsupervised clustering groups customers based on behavioral similarities.</p></article><article><b>FOUNDATION 2</b><h2>The Asymmetric Cost of False Positives vs False Negatives</h2><p> In business analytics, classification errors are rarely symmetric. In credit card fraud, a False Negative (missing a $4,000 fraudulent transaction) costs the bank $4,000. A False Positive (sending an automated verification SMS) costs $0.05. Models must be optimized for financial cost rather than naive accuracy.</p></article><article><b>FOUNDATION 3</b><h2>Precision-Recall Optimization</h2><p> In severely imbalanced datasets (e.g., fraud occurring in 1% of transactions), a naive model predicting "never fraud" achieves 99% accuracy but provides zero business value. Analysts evaluate Precision, Recall, and F1-Score to assess operational efficacy.</p></article><article><b>FOUNDATION 4</b><h2>Cluster Inertia and Customer Archetype Discovery</h2><p> In K-Means clustering, the algorithm minimizes within-cluster variance (inertia). Analysts use elbow plots to select optimal K cluster counts and label resulting clusters into actionable business segments.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 3 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 3</b><span>Development Workflow</span></header><h1>Build, Test, and Diagnose in the IDE</h1><i></i><main><article><b>[1] FILE EXPLORER</b><h2>Organize Assets</h2><p>Use the session dataset and keep scripts in a clear workspace.</p></article><article><b>[2] CODE EDITOR</b><h2>Write Small Segments</h2><p>Run each completed segment before expanding the program.</p></article><article><b>[3] AI AGENT CHAT</b><h2>Diagnose Errors</h2><p>Capture the traceback, request an explanation, and review the fix.</p></article><article><b>[4] INTEGRATED TERMINAL</b><h2>Verify Execution</h2><p>Confirm the final program completes with return code 0.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 4 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE</b><span>Style 2 Harvard Dual-Pane Editor</span></header><h1>Script Demonstration 1: Core Concepts of Machine Learning: Supervised vs. Unsupervised Learning and Evaluation Metrics</h1><i></i><main class="code"><pre>import pandas as pd
-    from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<title>Session 3.4 Lecture</title>
+<style>
+@page { size: 16in 9in; margin: 0; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "Times New Roman", serif; color: #18181B; }
+.slide { width: 16in; height: 9in; padding: .45in .8in .4in; display: flex; flex-direction: column; background: #FFF; page-break-after: always; }
+.eyebrow { color: #991B1B; font-size: 15pt; font-weight: bold; letter-spacing: .02em; }
+.kicker { color: #64748B; font-size: 15pt; margin-left: .25in; }
+.title { font-size: 36pt; line-height: 1.05; font-weight: bold; margin: .12in 0 .08in; }
+.rule { height: 4px; background: #991B1B; width: 1.2in; margin-bottom: .18in; flex-shrink: 0; }
+.body { flex: 1; min-height: 0; display: flex; gap: .25in; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: .2in; width: 100%; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: .18in; width: 100%; }
+.card { border: 1px solid #CBD5E1; border-radius: 10px; padding: .16in .2in; background: #FFF; min-height: 0; overflow: hidden; }
+.card h2 { font-size: 22pt; margin: .04in 0 .08in; }
+.card p, .card li { font-size: 18pt; line-height: 1.25; margin: .05in 0; }
+.card ul { margin: .04in 0 0; padding-left: .3in; }
+.tag { color: #991B1B; font-size: 15pt; font-weight: bold; }
+.what, .why { font-size: 18pt; line-height: 1.25; margin: .05in 0; }
+.what b, .why b { color: #991B1B; }
+code { font-family: "DejaVu Sans Mono", monospace; font-size: .86em; background: #F1F5F9; border: 1px solid #E2E8F0; border-radius: 4px; padding: 0 .04in; white-space: nowrap; }
+h2 code { font-size: .82em; }
+.footer { border-top: 1px solid #CBD5E1; min-height: .42in; margin-top: .18in; display: flex; align-items: end; justify-content: space-between; color: #475569; font-size: 15pt; flex-shrink: 0; }
 
-    df = pd.read_csv("data/session_03_04_dataset.csv")
-    y_true = df["Actual_Fraud_Binary"]
-    # Simulated model probability predictions
-    y_pred = (df["Cardholder_Risk_Score"] &gt;= 70).astype(int)
+/* Slide 1 */
+.overview { grid-template-columns: 2fr 3fr; }
+.overview .card { display: flex; flex-direction: column; }
+.overview ul.lead { margin: .1in 0 0; padding-left: .32in; }
+.overview ul.lead li { font-size: 20pt; line-height: 1.25; margin: 0 0 .1in; }
+.overview .card .flow { margin-top: auto; font-size: 16pt; color: #64748B; border-top: 1px solid #CBD5E1; padding-top: .1in; }
+.overview ol { margin: .06in 0 0; padding-left: .38in; }
+.overview ol > li { font-size: 21pt; line-height: 1.25; margin: 0 0 .12in; }
+.gloss { display: block; font-size: 18pt; color: #475569; margin-top: .03in; }
 
-    cm = confusion_matrix(y_true, y_pred)
-    prec = precision_score(y_true, y_pred)
-    rec = recall_score(y_true, y_pred)
-    f1 = f1_score(y_true, y_pred)
+/* Code slides */
+.code-panel { width: 60%; background: #18181B; border-radius: 10px; color: #E5E7EB; padding: .16in .22in; display: flex; flex-direction: column; flex-shrink: 0; }
+.code-header { color: #CBD5E1; font: 14pt "DejaVu Sans Mono", monospace; border-bottom: 1px solid #3F3F46; padding-bottom: .08in; display: flex; align-items: center; gap: .08in; }
+.dot { width: .13in; height: .13in; border-radius: 50%; display: inline-block; }
+pre { white-space: pre; font: 14.5pt/1.38 "DejaVu Sans Mono", monospace; margin: .12in 0 0; overflow: hidden; }
+.cm { color: #94A3B8; }
+.sec { color: #FBBF24; font-weight: bold; }
+.ipo { margin-left: auto; color: #FBBF24; font-size: 13pt; }
+.notes .card.wide { flex: 1.6; }
 
-    print("Confusion Matrix (TN, FP / FN, TP):\\n", cm)
-    print(f"Precision: {prec:.3f} | Recall: {rec:.3f} | F1-Score: {f1:.3f}")</pre><aside><article><b>SYNTAX</b><h2>Readable Structure</h2><p>Observe the syntax and indentation that control execution.</p></article><article><b>RUNTIME</b><h2>Verified Execution</h2><p>Run the example in the integrated terminal and inspect the output.</p></article><article><b>BUSINESS VALUE</b><h2>Applied Automation</h2><p>Use the pattern to automate a repeatable business decision.</p></article></aside></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 5 / 8</span></footer></section><section class="slide"><header><b>MODULE</b><span>Style 2 Harvard Dual-Pane Editor</span></header><h1>Script Demonstration 2: Core Concepts of Machine Learning: Supervised vs. Unsupervised Learning and Evaluation Metrics</h1><i></i><main class="code"><pre>from sklearn.metrics import roc_auc_score
+/* Rows and columns slide */
+.table-wrap { width: 60%; flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; }
+table.df { border-collapse: collapse; font: 16pt/1.3 "DejaVu Sans Mono", monospace; }
+table.df td, table.df th { padding: .07in .14in; text-align: left; white-space: nowrap; }
+table.df thead th { border-bottom: 2px solid #18181B; }
+table.df tbody td { border-bottom: 1px solid #E2E8F0; }
+table.df .num { text-align: right; }
+table.df .idx { color: #64748B; }
+table.df .lbl { font: bold 15pt "Times New Roman", serif; border: none; padding: 0 .1in .04in; }
+.row-lbl { color: #1D4ED8; text-align: right !important; }
+.col-lbl { color: #B45309; text-align: center !important; }
+table.df .hl-row td { background: #DBEAFE; }
+table.df .hl-col { background: #FEF3C7; }
+table.df .hl-row td.hl-col { background: #FDE68A; outline: 3px solid #991B1B; outline-offset: -3px; font-weight: bold; }
+table.df .more { color: #64748B; font-family: "Times New Roman", serif; font-style: italic; }
+.card .tag.blue { color: #1D4ED8; }
+.card .tag.amber { color: #B45309; }
+.card.row-card { border: 2px solid #93C5FD; }
+.card.col-card { border: 2px solid #FCD34D; }
+.card.cell-card { border: 2px solid #991B1B; }
+.notes { flex: 1; display: flex; flex-direction: column; gap: .12in; min-width: 0; }
+.notes .card { flex: 1; }
+.notes .card h2 { font-size: 20pt; }
 
-    risk_prob = df["Cardholder_Risk_Score"] / 100.0
-    auc_score = roc_auc_score(y_true, risk_prob)
-    print(f"Model Diagnostic ROC-AUC Score: {auc_score:.4f}")</pre><aside><article><b>SYNTAX</b><h2>Readable Structure</h2><p>Observe the syntax and indentation that control execution.</p></article><article><b>RUNTIME</b><h2>Verified Execution</h2><p>Run the example in the integrated terminal and inspect the output.</p></article><article><b>BUSINESS VALUE</b><h2>Applied Automation</h2><p>Use the pattern to automate a repeatable business decision.</p></article></aside></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 6 / 8</span></footer></section><section class="slide"><header><b>MODULE</b><span>Style 2 Harvard Dual-Pane Editor</span></header><h1>Script Demonstration 3: Core Concepts of Machine Learning: Supervised vs. Unsupervised Learning and Evaluation Metrics</h1><i></i><main class="code"><pre>from sklearn.cluster import KMeans
-    from sklearn.preprocessing import StandardScaler
+.check { margin-top: .14in; background: #FEF2F2; border: 1px solid #FCA5A5; border-radius: 10px; padding: .12in .2in; font-size: 18pt; flex-shrink: 0; }
 
-    features = df[["Transaction_Amount_USD", "Cardholder_Risk_Score"]]
-    scaler = StandardScaler()
-    scaled_features = scaler.fit_transform(features)
+/* Six terms visual map */
+.fit { flex: 1; min-height: 0; display: grid; grid-template-rows: 1fr 1fr; gap: .16in; }
+.fit-row { display: flex; gap: .14in; align-items: stretch; min-height: 0; }
+.fit-box { border: 1px solid #CBD5E1; border-radius: 10px; padding: .12in .16in; display: flex; flex-direction: column; min-width: 0; }
+.fit-box .tag { margin-bottom: .04in; }
+.fit-box .cap { font-size: 18pt; margin: .06in 0 0; line-height: 1.2; }
+.fit-arrow { display: flex; flex-direction: column; justify-content: center; align-items: center; color: #991B1B; flex-shrink: 0; }
+.fit-arrow .big { font-size: 40pt; line-height: 1; }
+.fit-arrow code { font-size: 14pt; }
+.rawcsv { background: #18181B; color: #E5E7EB; border-radius: 8px; padding: .1in .14in; font: 15pt/1.4 "DejaVu Sans Mono", monospace; white-space: pre; }
+.rawcsv b { color: #FBBF24; }
+table.mini { border-collapse: collapse; font: 15pt/1.3 "DejaVu Sans Mono", monospace; }
+table.mini th, table.mini td { padding: .03in .1in; text-align: left; white-space: nowrap; border-bottom: 1px solid #E2E8F0; }
+table.mini th { border-bottom: 2px solid #18181B; }
+table.mini .num { text-align: right; }
+table.mini .idx { color: #64748B; }
+table.mini .ser { background: #FEF3C7; }
+table.mini .new { background: #DCFCE7; font-weight: bold; }
+table.mini tr.keep td { background: #DBEAFE; font-weight: bold; }
+table.mini tr.drop td { color: #CBD5E1; }
+.op { font: bold 26pt "DejaVu Sans Mono", monospace; color: #991B1B; align-self: center; padding: 0 .06in; }
+.toolbar { font-size: 17pt; color: #475569; margin-bottom: .1in; flex-shrink: 0; }
+.toolbar b { color: #991B1B; }
 
-    kmeans = KMeans(n_clusters=3, random_state=42, n_init=10)
-    df["Cluster_ID"] = kmeans.fit_predict(scaled_features)
+/* DataFrame visual map */
+.xl th, .xl td { font-size: 15pt; }
+.xl .rn { background: #F1F5F9; color: #64748B; text-align: center; }
+.xl .bad { background: #FEE2E2; color: #B91C1C; font-weight: bold; }
+.side { display: flex; gap: .22in; align-items: flex-start; }
+.side .lab { font-size: 17pt; font-weight: bold; margin-bottom: .04in; }
+.brace { border-left: 4px solid #16A34A; padding-left: .1in; }
+.anat .ix { background: #DBEAFE; color: #1D4ED8; }
+.anat .hd { background: #FEF3C7; }
+.anat .vl { background: #DCFCE7; }
+.chips { display: flex; gap: .12in; flex-wrap: wrap; margin-top: .08in; }
+.chip { font-size: 16pt; padding: .02in .1in; border-radius: 6px; }
+.dt { font-size: 14pt; padding: .01in .08in; border-radius: 5px; background: #18181B; color: #FBBF24; font-family: "DejaVu Sans Mono", monospace; }
+.insp td { font-size: 15pt; vertical-align: top; }
+.insp td:first-child { color: #991B1B; }
+.pr, .insp td.pr { font: 18pt/1.3 "Times New Roman", serif; }
+td.pr { white-space: normal !important; }
 
-    cluster_profiles = df.groupby("Cluster_ID")[["Transaction_Amount_USD", "Cardholder_Risk_Score"]].mean()
-    print("Unsupervised Cluster Archetype Profiles:\\n", cluster_profiles)</pre><aside><article><b>SYNTAX</b><h2>Readable Structure</h2><p>Observe the syntax and indentation that control execution.</p></article><article><b>RUNTIME</b><h2>Verified Execution</h2><p>Run the example in the integrated terminal and inspect the output.</p></article><article><b>BUSINESS VALUE</b><h2>Applied Automation</h2><p>Use the pattern to automate a repeatable business decision.</p></article></aside></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 7 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 3</b><span>Hands-On Practice</span></header><h1>Exercise 1 and Exercise 2</h1><i></i><main><article><b>EXERCISE 1: GUIDED</b><h2>Foundational Practice</h2><p>Follow the lab protocol, run the script, and verify its output with the session dataset.</p></article><article><b>EXERCISE 2: DEBUGGING</b><h2>Applied Challenge</h2><p>Extend the program, diagnose an intentional error, apply the verified correction, and confirm return code 0.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 8 / 8</span></footer></section></body></html>
+/* IDE slide */
+.shot { width: 60%; flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; }
+.shot img { width: 100%; border: 1px solid #CBD5E1; border-radius: 10px; display: block; }
+.shot .cap { font-size: 17pt; margin: .1in 0 0; }
+.steps { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .1in; justify-content: center; }
+.step { display: flex; gap: .14in; align-items: flex-start; border: 1px solid #CBD5E1; border-radius: 10px; padding: .1in .14in; }
+.badge { background: #991B1B; color: #FFF; font: bold 16pt "DejaVu Sans Mono", monospace; border-radius: 6px; padding: .02in .08in; flex-shrink: 0; }
+.step h3 { font-size: 20pt; margin: 0 0 .02in; }
+.step p { font-size: 18pt; line-height: 1.22; margin: .02in 0; }
+.step p.eg { font-size: 16pt; color: #475569; }
+
+/* Quick check slides */
+.qc { grid-template-columns: 1fr 1.15fr; }
+.qc .card { display: flex; flex-direction: column; }
+.snip { background: #18181B; color: #E5E7EB; border-radius: 8px; padding: .1in .16in; font: 16pt/1.4 "DejaVu Sans Mono", monospace; white-space: pre; margin: .04in 0 .1in; }
+.snip .blank { background: #FBBF24; color: #18181B; padding: 0 .06in; border-radius: 3px; font-weight: bold; }
+.snip .cm { color: #94A3B8; }
+.snip-lab { font-size: 17pt; font-weight: bold; margin-top: .06in; }
+.strip { display: flex; gap: .05in; margin: .1in 0 .04in; }
+.strip span { flex: 1; text-align: center; font: 15pt "DejaVu Sans Mono", monospace; padding: .06in 0; border-radius: 5px; background: #F1F5F9; color: #94A3B8; }
+.strip .h { background: #DBEAFE; color: #1D4ED8; font-weight: bold; }
+.strip .t { background: #DCFCE7; color: #15803D; font-weight: bold; }
+.strip-lab { display: flex; justify-content: space-between; font-size: 16pt; }
+.flowline { display: flex; align-items: center; gap: .14in; margin: .1in 0; font: 17pt "DejaVu Sans Mono", monospace; }
+.flowline .box { background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 6px; padding: .04in .12in; }
+.flowline .arr { color: #991B1B; font-size: 22pt; }
+.flowline .res { background: #DCFCE7; border: 1px solid #86EFAC; border-radius: 6px; padding: .04in .12in; font-weight: bold; }
+.vstack { margin-top: .08in; }
+.vstack td, .vstack th { padding: .02in .12in; }
+.vstack tr.h td:not(.side-lab) { background: #DBEAFE; color: #1D4ED8; font-weight: bold; }
+.vstack tr.t td:not(.side-lab) { background: #DCFCE7; color: #15803D; font-weight: bold; }
+.vstack tr.gap td { color: #94A3B8; font-family: "Times New Roman", serif; font-style: italic; }
+.vstack .side-lab { border: none; font: 17pt "Times New Roman", serif; vertical-align: middle; }
+.vstack .h-lab { color: #1D4ED8; }
+.vstack .t-lab { color: #15803D; }
+table.mini th.plain { font: bold 17pt "Times New Roman", serif; }
+.overview ol.biz > li { font-size: 20pt; margin: 0 0 .1in; }
+.overview .q { display: block; color: #991B1B; font-style: italic; font-weight: bold; }
+.overview .sit-note { font-size: 19pt; font-weight: bold; margin: .04in 0 0; }
+
+/* CSV intro slide */
+.csvflow { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr auto 1.25fr auto 1fr; gap: .14in; align-items: stretch; }
+.csvflow .col { border: 1px solid #CBD5E1; border-radius: 10px; padding: .14in .18in; display: flex; flex-direction: column; gap: .1in; }
+.csvflow .item { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: .08in .12in; font-size: 18pt; line-height: 1.2; }
+.csvflow .item small { display: block; font-size: 16pt; color: #475569; }
+.csvflow .mid { border: 2px solid #991B1B; }
+.csvflow .arrow { display: flex; align-items: center; color: #991B1B; font-size: 40pt; }
+.csvflow li { font-size: 18pt; line-height: 1.3; margin: .04in 0; }
+.csvflow .fname { font: bold 15pt "DejaVu Sans Mono", monospace; color: #18181B; }
+
+/* CSV vs XLSX */
+.src-row { display: flex; gap: .14in; align-items: stretch; flex-shrink: 0; }
+.src-box { flex: 1; border: 1px solid #CBD5E1; border-radius: 10px; padding: .1in .16in; }
+.chips2 { display: flex; gap: .1in; flex-wrap: wrap; margin-top: .06in; }
+.chips2 span { background: #F1F5F9; border: 1px solid #E2E8F0; border-radius: 6px; padding: .03in .12in; font-size: 18pt; }
+.arrow2 { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #991B1B; font-size: 34pt; line-height: 1; }
+.arrow2 small { font-size: 15pt; }
+.files { display: flex; gap: .12in; align-items: center; margin-top: .06in; }
+.file { font: bold 16pt "DejaVu Sans Mono", monospace; padding: .03in .12in; border-radius: 6px; color: #FFF; }
+.file.xlsx { background: #64748B; }
+.file.csv { background: #15803D; }
+.vs { flex: 1; min-height: 0; display: flex; gap: .16in; }
+.vs-col { flex: 1; border-radius: 12px; padding: .14in .2in; display: flex; flex-direction: column; }
+.vs-col.bad { border: 2px solid #CBD5E1; background: #F8FAFC; }
+.vs-col.good { border: 3px solid #15803D; background: #F0FDF4; flex: 1.35; }
+.vs-head { font-size: 24pt; font-weight: bold; display: flex; align-items: center; gap: .12in; }
+.vs-sub { font-size: 18pt; margin: .06in 0 .1in; color: #334155; }
+.vs-mid { align-self: center; font: bold 26pt "Times New Roman", serif; color: #64748B; }
+.apps { display: flex; flex-wrap: wrap; gap: .1in; }
+.app { font-size: 18pt; background: #FFF; border-radius: 8px; padding: .06in .14in; display: flex; flex-direction: column; min-width: 1.5in; }
+.app b { font-size: 24pt; line-height: 1; }
+.app small { font-size: 15pt; color: #64748B; }
+.rawcsv.garbled { color: #94A3B8; }
+.app.ok { border: 2px solid #86EFAC; }
+.app.ok b { color: #15803D; }
+.app.no { border: 2px solid #FCA5A5; }
+.app.no b { color: #B91C1C; }
+
+/* Session 1.4 additions */
+table.terms { border-collapse: collapse; width: 100%; margin: .04in 0 .1in; }
+table.terms td { font-size: 18pt; padding: .05in .08in; border-bottom: 1px solid #E2E8F0; }
+table.terms td.num { text-align: right; }
+.vbars { display: flex; flex-direction: column; gap: .1in; margin-top: .12in; }
+.vrow { display: flex; align-items: center; gap: .12in; }
+.vq { width: .45in; font: bold 17pt "DejaVu Sans Mono", monospace; }
+.vval { width: 1.1in; font: 16pt "DejaVu Sans Mono", monospace; text-align: right; }
+.vtrack { flex: 1; height: .42in; position: relative; background: #F8FAFC; border-radius: 4px; }
+.vzero { position: absolute; left: 40%; top: 0; bottom: 0; border-left: 2px solid #18181B; }
+.vth { position: absolute; left: 52%; top: -.04in; bottom: -.04in; border-left: 2px dashed #B91C1C; }
+.vbar { position: absolute; top: .07in; bottom: .07in; border-radius: 3px; }
+.vbar.over { background: #EF4444; }
+.vbar.warn { background: #F59E0B; }
+.vbar.under { background: #22C55E; }
+.vtrack-lab { flex: 1; position: relative; height: .3in; }
+.vtrack-lab span { position: absolute; transform: translateX(-50%); font-size: 15pt; color: #475569; white-space: nowrap; }
+.bridge { flex: 1; min-height: 0; display: flex; gap: .16in; align-items: stretch; }
+.bridge .b-xl, .bridge .b-pd { border-radius: 10px; padding: .1in .18in; display: flex; flex-direction: column; justify-content: center; }
+.bridge .b-xl { flex: 1; border: 2px solid #CBD5E1; background: #F8FAFC; }
+.bridge .b-pd { flex: 1.5; border: 2px solid #15803D; background: #F0FDF4; }
+.bridge h2 { font-size: 22pt; margin: .02in 0; }
+.bridge p { font-size: 18pt; margin: .02in 0; }
+.b-arrow { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #991B1B; font-size: 40pt; line-height: 1; }
+.b-arrow.small { font-size: 30pt; }
+.b-arrow small { font-size: 15pt; }
+.sac { display: flex; gap: .16in; align-items: center; flex-wrap: wrap; }
+.sac-col { display: flex; flex-direction: column; gap: .06in; }
+.sac-lab { font-size: 16pt; color: #475569; }
+.grp { font: 15pt "DejaVu Sans Mono", monospace; padding: .03in .1in; border-radius: 5px; }
+.g1 { background: #DBEAFE; } .g2 { background: #FEF3C7; } .g3 { background: #EDE9FE; } .g4 { background: #DCFCE7; }
+table.mini .keycol { background: #FEF3C7; }
+table.mini .hl-c { background: #DCFCE7; font-weight: bold; }
+table.mini .bad-c { background: #FEE2E2; color: #B91C1C; font-weight: bold; }
+table.mini tr.nan-row td { background: #FEF3C7; font-style: italic; }
+.snip .bad-t { color: #F87171; font-weight: bold; }
+.snip .ok-t { color: #4ADE80; font-weight: bold; }
+table.mini td.tcell { background: #DBEAFE; color: #1D4ED8; font-weight: bold; }
+table.mini td.fcell { color: #94A3B8; }
+.qc { grid-template-columns: 1fr 1.4fr; }
+.qc .snip { font-size: 14.5pt; }
+.fit-box .snip { font-size: 14.5pt; margin: .04in 0; }
+.flip { display: flex; gap: .1in; align-items: center; font: 16pt "DejaVu Sans Mono", monospace; margin: .08in 0; }
+.flip .t { background: #DBEAFE; padding: .03in .1in; border-radius: 5px; }
+.flip .f { background: #F1F5F9; padding: .03in .1in; border-radius: 5px; }
+
+/* Session 2.1 additions */
+.big-li { font-size: 22pt; margin: .1in 0; }
+.notes .card.xwide { flex: 2.4; }
+.rules { border: 2px solid #991B1B; border-radius: 10px; padding: .1in .18in; flex-shrink: 0; }
+.rule-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: .12in; margin-top: .06in; }
+.rule-row span { font-size: 17pt; background: #FEF2F2; border-radius: 6px; padding: .06in .1in; }
+.http { display: flex; align-items: center; gap: .2in; flex-shrink: 0; }
+.http .node { border: 2px solid #18181B; border-radius: 10px; padding: .12in .2in; font-size: 20pt; font-weight: bold; text-align: center; min-width: 2.4in; }
+.http .node small { font: 15pt "DejaVu Sans Mono", monospace; font-weight: normal; color: #475569; }
+.msgs { flex: 1; display: flex; flex-direction: column; gap: .1in; }
+.msg { display: flex; align-items: center; gap: .1in; font-size: 19pt; border-radius: 8px; padding: .06in .14in; }
+.msg b { font-size: 28pt; color: #991B1B; }
+.msg.req { background: #DBEAFE; justify-content: space-between; }
+.msg.res { background: #DCFCE7; }
+.render { border: 1px solid #CBD5E1; border-radius: 10px; padding: .16in; background: #FFF; box-shadow: 0 2px 6px rgba(0,0,0,.08); width: 3.6in; margin: .08in 0; }
+.render .r-name { font: bold 22pt Arial, sans-serif; }
+.render .r-price { font: bold 26pt Arial, sans-serif; color: #B91C1C; margin: .04in 0; }
+.render .r-stock { font: 16pt Arial, sans-serif; color: #15803D; }
+.rawcsv.small { font-size: 13.5pt; }
+.rawcsv b { color: #FBBF24; }
+.tree { font: 16pt/1.6 "DejaVu Sans Mono", monospace; margin-top: .08in; }
+.tn { border-left: 2px solid #CBD5E1; padding-left: .1in; }
+.tn.t1 { margin-left: .3in; }
+.tn.t2 { margin-left: .6in; }
+.tn small { color: #64748B; font-size: 14pt; }
+.tn.hit { background: #FEF3C7; font-weight: bold; }
+.cards4 { display: flex; flex-direction: column; gap: .06in; }
+.cards4 span { font: 15pt "DejaVu Sans Mono", monospace; border: 1px solid #CBD5E1; border-radius: 6px; padding: .04in .1in; background: #F8FAFC; }
+
+/* session map + exercise 3 */
+.sm-q { border: 3px solid #991B1B; border-radius: 14px; padding: .1in .2in; font-size: 24pt; font-style: italic; background: #FEF2F2; align-self: flex-start; flex-shrink: 0; }
+.sm-q b { font-style: normal; color: #991B1B; }
+.sm-phases { flex: 1; min-height: 0; display: flex; gap: .14in; align-items: stretch; }
+.sm-phase { flex: 1; border: 2px solid #CBD5E1; border-radius: 12px; padding: .14in .2in; }
+.sm-phase.sm-p3 { border: 3px solid #15803D; background: #F0FDF4; }
+.sm-head { display: flex; gap: .14in; align-items: center; border-bottom: 2px solid #E2E8F0; padding-bottom: .08in; margin-bottom: .08in; }
+.sm-head b { font-size: 26pt; display: block; line-height: 1.1; }
+.sm-head small { font-size: 16pt; color: #64748B; }
+.sm-step { background: #991B1B; color: #FFF; border-radius: 50%; width: .5in; height: .5in; display: flex; align-items: center; justify-content: center; font-size: 20pt; font-weight: bold; flex-shrink: 0; }
+.sm-p3 .sm-step { background: #15803D; }
+.sm-phase p { font-size: 22pt; margin: .1in 0; line-height: 1.2; display: flex; }
+.sm-phase i { font-style: normal; font-family: "DejaVu Sans Mono", monospace; font-weight: bold; color: #991B1B; min-width: .6in; flex-shrink: 0; }
+.sm-p3 i { color: #15803D; }
+.sm-arrow { align-self: center; font-size: 34pt; color: #991B1B; }
+ol.ex3 { margin: .06in 0 0; padding-left: .36in; }
+ol.ex3 li { font-size: 18pt; line-height: 1.25; margin: .06in 0; }
+
+.card p.remember { font-size: 17pt; margin-top: .08in; color: #991B1B; }
+.card p.remember b { color: #991B1B; }
+.f7 .card ul { margin-top: .02in; }
+.f7 .card li { font-size: 17pt; }
+.f7 .card h2 { font-size: 21pt; }
+
+
+.fitbox { min-height: 0; overflow: hidden; }
+.card.fitbox p, .card.fitbox li { font-size: 18pt; }
+.mdtable { border-collapse: collapse; width: 100%; margin: .06in 0; }
+.mdtable th, .mdtable td { text-align: left; padding: .05in .1in; border-bottom: 1px solid #E2E8F0; font-size: 17pt; vertical-align: top; }
+.mdtable th { border-bottom: 2px solid #18181B; font-weight: bold; }
+.mdtable code { white-space: normal; }
+.card ul.tight { margin: .04in 0 0; padding-left: .3in; }
+.card ul.tight li { margin: .05in 0; line-height: 1.25; }
+.outbox { background: #18181B; color: #34D399; border-radius: 8px; padding: .1in .14in; font: 13.5pt/1.35 "DejaVu Sans Mono", monospace; white-space: pre; overflow: hidden; }
+.card p.remember { color: #991B1B; margin-top: .06in; }
+.card p.remember b { color: #991B1B; }
+.f7 .card h2 { font-size: 24pt; margin-bottom: .12in; }
+.f7 .card p.remember { margin-top: .16in; }
+.exg .card h2 { font-size: 24pt; }
+.exg .card p { margin: .1in 0; }
+.exg .card p code { font-size: .88em; }
+.big-q { font-size: 20pt; }
+.mdtable.cols td:first-child code { white-space: nowrap; overflow-wrap: normal; }
+.card code, .check code, .mdtable code, .card h2 { white-space: normal; overflow-wrap: anywhere; }
+.notes .card.how { flex: 1 1 auto; }
+.notes .card.out { flex: 0 0 auto; }
+
+
+/* session map with content */
+.sm-phase.fitbox { display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
+.sm-phase p.sm-item { display: flex; gap: .1in; margin: .06in 0; line-height: 1.15; }
+.sm-item i { font-style: normal; font-family: "DejaVu Sans Mono", monospace; font-weight: bold; color: #991B1B; min-width: .5in; flex-shrink: 0; }
+.sm-p3 .sm-item i { color: #15803D; }
+.sm-item b { display: block; font-size: 1em; }
+.sm-item span.d { display: block; font-size: .9em; color: #334155; }
+.sm-item code { font-size: .85em; white-space: normal; overflow-wrap: anywhere; }
+/* end session map */
+
+</style>
+</head>
+<body>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">1-2. Purpose and Outcomes</span></div>
+  <div class="title">Session 3.4: Core Concepts of Machine Learning: Supervised vs. Unsupervised Learning and Evaluation Metrics</div><div class="rule"></div>
+  <div class="body grid2 overview"><div class="card fitbox"><div class="tag">THE BUSINESS SITUATION</div><ul class="tight"><li>A card issuer&#x27;s fraud model gives every transaction a risk score from 1 to 100; above a cut-off score (the threshold), the transaction is held and the customer gets a verification text</li><li>The two possible mistakes have very different costs: a false alarm costs about $5 of checking, while a missed fraud costs the stolen money</li><li>The fraud operations manager asks: at what risk score should we stop a transaction, and what does each kind of mistake cost us? Today, you judge a model by business cost, not by a single accuracy number</li></ul><p class="flow">Today's flow: 60 min lecture, then 120 min hands-on lab</p></div><div class="card fitbox"><div class="tag">EXPECTED OUTCOMES</div><h2>By the end of today, you will be able to:</h2><ol class="biz"><li><span class="q">"Which kind of learning fits this problem?"</span> Tell supervised learning (learning from examples with known answers) from unsupervised learning (finding groups without answers), and group transactions with K-Means</li><li><span class="q">"How good is the risk score, really?"</span> Read a confusion matrix (a 2x2 count of right and wrong decisions) and calculate precision, recall, and ROC-AUC</li><li><span class="q">"Where should we set the threshold?"</span> Choose the threshold with the lowest business cost, and fix the <code>ValueError</code> raised when scores are passed in place of 0/1 decisions</li></ol></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 1 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Session Map</span></div>
+  <div class="title">Session Map: Follow the Numbers</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: .14in;"><div class="sm-q"><b>Today's question:</b> At what risk score should we stop a transaction, and what does each kind of mistake cost us?</div><div class="sm-phases"><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">1</span><span><b>Why it matters</b><small>Lecture, part 1</small></span></div><p class="sm-item"><i>1.</i><span><b>Session Purpose</b><span class="d">answer today&#x27;s question</span></span></p><p class="sm-item"><i>2.</i><span><b>Learning Outcomes</b><span class="d">3 skills you will show today</span></span></p><p class="sm-item"><i>3.</i><span><b>Business Context</b><span class="d">Not All Mistakes Cost the Same</span></span></p><p class="sm-item"><i>4.</i><span><b>Data Basics</b><span class="d">Reading a Classifier&#x27;s Report Card</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">2</span><span><b>Learn the tools</b><small>Lecture, part 2</small></span></div><p class="sm-item"><i>5.</i><span><b>Lab Dataset</b><span class="d">1 CSV</span></span></p><p class="sm-item"><i>6.</i><span><b>Keywords</b><span class="d">6 terms</span></span></p><p class="sm-item"><i>7.</i><span><b>Core Foundations</b><span class="d">5 ideas, one at a time</span></span></p><p class="sm-item"><i>8.</i><span><b>IDE Setup</b><span class="d"><code>pip install scikit-learn</code></span></span></p><p class="sm-item"><i>9.</i><span><b>Code Examples</b><span class="d">3 demos + Quick Checks</span></span></p><p class="sm-item"><i>10.</i><span><b>References</b><span class="d">2 official docs</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox sm-p3" data-start="22"><div class="sm-head"><span class="sm-step">3</span><span><b>Practice</b><small>Lab</small></span></div><p class="sm-item"><i>11.</i><span><b>Exercise 1: Guided</b><span class="d">Fraud Model Cost Report</span></span></p><p class="sm-item"><i>12.</i><span><b>Exercise 2: Applied</b><span class="d">Find the Cheapest Threshold</span></span></p><p class="sm-item"><i>13.</i><span><b>Exercise 3: Advanced</b><span class="d">Price the Misses with Real Amounts</span></span></p></div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 2 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">3. Business Context</span></div>
+  <div class="title">Not All Mistakes Cost the Same</div><div class="rule"></div>
+  <div class="body grid2" style="grid-template-columns: 1fr 1.15fr;"><div class="card fitbox"><div class="tag">KEY POINTS</div><ul class="tight"><li>Every decision on a transaction lands in one of four boxes:</li><li>In our cost model, a missed fraud costs <code>$1,500</code> and a false alarm costs <code>$5</code>, so one miss costs as much as 300 false alarms.</li><li>The accuracy trap: if only 1% of transactions are fraud, a model that says &quot;never fraud&quot; is 99% accurate and catches nothing.</li></ul></div><div class="card fitbox"><div class="tag">SEE IT ON REAL DATA</div><table class="mdtable"><tr><th></th><th>Model says: fraud (hold it)</th><th>Model says: legitimate (let it pass)</th></tr><tr><td><b>Really fraud</b></td><td>TP (True Positive): fraud caught</td><td>FN (False Negative): fraud missed, the money is lost</td></tr><tr><td><b>Really legitimate</b></td><td>FP (False Positive): false alarm, about $5 to check</td><td>TN (True Negative): normal purchase, no cost</td></tr></table></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 3 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">4. Data Basics</span></div>
+  <div class="title">Reading a Classifier&#x27;s Report Card</div><div class="rule"></div>
+  <div class="body grid2" style="grid-template-columns: 1fr 1.15fr;"><div class="card fitbox"><div class="tag">KEY POINTS</div><ul class="tight"><li>Four measures, each answering one question:</li><li>A higher threshold holds fewer transactions: fewer false alarms (higher precision) but more missed fraud (lower recall).</li><li>ROC-AUC (Area Under the Receiver Operating Characteristic Curve): <code>0.5</code> means the score ranks no better than a coin flip; <code>1.0</code> means every fraud scores above every legitimate transaction.</li><li>Supervised vs unsupervised:<ul class="tight"><li><b>Supervised:</b> past examples come with the answer (<code>Actual_Fraud_Binary</code>), and the model learns to predict it. Today&#x27;s risk score is a supervised model&#x27;s output.</li><li><b>Unsupervised:</b> no answer column; the method finds groups of similar rows by itself. K-Means is the most common example.</li></ul></li></ul></div><div class="card fitbox"><div class="tag">AT A GLANCE</div><table class="mdtable"><tr><th>Measure</th><th>Formula</th><th>Question it answers</th></tr><tr><td>Accuracy</td><td>(TP + TN) / all</td><td>What share of all decisions was right?</td></tr><tr><td>Precision</td><td>TP / (TP + FP)</td><td>Of the transactions we held, what share was really fraud?</td></tr><tr><td>Recall</td><td>TP / (TP + FN)</td><td>Of all the fraud, what share did we catch?</td></tr><tr><td>ROC-AUC</td><td>area under the ROC curve, from 0.5 to 1.0</td><td>How well does the score rank fraud above legitimate transactions, at every threshold?</td></tr></table></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 4 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">5. Lab Practice Dataset</span></div>
+  <div class="title">The Data for Today</div><div class="rule"></div>
+  <div class="body grid2" style="grid-template-columns: 1fr 2.2fr;"><div class="card fitbox"><div class="tag">FILES</div><ul class="tight"><li><code>data/session_03_04_dataset.csv</code></li></ul><p>Audited 16-row card transaction dataset (fictional teaching data), one row per transaction, checked afterwards by fraud investigators:</p></div><div class="card fitbox"><div class="tag">COLUMNS</div><table class="mdtable cols"><tr><td><code>Transaction_ID</code></td><td>Transaction code (e.g., <code>F-TXN-8001</code>).</td></tr><tr><td><code>Transaction_Amount_USD</code></td><td>Purchase amount in U.S. Dollars.</td></tr><tr><td><code>Foreign_IP_Flag</code></td><td><code>1</code> if the purchase came from a foreign IP (Internet Protocol) address, the network address of the device; <code>0</code> if domestic.</td></tr><tr><td><code>Failed_Login_Attempts_Count</code></td><td>Failed login attempts before the purchase.</td></tr><tr><td><code>Cardholder_Risk_Score</code></td><td>The fraud model&#x27;s risk score, from 1 (safe) to 100 (very risky).</td></tr><tr><td><code>Actual_Fraud_Binary</code></td><td>The investigators&#x27; answer: <code>1</code> = fraud, <code>0</code> = legitimate. 7 of the 16 transactions were fraud.</td></tr></table></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 5 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">6. Keywords</span></div>
+  <div class="title">6 Terms You Need Today</div><div class="rule"></div>
+  <div class="body grid3" style="grid-template-rows: repeat(2, 1fr);"><div class="card fitbox"><div class="tag">TERM 1</div><h2><code>Supervised vs Unsupervised Learning</code></h2><p class="what"><b>What:</b> learning with known answers vs finding groups without answers</p><p class="why"><b>Why:</b> the first question to ask about any ML project</p></div><div class="card fitbox"><div class="tag">TERM 2</div><h2><code>Threshold</code></h2><p class="what"><b>What:</b> the cut-off score above which the model&#x27;s answer becomes &quot;yes&quot;</p><p class="why"><b>Why:</b> the business sets it, not the model</p></div><div class="card fitbox"><div class="tag">TERM 3</div><h2><code>Confusion Matrix</code></h2><p class="what"><b>What:</b> the 2x2 count of TP, FP, FN, and TN</p><p class="why"><b>Why:</b> shows each kind of mistake separately, so each can be priced</p></div><div class="card fitbox"><div class="tag">TERM 4</div><h2><code>Precision</code> and <code>Recall</code></h2><p class="what"><b>What:</b> the share of holds that were fraud, and the share of fraud that was held</p><p class="why"><b>Why:</b> the two sides of the trade-off a threshold controls</p></div><div class="card fitbox"><div class="tag">TERM 5</div><h2><code>ROC-AUC</code></h2><p class="what"><b>What:</b> one number for how well a score ranks positives above negatives</p><p class="why"><b>Why:</b> compares scoring models before any threshold is chosen</p></div><div class="card fitbox"><div class="tag">TERM 6</div><h2><code>K-Means Clustering</code></h2><p class="what"><b>What:</b> an unsupervised method that splits rows into K groups of similar values</p><p class="why"><b>Why:</b> finds customer or transaction segments when no labels exist</p></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 6 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">7. Core Foundations</span></div>
+  <div class="title">How It Works</div><div class="rule"></div>
+  <div class="body f7" data-uniform style="display:grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: .16in;"><div class="card fitbox" data-start="24"><div class="tag">7.1</div><h2>From a score to a decision</h2><p class="remember"><b>Remember:</b> the model gives scores; the threshold turns them into decisions.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.2</div><h2>The confusion matrix</h2><p class="remember"><b>Remember:</b> TP and TN are right; FP and FN are the two different mistakes.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.3</div><h2>Accuracy, precision, and recall</h2><p class="remember"><b>Remember:</b> precision asks &quot;were the holds right?&quot;; recall asks &quot;did we catch the fraud?&quot;</p></div><div class="card fitbox" data-start="24"><div class="tag">7.4</div><h2>ROC-AUC</h2><p class="remember"><b>Remember:</b> AUC compares scores; precision and recall judge decisions.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.5</div><h2>Unsupervised learning</h2><p class="remember"><b>Remember:</b> supervised = learn the answer; unsupervised = find the groups, then name them.</p></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 7 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">7. Core Foundations: On Real Data</span></div>
+  <div class="title">7.1 From a score to a decision: On Real Data</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: .12in;"><div class="card fitbox" data-start="19"><div class="tag">SEE IT ON REAL DATA</div><table class="mdtable"><tr><th>Transaction</th><th>Score</th><th>Really fraud?</th><th>Held at 70?</th><th>Held at 75?</th></tr><tr><td><code>F-TXN-8006</code></td><td><code>22</code></td><td>no</td><td>no</td><td>no</td></tr><tr><td><code>F-TXN-8009</code></td><td><code>71</code></td><td>no</td><td><b>yes</b> (false alarm)</td><td>no</td></tr><tr><td><code>F-TXN-8005</code></td><td><code>74</code></td><td>yes</td><td>yes</td><td><b>no</b> (missed fraud)</td></tr><tr><td><code>F-TXN-8015</code></td><td><code>76</code></td><td>yes</td><td>yes</td><td>yes</td></tr><tr><td><code>F-TXN-8001</code></td><td><code>78</code></td><td>yes</td><td>yes</td><td>yes</td></tr><tr><td><code>F-TXN-8011</code> to <code>F-TXN-8007</code></td><td><code>85</code> to <code>92</code></td><td>yes</td><td>yes</td><td>yes</td></tr></table></div><div class="check"><b>Remember:</b> the model gives scores; the threshold turns them into decisions.</div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 8 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Code Demonstration 1</span></div>
+  <div class="title">Confusion Matrix at Threshold 70</div><div class="rule"></div>
+  <div class="body">
+    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
+      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S34_demo_1.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
+<pre><span class="sec"># 1. Input: the investigators&#x27; answers and the model&#x27;s scores</span>
+import pandas as pd
+from sklearn.metrics import confusion_matrix, precision_score, recall_score
+df = pd.read_csv(&quot;data/session_03_04_dataset.csv&quot;)
+y_true = df[&quot;Actual_Fraud_Binary&quot;]
+
+<span class="sec"># 2. Process: hold every transaction scoring 70 or more</span>
+y_pred = (df[&quot;Cardholder_Risk_Score&quot;] &gt;= 70).astype(int)
+cm = confusion_matrix(y_true, y_pred)
+precision = precision_score(y_true, y_pred)
+recall = recall_score(y_true, y_pred)
+
+<span class="sec"># 3. Output: the 2x2 table, then the two key measures</span>
+print(&quot;Rows: really legitimate, really fraud | Columns: passed, held\n&quot;, cm)
+print(f&quot;Precision: {precision:.3f} | Recall: {recall:.3f}&quot;)
+</pre>
+    </div>
+    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li>First time only, in the Terminal: <code>pip install scikit-learn</code></li><li><code>y_true</code> holds the investigators&#x27; answers: <code>1</code> for fraud, <code>0</code> for legitimate.</li><li><code>(df[&quot;Cardholder_Risk_Score&quot;] &gt;= 70).astype(int)</code> turns each score into a decision at threshold 70 (section 7.1).</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><ul class="tight"><li>Top row: 8 legitimate transactions passed, 1 held by mistake (<code>F-TXN-8009</code>, score <code>71</code>).</li></ul></div></div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 9 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Quick Check 1</span></div>
+  <div class="title">Quick Check 1: <code>classification_report()</code></div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid2 qc" style="flex: 1; min-height: 0;">
+      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>classification_report()</code></h2><p><code>classification_report(y_true, y_pred)</code> prints precision, recall, and the F1-score (one number that balances precision and recall) for both classes, plus accuracy. Why: the full report card in one call.</p></div>
+      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add <code>classification_report</code> to the import line, then add one line to part <b>3. Output</b>: <code>print(_____________________(y_true, y_pred))</code></p></div>
+    </div>
+    <div class="check"><b>Check:</b> the <code>accuracy</code> line shows <code>0.94</code>, and the row for class <code>1</code> shows precision <code>0.88</code> and recall <code>1.00</code>.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 10 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Code Demonstration 2</span></div>
+  <div class="title">ROC-AUC: Ranking Quality at Every Threshold</div><div class="rule"></div>
+  <div class="body">
+    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
+      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S34_demo_2.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
+<pre><span class="sec"># 1. Input: the answers and the scores</span>
+import pandas as pd
+from sklearn.metrics import roc_auc_score
+df = pd.read_csv(&quot;data/session_03_04_dataset.csv&quot;)
+y_true = df[&quot;Actual_Fraud_Binary&quot;]
+
+<span class="sec"># 2. Process: AUC uses the scores directly, not 0/1 decisions</span>
+auc = roc_auc_score(y_true, df[&quot;Cardholder_Risk_Score&quot;])
+
+<span class="sec"># 3. Output: compare the score ranges of the two groups</span>
+print(f&quot;ROC-AUC: {auc:.3f}&quot;)
+print(df.groupby(&quot;Actual_Fraud_Binary&quot;)[&quot;Cardholder_Risk_Score&quot;].agg([&quot;min&quot;, &quot;max&quot;]))
+</pre>
+    </div>
+    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>roc_auc_score(y_true, df[&quot;Cardholder_Risk_Score&quot;])</code> uses the raw scores, because it checks every possible threshold at once (section 7.4).</li><li><code>df.groupby(&quot;Actual_Fraud_Binary&quot;)[&quot;Cardholder_Risk_Score&quot;].agg([&quot;min&quot;, &quot;max&quot;])</code> shows the lowest and highest score in each group, to see why the AUC is what it is.</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><div class="outbox">ROC-AUC: 1.000
+                     min  max
+Actual_Fraud_Binary
+...</div><ul class="tight"><li>Legitimate transactions score from <code>12</code> to <code>71</code>; fraud from <code>74</code> to <code>92</code>.</li></ul></div></div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 11 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Quick Check 2</span></div>
+  <div class="title">Quick Check 2: <code>accuracy_score()</code></div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid2 qc" style="flex: 1; min-height: 0;">
+      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>accuracy_score()</code></h2><p><code>accuracy_score(y_true, y_pred)</code> returns the share of correct decisions. Why: shows how a single accuracy number can look good while hiding the costly mistakes.</p></div>
+      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add two lines to part <b>3. Output</b>: <code>from sklearn.metrics import accuracy_score</code> and <code>print(______________(y_true, (df[&quot;Cardholder_Risk_Score&quot;] &gt;= 90).astype(int)))</code></p></div>
+    </div>
+    <div class="check"><b>Check:</b> the Terminal shows <code>0.625</code>. At threshold 90, 62.5% of the decisions are right, yet 6 of the 7 frauds pass through.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 12 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Code Demonstration 3</span></div>
+  <div class="title">K-Means: Groups Without Answers</div><div class="rule"></div>
+  <div class="body">
+    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
+      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S34_demo_3.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
+<pre><span class="sec"># 1. Input: two features only; the fraud column is NOT used</span>
+import pandas as pd
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+df = pd.read_csv(&quot;data/session_03_04_dataset.csv&quot;)
+features = df[[&quot;Transaction_Amount_USD&quot;, &quot;Cardholder_Risk_Score&quot;]]
+
+<span class="sec"># 2. Process: scale, then form 3 groups of similar transactions</span>
+scaled = StandardScaler().fit_transform(features)
+kmeans = KMeans(n_clusters=3, random_state=42, n_init=10)
+df[&quot;Cluster_ID&quot;] = kmeans.fit_predict(scaled)
+
+<span class="sec"># 3. Output: the average profile of each group, and its fraud share</span>
+profile = df.groupby(&quot;Cluster_ID&quot;)[
+    [&quot;Transaction_Amount_USD&quot;, &quot;Cardholder_Risk_Score&quot;, &quot;Actual_Fraud_Binary&quot;]
+].mean().round(1)
+print(profile)
+</pre>
+    </div>
+    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li>Only two features go in: amount and risk score.</li><li><code>StandardScaler().fit_transform(features)</code> puts both on one scale (Session 3.2), so the dollar amounts do not outweigh the scores.</li><li><code>KMeans(n_clusters=3, random_state=42, n_init=10)</code> asks for 3 groups; <code>n_init=10</code> tries 10 starting points and keeps the best; <code>random_state=42</code> makes the result repeatable.</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><ul class="tight"><li>Group <code>1</code>: small, low-risk purchases, no fraud.</li></ul></div></div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 13 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Quick Check 3</span></div>
+  <div class="title">Quick Check 3: <code>.size()</code></div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid2 qc" style="flex: 1; min-height: 0;">
+      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>.size()</code></h2><p><code>df.groupby(&quot;Column&quot;).size()</code> counts the rows in each group. Why: a segment&#x27;s size matters as much as its profile.</p></div>
+      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add one line to part <b>3. Output</b>: <code>print(df.groupby(&quot;Cluster_ID&quot;).____())</code></p></div>
+    </div>
+    <div class="check"><b>Check:</b> group sizes <code>4</code>, <code>8</code>, and <code>4</code>.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 14 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">10. Official References</span></div>
+  <div class="title">Where to Look Things Up</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: .14in;"><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Scikit-Learn: Classification Metrics (Confusion Matrix, Precision-Recall)</h2><p>https://scikit-learn.org/stable/modules/model_evaluation.html#classification-metrics</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Scikit-Learn: Clustering (K-Means Algorithm Overview)</h2><p>https://scikit-learn.org/stable/modules/clustering.html#k-means</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Fawcett: An Introduction to ROC Analysis (Pattern Recognition Letters)</h2><p>https://www.sciencedirect.com/science/article/pii/S016786550500303X</p></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 15 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">11-13. Exercises</span></div>
+  <div class="title">Three Exercises</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid3 exg" data-uniform style="flex: 1; min-height: 0;"><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 1: GUIDED</div><h2>Fraud Model Cost Report</h2><p><b>Goal:</b> Count the four outcomes and price the mistakes</p><p><b>File:</b> <code>YourName_S34_evaluation.py</code></p><p class="remember"><b>Check:</b> <code>TP=7, FP=1, FN=0, TN=8</code>; cost <code>$5.00</code></p></div><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 2: APPLIED</div><h2>Find the Cheapest Threshold</h2><p><b>Goal:</b> Test thresholds 50 to 90 and find the cheapest</p><p><b>File:</b> <code>YourName_S34_practice.py</code></p><p class="remember"><b>Check:</b> 50 to 70 cost <code>$5</code>; 90 costs <code>$9,000</code></p></div><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 3: ADVANCED</div><h2>Price the Misses with Real Amounts</h2><p><b>Goal:</b> Price each missed fraud with its real amount</p><p><b>File:</b> <code>YourName_S34_challenge.py</code></p><p class="remember"><b>Check:</b> <code>$0</code> at thresholds <code>72</code>, <code>73</code>, and <code>74</code></p></div></div>
+    <div class="check">Full steps for all three exercises: sections 11-13 of the course page.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 16 / 16</span></div>
+</section>
+
+<script>
+window.__fitDone = false;
+function fitAll() {
+  document.querySelectorAll('.fitbox').forEach((box) => {
+    let size = parseFloat(box.dataset.start || '18');
+    const floor = parseFloat(box.dataset.floor || '15');
+    const apply = () => box.querySelectorAll('p, li, td, th, .outbox, pre').forEach((el) => {
+      if (el.tagName === 'PRE') { el.style.fontSize = Math.max(9.5, size - 3.5) + 'pt'; return; }
+      if (el.classList.contains('outbox')) { el.style.fontSize = Math.max(11, size - 4.5) + 'pt'; return; }
+      el.style.fontSize = size + 'pt';
+    });
+    apply();
+    const over = () => box.scrollHeight > box.clientHeight + 1 || box.scrollWidth > box.clientWidth + 1
+      || [...box.querySelectorAll('pre')].some((pre) => pre.scrollHeight > pre.clientHeight + 6 || pre.scrollWidth > pre.clientWidth + 6);
+    while (over() && size > floor) { size -= 0.5; apply(); }
+    if (over()) box.dataset.overflow = 'yes';
+    box.__apply = (v) => { size = v; apply(); };
+    box.dataset.size = size;
+  });
+  // cards on one slide share one size, so they read as a set
+  document.querySelectorAll('[data-uniform]').forEach((group) => {
+    const boxes = [...group.querySelectorAll('.fitbox')];
+    const min = Math.min(...boxes.map((b) => parseFloat(b.dataset.size)));
+    boxes.forEach((b) => b.__apply(min));
+  });
+  window.__fitDone = true;
+}
+document.fonts.ready.then(() => { fitAll(); document.querySelectorAll('[data-overflow]').forEach((el) => el.removeAttribute('data-overflow')); fitAll(); });
+</script>
+
+</body>
+</html>

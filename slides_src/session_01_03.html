@@ -216,6 +216,22 @@ table.cols td { font-size: 17pt; padding: .04in .08in; border-bottom: 1px solid 
 .f7 .card ul { margin-top: .02in; }
 .f7 .card li { font-size: 17pt; }
 .f7 .card h2 { font-size: 21pt; }
+
+/* session map with content */
+.sm-phase.fitbox { display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
+.sm-phase p.sm-item { display: flex; gap: .1in; margin: .06in 0; line-height: 1.15; }
+.sm-item i { font-style: normal; font-family: "DejaVu Sans Mono", monospace; font-weight: bold; color: #991B1B; min-width: .5in; flex-shrink: 0; }
+.sm-p3 .sm-item i { color: #15803D; }
+.sm-item b { display: block; font-size: 1em; }
+.sm-item span.d { display: block; font-size: .9em; color: #334155; }
+.sm-item code { font-size: .85em; white-space: normal; overflow-wrap: anywhere; }
+/* end session map */
+
+/* lean slides: bigger text */
+.f7 .card h2, .exg .card h2 { font-size: 25pt; margin-bottom: .14in; }
+.f7 .card p, .exg .card p { font-size: 21pt; line-height: 1.3; margin: .1in 0; }
+.f7 .card p.remember, .exg .card p.remember { font-size: 21pt; margin-top: .2in; }
+.f7 .card .tag, .exg .card .tag { font-size: 18pt; }
 </style>
 </head>
 <body>
@@ -251,23 +267,14 @@ table.cols td { font-size: 17pt; padding: .04in .08in; border-bottom: 1px solid 
       </ol>
     </div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 1 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 1 / 16</span></div>
 </section>
 
 <section class="slide">
   <div><span class="eyebrow">MODULE 1</span><span class="kicker">Session Map</span></div>
   <div class="title">Session Map: Follow the Numbers</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: .14in;">
-    <div class="sm-q"><b>Today's question:</b> Which stores are most profitable, and which meet the target?</div>
-    <div class="sm-phases">
-      <div class="sm-phase "><div class="sm-head"><span class="sm-step">1</span><span><b>Why it matters</b><small>Lecture, part 1</small></span></div><p><i>1.</i> Session Purpose</p><p><i>2.</i> Learning Outcomes</p><p><i>3.</i> Business Context: Why CSV?</p><p><i>4.</i> Data Basics: Rows and Columns</p></div>
-      <div class="sm-arrow">&#8594;</div>
-      <div class="sm-phase "><div class="sm-head"><span class="sm-step">2</span><span><b>Learn the tools</b><small>Lecture, part 2</small></span></div><p><i>5.</i> Lab Practice Dataset</p><p><i>6.</i> Keywords </p><p><i>7.</i> Core Foundations</p><p><i>8.</i> IDE Workflow</p><p><i>9.</i> Code Examples + Quick Checks</p><p><i>10.</i> Official References</p></div>
-      <div class="sm-arrow">&#8594;</div>
-      <div class="sm-phase sm-p3"><div class="sm-head"><span class="sm-step">3</span><span><b>Practice</b><small>Lab</small></span></div><p><i>11.</i> Exercise 1: Guided - Retail Performance Wrangling</p><p><i>12.</i> Exercise 2: Applied - Find the Top Stores</p><p><i>13.</i> Exercise 3: Advanced - Store Scorecard</p></div>
-    </div>
-  </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 2 / 19</span></div>
+    <div class="body" style="flex-direction: column; gap: .14in;"><div class="sm-q"><b>Today's question:</b> Which stores are most profitable, and which meet the target?</div><div class="sm-phases"><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">1</span><span><b>Why it matters</b><small>Lecture, part 1</small></span></div><p class="sm-item"><i>1.</i><span><b>Session Purpose</b><span class="d">answer today&#x27;s question</span></span></p><p class="sm-item"><i>2.</i><span><b>Learning Outcomes</b><span class="d">3 skills you will show today</span></span></p><p class="sm-item"><i>3.</i><span><b>Business Context</b><span class="d">Why CSV?</span></span></p><p class="sm-item"><i>4.</i><span><b>Data Basics</b><span class="d">Rows and Columns</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">2</span><span><b>Learn the tools</b><small>Lecture, part 2</small></span></div><p class="sm-item"><i>5.</i><span><b>Lab Dataset</b><span class="d">1 CSV</span></span></p><p class="sm-item"><i>6.</i><span><b>Keywords</b><span class="d">6 terms</span></span></p><p class="sm-item"><i>7.</i><span><b>Core Foundations</b><span class="d">5 ideas, one at a time</span></span></p><p class="sm-item"><i>8.</i><span><b>IDE Setup</b><span class="d">name files, run in the Terminal</span></span></p><p class="sm-item"><i>9.</i><span><b>Code Examples</b><span class="d">3 demos + Quick Checks</span></span></p><p class="sm-item"><i>10.</i><span><b>References</b><span class="d">3 official docs</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox sm-p3" data-start="22"><div class="sm-head"><span class="sm-step">3</span><span><b>Practice</b><small>Lab</small></span></div><p class="sm-item"><i>11.</i><span><b>Exercise 1: Guided</b><span class="d">Retail Performance Wrangling</span></span></p><p class="sm-item"><i>12.</i><span><b>Exercise 2: Applied</b><span class="d">Find the Top Stores</span></span></p><p class="sm-item"><i>13.</i><span><b>Exercise 3: Advanced</b><span class="d">Store Scorecard</span></span></p></div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 2 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -312,7 +319,7 @@ STR-1000,East,142000.0</div>
       </div>
     </div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 3 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 3 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -348,7 +355,7 @@ STR-1000,East,142000.0</div>
     </div>
     <div class="check"><b>Size of a table:</b> <code>df.shape</code> returns <code>(12, 6)</code> = 12 rows, 6 columns. Row labels (the <code>index</code>) start at <code>0</code>, not 1.</div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 4 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 4 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -370,7 +377,7 @@ STR-1000,East,142000.0</div>
     </div>
     <div class="check">The store data is fictional teaching data, checked with a script before class.</div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 5 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 5 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -397,90 +404,20 @@ STR-1000,East,142000.0</div>
       <p class="why"><b>Why:</b> pull out exactly the rows a question needs</p>
       <p>Example: <code>df.iloc[0:2, 0:3]</code> = first 2 rows, first 3 columns</p></div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 6 / 19</span></div>
-</section>
-
-<section class="slide">
-  <div><span class="eyebrow">MODULE 1</span><span class="kicker">6. Keywords: Visual Map</span></div>
-  <div class="title">How the Six Terms Fit Together</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="toolbar"><b>Toolbox:</b> every step below uses <code>pandas</code>, which runs its math on <code>NumPy</code> arrays.</div>
-    <div class="fit">
-      <div class="fit-row">
-        <div class="fit-box" style="flex: 1;">
-          <div class="tag">STEP 1: CSV FILE</div>
-<div class="rawcsv"><b>Store_ID,Region_Name,Monthly_Sales_USD</b>
-STR-1000,East,142000.0
-STR-1001,West,185000.0
-STR-1002,North,98000.0</div>
-          <p class="cap">Plain text: one line per row, commas between values</p>
-        </div>
-        <div class="fit-arrow"><span class="big">&#8594;</span><code>pd.read_csv()</code></div>
-        <div class="fit-box" style="flex: 1;">
-          <div class="tag">STEP 2: DATAFRAME, WITH ONE SERIES</div>
-          <table class="mini">
-            <tr><th class="idx"></th><th>Store_ID</th><th>Region_Name</th><th class="ser">Monthly_Sales_USD</th></tr>
-            <tr><td class="idx">0</td><td>STR-1000</td><td>East</td><td class="num ser">142000.0</td></tr>
-            <tr><td class="idx">1</td><td>STR-1001</td><td>West</td><td class="num ser">185000.0</td></tr>
-            <tr><td class="idx">2</td><td>STR-1002</td><td>North</td><td class="num ser">98000.0</td></tr>
-          </table>
-          <p class="cap">The whole table is a <code>DataFrame</code>; the yellow column is a <code>Series</code></p>
-        </div>
-      </div>
-      <div class="fit-row">
-        <div class="fit-box" style="flex: 1;">
-          <div class="tag">STEP 3: VECTORIZED COMPUTATION</div>
-          <div style="display: flex; align-items: center;">
-            <table class="mini"><tr><th class="plain">Sales</th></tr><tr><td class="num">142000.0</td></tr><tr><td class="num">185000.0</td></tr><tr><td class="num">98000.0</td></tr></table>
-            <span class="op">-</span>
-            <table class="mini"><tr><th class="plain">Cost</th></tr><tr><td class="num">98000.0</td></tr><tr><td class="num">122000.0</td></tr><tr><td class="num">71000.0</td></tr></table>
-            <span class="op">=</span>
-            <table class="mini"><tr><th class="new plain">Profit</th></tr><tr><td class="num new">44000.0</td></tr><tr><td class="num new">63000.0</td></tr><tr><td class="num new">27000.0</td></tr></table>
-          </div>
-          <p class="cap">One line subtracts every row at once: no loop, no dragging</p>
-          <p class="cap" style="font-size: 16pt; color: #475569;">Real code: <code>df["Monthly_Sales_USD"] - df["Operating_Cost_USD"]</code></p>
-        </div>
-        <div class="fit-box" style="flex: 1.25;">
-          <div class="tag">STEP 4: SELECTION</div>
-          <div style="display: flex; gap: .2in;">
-            <div>
-              <div class="cap" style="margin: 0 0 .04in;">By condition: <code>df.loc[df["Region_Name"] == "West"]</code></div>
-              <table class="mini">
-                <tr><th class="idx"></th><th>Region_Name</th></tr>
-                <tr class="drop"><td class="idx">0</td><td>East</td></tr>
-                <tr class="keep"><td class="idx">1</td><td>West</td></tr>
-                <tr class="drop"><td class="idx">2</td><td>North</td></tr>
-              </table>
-            </div>
-            <div>
-              <div class="cap" style="margin: 0 0 .04in;">By position: <code>df.iloc[0:2]</code></div>
-              <table class="mini">
-                <tr><th class="idx"></th><th>Store_ID</th></tr>
-                <tr class="keep"><td class="idx">0</td><td>STR-1000</td></tr>
-                <tr class="keep"><td class="idx">1</td><td>STR-1001</td></tr>
-                <tr class="drop"><td class="idx">2</td><td>STR-1002</td></tr>
-              </table>
-            </div>
-          </div>
-          <p class="cap">Blue = kept, grey = left out. <code>0:2</code> starts at 0 and stops <b>before</b> 2.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 7 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 6 / 16</span></div>
 </section>
 
 <section class="slide">
   <div><span class="eyebrow">MODULE 1</span><span class="kicker">7. Core Foundations</span></div>
   <div class="title">How a DataFrame Works</div><div class="rule"></div>
   <div class="body f7" style="display:grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: .16in;">
-    <div class="card"><div class="tag">7.1</div><h2>Columns, Not Cells</h2><ul><li>Excel: 12 copies of a formula, one per row</li><li>pandas: one rule for the whole column</li></ul><p class="remember"><b>Remember:</b> write the rule once; pandas applies it to every row</p></div>
-    <div class="card"><div class="tag">7.2</div><h2>Index, Columns, Values</h2><ul><li>Index: row labels on the left, from <code>0</code></li><li><code>df["A"]</code> = one column; <code>df[["A", "B"]]</code> = a smaller table</li></ul><p class="remember"><b>Remember:</b> counting starts at <code>0</code></p></div>
-    <div class="card"><div class="tag">7.3</div><h2>One Type per Column</h2><ul><li><code>float64</code>, <code>int64</code>: numbers; <code>str</code>: text</li><li><code>"1,200"</code> makes the column text: it "sums" to <code>"1,200800"</code></li></ul><p class="remember"><b>Remember:</b> check <code>df.dtypes</code> first</p></div>
-    <div class="card"><div class="tag">7.4</div><h2>Check Before You Calculate</h2><ul><li><code>.shape</code>, <code>.head()</code>, <code>.info()</code>, <code>.describe()</code></li><li><code>df.shape()</code> fails: it is a value, not an action</li></ul><p class="remember"><b>Remember:</b> look first, calculate second</p></div>
-    <div class="card"><div class="tag">7.5</div><h2><code>.loc[]</code> vs <code>.iloc[]</code></h2><ul><li><code>.loc[]</code>: label or condition</li><li><code>.iloc[]</code>: position; after sorting, the two differ</li></ul><p class="remember"><b>Remember:</b> misspelled column name = <code>KeyError</code></p></div>
+    <div class="card"><div class="tag">7.1</div><h2>Columns, Not Cells</h2><p>Excel: 12 copies of a formula, one per row</p><p class="remember"><b>Remember:</b> write the rule once; pandas applies it to every row</p></div>
+    <div class="card"><div class="tag">7.2</div><h2>Index, Columns, Values</h2><p>Index: row labels on the left, from <code>0</code></p><p class="remember"><b>Remember:</b> counting starts at <code>0</code></p></div>
+    <div class="card"><div class="tag">7.3</div><h2>One Type per Column</h2><p><code>float64</code>, <code>int64</code>: numbers; <code>str</code>: text</p><p class="remember"><b>Remember:</b> check <code>df.dtypes</code> first</p></div>
+    <div class="card"><div class="tag">7.4</div><h2>Check Before You Calculate</h2><p><code>.shape</code>, <code>.head()</code>, <code>.info()</code>, <code>.describe()</code></p><p class="remember"><b>Remember:</b> look first, calculate second</p></div>
+    <div class="card"><div class="tag">7.5</div><h2><code>.loc[]</code> vs <code>.iloc[]</code></h2><p><code>.loc[]</code>: label or condition</p><p class="remember"><b>Remember:</b> misspelled column name = <code>KeyError</code></p></div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 8 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 7 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -553,25 +490,7 @@ STR-1002,North,98000.0</div>
       </div>
     </div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 9 / 19</span></div>
-</section>
-
-<section class="slide">
-  <div><span class="eyebrow">MODULE 1</span><span class="kicker">8. Development Workflow</span></div>
-  <div class="title">Build, Test, and Diagnose in the IDE</div><div class="rule"></div>
-  <div class="body">
-    <div class="shot">
-      <img src="../assets/antigravity_ide_interface.png" alt="Google Antigravity IDE with its four labeled panels">
-      <p class="cap">Example: Terminal <code>[4]</code> shows a <code>NameError</code>; AI Chat <code>[3]</code> explains the fix</p>
-    </div>
-    <div class="steps">
-      <div class="step"><span class="badge">[1]</span><div><h3>File Explorer</h3><p>Name it <code>YourName_S13_demo_1.py</code></p><p class="eg">Example: <code>Reacher_S13_demo_1.py</code></p><p>Check the dataset is in <code>data/</code></p></div></div>
-      <div class="step"><span class="badge">[2]</span><div><h3>Code Editor</h3><p>Write a few lines, run, repeat</p><p>Small steps keep errors small</p></div></div>
-      <div class="step"><span class="badge">[3]</span><div><h3>AI Agent Chat</h3><p>Error? Capture the traceback (Python's error report) with <code>Win + Shift + S</code></p><p>Paste with <code>Ctrl + V</code>, ask why</p></div></div>
-      <div class="step"><span class="badge">[4]</span><div><h3>Terminal</h3><p>Run <code>python</code> + your script name</p><p>Return code <code>0</code> = no errors</p></div></div>
-    </div>
-  </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 10 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 8 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -600,7 +519,7 @@ print(preview)</pre>
       <div class="card"><div class="tag">3. OUTPUT</div><h2><code>print()</code></h2><p>Shows each result in the Terminal</p><p>Why: without <code>print()</code>, a script shows nothing</p></div>
     </div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 11 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 9 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -632,7 +551,7 @@ print(preview)</pre>
     </div>
     <div class="check"><b>Check:</b> run the script; the preview shows index <code>9</code>, <code>10</code>, <code>11</code> (<code>STR-1009</code>, <code>STR-1010</code>, <code>STR-1011</code>).</div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 12 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 10 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -663,7 +582,7 @@ print(df[["Store_ID", "Monthly_Sales_USD",
       <div class="card"><div class="tag">3. OUTPUT</div><h2><code>df[[ ... ]]</code> double brackets</h2><p>A list of column names returns a smaller table</p><p>Why: show only what your reader needs</p></div>
     </div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 13 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 11 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -688,7 +607,7 @@ print(df[["Store_ID", "Monthly_Sales_USD",
     </div>
     <div class="check"><b>Check:</b> the margins print as <code>31.0</code>, <code>34.1</code>, and <code>27.6</code>.</div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 14 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 12 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -722,7 +641,7 @@ print("Median Satisfaction Score Imputed:", median_score)</pre>
       <div class="card"><div class="tag">3. OUTPUT</div><h2><code>print()</code> the answer</h2><p>Shows the filtered stores and the median score</p></div>
     </div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 15 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 13 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -746,7 +665,7 @@ print("Median Satisfaction Score Imputed:", median_score)</pre>
     </div>
     <div class="check"><b>Check:</b> the Terminal shows <code>Stores found: 3</code>.</div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 16 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 14 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -757,59 +676,61 @@ print("Median Satisfaction Score Imputed:", median_score)</pre>
     <div class="card"><div class="tag">PANDAS</div><h2>Indexing and Selecting Data</h2><p>All the details of <code>.loc[]</code> and <code>.iloc[]</code>. pandas.pydata.org/docs/user_guide/indexing.html</p></div>
     <div class="card"><div class="tag">NUMPY</div><h2>NumPy Quickstart</h2><p>The arrays that run under every pandas column. numpy.org/doc/stable/user/quickstart.html</p></div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 17 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 15 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 1</span><span class="kicker">11-12. Exercises</span></div>
-  <div class="title">Exercise 1 and Exercise 2</div><div class="rule"></div>
+  <div><span class="eyebrow">MODULE 1</span><span class="kicker">11-13. Exercises</span></div>
+  <div class="title">Three Exercises</div><div class="rule"></div>
   <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid2" style="flex: 1; min-height: 0;">
-      <div class="card"><div class="tag">EXERCISE 1: GUIDED PRACTICE</div><h2>Retail Performance Wrangling</h2>
-        <ul>
-          <li>Create <code>YourName_S13_wrangling.py</code></li>
-          <li>Load the data with <code>pd.read_csv()</code></li>
-          <li>Add <code>Operating_Profit_USD</code> and <code>Operating_Margin_Pct</code></li>
-          <li>Print <code>df.describe()</code> for sales and margin</li>
-          <li>Run it in Terminal <code>[4]</code></li>
-        </ul></div>
-      <div class="card"><div class="tag">EXERCISE 2: APPLIED PRACTICE</div><h2>Find the Top Stores</h2>
-        <ul>
-          <li>In <code>YourName_S13_practice.py</code>, use <code>.loc[]</code>: margin <code>&gt;= 30.0</code> and satisfaction <code>&gt;= 4.5</code></li>
-          <li>Misspell <code>"Monthly_Sale_USD"</code> on purpose, read the <code>KeyError</code>, and ask AI Chat <code>[3]</code></li>
-          <li>Fix it, then sort with <code>.sort_values()</code>; add <code>ascending=False</code> for highest first</li>
-          <li>Save with <code>.to_csv()</code> to <code>data/top_performing_stores.csv</code></li>
-        </ul></div>
+    <div class="grid3 exg" style="flex: 1; min-height: 0;">
+      <div class="card"><div class="tag">EXERCISE 1: GUIDED</div><h2>Retail Performance Wrangling</h2>
+        <p><b>Goal:</b> Add an operating margin column and summarize stores by region</p>
+        <p><b>File:</b> <code>YourName_S13_wrangling.py</code></p>
+        <p class="remember"><b>Check:</b> <code>count</code> 12; margins from <code>23.6</code>% to <code>36.9</code>%</p></div>
+      <div class="card"><div class="tag">EXERCISE 2: APPLIED</div><h2>Find the Top Stores</h2>
+        <p><b>Goal:</b> Keep stores with margin <code>&gt;= 30</code> and satisfaction <code>&gt;= 4.5</code></p>
+        <p><b>File:</b> <code>YourName_S13_practice.py</code></p>
+        <p class="remember"><b>Check:</b> 5 stores, led by <code>STR-1011</code> (<code>36.89</code>%)</p></div>
+      <div class="card"><div class="tag">EXERCISE 3: ADVANCED</div><h2>Store Scorecard</h2>
+        <p><b>Goal:</b> Sort all 12 stores into Gold, Watch, and Standard tiers</p>
+        <p><b>File:</b> <code>YourName_S13_challenge.py</code></p>
+        <p class="remember"><b>Check:</b> Gold <code>4</code>, Watch <code>5</code>, Standard <code>3</code></p></div>
     </div>
-    <div class="check"><b>Success check:</b> Exercise 2 returns 5 stores, led by <code>STR-1011</code> (South, 36.89%), and the script ends with return code <code>0</code>.</div>
+    <div class="check">Full steps for all three exercises: sections 11-13 of the course page.</div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 18 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 16 / 16</span></div>
 </section>
 
-<section class="slide">
-  <div><span class="eyebrow">MODULE 1</span><span class="kicker">13. Exercise 3: Advanced Practice</span></div>
-  <div class="title">Store Scorecard: Gold, Standard, or Watch?</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid2" style="flex: 1; min-height: 0; grid-template-columns: 1.2fr 1fr;">
-      <div class="card"><div class="tag">WHAT TO BUILD: <code>YourName_S13_challenge.py</code></div>
-        <ol class="ex3">
-          <li>Add <code>Operating_Profit_USD</code>, <code>Operating_Margin_Pct</code> (1 decimal), and <code>Sales_per_Visitor_USD</code> = sales / visitors (2 decimals)</li>
-          <li><code>Tier</code>: start as <code>"Standard"</code>; <code>"Gold"</code> if margin <code>&gt;= 33.0</code> and rating <code>&gt;= 4.5</code>; <code>"Watch"</code> if margin <code>&lt; 30.0</code></li>
-          <li>Print how many stores are in each tier</li>
-          <li>Sort by margin, highest first; save <code>data/store_scorecard.csv</code></li>
-          <li>In a comment: which tier holds the highest sales per visitor?</li>
-        </ol></div>
-      <div class="card"><div class="tag">NEW TOOL</div>
-        <ul><li><code>df["Tier"] = "Standard"</code>: one value in every row</li><li>Then change selected rows only:</li></ul>
-<div class="snip">df.loc[mask, "Tier"] = "Gold"</div>
-        <div class="tag" style="margin-top:.1in;">HINT</div>
-        <ul><li>Count a tier: <code>len(df.loc[df["Tier"] == "Gold"])</code></li></ul>
-      </div>
-    </div>
-    <div class="check"><b>Self-check:</b> Gold 4, Watch 5, Standard 3. The top sales per visitor (<code>STR-1002</code>, <code>11.95</code>) is a Watch store. Full steps: section 13 of the course page.</div>
-  </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 19 / 19</span></div>
-</section>
+<script>
+window.__fitDone = false;
+function fitAll() {
+  document.querySelectorAll('.fitbox').forEach((box) => {
+    let size = parseFloat(box.dataset.start || '18');
+    const floor = parseFloat(box.dataset.floor || '15');
+    const apply = () => box.querySelectorAll('p, li, td, th, .outbox, pre').forEach((el) => {
+      if (el.tagName === 'PRE') { el.style.fontSize = Math.max(9.5, size - 3.5) + 'pt'; return; }
+      if (el.classList.contains('outbox')) { el.style.fontSize = Math.max(11, size - 4.5) + 'pt'; return; }
+      el.style.fontSize = size + 'pt';
+    });
+    apply();
+    const over = () => box.scrollHeight > box.clientHeight + 1 || box.scrollWidth > box.clientWidth + 1
+      || [...box.querySelectorAll('pre')].some((pre) => pre.scrollHeight > pre.clientHeight + 6 || pre.scrollWidth > pre.clientWidth + 6);
+    while (over() && size > floor) { size -= 0.5; apply(); }
+    if (over()) box.dataset.overflow = 'yes';
+    box.__apply = (v) => { size = v; apply(); };
+    box.dataset.size = size;
+  });
+  // cards on one slide share one size, so they read as a set
+  document.querySelectorAll('[data-uniform]').forEach((group) => {
+    const boxes = [...group.querySelectorAll('.fitbox')];
+    const min = Math.min(...boxes.map((b) => parseFloat(b.dataset.size)));
+    boxes.forEach((b) => b.__apply(min));
+  });
+  window.__fitDone = true;
+}
+document.fonts.ready.then(() => { fitAll(); document.querySelectorAll('[data-overflow]').forEach((el) => el.removeAttribute('data-overflow')); fitAll(); });
+</script>
 
 </body>
 </html>

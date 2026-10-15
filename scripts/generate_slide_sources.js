@@ -18,7 +18,7 @@ const codeSlide = (title, code, n) => page(`<header><b>MODULE</b><span>Style 2 H
 for (const match of sessions) {
   const module = match[1]; const session = match[2]; const title = match[3]; const body = match[4];
   const id = `0${module}_0${session}`;
-  if (['01_02', '01_03', '01_04', '02_01'].includes(id)) continue; // hand-authored sources
+  if (id !== '01_01') continue; // 1.2-2.1 are hand-authored; 2.2-4.4 come from scripts/build_deck_from_md.py
   const keywordBlock = (body.match(/\* \*\*Keywords[^\n]*\n([\s\S]*?)\n\* \*\*Core/) || [, ''])[1];
   const coreBlock = (body.match(/\* \*\*Core[^\n]*\n([\s\S]*?)\n\* \*\*Hands-On/) || [, ''])[1];
   const keywords = keywordBlock.split('\n').filter((line) => /^\s*\*/.test(line)).slice(0, 4).map(plain);
@@ -38,4 +38,4 @@ ${codeSlide(`Script Demonstration 1: ${title}`, codes[0], 5)}${codeSlide(`Script
 ${page(`<header><b>MODULE ${module}</b><span>Hands-On Practice</span></header><h1>Exercise 1 and Exercise 2</h1><i></i><main>${card('EXERCISE 1: GUIDED','Foundational Practice','Follow the lab protocol, run the script, and verify its output with the session dataset.')}${card('EXERCISE 2: DEBUGGING','Applied Challenge','Extend the program, diagnose an intentional error, apply the verified correction, and confirm return code 0.')}</main>`,8)}</body></html>`;
   fs.writeFileSync(`slides_src/session_${id}.html`, html);
 }
-console.log(`Generated HTML sources for ${sessions.length - 4} sessions; hand-authored sources are kept for 1.2 to 1.4 and 2.1.`);
+console.log(`Generated HTML sources for ${sessions.length - 4} sessions; only Session 1.1 is generated here.`);

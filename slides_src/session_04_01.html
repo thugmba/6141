@@ -1,39 +1,577 @@
-<!doctype html><html lang="en-US"><meta charset="utf-8"><title>Session 4.1</title><style>
-@page{size:16in 9in;margin:0}*{box-sizing:border-box}body{margin:0;font-family:"Times New Roman",serif;color:#18181B}.slide{width:16in;height:9in;padding:.45in .8in .4in;display:flex;flex-direction:column;background:#fff;page-break-after:always}header{font-size:15pt;color:#991B1B;font-weight:bold}header span{margin-left:.25in;color:#64748B;font-weight:normal}h1{font-size:34pt;line-height:1.08;margin:.13in 0 .08in}h2{font-size:21pt;margin:.06in 0}.slide>i{display:block;width:1.2in;height:4px;background:#991B1B;margin-bottom:.2in}main{flex:1;min-height:0;display:grid;grid-template-columns:repeat(2,1fr);gap:.2in}main.three{grid-template-columns:repeat(3,1fr);gap:.18in}article{border:1px solid #CBD5E1;border-radius:10px;padding:.18in;overflow:hidden}article b{font-size:14pt;color:#991B1B}p,li{font-size:17pt;line-height:1.25;margin:.06in 0}footer{margin-top:.18in;border-top:1px solid #CBD5E1;padding-top:.1in;font-size:15pt;color:#64748B;display:flex;justify-content:space-between}main.overview{grid-template-columns:2fr 3fr}main.overview article{display:flex;flex-direction:column}.overview ul.lead{margin:.12in 0 0;padding-left:.32in}.overview ul.lead li{font-size:21pt}.overview .flow{margin-top:auto;font-size:16pt;color:#64748B;border-top:1px solid #CBD5E1;padding-top:.1in}.overview ol{margin:.1in 0 0;padding-left:.38in}.overview li{font-size:20pt;line-height:1.3;margin:0 0 .16in}.code{display:flex;gap:.3in}.code pre{width:58%;margin:0;background:#18181B;border-radius:10px;color:#E5E7EB;padding:.22in;font:13.5pt/1.28 "DejaVu Sans Mono",monospace;white-space:pre-wrap;overflow-wrap:anywhere;overflow:hidden}.code aside{flex:1;display:flex;flex-direction:column;gap:.13in}.code aside article{flex:1}</style><body>
-<section class="slide"><header><b>MODULE 4</b><span>Session Overview</span></header><h1>Session 4.1: Integration of Business Analytics and Enterprise AI Architecture: End-to-End Decision Systems</h1><i></i><main class="overview"><article><b>TODAY'S PURPOSE</b><h2>Why This Session Matters</h2><ul class="lead"><li>Connect data, models, and business actions</li><li>Build one end-to-end decision system</li><li>Keep it working after deployment</li></ul><p class="flow">Today's flow: 60 min lecture, then 120 min hands-on lab</p></article><article><b>EXPECTED OUTCOMES</b><h2>By the end of today, you will be able to:</h2><ol><li>Map a pipeline from data intake to action</li><li>Save and reload a model with joblib</li><li>Detect data drift and handle a missing model file</li></ol></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 1 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 4</b><span>Core Vocabulary</span></header><h1>Concepts for This Session</h1><i></i><main class="three"><article><b>CONCEPT 1</b><h2>End-to-End Decision Pipeline</h2><p> A unified software pipeline connecting data ingestion, automated preprocessing, model inference, and operational decision triggers into a single automated system.</p></article><article><b>CONCEPT 2</b><h2>Batch vs. Real-Time Inference</h2><p> Batch inference scores millions of records offline on scheduled schedules (e.g., nightly credit updates), while real-time inference scores individual transactions in milliseconds via APIs.</p></article><article><b>CONCEPT 3</b><h2>Model Serialization (joblib)</h2><p> Saving trained Scikit-Learn model weights and preprocessing transformers to disk (.joblib format) to load into production systems without retraining.</p></article><article><b>CONCEPT 4</b><h2>Data Drift &amp; Model Degradation</h2><p> The real-world phenomenon where macroeconomic shifts or consumer behavior changes degrade model accuracy over time, requiring continuous monitoring.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 2 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 4</b><span>Computational Foundations</span></header><h1>How the Concept Works in Practice</h1><i></i><main><article><b>FOUNDATION 1</b><h2>Bridging Analytics Models to Operational Production</h2><p> Training a model inside a Jupyter notebook creates zero business value until it is integrated into operational software workflows that trigger actions: sending retention offers, halting fraudulent cards, or adjusting prices.</p></article><article><b>FOUNDATION 2</b><h2>Inference Latency vs Computational Throughput</h2><p> Choosing the right architectural pattern. Real-time inference requires sub-second response times (APIs), whereas enterprise batch scoring handles massive volume overnight with lower infrastructure cost.</p></article><article><b>FOUNDATION 3</b><h2>Model Persistence and Environment Reproducibility</h2><p> Serializing trained models using joblib allows developers to deploy pre-trained pipelines directly into production execution environments, separating heavy training compute from lightweight inference.</p></article><article><b>FOUNDATION 4</b><h2>Monitoring Model Degradation and Drift</h2><p> Models decay over time as external market conditions evolve. Robust enterprise architectures implement automated validation checks that compare live inference input distributions against baseline training distributions.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 3 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 4</b><span>Development Workflow</span></header><h1>Build, Test, and Diagnose in the IDE</h1><i></i><main><article><b>[1] FILE EXPLORER</b><h2>Organize Assets</h2><p>Use the session dataset and keep scripts in a clear workspace.</p></article><article><b>[2] CODE EDITOR</b><h2>Write Small Segments</h2><p>Run each completed segment before expanding the program.</p></article><article><b>[3] AI AGENT CHAT</b><h2>Diagnose Errors</h2><p>Capture the traceback, request an explanation, and review the fix.</p></article><article><b>[4] INTEGRATED TERMINAL</b><h2>Verify Execution</h2><p>Confirm the final program completes with return code 0.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 4 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE</b><span>Style 2 Harvard Dual-Pane Editor</span></header><h1>Script Demonstration 1: Integration of Business Analytics and Enterprise AI Architecture: End-to-End Decision Systems</h1><i></i><main class="code"><pre>import joblib
-    from sklearn.linear_model import LogisticRegression
-    import numpy as np
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<title>Session 4.1 Lecture</title>
+<style>
+@page { size: 16in 9in; margin: 0; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "Times New Roman", serif; color: #18181B; }
+.slide { width: 16in; height: 9in; padding: .45in .8in .4in; display: flex; flex-direction: column; background: #FFF; page-break-after: always; }
+.eyebrow { color: #991B1B; font-size: 15pt; font-weight: bold; letter-spacing: .02em; }
+.kicker { color: #64748B; font-size: 15pt; margin-left: .25in; }
+.title { font-size: 36pt; line-height: 1.05; font-weight: bold; margin: .12in 0 .08in; }
+.rule { height: 4px; background: #991B1B; width: 1.2in; margin-bottom: .18in; flex-shrink: 0; }
+.body { flex: 1; min-height: 0; display: flex; gap: .25in; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: .2in; width: 100%; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: .18in; width: 100%; }
+.card { border: 1px solid #CBD5E1; border-radius: 10px; padding: .16in .2in; background: #FFF; min-height: 0; overflow: hidden; }
+.card h2 { font-size: 22pt; margin: .04in 0 .08in; }
+.card p, .card li { font-size: 18pt; line-height: 1.25; margin: .05in 0; }
+.card ul { margin: .04in 0 0; padding-left: .3in; }
+.tag { color: #991B1B; font-size: 15pt; font-weight: bold; }
+.what, .why { font-size: 18pt; line-height: 1.25; margin: .05in 0; }
+.what b, .why b { color: #991B1B; }
+code { font-family: "DejaVu Sans Mono", monospace; font-size: .86em; background: #F1F5F9; border: 1px solid #E2E8F0; border-radius: 4px; padding: 0 .04in; white-space: nowrap; }
+h2 code { font-size: .82em; }
+.footer { border-top: 1px solid #CBD5E1; min-height: .42in; margin-top: .18in; display: flex; align-items: end; justify-content: space-between; color: #475569; font-size: 15pt; flex-shrink: 0; }
 
-    # Train a baseline model
-    X_sample = np.array([[10, 0.2], [50, 0.8], [20, 0.3], [70, 0.9]])
-    y_sample = np.array([0, 1, 0, 1])
-    clf = LogisticRegression().fit(X_sample, y_sample)
+/* Slide 1 */
+.overview { grid-template-columns: 2fr 3fr; }
+.overview .card { display: flex; flex-direction: column; }
+.overview ul.lead { margin: .1in 0 0; padding-left: .32in; }
+.overview ul.lead li { font-size: 20pt; line-height: 1.25; margin: 0 0 .1in; }
+.overview .card .flow { margin-top: auto; font-size: 16pt; color: #64748B; border-top: 1px solid #CBD5E1; padding-top: .1in; }
+.overview ol { margin: .06in 0 0; padding-left: .38in; }
+.overview ol > li { font-size: 21pt; line-height: 1.25; margin: 0 0 .12in; }
+.gloss { display: block; font-size: 18pt; color: #475569; margin-top: .03in; }
 
-    # Serialize model to disk
-    joblib.dump(clf, "data/production_fraud_model.joblib")
+/* Code slides */
+.code-panel { width: 60%; background: #18181B; border-radius: 10px; color: #E5E7EB; padding: .16in .22in; display: flex; flex-direction: column; flex-shrink: 0; }
+.code-header { color: #CBD5E1; font: 14pt "DejaVu Sans Mono", monospace; border-bottom: 1px solid #3F3F46; padding-bottom: .08in; display: flex; align-items: center; gap: .08in; }
+.dot { width: .13in; height: .13in; border-radius: 50%; display: inline-block; }
+pre { white-space: pre; font: 14.5pt/1.38 "DejaVu Sans Mono", monospace; margin: .12in 0 0; overflow: hidden; }
+.cm { color: #94A3B8; }
+.sec { color: #FBBF24; font-weight: bold; }
+.ipo { margin-left: auto; color: #FBBF24; font-size: 13pt; }
+.notes .card.wide { flex: 1.6; }
 
-    # Reload model in production context
-    deployed_model = joblib.load("data/production_fraud_model.joblib")
-    new_transaction = np.array([[35, 0.6]])
-    prediction = deployed_model.predict(new_transaction)
-    print("Production Model Loaded. New Transaction Prediction:", prediction[0])</pre><aside><article><b>SYNTAX</b><h2>Readable Structure</h2><p>Observe the syntax and indentation that control execution.</p></article><article><b>RUNTIME</b><h2>Verified Execution</h2><p>Run the example in the integrated terminal and inspect the output.</p></article><article><b>BUSINESS VALUE</b><h2>Applied Automation</h2><p>Use the pattern to automate a repeatable business decision.</p></article></aside></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 5 / 8</span></footer></section><section class="slide"><header><b>MODULE</b><span>Style 2 Harvard Dual-Pane Editor</span></header><h1>Script Demonstration 2: Integration of Business Analytics and Enterprise AI Architecture: End-to-End Decision Systems</h1><i></i><main class="code"><pre>import pandas as pd
+/* Rows and columns slide */
+.table-wrap { width: 60%; flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; }
+table.df { border-collapse: collapse; font: 16pt/1.3 "DejaVu Sans Mono", monospace; }
+table.df td, table.df th { padding: .07in .14in; text-align: left; white-space: nowrap; }
+table.df thead th { border-bottom: 2px solid #18181B; }
+table.df tbody td { border-bottom: 1px solid #E2E8F0; }
+table.df .num { text-align: right; }
+table.df .idx { color: #64748B; }
+table.df .lbl { font: bold 15pt "Times New Roman", serif; border: none; padding: 0 .1in .04in; }
+.row-lbl { color: #1D4ED8; text-align: right !important; }
+.col-lbl { color: #B45309; text-align: center !important; }
+table.df .hl-row td { background: #DBEAFE; }
+table.df .hl-col { background: #FEF3C7; }
+table.df .hl-row td.hl-col { background: #FDE68A; outline: 3px solid #991B1B; outline-offset: -3px; font-weight: bold; }
+table.df .more { color: #64748B; font-family: "Times New Roman", serif; font-style: italic; }
+.card .tag.blue { color: #1D4ED8; }
+.card .tag.amber { color: #B45309; }
+.card.row-card { border: 2px solid #93C5FD; }
+.card.col-card { border: 2px solid #FCD34D; }
+.card.cell-card { border: 2px solid #991B1B; }
+.notes { flex: 1; display: flex; flex-direction: column; gap: .12in; min-width: 0; }
+.notes .card { flex: 1; }
+.notes .card h2 { font-size: 20pt; }
 
-    df = pd.read_csv("data/session_04_01_dataset.csv")
+.check { margin-top: .14in; background: #FEF2F2; border: 1px solid #FCA5A5; border-radius: 10px; padding: .12in .2in; font-size: 18pt; flex-shrink: 0; }
 
-    def run_batch_inference(data_batch, model):
-        # Simulated batch score
-        data_batch["Inference_Confidence"] = data_batch["Model_Accuracy_Score"] * 0.98
-        data_batch["Action_Required"] = data_batch["Inference_Confidence"].apply(
-            lambda x: "Review" if x &lt; 0.94 else "Auto_Approve"
-        )
-        return data_batch
+/* Six terms visual map */
+.fit { flex: 1; min-height: 0; display: grid; grid-template-rows: 1fr 1fr; gap: .16in; }
+.fit-row { display: flex; gap: .14in; align-items: stretch; min-height: 0; }
+.fit-box { border: 1px solid #CBD5E1; border-radius: 10px; padding: .12in .16in; display: flex; flex-direction: column; min-width: 0; }
+.fit-box .tag { margin-bottom: .04in; }
+.fit-box .cap { font-size: 18pt; margin: .06in 0 0; line-height: 1.2; }
+.fit-arrow { display: flex; flex-direction: column; justify-content: center; align-items: center; color: #991B1B; flex-shrink: 0; }
+.fit-arrow .big { font-size: 40pt; line-height: 1; }
+.fit-arrow code { font-size: 14pt; }
+.rawcsv { background: #18181B; color: #E5E7EB; border-radius: 8px; padding: .1in .14in; font: 15pt/1.4 "DejaVu Sans Mono", monospace; white-space: pre; }
+.rawcsv b { color: #FBBF24; }
+table.mini { border-collapse: collapse; font: 15pt/1.3 "DejaVu Sans Mono", monospace; }
+table.mini th, table.mini td { padding: .03in .1in; text-align: left; white-space: nowrap; border-bottom: 1px solid #E2E8F0; }
+table.mini th { border-bottom: 2px solid #18181B; }
+table.mini .num { text-align: right; }
+table.mini .idx { color: #64748B; }
+table.mini .ser { background: #FEF3C7; }
+table.mini .new { background: #DCFCE7; font-weight: bold; }
+table.mini tr.keep td { background: #DBEAFE; font-weight: bold; }
+table.mini tr.drop td { color: #CBD5E1; }
+.op { font: bold 26pt "DejaVu Sans Mono", monospace; color: #991B1B; align-self: center; padding: 0 .06in; }
+.toolbar { font-size: 17pt; color: #475569; margin-bottom: .1in; flex-shrink: 0; }
+.toolbar b { color: #991B1B; }
 
-    scored_batch = run_batch_inference(df, deployed_model)
-    print(scored_batch[["Batch_Run_ID", "Pipeline_Stage", "Action_Required"]].head(3))</pre><aside><article><b>SYNTAX</b><h2>Readable Structure</h2><p>Observe the syntax and indentation that control execution.</p></article><article><b>RUNTIME</b><h2>Verified Execution</h2><p>Run the example in the integrated terminal and inspect the output.</p></article><article><b>BUSINESS VALUE</b><h2>Applied Automation</h2><p>Use the pattern to automate a repeatable business decision.</p></article></aside></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 6 / 8</span></footer></section><section class="slide"><header><b>MODULE</b><span>Style 2 Harvard Dual-Pane Editor</span></header><h1>Script Demonstration 3: Integration of Business Analytics and Enterprise AI Architecture: End-to-End Decision Systems</h1><i></i><main class="code"><pre>latency_threshold_ms = 500
-    latency_alerts = df[df["Latency_Milliseconds"] &gt; latency_threshold_ms]
-    print(f"Pipeline Stages Exceeding Latency Threshold ({latency_threshold_ms}ms): {len(latency_alerts)}")</pre><aside><article><b>SYNTAX</b><h2>Readable Structure</h2><p>Observe the syntax and indentation that control execution.</p></article><article><b>RUNTIME</b><h2>Verified Execution</h2><p>Run the example in the integrated terminal and inspect the output.</p></article><article><b>BUSINESS VALUE</b><h2>Applied Automation</h2><p>Use the pattern to automate a repeatable business decision.</p></article></aside></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 7 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 4</b><span>Hands-On Practice</span></header><h1>Exercise 1 and Exercise 2</h1><i></i><main><article><b>EXERCISE 1: GUIDED</b><h2>Foundational Practice</h2><p>Follow the lab protocol, run the script, and verify its output with the session dataset.</p></article><article><b>EXERCISE 2: DEBUGGING</b><h2>Applied Challenge</h2><p>Extend the program, diagnose an intentional error, apply the verified correction, and confirm return code 0.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 8 / 8</span></footer></section></body></html>
+/* DataFrame visual map */
+.xl th, .xl td { font-size: 15pt; }
+.xl .rn { background: #F1F5F9; color: #64748B; text-align: center; }
+.xl .bad { background: #FEE2E2; color: #B91C1C; font-weight: bold; }
+.side { display: flex; gap: .22in; align-items: flex-start; }
+.side .lab { font-size: 17pt; font-weight: bold; margin-bottom: .04in; }
+.brace { border-left: 4px solid #16A34A; padding-left: .1in; }
+.anat .ix { background: #DBEAFE; color: #1D4ED8; }
+.anat .hd { background: #FEF3C7; }
+.anat .vl { background: #DCFCE7; }
+.chips { display: flex; gap: .12in; flex-wrap: wrap; margin-top: .08in; }
+.chip { font-size: 16pt; padding: .02in .1in; border-radius: 6px; }
+.dt { font-size: 14pt; padding: .01in .08in; border-radius: 5px; background: #18181B; color: #FBBF24; font-family: "DejaVu Sans Mono", monospace; }
+.insp td { font-size: 15pt; vertical-align: top; }
+.insp td:first-child { color: #991B1B; }
+.pr, .insp td.pr { font: 18pt/1.3 "Times New Roman", serif; }
+td.pr { white-space: normal !important; }
+
+/* IDE slide */
+.shot { width: 60%; flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; }
+.shot img { width: 100%; border: 1px solid #CBD5E1; border-radius: 10px; display: block; }
+.shot .cap { font-size: 17pt; margin: .1in 0 0; }
+.steps { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .1in; justify-content: center; }
+.step { display: flex; gap: .14in; align-items: flex-start; border: 1px solid #CBD5E1; border-radius: 10px; padding: .1in .14in; }
+.badge { background: #991B1B; color: #FFF; font: bold 16pt "DejaVu Sans Mono", monospace; border-radius: 6px; padding: .02in .08in; flex-shrink: 0; }
+.step h3 { font-size: 20pt; margin: 0 0 .02in; }
+.step p { font-size: 18pt; line-height: 1.22; margin: .02in 0; }
+.step p.eg { font-size: 16pt; color: #475569; }
+
+/* Quick check slides */
+.qc { grid-template-columns: 1fr 1.15fr; }
+.qc .card { display: flex; flex-direction: column; }
+.snip { background: #18181B; color: #E5E7EB; border-radius: 8px; padding: .1in .16in; font: 16pt/1.4 "DejaVu Sans Mono", monospace; white-space: pre; margin: .04in 0 .1in; }
+.snip .blank { background: #FBBF24; color: #18181B; padding: 0 .06in; border-radius: 3px; font-weight: bold; }
+.snip .cm { color: #94A3B8; }
+.snip-lab { font-size: 17pt; font-weight: bold; margin-top: .06in; }
+.strip { display: flex; gap: .05in; margin: .1in 0 .04in; }
+.strip span { flex: 1; text-align: center; font: 15pt "DejaVu Sans Mono", monospace; padding: .06in 0; border-radius: 5px; background: #F1F5F9; color: #94A3B8; }
+.strip .h { background: #DBEAFE; color: #1D4ED8; font-weight: bold; }
+.strip .t { background: #DCFCE7; color: #15803D; font-weight: bold; }
+.strip-lab { display: flex; justify-content: space-between; font-size: 16pt; }
+.flowline { display: flex; align-items: center; gap: .14in; margin: .1in 0; font: 17pt "DejaVu Sans Mono", monospace; }
+.flowline .box { background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 6px; padding: .04in .12in; }
+.flowline .arr { color: #991B1B; font-size: 22pt; }
+.flowline .res { background: #DCFCE7; border: 1px solid #86EFAC; border-radius: 6px; padding: .04in .12in; font-weight: bold; }
+.vstack { margin-top: .08in; }
+.vstack td, .vstack th { padding: .02in .12in; }
+.vstack tr.h td:not(.side-lab) { background: #DBEAFE; color: #1D4ED8; font-weight: bold; }
+.vstack tr.t td:not(.side-lab) { background: #DCFCE7; color: #15803D; font-weight: bold; }
+.vstack tr.gap td { color: #94A3B8; font-family: "Times New Roman", serif; font-style: italic; }
+.vstack .side-lab { border: none; font: 17pt "Times New Roman", serif; vertical-align: middle; }
+.vstack .h-lab { color: #1D4ED8; }
+.vstack .t-lab { color: #15803D; }
+table.mini th.plain { font: bold 17pt "Times New Roman", serif; }
+.overview ol.biz > li { font-size: 20pt; margin: 0 0 .1in; }
+.overview .q { display: block; color: #991B1B; font-style: italic; font-weight: bold; }
+.overview .sit-note { font-size: 19pt; font-weight: bold; margin: .04in 0 0; }
+
+/* CSV intro slide */
+.csvflow { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr auto 1.25fr auto 1fr; gap: .14in; align-items: stretch; }
+.csvflow .col { border: 1px solid #CBD5E1; border-radius: 10px; padding: .14in .18in; display: flex; flex-direction: column; gap: .1in; }
+.csvflow .item { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: .08in .12in; font-size: 18pt; line-height: 1.2; }
+.csvflow .item small { display: block; font-size: 16pt; color: #475569; }
+.csvflow .mid { border: 2px solid #991B1B; }
+.csvflow .arrow { display: flex; align-items: center; color: #991B1B; font-size: 40pt; }
+.csvflow li { font-size: 18pt; line-height: 1.3; margin: .04in 0; }
+.csvflow .fname { font: bold 15pt "DejaVu Sans Mono", monospace; color: #18181B; }
+
+/* CSV vs XLSX */
+.src-row { display: flex; gap: .14in; align-items: stretch; flex-shrink: 0; }
+.src-box { flex: 1; border: 1px solid #CBD5E1; border-radius: 10px; padding: .1in .16in; }
+.chips2 { display: flex; gap: .1in; flex-wrap: wrap; margin-top: .06in; }
+.chips2 span { background: #F1F5F9; border: 1px solid #E2E8F0; border-radius: 6px; padding: .03in .12in; font-size: 18pt; }
+.arrow2 { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #991B1B; font-size: 34pt; line-height: 1; }
+.arrow2 small { font-size: 15pt; }
+.files { display: flex; gap: .12in; align-items: center; margin-top: .06in; }
+.file { font: bold 16pt "DejaVu Sans Mono", monospace; padding: .03in .12in; border-radius: 6px; color: #FFF; }
+.file.xlsx { background: #64748B; }
+.file.csv { background: #15803D; }
+.vs { flex: 1; min-height: 0; display: flex; gap: .16in; }
+.vs-col { flex: 1; border-radius: 12px; padding: .14in .2in; display: flex; flex-direction: column; }
+.vs-col.bad { border: 2px solid #CBD5E1; background: #F8FAFC; }
+.vs-col.good { border: 3px solid #15803D; background: #F0FDF4; flex: 1.35; }
+.vs-head { font-size: 24pt; font-weight: bold; display: flex; align-items: center; gap: .12in; }
+.vs-sub { font-size: 18pt; margin: .06in 0 .1in; color: #334155; }
+.vs-mid { align-self: center; font: bold 26pt "Times New Roman", serif; color: #64748B; }
+.apps { display: flex; flex-wrap: wrap; gap: .1in; }
+.app { font-size: 18pt; background: #FFF; border-radius: 8px; padding: .06in .14in; display: flex; flex-direction: column; min-width: 1.5in; }
+.app b { font-size: 24pt; line-height: 1; }
+.app small { font-size: 15pt; color: #64748B; }
+.rawcsv.garbled { color: #94A3B8; }
+.app.ok { border: 2px solid #86EFAC; }
+.app.ok b { color: #15803D; }
+.app.no { border: 2px solid #FCA5A5; }
+.app.no b { color: #B91C1C; }
+
+/* Session 1.4 additions */
+table.terms { border-collapse: collapse; width: 100%; margin: .04in 0 .1in; }
+table.terms td { font-size: 18pt; padding: .05in .08in; border-bottom: 1px solid #E2E8F0; }
+table.terms td.num { text-align: right; }
+.vbars { display: flex; flex-direction: column; gap: .1in; margin-top: .12in; }
+.vrow { display: flex; align-items: center; gap: .12in; }
+.vq { width: .45in; font: bold 17pt "DejaVu Sans Mono", monospace; }
+.vval { width: 1.1in; font: 16pt "DejaVu Sans Mono", monospace; text-align: right; }
+.vtrack { flex: 1; height: .42in; position: relative; background: #F8FAFC; border-radius: 4px; }
+.vzero { position: absolute; left: 40%; top: 0; bottom: 0; border-left: 2px solid #18181B; }
+.vth { position: absolute; left: 52%; top: -.04in; bottom: -.04in; border-left: 2px dashed #B91C1C; }
+.vbar { position: absolute; top: .07in; bottom: .07in; border-radius: 3px; }
+.vbar.over { background: #EF4444; }
+.vbar.warn { background: #F59E0B; }
+.vbar.under { background: #22C55E; }
+.vtrack-lab { flex: 1; position: relative; height: .3in; }
+.vtrack-lab span { position: absolute; transform: translateX(-50%); font-size: 15pt; color: #475569; white-space: nowrap; }
+.bridge { flex: 1; min-height: 0; display: flex; gap: .16in; align-items: stretch; }
+.bridge .b-xl, .bridge .b-pd { border-radius: 10px; padding: .1in .18in; display: flex; flex-direction: column; justify-content: center; }
+.bridge .b-xl { flex: 1; border: 2px solid #CBD5E1; background: #F8FAFC; }
+.bridge .b-pd { flex: 1.5; border: 2px solid #15803D; background: #F0FDF4; }
+.bridge h2 { font-size: 22pt; margin: .02in 0; }
+.bridge p { font-size: 18pt; margin: .02in 0; }
+.b-arrow { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #991B1B; font-size: 40pt; line-height: 1; }
+.b-arrow.small { font-size: 30pt; }
+.b-arrow small { font-size: 15pt; }
+.sac { display: flex; gap: .16in; align-items: center; flex-wrap: wrap; }
+.sac-col { display: flex; flex-direction: column; gap: .06in; }
+.sac-lab { font-size: 16pt; color: #475569; }
+.grp { font: 15pt "DejaVu Sans Mono", monospace; padding: .03in .1in; border-radius: 5px; }
+.g1 { background: #DBEAFE; } .g2 { background: #FEF3C7; } .g3 { background: #EDE9FE; } .g4 { background: #DCFCE7; }
+table.mini .keycol { background: #FEF3C7; }
+table.mini .hl-c { background: #DCFCE7; font-weight: bold; }
+table.mini .bad-c { background: #FEE2E2; color: #B91C1C; font-weight: bold; }
+table.mini tr.nan-row td { background: #FEF3C7; font-style: italic; }
+.snip .bad-t { color: #F87171; font-weight: bold; }
+.snip .ok-t { color: #4ADE80; font-weight: bold; }
+table.mini td.tcell { background: #DBEAFE; color: #1D4ED8; font-weight: bold; }
+table.mini td.fcell { color: #94A3B8; }
+.qc { grid-template-columns: 1fr 1.4fr; }
+.qc .snip { font-size: 14.5pt; }
+.fit-box .snip { font-size: 14.5pt; margin: .04in 0; }
+.flip { display: flex; gap: .1in; align-items: center; font: 16pt "DejaVu Sans Mono", monospace; margin: .08in 0; }
+.flip .t { background: #DBEAFE; padding: .03in .1in; border-radius: 5px; }
+.flip .f { background: #F1F5F9; padding: .03in .1in; border-radius: 5px; }
+
+/* Session 2.1 additions */
+.big-li { font-size: 22pt; margin: .1in 0; }
+.notes .card.xwide { flex: 2.4; }
+.rules { border: 2px solid #991B1B; border-radius: 10px; padding: .1in .18in; flex-shrink: 0; }
+.rule-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: .12in; margin-top: .06in; }
+.rule-row span { font-size: 17pt; background: #FEF2F2; border-radius: 6px; padding: .06in .1in; }
+.http { display: flex; align-items: center; gap: .2in; flex-shrink: 0; }
+.http .node { border: 2px solid #18181B; border-radius: 10px; padding: .12in .2in; font-size: 20pt; font-weight: bold; text-align: center; min-width: 2.4in; }
+.http .node small { font: 15pt "DejaVu Sans Mono", monospace; font-weight: normal; color: #475569; }
+.msgs { flex: 1; display: flex; flex-direction: column; gap: .1in; }
+.msg { display: flex; align-items: center; gap: .1in; font-size: 19pt; border-radius: 8px; padding: .06in .14in; }
+.msg b { font-size: 28pt; color: #991B1B; }
+.msg.req { background: #DBEAFE; justify-content: space-between; }
+.msg.res { background: #DCFCE7; }
+.render { border: 1px solid #CBD5E1; border-radius: 10px; padding: .16in; background: #FFF; box-shadow: 0 2px 6px rgba(0,0,0,.08); width: 3.6in; margin: .08in 0; }
+.render .r-name { font: bold 22pt Arial, sans-serif; }
+.render .r-price { font: bold 26pt Arial, sans-serif; color: #B91C1C; margin: .04in 0; }
+.render .r-stock { font: 16pt Arial, sans-serif; color: #15803D; }
+.rawcsv.small { font-size: 13.5pt; }
+.rawcsv b { color: #FBBF24; }
+.tree { font: 16pt/1.6 "DejaVu Sans Mono", monospace; margin-top: .08in; }
+.tn { border-left: 2px solid #CBD5E1; padding-left: .1in; }
+.tn.t1 { margin-left: .3in; }
+.tn.t2 { margin-left: .6in; }
+.tn small { color: #64748B; font-size: 14pt; }
+.tn.hit { background: #FEF3C7; font-weight: bold; }
+.cards4 { display: flex; flex-direction: column; gap: .06in; }
+.cards4 span { font: 15pt "DejaVu Sans Mono", monospace; border: 1px solid #CBD5E1; border-radius: 6px; padding: .04in .1in; background: #F8FAFC; }
+
+/* session map + exercise 3 */
+.sm-q { border: 3px solid #991B1B; border-radius: 14px; padding: .1in .2in; font-size: 24pt; font-style: italic; background: #FEF2F2; align-self: flex-start; flex-shrink: 0; }
+.sm-q b { font-style: normal; color: #991B1B; }
+.sm-phases { flex: 1; min-height: 0; display: flex; gap: .14in; align-items: stretch; }
+.sm-phase { flex: 1; border: 2px solid #CBD5E1; border-radius: 12px; padding: .14in .2in; }
+.sm-phase.sm-p3 { border: 3px solid #15803D; background: #F0FDF4; }
+.sm-head { display: flex; gap: .14in; align-items: center; border-bottom: 2px solid #E2E8F0; padding-bottom: .08in; margin-bottom: .08in; }
+.sm-head b { font-size: 26pt; display: block; line-height: 1.1; }
+.sm-head small { font-size: 16pt; color: #64748B; }
+.sm-step { background: #991B1B; color: #FFF; border-radius: 50%; width: .5in; height: .5in; display: flex; align-items: center; justify-content: center; font-size: 20pt; font-weight: bold; flex-shrink: 0; }
+.sm-p3 .sm-step { background: #15803D; }
+.sm-phase p { font-size: 22pt; margin: .1in 0; line-height: 1.2; display: flex; }
+.sm-phase i { font-style: normal; font-family: "DejaVu Sans Mono", monospace; font-weight: bold; color: #991B1B; min-width: .6in; flex-shrink: 0; }
+.sm-p3 i { color: #15803D; }
+.sm-arrow { align-self: center; font-size: 34pt; color: #991B1B; }
+ol.ex3 { margin: .06in 0 0; padding-left: .36in; }
+ol.ex3 li { font-size: 18pt; line-height: 1.25; margin: .06in 0; }
+
+.card p.remember { font-size: 17pt; margin-top: .08in; color: #991B1B; }
+.card p.remember b { color: #991B1B; }
+.f7 .card ul { margin-top: .02in; }
+.f7 .card li { font-size: 17pt; }
+.f7 .card h2 { font-size: 21pt; }
+
+
+.fitbox { min-height: 0; overflow: hidden; }
+.card.fitbox p, .card.fitbox li { font-size: 18pt; }
+.mdtable { border-collapse: collapse; width: 100%; margin: .06in 0; }
+.mdtable th, .mdtable td { text-align: left; padding: .05in .1in; border-bottom: 1px solid #E2E8F0; font-size: 17pt; vertical-align: top; }
+.mdtable th { border-bottom: 2px solid #18181B; font-weight: bold; }
+.mdtable code { white-space: normal; }
+.card ul.tight { margin: .04in 0 0; padding-left: .3in; }
+.card ul.tight li { margin: .05in 0; line-height: 1.25; }
+.outbox { background: #18181B; color: #34D399; border-radius: 8px; padding: .1in .14in; font: 13.5pt/1.35 "DejaVu Sans Mono", monospace; white-space: pre; overflow: hidden; }
+.card p.remember { color: #991B1B; margin-top: .06in; }
+.card p.remember b { color: #991B1B; }
+.f7 .card h2 { font-size: 24pt; margin-bottom: .12in; }
+.f7 .card p.remember { margin-top: .16in; }
+.exg .card h2 { font-size: 24pt; }
+.exg .card p { margin: .1in 0; }
+.exg .card p code { font-size: .88em; }
+.big-q { font-size: 20pt; }
+.mdtable.cols td:first-child code { white-space: nowrap; overflow-wrap: normal; }
+.card code, .check code, .mdtable code, .card h2 { white-space: normal; overflow-wrap: anywhere; }
+.notes .card.how { flex: 1 1 auto; }
+.notes .card.out { flex: 0 0 auto; }
+
+
+/* session map with content */
+.sm-phase.fitbox { display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
+.sm-phase p.sm-item { display: flex; gap: .1in; margin: .06in 0; line-height: 1.15; }
+.sm-item i { font-style: normal; font-family: "DejaVu Sans Mono", monospace; font-weight: bold; color: #991B1B; min-width: .5in; flex-shrink: 0; }
+.sm-p3 .sm-item i { color: #15803D; }
+.sm-item b { display: block; font-size: 1em; }
+.sm-item span.d { display: block; font-size: .9em; color: #334155; }
+.sm-item code { font-size: .85em; white-space: normal; overflow-wrap: anywhere; }
+/* end session map */
+
+</style>
+</head>
+<body>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">1-2. Purpose and Outcomes</span></div>
+  <div class="title">Session 4.1: Integration of Business Analytics and Enterprise AI Architecture: End-to-End Decision Systems</div><div class="rule"></div>
+  <div class="body grid2 overview"><div class="card fitbox"><div class="tag">THE BUSINESS SITUATION</div><ul class="tight"><li>A model that lives in an analyst&#x27;s notebook creates no value; value comes only when its predictions trigger real actions, every day, without a person running the code</li><li>The card issuer from Session 3.4 wants its fraud model to score each night&#x27;s transactions automatically and hold the risky ones</li><li>The head of operations asks: how do we put the fraud model to work every night, and how will we know when it starts to fail? Today, you save a trained model, reuse it on new data, and build the checks that warn you when the world changes</li></ul><p class="flow">Today's flow: 60 min lecture, then 120 min hands-on lab</p></div><div class="card fitbox"><div class="tag">EXPECTED OUTCOMES</div><h2>By the end of today, you will be able to:</h2><ol class="biz"><li><span class="q">"How does a model get from training to daily use?"</span> Map an end-to-end decision system (data in, checks, model, action), and save and reload a model with <code>joblib</code></li><li><span class="q">"Is new data still like the training data?"</span> Detect data drift (a change in the incoming data that makes a model less reliable) by comparing averages</li><li><span class="q">"What if something breaks at night?"</span> Monitor latency and accuracy from a run log, and handle a missing model file (<code>FileNotFoundError</code>) with a safe fallback</li></ol></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 1 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Session Map</span></div>
+  <div class="title">Session Map: Follow the Numbers</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: .14in;"><div class="sm-q"><b>Today's question:</b> How do we put the fraud model to work every night, and how will we know when it starts to fail?</div><div class="sm-phases"><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">1</span><span><b>Why it matters</b><small>Lecture, part 1</small></span></div><p class="sm-item"><i>1.</i><span><b>Session Purpose</b><span class="d">answer today&#x27;s question</span></span></p><p class="sm-item"><i>2.</i><span><b>Learning Outcomes</b><span class="d">3 skills you will show today</span></span></p><p class="sm-item"><i>3.</i><span><b>Business Context</b><span class="d">From a Model to a Decision System</span></span></p><p class="sm-item"><i>4.</i><span><b>Data Basics</b><span class="d">Saving a Model and Watching It</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">2</span><span><b>Learn the tools</b><small>Lecture, part 2</small></span></div><p class="sm-item"><i>5.</i><span><b>Lab Dataset</b><span class="d">3 CSVs</span></span></p><p class="sm-item"><i>6.</i><span><b>Keywords</b><span class="d">6 terms</span></span></p><p class="sm-item"><i>7.</i><span><b>Core Foundations</b><span class="d">5 ideas, one at a time</span></span></p><p class="sm-item"><i>8.</i><span><b>IDE Setup</b><span class="d"><code>pip install scikit-learn joblib</code></span></span></p><p class="sm-item"><i>9.</i><span><b>Code Examples</b><span class="d">3 demos + Quick Checks</span></span></p><p class="sm-item"><i>10.</i><span><b>References</b><span class="d">4 official docs</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox sm-p3" data-start="22"><div class="sm-head"><span class="sm-step">3</span><span><b>Practice</b><small>Lab</small></span></div><p class="sm-item"><i>11.</i><span><b>Exercise 1: Guided</b><span class="d">Read the Run Log</span></span></p><p class="sm-item"><i>12.</i><span><b>Exercise 2: Applied</b><span class="d">Survive a Missing Model File</span></span></p><p class="sm-item"><i>13.</i><span><b>Exercise 3: Advanced</b><span class="d">One Function for the Whole Night</span></span></p></div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 2 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">3. Business Context</span></div>
+  <div class="title">From a Model to a Decision System</div><div class="rule"></div>
+  <div class="body grid2" style="grid-template-columns: 1fr 1.15fr;"><div class="card fitbox"><div class="tag">KEY POINTS</div><ul class="tight"><li>A decision system has four stages, run every night as one batch (a group of records processed together):</li><li>Batch vs real-time:<ul class="tight"><li><b>Batch</b> scoring runs on a schedule, such as every night, for many records at once. It is cheaper, and fine when decisions can wait a few hours.</li><li><b>Real-time</b> scoring answers one request within milliseconds, for example while a customer waits at the checkout. It is faster but costs more to build and run.</li></ul></li><li>Models get worse over time, because customers and markets change.<ul class="tight"><li><b>Data drift:</b> the new data no longer looks like the training data (for example, purchases are much larger in the holiday season)</li><li><b>Performance decay:</b> accuracy on recent, checked cases falls</li></ul></li></ul></div><div class="card fitbox"><div class="tag">SEE IT ON REAL DATA</div><table class="mdtable"><tr><th>Stage</th><th>What happens</th><th>Example</th></tr><tr><td>Ingestion</td><td>collect the day&#x27;s data</td><td>120,000 card transactions</td></tr><tr><td>Validation</td><td>check it before use</td><td>no missing values, all columns present</td></tr><tr><td>Scoring</td><td>the model gives each record a probability</td><td>fraud probability from 0 to 1</td></tr><tr><td>Action</td><td>a business rule turns scores into actions</td><td>hold every transaction at 0.5 or above</td></tr></table></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 3 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">4. Data Basics</span></div>
+  <div class="title">Saving a Model and Watching It</div><div class="rule"></div>
+  <div class="body"><div class="card fitbox"><div class="tag">KEY POINTS</div><ul class="tight"><li>Training is slow and done rarely; scoring is fast and done often.<ul class="tight"><li><code>joblib.dump(model, &quot;models/fraud_model.joblib&quot;)</code> saves it</li><li><code>joblib.load(&quot;models/fraud_model.joblib&quot;)</code> loads it back, ready to predict, with no retraining</li></ul></li><li>A simple drift check compares each feature&#x27;s average in the new batch with its average in the training data:<ul class="tight"><li>change in percent = (new average - training average) / training average x 100</li><li>Our rule: flag a feature when the change is more than 20% in either direction</li></ul></li><li>A run log records every night&#x27;s stages with their record counts and latency (how long a stage took, in milliseconds; 1,000 ms = 1 second).</li></ul></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 4 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">5. Lab Practice Dataset</span></div>
+  <div class="title">The Data for Today</div><div class="rule"></div>
+  <div class="body grid2" style="grid-template-columns: 1fr 2.2fr;"><div class="card fitbox"><div class="tag">FILES</div><ul class="tight"><li><code>data/session_03_04_dataset.csv</code></li><li><code>data/session_04_01_new_batch.csv</code></li><li><code>data/session_04_01_dataset.csv</code></li></ul><p>Run log columns:</p></div><div class="card fitbox"><div class="tag">COLUMNS</div><table class="mdtable cols"><tr><td><code>Run_Date</code></td><td>The night of the run, <code>2024-12-01</code> to <code>2024-12-05</code>.</td></tr><tr><td><code>Pipeline_Stage</code></td><td><code>Ingestion</code>, <code>Validation</code>, <code>Scoring</code>, or <code>Action</code>.</td></tr><tr><td><code>Records_Count</code></td><td>Records processed by the stage. For <code>Action</code>, the number of held transactions.</td></tr><tr><td><code>Latency_Ms</code></td><td>Time the stage took, in milliseconds.</td></tr><tr><td><code>Model_Accuracy</code></td><td>Accuracy on that night&#x27;s investigated cases. Filled only for the <code>Scoring</code> stage; empty (<code>NaN</code>) for the others.</td></tr></table></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 5 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">6. Keywords</span></div>
+  <div class="title">6 Terms You Need Today</div><div class="rule"></div>
+  <div class="body grid3" style="grid-template-rows: repeat(2, 1fr);"><div class="card fitbox"><div class="tag">TERM 1</div><h2><code>End-to-End Decision System</code></h2><p class="what"><b>What:</b> ingestion, validation, scoring, and action joined into one automatic run</p><p class="why"><b>Why:</b> turns predictions into business actions without manual steps</p></div><div class="card fitbox"><div class="tag">TERM 2</div><h2><code>Batch vs Real-Time Scoring</code></h2><p class="what"><b>What:</b> many records on a schedule vs one record on request</p><p class="why"><b>Why:</b> the business deadline decides which one is worth its cost</p></div><div class="card fitbox"><div class="tag">TERM 3</div><h2><code>Model Persistence</code> (<code>joblib</code>)</h2><p class="what"><b>What:</b> saving a trained model to a file and loading it later</p><p class="why"><b>Why:</b> train once, score every night</p></div><div class="card fitbox"><div class="tag">TERM 4</div><h2><code>Data Drift</code></h2><p class="what"><b>What:</b> new data that no longer looks like the training data</p><p class="why"><b>Why:</b> a model is only reliable on data like the data it learned from</p></div><div class="card fitbox"><div class="tag">TERM 5</div><h2><code>Monitoring</code></h2><p class="what"><b>What:</b> tracking counts, latency, and accuracy for every run</p><p class="why"><b>Why:</b> catches a failing system before customers do</p></div><div class="card fitbox"><div class="tag">TERM 6</div><h2><code>Fallback</code></h2><p class="what"><b>What:</b> a simple, safe rule used when the model is not available</p><p class="why"><b>Why:</b> the business keeps running when something breaks</p></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 6 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">7. Core Foundations</span></div>
+  <div class="title">How It Works</div><div class="rule"></div>
+  <div class="body f7" data-uniform style="display:grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: .16in;"><div class="card fitbox" data-start="24"><div class="tag">7.1</div><h2>Train once, use many times</h2><p class="remember"><b>Remember:</b> save the whole pipeline once; load it every night.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.2</div><h2>Probabilities, not just yes or no</h2><p class="remember"><b>Remember:</b> use probabilities when the cut-off is a business decision.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.3</div><h2>Data drift</h2><p class="remember"><b>Remember:</b> compare new averages with training averages, in both directions.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.4</div><h2>Monitoring</h2><p class="remember"><b>Remember:</b> log every run, then watch the trends, not just single nights.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.5</div><h2>When something breaks</h2><p class="remember"><b>Remember:</b> plan for failure, and always report which method made the decisions.</p></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 7 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">7. Core Foundations: On Real Data</span></div>
+  <div class="title">7.1 Train once, use many times: On Real Data</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: .12in;"><div class="card fitbox" data-start="19"><div class="tag">SEE IT ON REAL DATA</div><table class="mdtable"><tr><th>Step</th><th>Code</th><th>Result</th></tr><tr><td>Save</td><td><code>joblib.dump(model, &quot;models/fraud_model.joblib&quot;)</code></td><td>a small file, about 1.7 KB</td></tr><tr><td>Load</td><td><code>loaded = joblib.load(&quot;models/fraud_model.joblib&quot;)</code></td><td>the same trained model</td></tr><tr><td>Check</td><td><code>(model.predict_proba(X) == loaded.predict_proba(X)).all()</code></td><td><code>True</code>: identical predictions</td></tr></table></div><div class="check"><b>Remember:</b> save the whole pipeline once; load it every night.</div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 8 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Code Demonstration 1</span></div>
+  <div class="title">Train Once, Save to a File</div><div class="rule"></div>
+  <div class="body">
+    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
+      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S41_demo_1.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
+<pre><span class="sec"># 1. Input: the investigated transactions from Session 3.4</span>
+import os
+import joblib
+import pandas as pd
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+train = pd.read_csv(&quot;data/session_03_04_dataset.csv&quot;)
+features = [&quot;Transaction_Amount_USD&quot;, &quot;Foreign_IP_Flag&quot;,
+            &quot;Failed_Login_Attempts_Count&quot;]
+
+<span class="sec"># 2. Process: scale + logistic regression, trained in one Pipeline</span>
+model = Pipeline([
+    (&quot;scale&quot;, StandardScaler()),
+    (&quot;classify&quot;, LogisticRegression()),
+])
+model.fit(train[features], train[&quot;Actual_Fraud_Binary&quot;])
+
+<span class="sec"># 3. Output: save the trained model as a file</span>
+os.makedirs(&quot;models&quot;, exist_ok=True)
+joblib.dump(model, &quot;models/fraud_model.joblib&quot;)
+print(&quot;Saved: models/fraud_model.joblib&quot;)
+print(&quot;Training accuracy:&quot;, model.score(train[features], train[&quot;Actual_Fraud_Binary&quot;]))
+</pre>
+    </div>
+    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li>First time only, in the Terminal: <code>pip install scikit-learn joblib</code></li><li>The training data is the 16 investigated transactions from Session 3.4; the model uses 3 features.</li><li><code>Pipeline([(&quot;scale&quot;, StandardScaler()), (&quot;classify&quot;, LogisticRegression())])</code> joins two steps into one object: first standardize, then classify.</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><div class="outbox">Saved: models/fraud_model.joblib
+Training accuracy: 0.9375
+</div><ul class="tight"><li>The file now exists in the <code>models</code> folder, visible in Panel <code>[1]</code>.</li></ul></div></div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 9 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Quick Check 1</span></div>
+  <div class="title">Quick Check 1: <code>os.path.exists()</code></div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid2 qc" style="flex: 1; min-height: 0;">
+      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>os.path.exists()</code></h2><p><code>os.path.exists(path)</code> returns <code>True</code> if the file exists. Why: the nightly job should confirm the model is there before it starts.</p></div>
+      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add one line to part <b>3. Output</b>: <code>print(os.path.______(&quot;models/fraud_model.joblib&quot;))</code></p></div>
+    </div>
+    <div class="check"><b>Check:</b> the Terminal shows <code>True</code>.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 10 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Code Demonstration 2</span></div>
+  <div class="title">The Nightly Job: Load, Score, Decide</div><div class="rule"></div>
+  <div class="body">
+    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
+      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S41_demo_2.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
+<pre><span class="sec"># 1. Input: the saved model and tonight&#x27;s new transactions</span>
+import joblib
+import pandas as pd
+model = joblib.load(&quot;models/fraud_model.joblib&quot;)
+batch = pd.read_csv(&quot;data/session_04_01_new_batch.csv&quot;)
+features = [&quot;Transaction_Amount_USD&quot;, &quot;Foreign_IP_Flag&quot;,
+            &quot;Failed_Login_Attempts_Count&quot;]
+
+<span class="sec"># 2. Process: fraud probability, then the business rule (hold at 0.5 or above)</span>
+batch[&quot;Fraud_Probability&quot;] = model.predict_proba(batch[features])[:, 1].round(3)
+batch[&quot;Decision&quot;] = &quot;Pass&quot;
+batch.loc[batch[&quot;Fraud_Probability&quot;] &gt;= 0.5, &quot;Decision&quot;] = &quot;Hold&quot;
+
+<span class="sec"># 3. Output: print and save tonight&#x27;s decisions</span>
+print(batch[[&quot;Transaction_ID&quot;, &quot;Fraud_Probability&quot;, &quot;Decision&quot;]])
+batch.to_csv(&quot;data/nightly_decisions.csv&quot;, index=False)
+</pre>
+    </div>
+    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>joblib.load(...)</code> brings back the trained pipeline: no training happens here, so this script runs in a fraction of a second.</li><li><code>model.predict_proba(batch[features])[:, 1]</code> gives each new transaction its fraud probability (section 7.2).</li><li><code>batch[&quot;Decision&quot;] = &quot;Pass&quot;</code> sets every row to &quot;Pass&quot;; <code>batch.loc[batch[&quot;Fraud_Probability&quot;] &gt;= 0.5, &quot;Decision&quot;] = &quot;Hold&quot;</code> changes only the risky rows.</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><div class="outbox">  Transaction_ID  Fraud_Probability Decision
+0     N-TXN-9001              0.862     Hold
+1     N-TXN-9002              0.070     Pass
+...</div><ul class="tight"><li>4 of 8 transactions are held, all foreign purchases above $2,800.</li></ul></div></div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 11 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Quick Check 2</span></div>
+  <div class="title">Quick Check 2: Run date stamp</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid2 qc" style="flex: 1; min-height: 0;">
+      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2>Run date stamp</h2><p><code>from datetime import date</code> and <code>date.today()</code> give today&#x27;s date. Why: every decision file must show when the decisions were made, for audits.</p></div>
+      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add <code>from datetime import date</code> to part <b>1. Input</b>, and one line at the end of part <b>2. Process</b>: <code>batch[&quot;Run_Date&quot;] = str(date._____())</code></p></div>
+    </div>
+    <div class="check"><b>Check:</b> the saved <code>data/nightly_decisions.csv</code> has a <code>Run_Date</code> column with today&#x27;s date, written as <code>YYYY-MM-DD</code>.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 12 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Code Demonstration 3</span></div>
+  <div class="title">Drift Check: Does Tonight Look Like Training?</div><div class="rule"></div>
+  <div class="body">
+    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
+      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S41_demo_3.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
+<pre><span class="sec"># 1. Input: training data and tonight&#x27;s batch</span>
+import pandas as pd
+train = pd.read_csv(&quot;data/session_03_04_dataset.csv&quot;)
+batch = pd.read_csv(&quot;data/session_04_01_new_batch.csv&quot;)
+features = [&quot;Transaction_Amount_USD&quot;, &quot;Foreign_IP_Flag&quot;,
+            &quot;Failed_Login_Attempts_Count&quot;]
+
+<span class="sec"># 2. Process: compare the averages, feature by feature</span>
+drift = pd.DataFrame({
+    &quot;Train_Avg&quot;: train[features].mean().round(2),
+    &quot;Batch_Avg&quot;: batch[features].mean().round(2),
+})
+drift[&quot;Change_Pct&quot;] = (
+    (drift[&quot;Batch_Avg&quot;] - drift[&quot;Train_Avg&quot;]) / drift[&quot;Train_Avg&quot;] * 100
+).round(1)
+drift[&quot;Drift_Flag&quot;] = drift[&quot;Change_Pct&quot;] &gt; 20
+
+<span class="sec"># 3. Output: the drift report</span>
+print(drift)
+</pre>
+    </div>
+    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>train[features].mean()</code> and <code>batch[features].mean()</code> give each feature&#x27;s average in the two files.</li><li>Putting both into <code>pd.DataFrame({...})</code> lines them up by feature name, one row per feature.</li><li><code>Change_Pct</code> is the change in percent from the training average (section 7.3).</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><ul class="tight"><li>Tonight&#x27;s purchases are on average 86% larger than the training purchases: amount has drifted.</li></ul></div></div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 13 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Quick Check 3</span></div>
+  <div class="title">Quick Check 3: <code>.abs()</code></div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid2 qc" style="flex: 1; min-height: 0;">
+      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>.abs()</code></h2><p><code>column.abs()</code> removes the minus sign. Why: a feature that <b>falls</b> by 30% has drifted too; <code>&gt; 20</code> alone misses it.</p></div>
+      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>In part <b>2. Process</b>, change the flag line to <code>drift[&quot;Drift_Flag&quot;] = drift[&quot;Change_Pct&quot;].___() &gt; 20</code></p></div>
+    </div>
+    <div class="check"><b>Check:</b> the flags do not change for tonight&#x27;s batch, but a change of <code>-30.0</code> would now be flagged as well.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 14 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">10. Official References</span></div>
+  <div class="title">Where to Look Things Up</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: .14in;"><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Scikit-Learn Model Persistence Guide (Joblib Documentation)</h2><p>https://scikit-learn.org/stable/model_persistence.html</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Python Library: os.path (Checking Files and Paths)</h2><p>https://docs.python.org/3/library/os.path.html</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>MLflow Official Documentation: Open Source Platform for the Machine Learning Lifecycle</h2><p>https://mlflow.org/docs/latest/index.html</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Sculley et al.: Hidden Technical Debt in Machine Learning Systems (NeurIPS Standards)</h2><p>https://papers.nips.cc/paper/5656-hidden-technical-debt-in-machine-learning-systems.pdf</p></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 15 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">11-13. Exercises</span></div>
+  <div class="title">Three Exercises</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid3 exg" data-uniform style="flex: 1; min-height: 0;"><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 1: GUIDED</div><h2>Read the Run Log</h2><p><b>Goal:</b> Find the nights in the run log that need attention</p><p><b>File:</b> <code>YourName_S41_monitoring.py</code></p><p class="remember"><b>Check:</b> alerts on <code>2024-12-04</code> and <code>2024-12-05</code></p></div><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 2: APPLIED</div><h2>Survive a Missing Model File</h2><p><b>Goal:</b> Keep the nightly job working without the model file</p><p><b>File:</b> <code>YourName_S41_practice.py</code></p><p class="remember"><b>Check:</b> fallback holds 3; the model holds 4</p></div><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 3: ADVANCED</div><h2>One Function for the Whole Night</h2><p><b>Goal:</b> One function for the whole night: validate, score, act, report</p><p><b>File:</b> <code>YourName_S41_challenge.py</code></p><p class="remember"><b>Check:</b> <code>held: 4</code>, <code>needs_review: True</code></p></div></div>
+    <div class="check">Full steps for all three exercises: sections 11-13 of the course page.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 16 / 16</span></div>
+</section>
+
+<script>
+window.__fitDone = false;
+function fitAll() {
+  document.querySelectorAll('.fitbox').forEach((box) => {
+    let size = parseFloat(box.dataset.start || '18');
+    const floor = parseFloat(box.dataset.floor || '15');
+    const apply = () => box.querySelectorAll('p, li, td, th, .outbox, pre').forEach((el) => {
+      if (el.tagName === 'PRE') { el.style.fontSize = Math.max(9.5, size - 3.5) + 'pt'; return; }
+      if (el.classList.contains('outbox')) { el.style.fontSize = Math.max(11, size - 4.5) + 'pt'; return; }
+      el.style.fontSize = size + 'pt';
+    });
+    apply();
+    const over = () => box.scrollHeight > box.clientHeight + 1 || box.scrollWidth > box.clientWidth + 1
+      || [...box.querySelectorAll('pre')].some((pre) => pre.scrollHeight > pre.clientHeight + 6 || pre.scrollWidth > pre.clientWidth + 6);
+    while (over() && size > floor) { size -= 0.5; apply(); }
+    if (over()) box.dataset.overflow = 'yes';
+    box.__apply = (v) => { size = v; apply(); };
+    box.dataset.size = size;
+  });
+  // cards on one slide share one size, so they read as a set
+  document.querySelectorAll('[data-uniform]').forEach((group) => {
+    const boxes = [...group.querySelectorAll('.fitbox')];
+    const min = Math.min(...boxes.map((b) => parseFloat(b.dataset.size)));
+    boxes.forEach((b) => b.__apply(min));
+  });
+  window.__fitDone = true;
+}
+document.fonts.ready.then(() => { fitAll(); document.querySelectorAll('[data-overflow]').forEach((el) => el.removeAttribute('data-overflow')); fitAll(); });
+</script>
+
+</body>
+</html>

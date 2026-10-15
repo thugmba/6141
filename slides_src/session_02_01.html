@@ -290,6 +290,22 @@ ol.ex3 li { font-size: 18pt; line-height: 1.25; margin: .06in 0; }
 .f7 .card ul { margin-top: .02in; }
 .f7 .card li { font-size: 17pt; }
 .f7 .card h2 { font-size: 21pt; }
+
+/* session map with content */
+.sm-phase.fitbox { display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
+.sm-phase p.sm-item { display: flex; gap: .1in; margin: .06in 0; line-height: 1.15; }
+.sm-item i { font-style: normal; font-family: "DejaVu Sans Mono", monospace; font-weight: bold; color: #991B1B; min-width: .5in; flex-shrink: 0; }
+.sm-p3 .sm-item i { color: #15803D; }
+.sm-item b { display: block; font-size: 1em; }
+.sm-item span.d { display: block; font-size: .9em; color: #334155; }
+.sm-item code { font-size: .85em; white-space: normal; overflow-wrap: anywhere; }
+/* end session map */
+
+/* lean slides: bigger text */
+.f7 .card h2, .exg .card h2 { font-size: 25pt; margin-bottom: .14in; }
+.f7 .card p, .exg .card p { font-size: 21pt; line-height: 1.3; margin: .1in 0; }
+.f7 .card p.remember, .exg .card p.remember { font-size: 21pt; margin-top: .2in; }
+.f7 .card .tag, .exg .card .tag { font-size: 18pt; }
 </style>
 
 </head>
@@ -324,26 +340,14 @@ ol.ex3 li { font-size: 18pt; line-height: 1.25; margin: .06in 0; }
       </ol>
     </div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 1 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 1 / 16</span></div>
 </section>
 
 <section class="slide">
   <div><span class="eyebrow">MODULE 2</span><span class="kicker">Session Map</span></div>
   <div class="title">Session Map: Follow the Numbers</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: .14in;">
-    <div class="sm-q"><b>Today's question:</b> What does each competitor charge, and who discounts most?</div>
-    <div class="sm-phases">
-      <div class="sm-phase"><div class="sm-head"><span class="sm-step">1</span><span><b>Why it matters</b><small>Lecture, part 1</small></span></div>
-        <p><i>1.</i> Session Purpose</p><p><i>2.</i> Learning Outcomes</p><p><i>3.</i> Business Context: Why Scrape?</p><p><i>4.</i> Data Basics: Web Request to HTML</p></div>
-      <div class="sm-arrow">&#8594;</div>
-      <div class="sm-phase"><div class="sm-head"><span class="sm-step">2</span><span><b>Learn the tools</b><small>Lecture, part 2</small></span></div>
-        <p><i>5.</i> Lab Practice Dataset</p><p><i>6.</i> Keywords</p><p><i>7.</i> Core Foundations</p><p><i>8.</i> IDE Workflow</p><p><i>9.</i> Code Examples + Quick Checks</p><p><i>10.</i> Official References</p></div>
-      <div class="sm-arrow">&#8594;</div>
-      <div class="sm-phase sm-p3"><div class="sm-head"><span class="sm-step">3</span><span><b>Practice</b><small>Lab</small></span></div>
-        <p><i>11.</i> Exercise 1: Guided - Competitor Price Benchmark</p><p><i>12.</i> Exercise 2: Applied - Scrape Stock Levels Safely</p><p><i>13.</i> Exercise 3: Advanced - Detect a Price Change</p></div>
-    </div>
-  </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 2 / 19</span></div>
+                  <div class="body" style="flex-direction: column; gap: .14in;"><div class="sm-q"><b>Today's question:</b> What does each competitor charge, and who discounts most?</div><div class="sm-phases"><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">1</span><span><b>Why it matters</b><small>Lecture, part 1</small></span></div><p class="sm-item"><i>1.</i><span><b>Session Purpose</b><span class="d">answer today&#x27;s question</span></span></p><p class="sm-item"><i>2.</i><span><b>Learning Outcomes</b><span class="d">3 skills you will show today</span></span></p><p class="sm-item"><i>3.</i><span><b>Business Context</b><span class="d">Why Scrape?</span></span></p><p class="sm-item"><i>4.</i><span><b>Data Basics</b><span class="d">From Web Request to HTML</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">2</span><span><b>Learn the tools</b><small>Lecture, part 2</small></span></div><p class="sm-item"><i>5.</i><span><b>Lab Dataset</b><span class="d">2 web pages, 1 CSV</span></span></p><p class="sm-item"><i>6.</i><span><b>Keywords</b><span class="d">6 terms</span></span></p><p class="sm-item"><i>7.</i><span><b>Core Foundations</b><span class="d">6 ideas, one at a time</span></span></p><p class="sm-item"><i>8.</i><span><b>IDE Setup</b><span class="d"><code>pip install beautifulsoup4</code></span></span></p><p class="sm-item"><i>9.</i><span><b>Code Examples</b><span class="d">3 demos + Quick Checks</span></span></p><p class="sm-item"><i>10.</i><span><b>References</b><span class="d">3 official docs</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox sm-p3" data-start="22"><div class="sm-head"><span class="sm-step">3</span><span><b>Practice</b><small>Lab</small></span></div><p class="sm-item"><i>11.</i><span><b>Exercise 1: Guided</b><span class="d">Competitor Price Benchmark</span></span></p><p class="sm-item"><i>12.</i><span><b>Exercise 2: Applied</b><span class="d">Scrape Stock Levels Safely</span></span></p><p class="sm-item"><i>13.</i><span><b>Exercise 3: Advanced</b><span class="d">Detect a Price Change on a New Site</span></span></p></div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 2 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -378,7 +382,7 @@ ol.ex3 li { font-size: 18pt; line-height: 1.25; margin: .06in 0; }
       </div>
     </div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 3 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 3 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -409,7 +413,7 @@ ol.ex3 li { font-size: 18pt; line-height: 1.25; margin: .06in 0; }
       </div>
     </div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 4 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 4 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -426,7 +430,7 @@ ol.ex3 li { font-size: 18pt; line-height: 1.25; margin: .06in 0; }
     </div>
     <div class="check">All three files are in the <code>data/</code> folder. Every name and price is fictional teaching data.</div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 5 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 5 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -452,78 +456,21 @@ ol.ex3 li { font-size: 18pt; line-height: 1.25; margin: .06in 0; }
       <p class="what"><b>What:</b> follow <code>robots.txt</code>, pause between requests, stay on public pages</p>
       <p class="why"><b>Why:</b> protects the website and your company</p></div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 6 / 19</span></div>
-</section>
-
-<section class="slide">
-  <div><span class="eyebrow">MODULE 2</span><span class="kicker">6. Keywords: Visual Map</span></div>
-  <div class="title">How the Six Terms Fit Together</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="fit" style="grid-template-rows: 1.15fr 1fr;">
-      <div class="fit-row">
-        <div class="fit-box" style="flex: 1.3;">
-          <div class="tag">STEP 1: HTML TEXT FROM THE GET REQUEST</div>
-<div class="rawcsv">&lt;div class="product"&gt;
-  &lt;h3 class="name"&gt;Office Desk Chair&lt;/h3&gt;
-  &lt;span <b>class="price"</b>&gt;$49.50&lt;/span&gt;
-  &lt;span class="stock"&gt;120 units&lt;/span&gt;
-&lt;/div&gt;
-... 3 more product cards</div>
-        </div>
-        <div class="fit-arrow"><span class="big">&#8594;</span><code>BeautifulSoup()</code></div>
-        <div class="fit-box" style="flex: 1;">
-          <div class="tag">STEP 2: DOM TREE</div>
-          <div class="tree">
-            <div class="tn t0">div.catalog</div>
-            <div class="tn t1">div.product <small>SKU-801</small></div>
-            <div class="tn t2">h3.name</div>
-            <div class="tn t2 hit">span.price</div>
-            <div class="tn t2">span.stock</div>
-            <div class="tn t1">div.product <small>&#215; 3 more</small></div>
-          </div>
-        </div>
-      </div>
-      <div class="fit-row">
-        <div class="fit-box" style="flex: 1;">
-          <div class="tag">STEP 3: CSS SELECTOR PICKS THE VALUES</div>
-          <div class="sac">
-            <div class="fit-arrow"><code>.select(".price")</code><span class="big">&#8594;</span></div>
-            <table class="mini">
-              <tr><th>price text</th></tr>
-              <tr><td class="num">$49.50</td></tr>
-              <tr><td class="num">$320.00</td></tr>
-              <tr><td class="num">$429.00</td></tr>
-              <tr><td class="num">$195.00</td></tr>
-            </table>
-            <div class="fit-arrow"><code>float()</code><span class="big">&#8594;</span></div>
-            <table class="mini">
-              <tr><th class="new">price_usd</th></tr>
-              <tr><td class="num new">49.5</td></tr>
-              <tr><td class="num new">320.0</td></tr>
-              <tr><td class="num new">429.0</td></tr>
-              <tr><td class="num new">195.0</td></tr>
-            </table>
-            <p class="cap" style="max-width: 4in;">Yellow in Steps 1-2: the tag the selector <code>.price</code> matches. Green: numbers pandas can calculate with</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 7 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 6 / 16</span></div>
 </section>
 
 <section class="slide">
   <div><span class="eyebrow">MODULE 2</span><span class="kicker">7. Core Foundations</span></div>
   <div class="title">How Scraping Works</div><div class="rule"></div>
   <div class="body f7" style="display:grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: .16in;">
-    <div class="card"><div class="tag">7.1</div><h2>Text with Tags</h2><ul><li><code>&lt;span class="price"&gt;$49.50&lt;/span&gt;</code></li><li>The class label tells you where the value is</li></ul><p class="remember"><b>Remember:</b> find the tag, take the text</p></div>
-    <div class="card"><div class="tag">7.2</div><h2>Tags Inside Tags</h2><ul><li>Whole page: 4 prices; inside one card: 1</li><li>Loop over cards, then search inside each</li></ul><p class="remember"><b>Remember:</b> values stay with their product</p></div>
-    <div class="card"><div class="tag">7.3</div><h2>Four Ways to Find Tags</h2><ul><li>First: <code>.find()</code>, <code>.select_one()</code></li><li>All: <code>.find_all()</code>, <code>.select()</code></li></ul><p class="remember"><b>Remember:</b> then <code>.text</code> for the words</p></div>
-    <div class="card"><div class="tag">7.4</div><h2>Text Is Not a Number Yet</h2><ul><li><code>"$49.50"</code> &#8594; <code>.replace("$", "")</code> &#8594; <code>float()</code> &#8594; <code>49.5</code></li><li><code>float("$49.50")</code> raises <code>ValueError</code></li></ul><p class="remember"><b>Remember:</b> clean first, then convert</p></div>
-    <div class="card"><div class="tag">7.5</div><h2>Class, Not Position</h2><ul><li>"2nd tag" breaks when a SALE badge appears</li><li><code>.price</code> follows the label</li></ul><p class="remember"><b>Remember:</b> recheck after a redesign</p></div>
-    <div class="card"><div class="tag">7.6</div><h2>Missing Tag = <code>None</code></h2><ul><li><code>SKU-807</code> has no stock tag</li><li><code>None.text</code> raises <code>AttributeError</code></li></ul><p class="remember"><b>Remember:</b> check <code>is not None</code> first</p></div>
+    <div class="card"><div class="tag">7.1</div><h2>Text with Tags</h2><p><code>class="price"</code> marks where the price is</p><p class="remember"><b>Remember:</b> find the tag, take the text</p></div>
+    <div class="card"><div class="tag">7.2</div><h2>Tags Inside Tags</h2><p>Loop over cards, then search inside each</p><p class="remember"><b>Remember:</b> values stay with their product</p></div>
+    <div class="card"><div class="tag">7.3</div><h2>Four Ways to Find Tags</h2><p>First: <code>.find()</code>, <code>.select_one()</code><br>All: <code>.find_all()</code>, <code>.select()</code></p><p class="remember"><b>Remember:</b> then <code>.text</code> for the words</p></div>
+    <div class="card"><div class="tag">7.4</div><h2>Text Is Not a Number Yet</h2><p><code>"$49.50"</code> &#8594; <code>49.5</code></p><p class="remember"><b>Remember:</b> clean first, then convert</p></div>
+    <div class="card"><div class="tag">7.5</div><h2>Class, Not Position</h2><p><code>.price</code> follows the label</p><p class="remember"><b>Remember:</b> recheck after a redesign</p></div>
+    <div class="card"><div class="tag">7.6</div><h2>Missing Tag = <code>None</code></h2><p><code>None.text</code> raises <code>AttributeError</code></p><p class="remember"><b>Remember:</b> check <code>is not None</code> first</p></div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 8 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 7 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -574,25 +521,7 @@ ol.ex3 li { font-size: 18pt; line-height: 1.25; margin: .06in 0; }
       </div>
     </div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 9 / 19</span></div>
-</section>
-
-<section class="slide">
-  <div><span class="eyebrow">MODULE 2</span><span class="kicker">8. Development Workflow</span></div>
-  <div class="title">Build, Test, and Diagnose in the IDE</div><div class="rule"></div>
-  <div class="body">
-    <div class="shot">
-      <img src="../assets/antigravity_ide_interface.png" alt="Google Antigravity IDE with its four labeled panels">
-      <p class="cap">Example: Terminal <code>[4]</code> shows a <code>NameError</code>; AI Chat <code>[3]</code> explains the fix</p>
-    </div>
-    <div class="steps">
-      <div class="step"><span class="badge">[1]</span><div><h3>File Explorer</h3><p>Name it <code>YourName_S21_demo_1.py</code></p><p class="eg">Example: <code>Reacher_S21_demo_1.py</code></p><p>Check the dataset is in <code>data/</code></p></div></div>
-      <div class="step"><span class="badge">[2]</span><div><h3>Code Editor</h3><p>Write a few lines, run, repeat</p><p>Small steps keep errors small</p></div></div>
-      <div class="step"><span class="badge">[3]</span><div><h3>AI Agent Chat</h3><p>Error? Capture the traceback (Python's error report) with <code>Win + Shift + S</code></p><p>Paste with <code>Ctrl + V</code>, ask why</p></div></div>
-      <div class="step"><span class="badge">[4]</span><div><h3>Terminal</h3><p>Run <code>python</code> + your script name</p><p>Return code <code>0</code> = no errors</p><p class="eg">First time only: <code>pip install beautifulsoup4</code></p></div></div>
-    </div>
-  </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 10 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 8 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -614,12 +543,12 @@ print("Page title:", soup.title.text)
 print("First product:", first_name)</pre>
     </div>
     <div class="notes">
-      <div class="card xwide"><div class="tag">1. INPUT</div><h2><code>open().read()</code></h2><ul><li>Reads the saved page as one long text</li><li>No <code>encoding=</code> needed: the file has only plain English characters</li><li>On a live site, <code>requests.get(url).text</code> gives the same text (not run in class)</li></ul></div>
+      <div class="card xwide"><div class="tag">1. INPUT</div><h2><code>open().read()</code></h2><ul><li>Reads the saved page as one long text</li><li>First time only, in the Terminal: <code>pip install beautifulsoup4</code></li><li>On a live site, <code>requests.get(url).text</code> gives the same text (not run in class)</li></ul></div>
       <div class="card wide"><div class="tag">2. PROCESS</div><h2><code>BeautifulSoup()</code> and <code>.find()</code></h2><ul><li><code>"html.parser"</code>: the built-in HTML reader</li><li><code>.find("h3")</code>: the first <code>h3</code> tag</li><li><code>.text</code>: the words inside it</li></ul></div>
       <div class="card"><div class="tag">3. OUTPUT</div><h2><code>soup.title.text</code></h2><p>The page title, then the first product</p></div>
     </div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 11 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 9 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -642,7 +571,7 @@ print("First product:", first_name)</pre>
     </div>
     <div class="check"><b>Check:</b> the Terminal shows <code>Products on page: 4</code>.</div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 12 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 10 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -676,7 +605,7 @@ for item in products:
       <div class="card"><div class="tag">3. OUTPUT</div><h2>One dictionary per product</h2><p>4 lines, one per card</p></div>
     </div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 13 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 11 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -699,7 +628,7 @@ for item in products:
     </div>
     <div class="check"><b>Check:</b> the output does not change: the first line is still <code>{'sku': 'SKU-801', 'name': 'Office Desk Chair', 'price_usd': 49.5}</code>.</div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 14 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 12 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -729,7 +658,7 @@ electronics.to_csv("data/electronics_prices.csv", index=False)</pre>
       <div class="card"><div class="tag">3. OUTPUT</div><h2><code>.to_csv()</code></h2><ul><li>Saves the table as a new CSV file</li><li><code>index=False</code>: leave out the row labels</li></ul></div>
     </div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 15 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 13 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -753,7 +682,7 @@ print("Lowest price:", lowest)</div>
     </div>
     <div class="check"><b>Check:</b> the Terminal shows <code>Lowest price: 263.5</code> (GammaGlobal).</div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 16 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 14 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -764,67 +693,54 @@ print("Lowest price:", lowest)</div>
     <div class="card"><div class="tag">REQUESTS</div><h2>requests.readthedocs.io</h2><p>How <code>requests.get(url)</code> fetches a live page, and how to send a User-Agent</p></div>
     <div class="card"><div class="tag">W3C HTML STANDARD</div><h2>w3.org/TR/html52</h2><p>The World Wide Web Consortium's official rules for HTML tags</p></div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 17 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 15 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 2</span><span class="kicker">11-12. Exercises</span></div>
-  <div class="title">Exercise 1 and Exercise 2</div><div class="rule"></div>
+  <div><span class="eyebrow">MODULE 2</span><span class="kicker">11-13. Exercises</span></div>
+  <div class="title">Three Exercises</div><div class="rule"></div>
   <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid2" style="flex: 1; min-height: 0;">
-      <div class="card"><div class="tag">EXERCISE 1: GUIDED PRACTICE</div><h2>Competitor Price Benchmark</h2>
-        <ul>
-          <li>Create <code>YourName_S21_benchmark.py</code></li>
-          <li>Load <code>data/session_02_01_dataset.csv</code> and add <code>Effective_Price_USD</code></li>
-          <li>Group by <code>["Category_Name", "Competitor_Name"]</code>: average discount and effective price</li>
-          <li>Find the deepest discount and the lowest price in Electronics and Hardware</li>
-        </ul></div>
-      <div class="card"><div class="tag">EXERCISE 2: APPLIED PRACTICE</div><h2>Scrape Stock Levels Safely</h2>
-        <ul>
-          <li>In <code>YourName_S21_practice.py</code>, extend Demo 2 to read <code>.stock</code></li>
-          <li>Run it: SKU-807 has no stock tag, so read the <code>AttributeError</code> and ask AI Chat <code>[3]</code></li>
-          <li>Fix it with <code>if stock_tag is not None:</code>, else <code>"not shown"</code></li>
-          <li>Save the table with <code>.to_csv()</code> to <code>data/competitor_price_audit.csv</code></li>
-        </ul></div>
+    <div class="grid3 exg" style="flex: 1; min-height: 0;">
+      <div class="card"><div class="tag">EXERCISE 1: GUIDED</div><h2>Competitor Price Benchmark</h2>
+        <p><b>Goal:</b> who discounts most, and who is cheapest, in each category?</p>
+        <p><b>File:</b> <code>YourName_S21_benchmark.py</code></p>
+        <p class="remember"><b>Check:</b> Hardware: GammaGlobal discounts most (15%), AlphaRetail is cheapest (<code>157.5</code>)</p></div>
+      <div class="card"><div class="tag">EXERCISE 2: APPLIED</div><h2>Scrape Stock Levels Safely</h2>
+        <p><b>Goal:</b> add stock to the Demo 2 table without crashing on SKU-807</p>
+        <p><b>File:</b> <code>YourName_S21_practice.py</code></p>
+        <p class="remember"><b>Check:</b> 4 rows; SKU-807 shows <code>not shown</code></p></div>
+      <div class="card"><div class="tag">EXERCISE 3: ADVANCED</div><h2>Detect a Price Change on a New Site</h2>
+        <p><b>Goal:</b> which GammaGlobal discount changed since last week's CSV?</p>
+        <p><b>File:</b> <code>YourName_S21_challenge.py</code></p>
+        <p><b>New:</b> <code>pd.merge()</code> with <code>left_on</code>, <code>right_on</code></p>
+        <p class="remember"><b>Check:</b> only <code>SKU-811</code> changed: <code>15.0</code>% vs <code>10.0</code>%</p></div>
     </div>
-    <div class="check"><b>Success check:</b> Ex. 1: in Hardware, GammaGlobal has the deepest discount (15%) but AlphaRetail has the lowest price (<code>157.5</code>). Ex. 2: 4 rows, SKU-807 shows <code>not shown</code>.</div>
+    <div class="check">Full steps for all three exercises: sections 11-13 of the course page.</div>
   </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 18 / 19</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 16 / 16</span></div>
 </section>
 
-<section class="slide">
-  <div><span class="eyebrow">MODULE 2</span><span class="kicker">13. Exercise 3: Advanced Practice</span></div>
-  <div class="title">Detect a Price Change on a New Site</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid2" style="flex: 1; min-height: 0; grid-template-columns: 1.15fr 1fr;">
-      <div class="card"><div class="tag">WHAT TO BUILD: <code>YourName_S21_challenge.py</code></div>
-        <ol class="ex3">
-          <li>Scrape <code>session_02_01_gamma.html</code>: <code>sku</code>, <code>name</code>, <code>List_Price_Web</code>, <code>Current_Price_Web</code> (sale price if the tag exists, else list price)</li>
-          <li><code>Discount_Pct_Web</code> = (list - current) / list &#215; 100, 1 decimal</li>
-          <li>Merge with the GammaGlobal rows of the CSV</li>
-          <li><code>Discount_Changed</code> = web discount <code>!=</code> <code>Promotion_Discount_Pct</code></li>
-          <li>Print, then save <code>data/gamma_price_check.csv</code></li>
-          <li>Print <code>Products with a changed discount: N</code></li>
-        </ol></div>
-      <div class="card"><div class="tag">NEW TOOLS</div>
-        <ul>
-          <li>Key columns with different names: <code>left_on</code> for the first table, <code>right_on</code> for the second</li></ul>
-<div class="snip">pd.merge(
-    web_df, gamma_df,
-    left_on="sku", right_on="Product_SKU",
-    how="left",
-)</div>
-        <ul>
-          <li><code>!=</code>: "not equal", one <code>True</code> / <code>False</code> per row</li>
-        </ul>
-        <div class="tag" style="margin-top:.12in;">HINT</div>
-        <ul><li><code>sale_tag = card.select_one(".sale-price")</code>, then <code>if sale_tag is not None:</code></li></ul>
-      </div>
-    </div>
-    <div class="check"><b>Self-check:</b> only <code>SKU-811</code> (Electric Oven) changed: <code>15.0</code>% on the web vs <code>10.0</code>% in last week's CSV. Full steps: section 13 of the course page.</div>
-  </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 19 / 19</span></div>
-</section>
+<script>
+window.__fitDone = false;
+function fitAll() {
+  document.querySelectorAll('.fitbox').forEach((box) => {
+    let size = parseFloat(box.dataset.start || '18');
+    const floor = parseFloat(box.dataset.floor || '15');
+    const apply = () => box.querySelectorAll('p, li, td, th, .outbox, pre').forEach((el) => {
+      if (el.tagName === 'PRE') { el.style.fontSize = Math.max(9.5, size - 3.5) + 'pt'; return; }
+      if (el.classList.contains('outbox')) { el.style.fontSize = Math.max(11, size - 4.5) + 'pt'; return; }
+      el.style.fontSize = size + 'pt';
+    });
+    apply();
+    const over = () => box.scrollHeight > box.clientHeight + 1 || box.scrollWidth > box.clientWidth + 1
+      || [...box.querySelectorAll('pre')].some((pre) => pre.scrollHeight > pre.clientHeight + 6 || pre.scrollWidth > pre.clientWidth + 6);
+    while (over() && size > floor) { size -= 0.5; apply(); }
+    if (over()) box.dataset.overflow = 'yes';
+  });
+  window.__fitDone = true;
+}
+document.fonts.ready.then(() => { fitAll(); document.querySelectorAll('[data-overflow]').forEach((el) => el.removeAttribute('data-overflow')); fitAll(); });
+</script>
 
 </body>
 </html>

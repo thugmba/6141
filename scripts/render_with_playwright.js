@@ -23,6 +23,12 @@ if (!fs.existsSync(source)) throw new Error(`Missing HTML source: ${source}`);
   const page = await browser.newPage({ viewport: { width: 2400, height: 1350 }, deviceScaleFactor: 1 });
   await page.goto(pathToFileURL(source).href, { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
+  await page.waitForFunction(() => !('__fitDone' in window) || window.__fitDone === true, null, { timeout: 30000 });
+  const overflowing = await page.evaluate(() => [...document.querySelectorAll('[data-overflow="yes"]')].map((el) => {
+    const slide = el.closest('.slide');
+    return [...document.querySelectorAll('.slide')].indexOf(slide) + 1;
+  }));
+  if (overflowing.length) console.warn(`WARNING ${source}: text still overflows after autofit on slides ${[...new Set(overflowing)].join(', ')}`);
   const slides = page.locator('.slide');
   const count = await slides.count();
   if (count < 1) throw new Error(`${source} contains no .slide elements.`);

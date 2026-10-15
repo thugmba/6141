@@ -1,33 +1,580 @@
-<!doctype html><html lang="en-US"><meta charset="utf-8"><title>Session 3.3</title><style>
-@page{size:16in 9in;margin:0}*{box-sizing:border-box}body{margin:0;font-family:"Times New Roman",serif;color:#18181B}.slide{width:16in;height:9in;padding:.45in .8in .4in;display:flex;flex-direction:column;background:#fff;page-break-after:always}header{font-size:15pt;color:#991B1B;font-weight:bold}header span{margin-left:.25in;color:#64748B;font-weight:normal}h1{font-size:34pt;line-height:1.08;margin:.13in 0 .08in}h2{font-size:21pt;margin:.06in 0}.slide>i{display:block;width:1.2in;height:4px;background:#991B1B;margin-bottom:.2in}main{flex:1;min-height:0;display:grid;grid-template-columns:repeat(2,1fr);gap:.2in}main.three{grid-template-columns:repeat(3,1fr);gap:.18in}article{border:1px solid #CBD5E1;border-radius:10px;padding:.18in;overflow:hidden}article b{font-size:14pt;color:#991B1B}p,li{font-size:17pt;line-height:1.25;margin:.06in 0}footer{margin-top:.18in;border-top:1px solid #CBD5E1;padding-top:.1in;font-size:15pt;color:#64748B;display:flex;justify-content:space-between}main.overview{grid-template-columns:2fr 3fr}main.overview article{display:flex;flex-direction:column}.overview ul.lead{margin:.12in 0 0;padding-left:.32in}.overview ul.lead li{font-size:21pt}.overview .flow{margin-top:auto;font-size:16pt;color:#64748B;border-top:1px solid #CBD5E1;padding-top:.1in}.overview ol{margin:.1in 0 0;padding-left:.38in}.overview li{font-size:20pt;line-height:1.3;margin:0 0 .16in}.code{display:flex;gap:.3in}.code pre{width:58%;margin:0;background:#18181B;border-radius:10px;color:#E5E7EB;padding:.22in;font:13.5pt/1.28 "DejaVu Sans Mono",monospace;white-space:pre-wrap;overflow-wrap:anywhere;overflow:hidden}.code aside{flex:1;display:flex;flex-direction:column;gap:.13in}.code aside article{flex:1}</style><body>
-<section class="slide"><header><b>MODULE 3</b><span>Session Overview</span></header><h1>Session 3.3: Practical Machine Learning with Scikit-Learn: Model Training and Validation</h1><i></i><main class="overview"><article><b>TODAY'S PURPOSE</b><h2>Why This Session Matters</h2><ul class="lead"><li>Train your first models with Scikit-Learn</li><li>Make predictions on new cases</li><li>Measure how accurate the predictions are</li></ul><p class="flow">Today's flow: 60 min lecture, then 120 min hands-on lab</p></article><article><b>EXPECTED OUTCOMES</b><h2>By the end of today, you will be able to:</h2><ol><li>Train linear and logistic regression models</li><li>Evaluate with Root Mean Squared Error (RMSE) and cross-validation</li><li>Predict one case and fix a 1D array ValueError</li></ol></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 1 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 3</b><span>Core Vocabulary</span></header><h1>Concepts for This Session</h1><i></i><main class="three"><article><b>CONCEPT 1</b><h2>Unified Estimator API</h2><p> The standard three-stage Scikit-Learn interface: instantiate model, fit on training data (.fit()), predict on new data (.predict()), and evaluate accuracy (.score()).</p></article><article><b>CONCEPT 2</b><h2>Linear Regression</h2><p> A fundamental supervised regression algorithm that models the linear relationship between continuous independent variables and a target business metric.</p></article><article><b>CONCEPT 3</b><h2>Logistic Regression</h2><p> A foundational supervised classification algorithm that models the probability of a binary categorical event using the logistic sigmoid function.</p></article><article><b>CONCEPT 4</b><h2>K-Fold Cross-Validation</h2><p> Splitting training data into K subsets to iteratively train and validate the model K times, providing an unbiased estimate of generalization performance.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 2 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 3</b><span>Computational Foundations</span></header><h1>How the Concept Works in Practice</h1><i></i><main><article><b>FOUNDATION 1</b><h2>The Scikit-Learn Estimator Interface</h2><p> Every model in Scikit-Learn (whether simple linear regression or advanced random forests) implements the identical class interface. Learning .fit() and .predict() unlocks hundreds of advanced machine learning algorithms.</p></article><article><b>FOUNDATION 2</b><h2>Linear Regression for Continuous Business Forecasting</h2><p> Quantifying empirical business relationships. Model coefficients (model.coef_) indicate the marginal financial return of adding square footage or reducing distance to commercial business districts.</p></article><article><b>FOUNDATION 3</b><h2>Logistic Regression for Binary Operational Decisions</h2><p> Unlike linear regression which can predict values outside [0, 1], logistic regression squashes predictions into calibrated probabilities between 0.0 and 1.0, ideal for loan default or churn risk scoring.</p></article><article><b>FOUNDATION 4</b><h2>Overfitting, Underfitting, and Generalization</h2><p> A model that achieves 100% accuracy on training data but fails on real-world test data has memorized noise (overfitting). Cross-validation ensures models generalize reliably to future enterprise data.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 3 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 3</b><span>Development Workflow</span></header><h1>Build, Test, and Diagnose in the IDE</h1><i></i><main><article><b>[1] FILE EXPLORER</b><h2>Organize Assets</h2><p>Use the session dataset and keep scripts in a clear workspace.</p></article><article><b>[2] CODE EDITOR</b><h2>Write Small Segments</h2><p>Run each completed segment before expanding the program.</p></article><article><b>[3] AI AGENT CHAT</b><h2>Diagnose Errors</h2><p>Capture the traceback, request an explanation, and review the fix.</p></article><article><b>[4] INTEGRATED TERMINAL</b><h2>Verify Execution</h2><p>Confirm the final program completes with return code 0.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 4 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE</b><span>Style 2 Harvard Dual-Pane Editor</span></header><h1>Script Demonstration 1: Practical Machine Learning with Scikit-Learn: Model Training and Validation</h1><i></i><main class="code"><pre>import pandas as pd
-    from sklearn.linear_model import LinearRegression
-    from sklearn.model_selection import train_test_split
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<title>Session 3.3 Lecture</title>
+<style>
+@page { size: 16in 9in; margin: 0; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "Times New Roman", serif; color: #18181B; }
+.slide { width: 16in; height: 9in; padding: .45in .8in .4in; display: flex; flex-direction: column; background: #FFF; page-break-after: always; }
+.eyebrow { color: #991B1B; font-size: 15pt; font-weight: bold; letter-spacing: .02em; }
+.kicker { color: #64748B; font-size: 15pt; margin-left: .25in; }
+.title { font-size: 36pt; line-height: 1.05; font-weight: bold; margin: .12in 0 .08in; }
+.rule { height: 4px; background: #991B1B; width: 1.2in; margin-bottom: .18in; flex-shrink: 0; }
+.body { flex: 1; min-height: 0; display: flex; gap: .25in; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: .2in; width: 100%; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: .18in; width: 100%; }
+.card { border: 1px solid #CBD5E1; border-radius: 10px; padding: .16in .2in; background: #FFF; min-height: 0; overflow: hidden; }
+.card h2 { font-size: 22pt; margin: .04in 0 .08in; }
+.card p, .card li { font-size: 18pt; line-height: 1.25; margin: .05in 0; }
+.card ul { margin: .04in 0 0; padding-left: .3in; }
+.tag { color: #991B1B; font-size: 15pt; font-weight: bold; }
+.what, .why { font-size: 18pt; line-height: 1.25; margin: .05in 0; }
+.what b, .why b { color: #991B1B; }
+code { font-family: "DejaVu Sans Mono", monospace; font-size: .86em; background: #F1F5F9; border: 1px solid #E2E8F0; border-radius: 4px; padding: 0 .04in; white-space: nowrap; }
+h2 code { font-size: .82em; }
+.footer { border-top: 1px solid #CBD5E1; min-height: .42in; margin-top: .18in; display: flex; align-items: end; justify-content: space-between; color: #475569; font-size: 15pt; flex-shrink: 0; }
 
-    df = pd.read_csv("data/session_03_03_dataset.csv")
-    X = df[["Square_Feet_Units", "Bedrooms_Count", "Distance_To_CBD_Miles", "Local_Tax_Rate_Pct"]]
-    y = df["Sale_Price_USD"]
+/* Slide 1 */
+.overview { grid-template-columns: 2fr 3fr; }
+.overview .card { display: flex; flex-direction: column; }
+.overview ul.lead { margin: .1in 0 0; padding-left: .32in; }
+.overview ul.lead li { font-size: 20pt; line-height: 1.25; margin: 0 0 .1in; }
+.overview .card .flow { margin-top: auto; font-size: 16pt; color: #64748B; border-top: 1px solid #CBD5E1; padding-top: .1in; }
+.overview ol { margin: .06in 0 0; padding-left: .38in; }
+.overview ol > li { font-size: 21pt; line-height: 1.25; margin: 0 0 .12in; }
+.gloss { display: block; font-size: 18pt; color: #475569; margin-top: .03in; }
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=42)
+/* Code slides */
+.code-panel { width: 60%; background: #18181B; border-radius: 10px; color: #E5E7EB; padding: .16in .22in; display: flex; flex-direction: column; flex-shrink: 0; }
+.code-header { color: #CBD5E1; font: 14pt "DejaVu Sans Mono", monospace; border-bottom: 1px solid #3F3F46; padding-bottom: .08in; display: flex; align-items: center; gap: .08in; }
+.dot { width: .13in; height: .13in; border-radius: 50%; display: inline-block; }
+pre { white-space: pre; font: 14.5pt/1.38 "DejaVu Sans Mono", monospace; margin: .12in 0 0; overflow: hidden; }
+.cm { color: #94A3B8; }
+.sec { color: #FBBF24; font-weight: bold; }
+.ipo { margin-left: auto; color: #FBBF24; font-size: 13pt; }
+.notes .card.wide { flex: 1.6; }
 
-    model = LinearRegression()
-    model.fit(X_train, y_train)
-    print("Model Intercept:", round(model.intercept_, 2))
-    print("Model Coefficients (Feature Weights):", dict(zip(X.columns, model.coef_.round(2))))</pre><aside><article><b>SYNTAX</b><h2>Readable Structure</h2><p>Observe the syntax and indentation that control execution.</p></article><article><b>RUNTIME</b><h2>Verified Execution</h2><p>Run the example in the integrated terminal and inspect the output.</p></article><article><b>BUSINESS VALUE</b><h2>Applied Automation</h2><p>Use the pattern to automate a repeatable business decision.</p></article></aside></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 5 / 8</span></footer></section><section class="slide"><header><b>MODULE</b><span>Style 2 Harvard Dual-Pane Editor</span></header><h1>Script Demonstration 2: Practical Machine Learning with Scikit-Learn: Model Training and Validation</h1><i></i><main class="code"><pre>import numpy as np
-    from sklearn.metrics import mean_squared_error, r2_score
+/* Rows and columns slide */
+.table-wrap { width: 60%; flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; }
+table.df { border-collapse: collapse; font: 16pt/1.3 "DejaVu Sans Mono", monospace; }
+table.df td, table.df th { padding: .07in .14in; text-align: left; white-space: nowrap; }
+table.df thead th { border-bottom: 2px solid #18181B; }
+table.df tbody td { border-bottom: 1px solid #E2E8F0; }
+table.df .num { text-align: right; }
+table.df .idx { color: #64748B; }
+table.df .lbl { font: bold 15pt "Times New Roman", serif; border: none; padding: 0 .1in .04in; }
+.row-lbl { color: #1D4ED8; text-align: right !important; }
+.col-lbl { color: #B45309; text-align: center !important; }
+table.df .hl-row td { background: #DBEAFE; }
+table.df .hl-col { background: #FEF3C7; }
+table.df .hl-row td.hl-col { background: #FDE68A; outline: 3px solid #991B1B; outline-offset: -3px; font-weight: bold; }
+table.df .more { color: #64748B; font-family: "Times New Roman", serif; font-style: italic; }
+.card .tag.blue { color: #1D4ED8; }
+.card .tag.amber { color: #B45309; }
+.card.row-card { border: 2px solid #93C5FD; }
+.card.col-card { border: 2px solid #FCD34D; }
+.card.cell-card { border: 2px solid #991B1B; }
+.notes { flex: 1; display: flex; flex-direction: column; gap: .12in; min-width: 0; }
+.notes .card { flex: 1; }
+.notes .card h2 { font-size: 20pt; }
 
-    y_pred = model.predict(X_test)
-    rmse = np.sqrt(mean_squared_error(y_test, y_pred))
-    r2 = r2_score(y_test, y_pred)
+.check { margin-top: .14in; background: #FEF2F2; border: 1px solid #FCA5A5; border-radius: 10px; padding: .12in .2in; font-size: 18pt; flex-shrink: 0; }
 
-    print(f"Test Set RMSE: ${rmse:,.2f}")
-    print(f"Test Set R-Squared (Variance Explained): {r2:.4f}")</pre><aside><article><b>SYNTAX</b><h2>Readable Structure</h2><p>Observe the syntax and indentation that control execution.</p></article><article><b>RUNTIME</b><h2>Verified Execution</h2><p>Run the example in the integrated terminal and inspect the output.</p></article><article><b>BUSINESS VALUE</b><h2>Applied Automation</h2><p>Use the pattern to automate a repeatable business decision.</p></article></aside></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 6 / 8</span></footer></section><section class="slide"><header><b>MODULE</b><span>Style 2 Harvard Dual-Pane Editor</span></header><h1>Script Demonstration 3: Practical Machine Learning with Scikit-Learn: Model Training and Validation</h1><i></i><main class="code"><pre>from sklearn.model_selection import cross_val_score
+/* Six terms visual map */
+.fit { flex: 1; min-height: 0; display: grid; grid-template-rows: 1fr 1fr; gap: .16in; }
+.fit-row { display: flex; gap: .14in; align-items: stretch; min-height: 0; }
+.fit-box { border: 1px solid #CBD5E1; border-radius: 10px; padding: .12in .16in; display: flex; flex-direction: column; min-width: 0; }
+.fit-box .tag { margin-bottom: .04in; }
+.fit-box .cap { font-size: 18pt; margin: .06in 0 0; line-height: 1.2; }
+.fit-arrow { display: flex; flex-direction: column; justify-content: center; align-items: center; color: #991B1B; flex-shrink: 0; }
+.fit-arrow .big { font-size: 40pt; line-height: 1; }
+.fit-arrow code { font-size: 14pt; }
+.rawcsv { background: #18181B; color: #E5E7EB; border-radius: 8px; padding: .1in .14in; font: 15pt/1.4 "DejaVu Sans Mono", monospace; white-space: pre; }
+.rawcsv b { color: #FBBF24; }
+table.mini { border-collapse: collapse; font: 15pt/1.3 "DejaVu Sans Mono", monospace; }
+table.mini th, table.mini td { padding: .03in .1in; text-align: left; white-space: nowrap; border-bottom: 1px solid #E2E8F0; }
+table.mini th { border-bottom: 2px solid #18181B; }
+table.mini .num { text-align: right; }
+table.mini .idx { color: #64748B; }
+table.mini .ser { background: #FEF3C7; }
+table.mini .new { background: #DCFCE7; font-weight: bold; }
+table.mini tr.keep td { background: #DBEAFE; font-weight: bold; }
+table.mini tr.drop td { color: #CBD5E1; }
+.op { font: bold 26pt "DejaVu Sans Mono", monospace; color: #991B1B; align-self: center; padding: 0 .06in; }
+.toolbar { font-size: 17pt; color: #475569; margin-bottom: .1in; flex-shrink: 0; }
+.toolbar b { color: #991B1B; }
 
-    cv_scores = cross_val_score(model, X, y, cv=5, scoring="r2")
-    print("5-Fold Cross-Validation R-Squared Scores:", cv_scores.round(3))
-    print(f"Mean Cross-Validated R-Squared: {cv_scores.mean():.3f} (+/- {cv_scores.std():.3f})")</pre><aside><article><b>SYNTAX</b><h2>Readable Structure</h2><p>Observe the syntax and indentation that control execution.</p></article><article><b>RUNTIME</b><h2>Verified Execution</h2><p>Run the example in the integrated terminal and inspect the output.</p></article><article><b>BUSINESS VALUE</b><h2>Applied Automation</h2><p>Use the pattern to automate a repeatable business decision.</p></article></aside></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 7 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 3</b><span>Hands-On Practice</span></header><h1>Exercise 1 and Exercise 2</h1><i></i><main><article><b>EXERCISE 1: GUIDED</b><h2>Foundational Practice</h2><p>Follow the lab protocol, run the script, and verify its output with the session dataset.</p></article><article><b>EXERCISE 2: DEBUGGING</b><h2>Applied Challenge</h2><p>Extend the program, diagnose an intentional error, apply the verified correction, and confirm return code 0.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 8 / 8</span></footer></section></body></html>
+/* DataFrame visual map */
+.xl th, .xl td { font-size: 15pt; }
+.xl .rn { background: #F1F5F9; color: #64748B; text-align: center; }
+.xl .bad { background: #FEE2E2; color: #B91C1C; font-weight: bold; }
+.side { display: flex; gap: .22in; align-items: flex-start; }
+.side .lab { font-size: 17pt; font-weight: bold; margin-bottom: .04in; }
+.brace { border-left: 4px solid #16A34A; padding-left: .1in; }
+.anat .ix { background: #DBEAFE; color: #1D4ED8; }
+.anat .hd { background: #FEF3C7; }
+.anat .vl { background: #DCFCE7; }
+.chips { display: flex; gap: .12in; flex-wrap: wrap; margin-top: .08in; }
+.chip { font-size: 16pt; padding: .02in .1in; border-radius: 6px; }
+.dt { font-size: 14pt; padding: .01in .08in; border-radius: 5px; background: #18181B; color: #FBBF24; font-family: "DejaVu Sans Mono", monospace; }
+.insp td { font-size: 15pt; vertical-align: top; }
+.insp td:first-child { color: #991B1B; }
+.pr, .insp td.pr { font: 18pt/1.3 "Times New Roman", serif; }
+td.pr { white-space: normal !important; }
+
+/* IDE slide */
+.shot { width: 60%; flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; }
+.shot img { width: 100%; border: 1px solid #CBD5E1; border-radius: 10px; display: block; }
+.shot .cap { font-size: 17pt; margin: .1in 0 0; }
+.steps { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .1in; justify-content: center; }
+.step { display: flex; gap: .14in; align-items: flex-start; border: 1px solid #CBD5E1; border-radius: 10px; padding: .1in .14in; }
+.badge { background: #991B1B; color: #FFF; font: bold 16pt "DejaVu Sans Mono", monospace; border-radius: 6px; padding: .02in .08in; flex-shrink: 0; }
+.step h3 { font-size: 20pt; margin: 0 0 .02in; }
+.step p { font-size: 18pt; line-height: 1.22; margin: .02in 0; }
+.step p.eg { font-size: 16pt; color: #475569; }
+
+/* Quick check slides */
+.qc { grid-template-columns: 1fr 1.15fr; }
+.qc .card { display: flex; flex-direction: column; }
+.snip { background: #18181B; color: #E5E7EB; border-radius: 8px; padding: .1in .16in; font: 16pt/1.4 "DejaVu Sans Mono", monospace; white-space: pre; margin: .04in 0 .1in; }
+.snip .blank { background: #FBBF24; color: #18181B; padding: 0 .06in; border-radius: 3px; font-weight: bold; }
+.snip .cm { color: #94A3B8; }
+.snip-lab { font-size: 17pt; font-weight: bold; margin-top: .06in; }
+.strip { display: flex; gap: .05in; margin: .1in 0 .04in; }
+.strip span { flex: 1; text-align: center; font: 15pt "DejaVu Sans Mono", monospace; padding: .06in 0; border-radius: 5px; background: #F1F5F9; color: #94A3B8; }
+.strip .h { background: #DBEAFE; color: #1D4ED8; font-weight: bold; }
+.strip .t { background: #DCFCE7; color: #15803D; font-weight: bold; }
+.strip-lab { display: flex; justify-content: space-between; font-size: 16pt; }
+.flowline { display: flex; align-items: center; gap: .14in; margin: .1in 0; font: 17pt "DejaVu Sans Mono", monospace; }
+.flowline .box { background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 6px; padding: .04in .12in; }
+.flowline .arr { color: #991B1B; font-size: 22pt; }
+.flowline .res { background: #DCFCE7; border: 1px solid #86EFAC; border-radius: 6px; padding: .04in .12in; font-weight: bold; }
+.vstack { margin-top: .08in; }
+.vstack td, .vstack th { padding: .02in .12in; }
+.vstack tr.h td:not(.side-lab) { background: #DBEAFE; color: #1D4ED8; font-weight: bold; }
+.vstack tr.t td:not(.side-lab) { background: #DCFCE7; color: #15803D; font-weight: bold; }
+.vstack tr.gap td { color: #94A3B8; font-family: "Times New Roman", serif; font-style: italic; }
+.vstack .side-lab { border: none; font: 17pt "Times New Roman", serif; vertical-align: middle; }
+.vstack .h-lab { color: #1D4ED8; }
+.vstack .t-lab { color: #15803D; }
+table.mini th.plain { font: bold 17pt "Times New Roman", serif; }
+.overview ol.biz > li { font-size: 20pt; margin: 0 0 .1in; }
+.overview .q { display: block; color: #991B1B; font-style: italic; font-weight: bold; }
+.overview .sit-note { font-size: 19pt; font-weight: bold; margin: .04in 0 0; }
+
+/* CSV intro slide */
+.csvflow { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr auto 1.25fr auto 1fr; gap: .14in; align-items: stretch; }
+.csvflow .col { border: 1px solid #CBD5E1; border-radius: 10px; padding: .14in .18in; display: flex; flex-direction: column; gap: .1in; }
+.csvflow .item { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: .08in .12in; font-size: 18pt; line-height: 1.2; }
+.csvflow .item small { display: block; font-size: 16pt; color: #475569; }
+.csvflow .mid { border: 2px solid #991B1B; }
+.csvflow .arrow { display: flex; align-items: center; color: #991B1B; font-size: 40pt; }
+.csvflow li { font-size: 18pt; line-height: 1.3; margin: .04in 0; }
+.csvflow .fname { font: bold 15pt "DejaVu Sans Mono", monospace; color: #18181B; }
+
+/* CSV vs XLSX */
+.src-row { display: flex; gap: .14in; align-items: stretch; flex-shrink: 0; }
+.src-box { flex: 1; border: 1px solid #CBD5E1; border-radius: 10px; padding: .1in .16in; }
+.chips2 { display: flex; gap: .1in; flex-wrap: wrap; margin-top: .06in; }
+.chips2 span { background: #F1F5F9; border: 1px solid #E2E8F0; border-radius: 6px; padding: .03in .12in; font-size: 18pt; }
+.arrow2 { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #991B1B; font-size: 34pt; line-height: 1; }
+.arrow2 small { font-size: 15pt; }
+.files { display: flex; gap: .12in; align-items: center; margin-top: .06in; }
+.file { font: bold 16pt "DejaVu Sans Mono", monospace; padding: .03in .12in; border-radius: 6px; color: #FFF; }
+.file.xlsx { background: #64748B; }
+.file.csv { background: #15803D; }
+.vs { flex: 1; min-height: 0; display: flex; gap: .16in; }
+.vs-col { flex: 1; border-radius: 12px; padding: .14in .2in; display: flex; flex-direction: column; }
+.vs-col.bad { border: 2px solid #CBD5E1; background: #F8FAFC; }
+.vs-col.good { border: 3px solid #15803D; background: #F0FDF4; flex: 1.35; }
+.vs-head { font-size: 24pt; font-weight: bold; display: flex; align-items: center; gap: .12in; }
+.vs-sub { font-size: 18pt; margin: .06in 0 .1in; color: #334155; }
+.vs-mid { align-self: center; font: bold 26pt "Times New Roman", serif; color: #64748B; }
+.apps { display: flex; flex-wrap: wrap; gap: .1in; }
+.app { font-size: 18pt; background: #FFF; border-radius: 8px; padding: .06in .14in; display: flex; flex-direction: column; min-width: 1.5in; }
+.app b { font-size: 24pt; line-height: 1; }
+.app small { font-size: 15pt; color: #64748B; }
+.rawcsv.garbled { color: #94A3B8; }
+.app.ok { border: 2px solid #86EFAC; }
+.app.ok b { color: #15803D; }
+.app.no { border: 2px solid #FCA5A5; }
+.app.no b { color: #B91C1C; }
+
+/* Session 1.4 additions */
+table.terms { border-collapse: collapse; width: 100%; margin: .04in 0 .1in; }
+table.terms td { font-size: 18pt; padding: .05in .08in; border-bottom: 1px solid #E2E8F0; }
+table.terms td.num { text-align: right; }
+.vbars { display: flex; flex-direction: column; gap: .1in; margin-top: .12in; }
+.vrow { display: flex; align-items: center; gap: .12in; }
+.vq { width: .45in; font: bold 17pt "DejaVu Sans Mono", monospace; }
+.vval { width: 1.1in; font: 16pt "DejaVu Sans Mono", monospace; text-align: right; }
+.vtrack { flex: 1; height: .42in; position: relative; background: #F8FAFC; border-radius: 4px; }
+.vzero { position: absolute; left: 40%; top: 0; bottom: 0; border-left: 2px solid #18181B; }
+.vth { position: absolute; left: 52%; top: -.04in; bottom: -.04in; border-left: 2px dashed #B91C1C; }
+.vbar { position: absolute; top: .07in; bottom: .07in; border-radius: 3px; }
+.vbar.over { background: #EF4444; }
+.vbar.warn { background: #F59E0B; }
+.vbar.under { background: #22C55E; }
+.vtrack-lab { flex: 1; position: relative; height: .3in; }
+.vtrack-lab span { position: absolute; transform: translateX(-50%); font-size: 15pt; color: #475569; white-space: nowrap; }
+.bridge { flex: 1; min-height: 0; display: flex; gap: .16in; align-items: stretch; }
+.bridge .b-xl, .bridge .b-pd { border-radius: 10px; padding: .1in .18in; display: flex; flex-direction: column; justify-content: center; }
+.bridge .b-xl { flex: 1; border: 2px solid #CBD5E1; background: #F8FAFC; }
+.bridge .b-pd { flex: 1.5; border: 2px solid #15803D; background: #F0FDF4; }
+.bridge h2 { font-size: 22pt; margin: .02in 0; }
+.bridge p { font-size: 18pt; margin: .02in 0; }
+.b-arrow { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #991B1B; font-size: 40pt; line-height: 1; }
+.b-arrow.small { font-size: 30pt; }
+.b-arrow small { font-size: 15pt; }
+.sac { display: flex; gap: .16in; align-items: center; flex-wrap: wrap; }
+.sac-col { display: flex; flex-direction: column; gap: .06in; }
+.sac-lab { font-size: 16pt; color: #475569; }
+.grp { font: 15pt "DejaVu Sans Mono", monospace; padding: .03in .1in; border-radius: 5px; }
+.g1 { background: #DBEAFE; } .g2 { background: #FEF3C7; } .g3 { background: #EDE9FE; } .g4 { background: #DCFCE7; }
+table.mini .keycol { background: #FEF3C7; }
+table.mini .hl-c { background: #DCFCE7; font-weight: bold; }
+table.mini .bad-c { background: #FEE2E2; color: #B91C1C; font-weight: bold; }
+table.mini tr.nan-row td { background: #FEF3C7; font-style: italic; }
+.snip .bad-t { color: #F87171; font-weight: bold; }
+.snip .ok-t { color: #4ADE80; font-weight: bold; }
+table.mini td.tcell { background: #DBEAFE; color: #1D4ED8; font-weight: bold; }
+table.mini td.fcell { color: #94A3B8; }
+.qc { grid-template-columns: 1fr 1.4fr; }
+.qc .snip { font-size: 14.5pt; }
+.fit-box .snip { font-size: 14.5pt; margin: .04in 0; }
+.flip { display: flex; gap: .1in; align-items: center; font: 16pt "DejaVu Sans Mono", monospace; margin: .08in 0; }
+.flip .t { background: #DBEAFE; padding: .03in .1in; border-radius: 5px; }
+.flip .f { background: #F1F5F9; padding: .03in .1in; border-radius: 5px; }
+
+/* Session 2.1 additions */
+.big-li { font-size: 22pt; margin: .1in 0; }
+.notes .card.xwide { flex: 2.4; }
+.rules { border: 2px solid #991B1B; border-radius: 10px; padding: .1in .18in; flex-shrink: 0; }
+.rule-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: .12in; margin-top: .06in; }
+.rule-row span { font-size: 17pt; background: #FEF2F2; border-radius: 6px; padding: .06in .1in; }
+.http { display: flex; align-items: center; gap: .2in; flex-shrink: 0; }
+.http .node { border: 2px solid #18181B; border-radius: 10px; padding: .12in .2in; font-size: 20pt; font-weight: bold; text-align: center; min-width: 2.4in; }
+.http .node small { font: 15pt "DejaVu Sans Mono", monospace; font-weight: normal; color: #475569; }
+.msgs { flex: 1; display: flex; flex-direction: column; gap: .1in; }
+.msg { display: flex; align-items: center; gap: .1in; font-size: 19pt; border-radius: 8px; padding: .06in .14in; }
+.msg b { font-size: 28pt; color: #991B1B; }
+.msg.req { background: #DBEAFE; justify-content: space-between; }
+.msg.res { background: #DCFCE7; }
+.render { border: 1px solid #CBD5E1; border-radius: 10px; padding: .16in; background: #FFF; box-shadow: 0 2px 6px rgba(0,0,0,.08); width: 3.6in; margin: .08in 0; }
+.render .r-name { font: bold 22pt Arial, sans-serif; }
+.render .r-price { font: bold 26pt Arial, sans-serif; color: #B91C1C; margin: .04in 0; }
+.render .r-stock { font: 16pt Arial, sans-serif; color: #15803D; }
+.rawcsv.small { font-size: 13.5pt; }
+.rawcsv b { color: #FBBF24; }
+.tree { font: 16pt/1.6 "DejaVu Sans Mono", monospace; margin-top: .08in; }
+.tn { border-left: 2px solid #CBD5E1; padding-left: .1in; }
+.tn.t1 { margin-left: .3in; }
+.tn.t2 { margin-left: .6in; }
+.tn small { color: #64748B; font-size: 14pt; }
+.tn.hit { background: #FEF3C7; font-weight: bold; }
+.cards4 { display: flex; flex-direction: column; gap: .06in; }
+.cards4 span { font: 15pt "DejaVu Sans Mono", monospace; border: 1px solid #CBD5E1; border-radius: 6px; padding: .04in .1in; background: #F8FAFC; }
+
+/* session map + exercise 3 */
+.sm-q { border: 3px solid #991B1B; border-radius: 14px; padding: .1in .2in; font-size: 24pt; font-style: italic; background: #FEF2F2; align-self: flex-start; flex-shrink: 0; }
+.sm-q b { font-style: normal; color: #991B1B; }
+.sm-phases { flex: 1; min-height: 0; display: flex; gap: .14in; align-items: stretch; }
+.sm-phase { flex: 1; border: 2px solid #CBD5E1; border-radius: 12px; padding: .14in .2in; }
+.sm-phase.sm-p3 { border: 3px solid #15803D; background: #F0FDF4; }
+.sm-head { display: flex; gap: .14in; align-items: center; border-bottom: 2px solid #E2E8F0; padding-bottom: .08in; margin-bottom: .08in; }
+.sm-head b { font-size: 26pt; display: block; line-height: 1.1; }
+.sm-head small { font-size: 16pt; color: #64748B; }
+.sm-step { background: #991B1B; color: #FFF; border-radius: 50%; width: .5in; height: .5in; display: flex; align-items: center; justify-content: center; font-size: 20pt; font-weight: bold; flex-shrink: 0; }
+.sm-p3 .sm-step { background: #15803D; }
+.sm-phase p { font-size: 22pt; margin: .1in 0; line-height: 1.2; display: flex; }
+.sm-phase i { font-style: normal; font-family: "DejaVu Sans Mono", monospace; font-weight: bold; color: #991B1B; min-width: .6in; flex-shrink: 0; }
+.sm-p3 i { color: #15803D; }
+.sm-arrow { align-self: center; font-size: 34pt; color: #991B1B; }
+ol.ex3 { margin: .06in 0 0; padding-left: .36in; }
+ol.ex3 li { font-size: 18pt; line-height: 1.25; margin: .06in 0; }
+
+.card p.remember { font-size: 17pt; margin-top: .08in; color: #991B1B; }
+.card p.remember b { color: #991B1B; }
+.f7 .card ul { margin-top: .02in; }
+.f7 .card li { font-size: 17pt; }
+.f7 .card h2 { font-size: 21pt; }
+
+
+.fitbox { min-height: 0; overflow: hidden; }
+.card.fitbox p, .card.fitbox li { font-size: 18pt; }
+.mdtable { border-collapse: collapse; width: 100%; margin: .06in 0; }
+.mdtable th, .mdtable td { text-align: left; padding: .05in .1in; border-bottom: 1px solid #E2E8F0; font-size: 17pt; vertical-align: top; }
+.mdtable th { border-bottom: 2px solid #18181B; font-weight: bold; }
+.mdtable code { white-space: normal; }
+.card ul.tight { margin: .04in 0 0; padding-left: .3in; }
+.card ul.tight li { margin: .05in 0; line-height: 1.25; }
+.outbox { background: #18181B; color: #34D399; border-radius: 8px; padding: .1in .14in; font: 13.5pt/1.35 "DejaVu Sans Mono", monospace; white-space: pre; overflow: hidden; }
+.card p.remember { color: #991B1B; margin-top: .06in; }
+.card p.remember b { color: #991B1B; }
+.f7 .card h2 { font-size: 24pt; margin-bottom: .12in; }
+.f7 .card p.remember { margin-top: .16in; }
+.exg .card h2 { font-size: 24pt; }
+.exg .card p { margin: .1in 0; }
+.exg .card p code { font-size: .88em; }
+.big-q { font-size: 20pt; }
+.mdtable.cols td:first-child code { white-space: nowrap; overflow-wrap: normal; }
+.card code, .check code, .mdtable code, .card h2 { white-space: normal; overflow-wrap: anywhere; }
+.notes .card.how { flex: 1 1 auto; }
+.notes .card.out { flex: 0 0 auto; }
+
+
+/* session map with content */
+.sm-phase.fitbox { display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
+.sm-phase p.sm-item { display: flex; gap: .1in; margin: .06in 0; line-height: 1.15; }
+.sm-item i { font-style: normal; font-family: "DejaVu Sans Mono", monospace; font-weight: bold; color: #991B1B; min-width: .5in; flex-shrink: 0; }
+.sm-p3 .sm-item i { color: #15803D; }
+.sm-item b { display: block; font-size: 1em; }
+.sm-item span.d { display: block; font-size: .9em; color: #334155; }
+.sm-item code { font-size: .85em; white-space: normal; overflow-wrap: anywhere; }
+/* end session map */
+
+</style>
+</head>
+<body>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">1-2. Purpose and Outcomes</span></div>
+  <div class="title">Session 3.3: Practical Machine Learning with Scikit-Learn: Model Training and Validation</div><div class="rule"></div>
+  <div class="body grid2 overview"><div class="card fitbox"><div class="tag">THE BUSINESS SITUATION</div><ul class="tight"><li>A commercial property valuation firm prices office buildings by hand, which takes an expert several days per property</li><li>It has the sale records of 14 recent deals: size, number of rooms, distance to the city center, tax rate, and price</li><li>The valuation manager asks: can a model estimate a property&#x27;s sale price from its size and location, and how far off will it be? Today, you train your first machine learning model and measure its error honestly</li></ul><p class="flow">Today's flow: 60 min lecture, then 120 min hands-on lab</p></div><div class="card fitbox"><div class="tag">EXPECTED OUTCOMES</div><h2>By the end of today, you will be able to:</h2><ol class="biz"><li><span class="q">"Can a model learn prices from past deals?"</span> Train a linear regression model with Scikit-Learn&#x27;s <code>.fit()</code> and read its coefficients (how much the price changes for one more unit of each feature)</li><li><span class="q">"How far off are the predictions?"</span> Measure the error with RMSE (Root Mean Squared Error) and MAE (Mean Absolute Error), and check stability with cross-validation (testing on several different splits)</li><li><span class="q">"What will this new building sell for?"</span> Predict the price of one new property, and fix the <code>ValueError</code> a one-row prediction often raises</li></ol></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 1 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Session Map</span></div>
+  <div class="title">Session Map: Follow the Numbers</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: .14in;"><div class="sm-q"><b>Today's question:</b> Can a model estimate a property&#x27;s sale price from its size and location, and how far off will it be?</div><div class="sm-phases"><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">1</span><span><b>Why it matters</b><small>Lecture, part 1</small></span></div><p class="sm-item"><i>1.</i><span><b>Session Purpose</b><span class="d">answer today&#x27;s question</span></span></p><p class="sm-item"><i>2.</i><span><b>Learning Outcomes</b><span class="d">3 skills you will show today</span></span></p><p class="sm-item"><i>3.</i><span><b>Business Context</b><span class="d">When a Price Model Is Worth Using</span></span></p><p class="sm-item"><i>4.</i><span><b>Data Basics</b><span class="d">How Linear Regression Works</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">2</span><span><b>Learn the tools</b><small>Lecture, part 2</small></span></div><p class="sm-item"><i>5.</i><span><b>Lab Dataset</b><span class="d">1 CSV</span></span></p><p class="sm-item"><i>6.</i><span><b>Keywords</b><span class="d">6 terms</span></span></p><p class="sm-item"><i>7.</i><span><b>Core Foundations</b><span class="d">5 ideas, one at a time</span></span></p><p class="sm-item"><i>8.</i><span><b>IDE Setup</b><span class="d"><code>pip install scikit-learn</code></span></span></p><p class="sm-item"><i>9.</i><span><b>Code Examples</b><span class="d">3 demos + Quick Checks</span></span></p><p class="sm-item"><i>10.</i><span><b>References</b><span class="d">2 official docs</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox sm-p3" data-start="22"><div class="sm-head"><span class="sm-step">3</span><span><b>Practice</b><small>Lab</small></span></div><p class="sm-item"><i>11.</i><span><b>Exercise 1: Guided</b><span class="d">Property Valuation Engine</span></span></p><p class="sm-item"><i>12.</i><span><b>Exercise 2: Applied</b><span class="d">Error per Property and a One-Row Prediction</span></span></p><p class="sm-item"><i>13.</i><span><b>Exercise 3: Advanced</b><span class="d">Does a Bigger Model Price Better?</span></span></p></div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 2 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">3. Business Context</span></div>
+  <div class="title">When a Price Model Is Worth Using</div><div class="rule"></div>
+  <div class="body"><div class="card fitbox"><div class="tag">KEY POINTS</div><ul class="tight"><li>An estimate is useful if its typical error is small compared with the price.</li><li>A model learns from past deals only.</li><li>Regression vs classification:<ul class="tight"><li><b>Regression</b> predicts a number, such as a price. Today&#x27;s model, linear regression, is one example.</li><li><b>Classification</b> predicts a category, such as &quot;fraud&quot; or &quot;not fraud&quot;. Logistic regression, used in Session 3.4, is one example.</li></ul></li></ul></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 3 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">4. Data Basics</span></div>
+  <div class="title">How Linear Regression Works</div><div class="rule"></div>
+  <div class="body grid2" style="grid-template-columns: 1fr 1.15fr;"><div class="card fitbox"><div class="tag">KEY POINTS</div><ul class="tight"><li>Linear regression finds the best straight-line formula: <code>price = intercept + coefficient_1 x feature_1 + coefficient_2 x feature_2 + ...</code>. &quot;Best&quot; means the smallest total squared error on the training rows.</li><li>Reading a coefficient: the change in price for one more unit of that feature, <b>while the other features stay the same</b>.</li><li>Coefficients can surprise you.</li><li>Three error measures, in plain words:</li></ul></div><div class="card fitbox"><div class="tag">AT A GLANCE</div><table class="mdtable"><tr><th>Measure</th><th>Meaning</th><th>Lower or higher is better?</th></tr><tr><td>MAE (Mean Absolute Error)</td><td>the average size of the errors, in dollars</td><td>lower</td></tr><tr><td>RMSE (Root Mean Squared Error)</td><td>like MAE, but large errors count extra</td><td>lower</td></tr><tr><td>R-squared</td><td>the share of the price differences the model explains, from 0 to 1</td><td>higher</td></tr></table></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 4 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">5. Lab Practice Dataset</span></div>
+  <div class="title">The Data for Today</div><div class="rule"></div>
+  <div class="body grid2" style="grid-template-columns: 1fr 2.2fr;"><div class="card fitbox"><div class="tag">FILES</div><ul class="tight"><li><code>data/session_03_03_dataset.csv</code></li></ul><p>Audited 14-row commercial property sales dataset (fictional teaching data), one row per sale:</p></div><div class="card fitbox"><div class="tag">COLUMNS</div><table class="mdtable cols"><tr><td><code>Property_ID</code></td><td>Sale code (e.g., <code>PROP-401</code>).</td></tr><tr><td><code>Square_Feet_Units</code></td><td>Usable floor area in square feet.</td></tr><tr><td><code>Bedrooms_Count</code></td><td>Number of separate rooms or office suites.</td></tr><tr><td><code>Distance_To_CBD_Miles</code></td><td>Distance to the CBD (Central Business District, the city&#x27;s main business center), in miles.</td></tr><tr><td><code>Local_Tax_Rate_Pct</code></td><td>Local property tax rate, in percent.</td></tr><tr><td><code>Sale_Price_USD</code></td><td>The price the property sold for, in U.S. Dollars. This is the target.</td></tr></table></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 5 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">6. Keywords</span></div>
+  <div class="title">6 Terms You Need Today</div><div class="rule"></div>
+  <div class="body grid3" style="grid-template-rows: repeat(2, 1fr);"><div class="card fitbox"><div class="tag">TERM 1</div><h2><code>Estimator</code> (<code>.fit()</code> / <code>.predict()</code>)</h2><p class="what"><b>What:</b> any Scikit-Learn model; <code>.fit(X, y)</code> learns from examples, <code>.predict(X)</code> makes predictions</p><p class="why"><b>Why:</b> every model in the library uses the same two methods</p></div><div class="card fitbox"><div class="tag">TERM 2</div><h2><code>Linear Regression</code></h2><p class="what"><b>What:</b> a model that predicts a number with a straight-line formula</p><p class="why"><b>Why:</b> simple, fast, and its coefficients are easy to explain to a manager</p></div><div class="card fitbox"><div class="tag">TERM 3</div><h2><code>Logistic Regression</code></h2><p class="what"><b>What:</b> a model that predicts the probability of a yes/no outcome</p><p class="why"><b>Why:</b> the classification partner of linear regression (Session 3.4)</p></div><div class="card fitbox"><div class="tag">TERM 4</div><h2><code>RMSE</code> and <code>MAE</code></h2><p class="what"><b>What:</b> the typical prediction error, in the target&#x27;s own unit (here, dollars)</p><p class="why"><b>Why:</b> tells the manager how far off an estimate can be</p></div><div class="card fitbox"><div class="tag">TERM 5</div><h2><code>Cross-Validation</code></h2><p class="what"><b>What:</b> splitting the data into K parts and testing K times, each time on a different part</p><p class="why"><b>Why:</b> one lucky split can make a model look better than it is</p></div><div class="card fitbox"><div class="tag">TERM 6</div><h2><code>Overfitting</code></h2><p class="what"><b>What:</b> a model that memorizes its training rows and does worse on new data</p><p class="why"><b>Why:</b> the main risk when data is small; testing on unseen rows reveals it</p></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 6 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">7. Core Foundations</span></div>
+  <div class="title">How It Works</div><div class="rule"></div>
+  <div class="body f7" data-uniform style="display:grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: .16in;"><div class="card fitbox" data-start="24"><div class="tag">7.1</div><h2>The estimator pattern</h2><p class="remember"><b>Remember:</b> create, fit, predict; learned values end with <code>_</code>.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.2</div><h2>Reading the price formula</h2><p class="remember"><b>Remember:</b> a coefficient is the effect of one feature with the others held fixed.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.3</div><h2>Measuring error</h2><p class="remember"><b>Remember:</b> MAE is the plain average error; RMSE punishes large errors; test on unseen rows.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.4</div><h2>One split is not enough</h2><p class="remember"><b>Remember:</b> report the average over the folds, and look at the worst fold too.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.5</div><h2>One row is still a table</h2><p class="remember"><b>Remember:</b> one row = a one-row DataFrame with the same column names.</p></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 7 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">7. Core Foundations: On Real Data</span></div>
+  <div class="title">7.1 The estimator pattern: On Real Data</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: .12in;"><div class="card fitbox" data-start="19"><div class="tag">SEE IT ON REAL DATA</div><table class="mdtable"><tr><th>Step</th><th>Code</th><th>What happens</th></tr><tr><td>Create</td><td><code>model = LinearRegression()</code></td><td>an empty model, nothing learned yet</td></tr><tr><td>Fit</td><td><code>model.fit(X_train, y_train)</code></td><td>learns the price formula from 10 sales</td></tr><tr><td>Predict</td><td><code>model.predict(X_test)</code></td><td>4 estimated prices for the 4 test sales</td></tr><tr><td>Score</td><td><code>model.score(X_test, y_test)</code></td><td><code>0.996</code>, the share of price differences explained</td></tr></table></div><div class="check"><b>Remember:</b> create, fit, predict; learned values end with <code>_</code>.</div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 8 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Code Demonstration 1</span></div>
+  <div class="title">Train a Price Model</div><div class="rule"></div>
+  <div class="body">
+    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
+      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S33_demo_1.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
+<pre><span class="sec"># 1. Input: load the sales and split them</span>
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+df = pd.read_csv(&quot;data/session_03_03_dataset.csv&quot;)
+features = [&quot;Square_Feet_Units&quot;, &quot;Bedrooms_Count&quot;, &quot;Distance_To_CBD_Miles&quot;]
+X = df[features]
+y = df[&quot;Sale_Price_USD&quot;]
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.25, random_state=42
+)
+
+<span class="sec"># 2. Process: learn the price formula from the training rows</span>
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+<span class="sec"># 3. Output: the learned formula</span>
+print(&quot;Intercept:&quot;, round(model.intercept_, 1))
+for name, coef in zip(features, model.coef_):
+    print(f&quot;{name}: {coef:,.1f}&quot;)
+</pre>
+    </div>
+    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li>First time only, in the Terminal: <code>pip install scikit-learn</code></li><li><code>features = [...]</code> lists the 3 input columns; <code>X = df[features]</code> and <code>y = df[&quot;Sale_Price_USD&quot;]</code> separate inputs and answer (Session 3.2).</li><li><code>train_test_split(..., test_size=0.25, random_state=42)</code> keeps 4 of the 14 sales aside for testing.</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><div class="outbox">Intercept: 123568.1
+Square_Feet_Units: 180.1
+Bedrooms_Count: 14,703.6
+Distance_To_CBD_Miles: -1,915.8
+</div><ul class="tight"><li>Each extra square foot adds about <code>$180</code>, each extra room about <code>$14,700</code>, and each extra mile from the center subtracts about <code>$1,900</code>, with the other features held fixed (section 7.2).</li></ul></div></div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 9 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Quick Check 1</span></div>
+  <div class="title">Quick Check 1: <code>.score()</code></div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid2 qc" style="flex: 1; min-height: 0;">
+      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>.score()</code></h2><p><code>model.score(X_test, y_test)</code> returns R-squared on the test rows in one call. Why: a quick first check of how well the model explains prices it has not seen.</p></div>
+      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add one line to part <b>3. Output</b>: <code>print(&quot;Test R-squared:&quot;, round(model._____(X_test, y_test), 3))</code></p></div>
+    </div>
+    <div class="check"><b>Check:</b> the Terminal shows <code>Test R-squared: 0.996</code>.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 10 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Code Demonstration 2</span></div>
+  <div class="title">Predict the Test Sales and Measure the Error</div><div class="rule"></div>
+  <div class="body">
+    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
+      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S33_demo_2.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
+<pre><span class="sec"># 1. Input: load, split, and train (same as Micro-Example 1)</span>
+import numpy as np
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+df = pd.read_csv(&quot;data/session_03_03_dataset.csv&quot;)
+features = [&quot;Square_Feet_Units&quot;, &quot;Bedrooms_Count&quot;, &quot;Distance_To_CBD_Miles&quot;]
+X_train, X_test, y_train, y_test = train_test_split(
+    df[features], df[&quot;Sale_Price_USD&quot;], test_size=0.25, random_state=42
+)
+model = LinearRegression().fit(X_train, y_train)
+
+<span class="sec"># 2. Process: predict the 4 test sales and compute the RMSE</span>
+y_pred = model.predict(X_test)
+rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+comparison = pd.DataFrame({
+    &quot;Property_ID&quot;: df.loc[X_test.index, &quot;Property_ID&quot;],
+    &quot;Actual_USD&quot;: y_test,
+    &quot;Predicted_USD&quot;: y_pred.round(0),
+})
+
+<span class="sec"># 3. Output: actual vs predicted, then the typical error</span>
+print(comparison)
+print(f&quot;Test RMSE: ${rmse:,.0f}&quot;)
+</pre>
+    </div>
+    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li>Part 1 loads, splits, and trains, as in Micro-Example 1.</li><li><code>model.predict(X_test)</code> returns 4 estimated prices.</li><li><code>mean_squared_error()</code> averages the squared errors; <code>np.sqrt()</code> (square root, from NumPy) brings the result back to dollars: the RMSE (section 7.3).</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><div class="outbox">   Property_ID  Actual_USD  Predicted_USD
+9     PROP-409    465000.0       460268.0
+11    PROP-411    330000.0       345735.0
+...</div><ul class="tight"><li>The model is close on the large building (<code>PROP-412</code>: off by <code>$2,141</code>) and on <code>PROP-409</code>.</li></ul></div></div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 11 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Quick Check 2</span></div>
+  <div class="title">Quick Check 2: <code>mean_absolute_error()</code></div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid2 qc" style="flex: 1; min-height: 0;">
+      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>mean_absolute_error()</code></h2><p><code>mean_absolute_error(y_test, y_pred)</code> returns the average error size in dollars. Why: the easiest error number to explain: &quot;on average, we are off by this much&quot;.</p></div>
+      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Change the import line to <code>from sklearn.metrics import mean_squared_error, mean_absolute_error</code>, then add one line to part <b>3. Output</b>: <code>print(f&quot;Test MAE: ${___________________(y_test, y_pred):,.0f}&quot;)</code></p></div>
+    </div>
+    <div class="check"><b>Check:</b> the Terminal shows <code>Test MAE: $9,668</code>, lower than the RMSE because RMSE weighs the two larger errors (about $16,000 each) more heavily.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 12 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Code Demonstration 3</span></div>
+  <div class="title">Five Splits Instead of One</div><div class="rule"></div>
+  <div class="body">
+    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
+      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S33_demo_3.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
+<pre><span class="sec"># 1. Input: load the sales</span>
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import cross_val_score
+df = pd.read_csv(&quot;data/session_03_03_dataset.csv&quot;)
+features = [&quot;Square_Feet_Units&quot;, &quot;Bedrooms_Count&quot;, &quot;Distance_To_CBD_Miles&quot;]
+
+<span class="sec"># 2. Process: train and test 5 times, each time on a different part</span>
+scores = cross_val_score(LinearRegression(), df[features],
+                         df[&quot;Sale_Price_USD&quot;], cv=5, scoring=&quot;r2&quot;)
+
+<span class="sec"># 3. Output: the 5 scores and their average</span>
+print(&quot;R-squared per fold:&quot;, scores.round(3).tolist())
+print(f&quot;Average R-squared: {scores.mean():.3f}&quot;)
+</pre>
+    </div>
+    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>cross_val_score(LinearRegression(), X, y, cv=5, scoring=&quot;r2&quot;)</code> does all the work of section 7.4: it cuts the 14 sales into 5 folds, trains 5 fresh models, and tests each one on its own fold.</li><li>It returns 5 scores, one per fold.</li><li><code>scores.mean()</code> averages them.</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><ul class="tight"><li>Every fold scores above <code>0.99</code>: the model does well no matter which sales are held out, not just on one lucky split.</li></ul></div></div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 13 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Quick Check 3</span></div>
+  <div class="title">Quick Check 3: RMSE per fold</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid2 qc" style="flex: 1; min-height: 0;">
+      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2>RMSE per fold</h2><p><code>scoring=&quot;neg_root_mean_squared_error&quot;</code> makes <code>cross_val_score()</code> return the RMSE of each fold as a negative number (Scikit-Learn treats higher scores as better), so put a minus sign in front to read it. Why: shows the error in dollars for every fold.</p></div>
+      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add two lines to part <b>3. Output</b>: <code>rmse = -cross_val_score(LinearRegression(), df[features], df[&quot;Sale_Price_USD&quot;], cv=5, scoring=&quot;______________________________&quot;)</code> and <code>print(rmse.round(0).tolist())</code></p></div>
+    </div>
+    <div class="check"><b>Check:</b> <code>[7862.0, 15224.0, 4004.0, 8201.0, 3374.0]</code>. The error ranges from about $3,400 to $15,200 depending on which properties are tested.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 14 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">10. Official References</span></div>
+  <div class="title">Where to Look Things Up</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: .14in;"><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Scikit-Learn: Linear Models (LinearRegression Documentation)</h2><p>https://scikit-learn.org/stable/modules/linear_model.html</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Scikit-Learn: Cross-Validation Metrics and Scoring</h2><p>https://scikit-learn.org/stable/modules/cross_validation.html</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Scikit-Learn: Regression Metrics (MAE, RMSE, R-squared)</h2><p>https://scikit-learn.org/stable/modules/model_evaluation.html#regression-metrics</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Gareth James et al.: An Introduction to Statistical Learning (ISLR with Applications in Python)</h2><p>https://www.statlearning.com/</p></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 15 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">11-13. Exercises</span></div>
+  <div class="title">Three Exercises</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid3 exg" data-uniform style="flex: 1; min-height: 0;"><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 1: GUIDED</div><h2>Property Valuation Engine</h2><p><b>Goal:</b> Train, predict, and evaluate a price model</p><p><b>File:</b> <code>YourName_S33_regression.py</code></p><p class="remember"><b>Check:</b> <code>Test RMSE: $11,539 | R-squared: 0.996</code></p></div><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 2: APPLIED</div><h2>Error per Property and a One-Row Prediction</h2><p><b>Goal:</b> Show each property&#x27;s error and price one new building</p><p><b>File:</b> <code>YourName_S33_practice.py</code></p><p class="remember"><b>Check:</b> MAPE <code>2.68</code>%</p></div><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 3: ADVANCED</div><h2>Does a Bigger Model Price Better?</h2><p><b>Goal:</b> Do more features give a better price model?</p><p><b>File:</b> <code>YourName_S33_challenge.py</code></p><p class="remember"><b>Check:</b> model C has the lowest average RMSE (<code>$7,733</code>)</p></div></div>
+    <div class="check">Full steps for all three exercises: sections 11-13 of the course page.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 16 / 16</span></div>
+</section>
+
+<script>
+window.__fitDone = false;
+function fitAll() {
+  document.querySelectorAll('.fitbox').forEach((box) => {
+    let size = parseFloat(box.dataset.start || '18');
+    const floor = parseFloat(box.dataset.floor || '15');
+    const apply = () => box.querySelectorAll('p, li, td, th, .outbox, pre').forEach((el) => {
+      if (el.tagName === 'PRE') { el.style.fontSize = Math.max(9.5, size - 3.5) + 'pt'; return; }
+      if (el.classList.contains('outbox')) { el.style.fontSize = Math.max(11, size - 4.5) + 'pt'; return; }
+      el.style.fontSize = size + 'pt';
+    });
+    apply();
+    const over = () => box.scrollHeight > box.clientHeight + 1 || box.scrollWidth > box.clientWidth + 1
+      || [...box.querySelectorAll('pre')].some((pre) => pre.scrollHeight > pre.clientHeight + 6 || pre.scrollWidth > pre.clientWidth + 6);
+    while (over() && size > floor) { size -= 0.5; apply(); }
+    if (over()) box.dataset.overflow = 'yes';
+    box.__apply = (v) => { size = v; apply(); };
+    box.dataset.size = size;
+  });
+  // cards on one slide share one size, so they read as a set
+  document.querySelectorAll('[data-uniform]').forEach((group) => {
+    const boxes = [...group.querySelectorAll('.fitbox')];
+    const min = Math.min(...boxes.map((b) => parseFloat(b.dataset.size)));
+    boxes.forEach((b) => b.__apply(min));
+  });
+  window.__fitDone = true;
+}
+document.fonts.ready.then(() => { fitAll(); document.querySelectorAll('[data-overflow]').forEach((el) => el.removeAttribute('data-overflow')); fitAll(); });
+</script>
+
+</body>
+</html>

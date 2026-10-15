@@ -1,39 +1,570 @@
-<!doctype html><html lang="en-US"><meta charset="utf-8"><title>Session 4.3</title><style>
-@page{size:16in 9in;margin:0}*{box-sizing:border-box}body{margin:0;font-family:"Times New Roman",serif;color:#18181B}.slide{width:16in;height:9in;padding:.45in .8in .4in;display:flex;flex-direction:column;background:#fff;page-break-after:always}header{font-size:15pt;color:#991B1B;font-weight:bold}header span{margin-left:.25in;color:#64748B;font-weight:normal}h1{font-size:34pt;line-height:1.08;margin:.13in 0 .08in}h2{font-size:21pt;margin:.06in 0}.slide>i{display:block;width:1.2in;height:4px;background:#991B1B;margin-bottom:.2in}main{flex:1;min-height:0;display:grid;grid-template-columns:repeat(2,1fr);gap:.2in}main.three{grid-template-columns:repeat(3,1fr);gap:.18in}article{border:1px solid #CBD5E1;border-radius:10px;padding:.18in;overflow:hidden}article b{font-size:14pt;color:#991B1B}p,li{font-size:17pt;line-height:1.25;margin:.06in 0}footer{margin-top:.18in;border-top:1px solid #CBD5E1;padding-top:.1in;font-size:15pt;color:#64748B;display:flex;justify-content:space-between}main.overview{grid-template-columns:2fr 3fr}main.overview article{display:flex;flex-direction:column}.overview ul.lead{margin:.12in 0 0;padding-left:.32in}.overview ul.lead li{font-size:21pt}.overview .flow{margin-top:auto;font-size:16pt;color:#64748B;border-top:1px solid #CBD5E1;padding-top:.1in}.overview ol{margin:.1in 0 0;padding-left:.38in}.overview li{font-size:20pt;line-height:1.3;margin:0 0 .16in}.code{display:flex;gap:.3in}.code pre{width:58%;margin:0;background:#18181B;border-radius:10px;color:#E5E7EB;padding:.22in;font:13.5pt/1.28 "DejaVu Sans Mono",monospace;white-space:pre-wrap;overflow-wrap:anywhere;overflow:hidden}.code aside{flex:1;display:flex;flex-direction:column;gap:.13in}.code aside article{flex:1}</style><body>
-<section class="slide"><header><b>MODULE 4</b><span>Session Overview</span></header><h1>Session 4.3: AI Applications in Business Decision-Making Part 2: Pricing Optimization and Revenue Management</h1><i></i><main class="overview"><article><b>TODAY'S PURPOSE</b><h2>Why This Session Matters</h2><ul class="lead"><li>Set prices with data instead of guesswork</li><li>Balance revenue, margin, and inventory</li><li>Plan markdowns that clear stock on time</li></ul><p class="flow">Today's flow: 60 min lecture, then 120 min hands-on lab</p></article><article><b>EXPECTED OUTCOMES</b><h2>By the end of today, you will be able to:</h2><ol><li>Calculate the Price Elasticity of Demand (PED)</li><li>Simulate revenue and margin across prices</li><li>Recommend markdowns that clear inventory on time</li></ol></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 1 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 4</b><span>Core Vocabulary</span></header><h1>Concepts for This Session</h1><i></i><main class="three"><article><b>CONCEPT 1</b><h2>Price Elasticity of Demand (PED)</h2><p> The percentage change in quantity demanded resulting from a 1% change in product price, quantifying consumer price sensitivity.</p></article><article><b>CONCEPT 2</b><h2>Revenue Management Optimization</h2><p> Programmatically identifying the price point that maximizes total gross profit ((Price - Unit_Cost) Quantity) subject to market demand curves.</p></article><article><b>CONCEPT 3</b><h2>Gross Margin Simulation</h2><p> Simulating projected sales volume and financial profit across discrete pricing scenarios (+5%, +10%, -10%).</p></article><article><b>CONCEPT 4</b><h2>Competitor Price Gap Sensitivity</h2><p> Modeling how the premium or discount relative to competitor catalog prices influences customer purchase conversion.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 2 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 4</b><span>Computational Foundations</span></header><h1>How the Concept Works in Practice</h1><i></i><main><article><b>FOUNDATION 1</b><h2>Microeconomic Demand Curves in Empirical Machine Learning</h2><p> Translating economic theory into executable code. Rather than assuming static demand curves, machine learning regression estimates empirical price sensitivity directly from historical sales and competitor price variations.</p></article><article><b>FOUNDATION 2</b><h2>Revenue Optimization vs. Margin Maximization</h2><p> Maximizing total revenue does not always maximize operating profit. Lowering prices may increase unit sales while eroding gross margins. Algorithms compute the exact price that maximizes bottom-line profit dollars.</p></article><article><b>FOUNDATION 3</b><h2>Dynamic Response to Competitor Shifts</h2><p> Consumer e-commerce purchase decisions depend heavily on relative price differences. Models incorporate the ratio of Current_Price / Competitor_Price as a primary explanatory feature.</p></article><article><b>FOUNDATION 4</b><h2>Managing Inventory Expiration and Velocity</h2><p> High inventory holding costs and obsolescence risks require dynamic price adjustments. If daily sales velocity falls behind targets, automated algorithms apply markdown tiers to clear inventory before fiscal year-end.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 3 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 4</b><span>Development Workflow</span></header><h1>Build, Test, and Diagnose in the IDE</h1><i></i><main><article><b>[1] FILE EXPLORER</b><h2>Organize Assets</h2><p>Use the session dataset and keep scripts in a clear workspace.</p></article><article><b>[2] CODE EDITOR</b><h2>Write Small Segments</h2><p>Run each completed segment before expanding the program.</p></article><article><b>[3] AI AGENT CHAT</b><h2>Diagnose Errors</h2><p>Capture the traceback, request an explanation, and review the fix.</p></article><article><b>[4] INTEGRATED TERMINAL</b><h2>Verify Execution</h2><p>Confirm the final program completes with return code 0.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 4 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE</b><span>Style 2 Harvard Dual-Pane Editor</span></header><h1>Script Demonstration 1: AI Applications in Business Decision-Making Part 2: Pricing Optimization and Revenue Management</h1><i></i><main class="code"><pre>import pandas as pd
-    import numpy as np
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<title>Session 4.3 Lecture</title>
+<style>
+@page { size: 16in 9in; margin: 0; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "Times New Roman", serif; color: #18181B; }
+.slide { width: 16in; height: 9in; padding: .45in .8in .4in; display: flex; flex-direction: column; background: #FFF; page-break-after: always; }
+.eyebrow { color: #991B1B; font-size: 15pt; font-weight: bold; letter-spacing: .02em; }
+.kicker { color: #64748B; font-size: 15pt; margin-left: .25in; }
+.title { font-size: 36pt; line-height: 1.05; font-weight: bold; margin: .12in 0 .08in; }
+.rule { height: 4px; background: #991B1B; width: 1.2in; margin-bottom: .18in; flex-shrink: 0; }
+.body { flex: 1; min-height: 0; display: flex; gap: .25in; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: .2in; width: 100%; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: .18in; width: 100%; }
+.card { border: 1px solid #CBD5E1; border-radius: 10px; padding: .16in .2in; background: #FFF; min-height: 0; overflow: hidden; }
+.card h2 { font-size: 22pt; margin: .04in 0 .08in; }
+.card p, .card li { font-size: 18pt; line-height: 1.25; margin: .05in 0; }
+.card ul { margin: .04in 0 0; padding-left: .3in; }
+.tag { color: #991B1B; font-size: 15pt; font-weight: bold; }
+.what, .why { font-size: 18pt; line-height: 1.25; margin: .05in 0; }
+.what b, .why b { color: #991B1B; }
+code { font-family: "DejaVu Sans Mono", monospace; font-size: .86em; background: #F1F5F9; border: 1px solid #E2E8F0; border-radius: 4px; padding: 0 .04in; white-space: nowrap; }
+h2 code { font-size: .82em; }
+.footer { border-top: 1px solid #CBD5E1; min-height: .42in; margin-top: .18in; display: flex; align-items: end; justify-content: space-between; color: #475569; font-size: 15pt; flex-shrink: 0; }
 
-    df = pd.read_csv("data/session_04_03_dataset.csv")
+/* Slide 1 */
+.overview { grid-template-columns: 2fr 3fr; }
+.overview .card { display: flex; flex-direction: column; }
+.overview ul.lead { margin: .1in 0 0; padding-left: .32in; }
+.overview ul.lead li { font-size: 20pt; line-height: 1.25; margin: 0 0 .1in; }
+.overview .card .flow { margin-top: auto; font-size: 16pt; color: #64748B; border-top: 1px solid #CBD5E1; padding-top: .1in; }
+.overview ol { margin: .06in 0 0; padding-left: .38in; }
+.overview ol > li { font-size: 21pt; line-height: 1.25; margin: 0 0 .12in; }
+.gloss { display: block; font-size: 18pt; color: #475569; margin-top: .03in; }
 
-    # Percentage premium relative to competitor
-    df["Price_Premium_Pct"] = ((df["Current_Price_USD"] - df["Competitor_Price_USD"]) / df["Competitor_Price_USD"]) * 100.0
+/* Code slides */
+.code-panel { width: 60%; background: #18181B; border-radius: 10px; color: #E5E7EB; padding: .16in .22in; display: flex; flex-direction: column; flex-shrink: 0; }
+.code-header { color: #CBD5E1; font: 14pt "DejaVu Sans Mono", monospace; border-bottom: 1px solid #3F3F46; padding-bottom: .08in; display: flex; align-items: center; gap: .08in; }
+.dot { width: .13in; height: .13in; border-radius: 50%; display: inline-block; }
+pre { white-space: pre; font: 14.5pt/1.38 "DejaVu Sans Mono", monospace; margin: .12in 0 0; overflow: hidden; }
+.cm { color: #94A3B8; }
+.sec { color: #FBBF24; font-weight: bold; }
+.ipo { margin-left: auto; color: #FBBF24; font-size: 13pt; }
+.notes .card.wide { flex: 1.6; }
 
-    # Empirical Price Elasticity: % Change in Sales / % Change in Price
-    base_price = df["Current_Price_USD"].mean()
-    base_sales = df["Historical_Daily_Sales_Units"].mean()
+/* Rows and columns slide */
+.table-wrap { width: 60%; flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; }
+table.df { border-collapse: collapse; font: 16pt/1.3 "DejaVu Sans Mono", monospace; }
+table.df td, table.df th { padding: .07in .14in; text-align: left; white-space: nowrap; }
+table.df thead th { border-bottom: 2px solid #18181B; }
+table.df tbody td { border-bottom: 1px solid #E2E8F0; }
+table.df .num { text-align: right; }
+table.df .idx { color: #64748B; }
+table.df .lbl { font: bold 15pt "Times New Roman", serif; border: none; padding: 0 .1in .04in; }
+.row-lbl { color: #1D4ED8; text-align: right !important; }
+.col-lbl { color: #B45309; text-align: center !important; }
+table.df .hl-row td { background: #DBEAFE; }
+table.df .hl-col { background: #FEF3C7; }
+table.df .hl-row td.hl-col { background: #FDE68A; outline: 3px solid #991B1B; outline-offset: -3px; font-weight: bold; }
+table.df .more { color: #64748B; font-family: "Times New Roman", serif; font-style: italic; }
+.card .tag.blue { color: #1D4ED8; }
+.card .tag.amber { color: #B45309; }
+.card.row-card { border: 2px solid #93C5FD; }
+.card.col-card { border: 2px solid #FCD34D; }
+.card.cell-card { border: 2px solid #991B1B; }
+.notes { flex: 1; display: flex; flex-direction: column; gap: .12in; min-width: 0; }
+.notes .card { flex: 1; }
+.notes .card h2 { font-size: 20pt; }
 
-    # Simulated elasticity: For every 10% price premium, daily sales drop by 15% (Elasticity = -1.5)
-    elasticity_coefficient = -1.5
-    print(f"Empirical Price Elasticity of Demand Coefficient: {elasticity_coefficient}")</pre><aside><article><b>SYNTAX</b><h2>Readable Structure</h2><p>Observe the syntax and indentation that control execution.</p></article><article><b>RUNTIME</b><h2>Verified Execution</h2><p>Run the example in the integrated terminal and inspect the output.</p></article><article><b>BUSINESS VALUE</b><h2>Applied Automation</h2><p>Use the pattern to automate a repeatable business decision.</p></article></aside></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 5 / 8</span></footer></section><section class="slide"><header><b>MODULE</b><span>Style 2 Harvard Dual-Pane Editor</span></header><h1>Script Demonstration 2: AI Applications in Business Decision-Making Part 2: Pricing Optimization and Revenue Management</h1><i></i><main class="code"><pre>def simulate_pricing_scenario(data, price_adjustment_pct):
-        simulated = data.copy()
-        simulated["Simulated_Price_USD"] = simulated["Current_Price_USD"] * (1.0 + price_adjustment_pct)
-        # Quantity adjusted by elasticity
-        simulated["Simulated_Daily_Units"] = simulated["Historical_Daily_Sales_Units"] * (1.0 + (elasticity_coefficient * price_adjustment_pct))
-        simulated["Simulated_Gross_Profit_USD"] = (simulated["Simulated_Price_USD"] - simulated["Unit_Cost_USD"]) * simulated["Simulated_Daily_Units"]
-        return simulated["Simulated_Gross_Profit_USD"].sum()
+.check { margin-top: .14in; background: #FEF2F2; border: 1px solid #FCA5A5; border-radius: 10px; padding: .12in .2in; font-size: 18pt; flex-shrink: 0; }
 
-    current_profit = simulate_pricing_scenario(df, 0.0)
-    plus_5_profit = simulate_pricing_scenario(df, 0.05)
-    minus_5_profit = simulate_pricing_scenario(df, -0.05)
+/* Six terms visual map */
+.fit { flex: 1; min-height: 0; display: grid; grid-template-rows: 1fr 1fr; gap: .16in; }
+.fit-row { display: flex; gap: .14in; align-items: stretch; min-height: 0; }
+.fit-box { border: 1px solid #CBD5E1; border-radius: 10px; padding: .12in .16in; display: flex; flex-direction: column; min-width: 0; }
+.fit-box .tag { margin-bottom: .04in; }
+.fit-box .cap { font-size: 18pt; margin: .06in 0 0; line-height: 1.2; }
+.fit-arrow { display: flex; flex-direction: column; justify-content: center; align-items: center; color: #991B1B; flex-shrink: 0; }
+.fit-arrow .big { font-size: 40pt; line-height: 1; }
+.fit-arrow code { font-size: 14pt; }
+.rawcsv { background: #18181B; color: #E5E7EB; border-radius: 8px; padding: .1in .14in; font: 15pt/1.4 "DejaVu Sans Mono", monospace; white-space: pre; }
+.rawcsv b { color: #FBBF24; }
+table.mini { border-collapse: collapse; font: 15pt/1.3 "DejaVu Sans Mono", monospace; }
+table.mini th, table.mini td { padding: .03in .1in; text-align: left; white-space: nowrap; border-bottom: 1px solid #E2E8F0; }
+table.mini th { border-bottom: 2px solid #18181B; }
+table.mini .num { text-align: right; }
+table.mini .idx { color: #64748B; }
+table.mini .ser { background: #FEF3C7; }
+table.mini .new { background: #DCFCE7; font-weight: bold; }
+table.mini tr.keep td { background: #DBEAFE; font-weight: bold; }
+table.mini tr.drop td { color: #CBD5E1; }
+.op { font: bold 26pt "DejaVu Sans Mono", monospace; color: #991B1B; align-self: center; padding: 0 .06in; }
+.toolbar { font-size: 17pt; color: #475569; margin-bottom: .1in; flex-shrink: 0; }
+.toolbar b { color: #991B1B; }
 
-    print(f"Current Daily Gross Profit: ${current_profit:,.2f}")
-    print(f"Daily Gross Profit at +5% Price: ${plus_5_profit:,.2f}")
-    print(f"Daily Gross Profit at -5% Price: ${minus_5_profit:,.2f}")</pre><aside><article><b>SYNTAX</b><h2>Readable Structure</h2><p>Observe the syntax and indentation that control execution.</p></article><article><b>RUNTIME</b><h2>Verified Execution</h2><p>Run the example in the integrated terminal and inspect the output.</p></article><article><b>BUSINESS VALUE</b><h2>Applied Automation</h2><p>Use the pattern to automate a repeatable business decision.</p></article></aside></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 6 / 8</span></footer></section><section class="slide"><header><b>MODULE</b><span>Style 2 Harvard Dual-Pane Editor</span></header><h1>Script Demonstration 3: AI Applications in Business Decision-Making Part 2: Pricing Optimization and Revenue Management</h1><i></i><main class="code"><pre># Days of inventory remaining at current sales velocity
-    df["Days_Of_Inventory_Remaining"] = df["Inventory_Units_Count"] / df["Historical_Daily_Sales_Units"]
-    df["Markdown_Recommended"] = df["Days_Of_Inventory_Remaining"].apply(lambda d: "Markdown_15Pct" if d &gt; 20 else "Maintain_Price")
-    print(df[["Product_ID", "Inventory_Units_Count", "Days_Of_Inventory_Remaining", "Markdown_Recommended"]].head(3))</pre><aside><article><b>SYNTAX</b><h2>Readable Structure</h2><p>Observe the syntax and indentation that control execution.</p></article><article><b>RUNTIME</b><h2>Verified Execution</h2><p>Run the example in the integrated terminal and inspect the output.</p></article><article><b>BUSINESS VALUE</b><h2>Applied Automation</h2><p>Use the pattern to automate a repeatable business decision.</p></article></aside></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 7 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 4</b><span>Hands-On Practice</span></header><h1>Exercise 1 and Exercise 2</h1><i></i><main><article><b>EXERCISE 1: GUIDED</b><h2>Foundational Practice</h2><p>Follow the lab protocol, run the script, and verify its output with the session dataset.</p></article><article><b>EXERCISE 2: DEBUGGING</b><h2>Applied Challenge</h2><p>Extend the program, diagnose an intentional error, apply the verified correction, and confirm return code 0.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 8 / 8</span></footer></section></body></html>
+/* DataFrame visual map */
+.xl th, .xl td { font-size: 15pt; }
+.xl .rn { background: #F1F5F9; color: #64748B; text-align: center; }
+.xl .bad { background: #FEE2E2; color: #B91C1C; font-weight: bold; }
+.side { display: flex; gap: .22in; align-items: flex-start; }
+.side .lab { font-size: 17pt; font-weight: bold; margin-bottom: .04in; }
+.brace { border-left: 4px solid #16A34A; padding-left: .1in; }
+.anat .ix { background: #DBEAFE; color: #1D4ED8; }
+.anat .hd { background: #FEF3C7; }
+.anat .vl { background: #DCFCE7; }
+.chips { display: flex; gap: .12in; flex-wrap: wrap; margin-top: .08in; }
+.chip { font-size: 16pt; padding: .02in .1in; border-radius: 6px; }
+.dt { font-size: 14pt; padding: .01in .08in; border-radius: 5px; background: #18181B; color: #FBBF24; font-family: "DejaVu Sans Mono", monospace; }
+.insp td { font-size: 15pt; vertical-align: top; }
+.insp td:first-child { color: #991B1B; }
+.pr, .insp td.pr { font: 18pt/1.3 "Times New Roman", serif; }
+td.pr { white-space: normal !important; }
+
+/* IDE slide */
+.shot { width: 60%; flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; }
+.shot img { width: 100%; border: 1px solid #CBD5E1; border-radius: 10px; display: block; }
+.shot .cap { font-size: 17pt; margin: .1in 0 0; }
+.steps { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .1in; justify-content: center; }
+.step { display: flex; gap: .14in; align-items: flex-start; border: 1px solid #CBD5E1; border-radius: 10px; padding: .1in .14in; }
+.badge { background: #991B1B; color: #FFF; font: bold 16pt "DejaVu Sans Mono", monospace; border-radius: 6px; padding: .02in .08in; flex-shrink: 0; }
+.step h3 { font-size: 20pt; margin: 0 0 .02in; }
+.step p { font-size: 18pt; line-height: 1.22; margin: .02in 0; }
+.step p.eg { font-size: 16pt; color: #475569; }
+
+/* Quick check slides */
+.qc { grid-template-columns: 1fr 1.15fr; }
+.qc .card { display: flex; flex-direction: column; }
+.snip { background: #18181B; color: #E5E7EB; border-radius: 8px; padding: .1in .16in; font: 16pt/1.4 "DejaVu Sans Mono", monospace; white-space: pre; margin: .04in 0 .1in; }
+.snip .blank { background: #FBBF24; color: #18181B; padding: 0 .06in; border-radius: 3px; font-weight: bold; }
+.snip .cm { color: #94A3B8; }
+.snip-lab { font-size: 17pt; font-weight: bold; margin-top: .06in; }
+.strip { display: flex; gap: .05in; margin: .1in 0 .04in; }
+.strip span { flex: 1; text-align: center; font: 15pt "DejaVu Sans Mono", monospace; padding: .06in 0; border-radius: 5px; background: #F1F5F9; color: #94A3B8; }
+.strip .h { background: #DBEAFE; color: #1D4ED8; font-weight: bold; }
+.strip .t { background: #DCFCE7; color: #15803D; font-weight: bold; }
+.strip-lab { display: flex; justify-content: space-between; font-size: 16pt; }
+.flowline { display: flex; align-items: center; gap: .14in; margin: .1in 0; font: 17pt "DejaVu Sans Mono", monospace; }
+.flowline .box { background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 6px; padding: .04in .12in; }
+.flowline .arr { color: #991B1B; font-size: 22pt; }
+.flowline .res { background: #DCFCE7; border: 1px solid #86EFAC; border-radius: 6px; padding: .04in .12in; font-weight: bold; }
+.vstack { margin-top: .08in; }
+.vstack td, .vstack th { padding: .02in .12in; }
+.vstack tr.h td:not(.side-lab) { background: #DBEAFE; color: #1D4ED8; font-weight: bold; }
+.vstack tr.t td:not(.side-lab) { background: #DCFCE7; color: #15803D; font-weight: bold; }
+.vstack tr.gap td { color: #94A3B8; font-family: "Times New Roman", serif; font-style: italic; }
+.vstack .side-lab { border: none; font: 17pt "Times New Roman", serif; vertical-align: middle; }
+.vstack .h-lab { color: #1D4ED8; }
+.vstack .t-lab { color: #15803D; }
+table.mini th.plain { font: bold 17pt "Times New Roman", serif; }
+.overview ol.biz > li { font-size: 20pt; margin: 0 0 .1in; }
+.overview .q { display: block; color: #991B1B; font-style: italic; font-weight: bold; }
+.overview .sit-note { font-size: 19pt; font-weight: bold; margin: .04in 0 0; }
+
+/* CSV intro slide */
+.csvflow { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr auto 1.25fr auto 1fr; gap: .14in; align-items: stretch; }
+.csvflow .col { border: 1px solid #CBD5E1; border-radius: 10px; padding: .14in .18in; display: flex; flex-direction: column; gap: .1in; }
+.csvflow .item { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: .08in .12in; font-size: 18pt; line-height: 1.2; }
+.csvflow .item small { display: block; font-size: 16pt; color: #475569; }
+.csvflow .mid { border: 2px solid #991B1B; }
+.csvflow .arrow { display: flex; align-items: center; color: #991B1B; font-size: 40pt; }
+.csvflow li { font-size: 18pt; line-height: 1.3; margin: .04in 0; }
+.csvflow .fname { font: bold 15pt "DejaVu Sans Mono", monospace; color: #18181B; }
+
+/* CSV vs XLSX */
+.src-row { display: flex; gap: .14in; align-items: stretch; flex-shrink: 0; }
+.src-box { flex: 1; border: 1px solid #CBD5E1; border-radius: 10px; padding: .1in .16in; }
+.chips2 { display: flex; gap: .1in; flex-wrap: wrap; margin-top: .06in; }
+.chips2 span { background: #F1F5F9; border: 1px solid #E2E8F0; border-radius: 6px; padding: .03in .12in; font-size: 18pt; }
+.arrow2 { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #991B1B; font-size: 34pt; line-height: 1; }
+.arrow2 small { font-size: 15pt; }
+.files { display: flex; gap: .12in; align-items: center; margin-top: .06in; }
+.file { font: bold 16pt "DejaVu Sans Mono", monospace; padding: .03in .12in; border-radius: 6px; color: #FFF; }
+.file.xlsx { background: #64748B; }
+.file.csv { background: #15803D; }
+.vs { flex: 1; min-height: 0; display: flex; gap: .16in; }
+.vs-col { flex: 1; border-radius: 12px; padding: .14in .2in; display: flex; flex-direction: column; }
+.vs-col.bad { border: 2px solid #CBD5E1; background: #F8FAFC; }
+.vs-col.good { border: 3px solid #15803D; background: #F0FDF4; flex: 1.35; }
+.vs-head { font-size: 24pt; font-weight: bold; display: flex; align-items: center; gap: .12in; }
+.vs-sub { font-size: 18pt; margin: .06in 0 .1in; color: #334155; }
+.vs-mid { align-self: center; font: bold 26pt "Times New Roman", serif; color: #64748B; }
+.apps { display: flex; flex-wrap: wrap; gap: .1in; }
+.app { font-size: 18pt; background: #FFF; border-radius: 8px; padding: .06in .14in; display: flex; flex-direction: column; min-width: 1.5in; }
+.app b { font-size: 24pt; line-height: 1; }
+.app small { font-size: 15pt; color: #64748B; }
+.rawcsv.garbled { color: #94A3B8; }
+.app.ok { border: 2px solid #86EFAC; }
+.app.ok b { color: #15803D; }
+.app.no { border: 2px solid #FCA5A5; }
+.app.no b { color: #B91C1C; }
+
+/* Session 1.4 additions */
+table.terms { border-collapse: collapse; width: 100%; margin: .04in 0 .1in; }
+table.terms td { font-size: 18pt; padding: .05in .08in; border-bottom: 1px solid #E2E8F0; }
+table.terms td.num { text-align: right; }
+.vbars { display: flex; flex-direction: column; gap: .1in; margin-top: .12in; }
+.vrow { display: flex; align-items: center; gap: .12in; }
+.vq { width: .45in; font: bold 17pt "DejaVu Sans Mono", monospace; }
+.vval { width: 1.1in; font: 16pt "DejaVu Sans Mono", monospace; text-align: right; }
+.vtrack { flex: 1; height: .42in; position: relative; background: #F8FAFC; border-radius: 4px; }
+.vzero { position: absolute; left: 40%; top: 0; bottom: 0; border-left: 2px solid #18181B; }
+.vth { position: absolute; left: 52%; top: -.04in; bottom: -.04in; border-left: 2px dashed #B91C1C; }
+.vbar { position: absolute; top: .07in; bottom: .07in; border-radius: 3px; }
+.vbar.over { background: #EF4444; }
+.vbar.warn { background: #F59E0B; }
+.vbar.under { background: #22C55E; }
+.vtrack-lab { flex: 1; position: relative; height: .3in; }
+.vtrack-lab span { position: absolute; transform: translateX(-50%); font-size: 15pt; color: #475569; white-space: nowrap; }
+.bridge { flex: 1; min-height: 0; display: flex; gap: .16in; align-items: stretch; }
+.bridge .b-xl, .bridge .b-pd { border-radius: 10px; padding: .1in .18in; display: flex; flex-direction: column; justify-content: center; }
+.bridge .b-xl { flex: 1; border: 2px solid #CBD5E1; background: #F8FAFC; }
+.bridge .b-pd { flex: 1.5; border: 2px solid #15803D; background: #F0FDF4; }
+.bridge h2 { font-size: 22pt; margin: .02in 0; }
+.bridge p { font-size: 18pt; margin: .02in 0; }
+.b-arrow { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #991B1B; font-size: 40pt; line-height: 1; }
+.b-arrow.small { font-size: 30pt; }
+.b-arrow small { font-size: 15pt; }
+.sac { display: flex; gap: .16in; align-items: center; flex-wrap: wrap; }
+.sac-col { display: flex; flex-direction: column; gap: .06in; }
+.sac-lab { font-size: 16pt; color: #475569; }
+.grp { font: 15pt "DejaVu Sans Mono", monospace; padding: .03in .1in; border-radius: 5px; }
+.g1 { background: #DBEAFE; } .g2 { background: #FEF3C7; } .g3 { background: #EDE9FE; } .g4 { background: #DCFCE7; }
+table.mini .keycol { background: #FEF3C7; }
+table.mini .hl-c { background: #DCFCE7; font-weight: bold; }
+table.mini .bad-c { background: #FEE2E2; color: #B91C1C; font-weight: bold; }
+table.mini tr.nan-row td { background: #FEF3C7; font-style: italic; }
+.snip .bad-t { color: #F87171; font-weight: bold; }
+.snip .ok-t { color: #4ADE80; font-weight: bold; }
+table.mini td.tcell { background: #DBEAFE; color: #1D4ED8; font-weight: bold; }
+table.mini td.fcell { color: #94A3B8; }
+.qc { grid-template-columns: 1fr 1.4fr; }
+.qc .snip { font-size: 14.5pt; }
+.fit-box .snip { font-size: 14.5pt; margin: .04in 0; }
+.flip { display: flex; gap: .1in; align-items: center; font: 16pt "DejaVu Sans Mono", monospace; margin: .08in 0; }
+.flip .t { background: #DBEAFE; padding: .03in .1in; border-radius: 5px; }
+.flip .f { background: #F1F5F9; padding: .03in .1in; border-radius: 5px; }
+
+/* Session 2.1 additions */
+.big-li { font-size: 22pt; margin: .1in 0; }
+.notes .card.xwide { flex: 2.4; }
+.rules { border: 2px solid #991B1B; border-radius: 10px; padding: .1in .18in; flex-shrink: 0; }
+.rule-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: .12in; margin-top: .06in; }
+.rule-row span { font-size: 17pt; background: #FEF2F2; border-radius: 6px; padding: .06in .1in; }
+.http { display: flex; align-items: center; gap: .2in; flex-shrink: 0; }
+.http .node { border: 2px solid #18181B; border-radius: 10px; padding: .12in .2in; font-size: 20pt; font-weight: bold; text-align: center; min-width: 2.4in; }
+.http .node small { font: 15pt "DejaVu Sans Mono", monospace; font-weight: normal; color: #475569; }
+.msgs { flex: 1; display: flex; flex-direction: column; gap: .1in; }
+.msg { display: flex; align-items: center; gap: .1in; font-size: 19pt; border-radius: 8px; padding: .06in .14in; }
+.msg b { font-size: 28pt; color: #991B1B; }
+.msg.req { background: #DBEAFE; justify-content: space-between; }
+.msg.res { background: #DCFCE7; }
+.render { border: 1px solid #CBD5E1; border-radius: 10px; padding: .16in; background: #FFF; box-shadow: 0 2px 6px rgba(0,0,0,.08); width: 3.6in; margin: .08in 0; }
+.render .r-name { font: bold 22pt Arial, sans-serif; }
+.render .r-price { font: bold 26pt Arial, sans-serif; color: #B91C1C; margin: .04in 0; }
+.render .r-stock { font: 16pt Arial, sans-serif; color: #15803D; }
+.rawcsv.small { font-size: 13.5pt; }
+.rawcsv b { color: #FBBF24; }
+.tree { font: 16pt/1.6 "DejaVu Sans Mono", monospace; margin-top: .08in; }
+.tn { border-left: 2px solid #CBD5E1; padding-left: .1in; }
+.tn.t1 { margin-left: .3in; }
+.tn.t2 { margin-left: .6in; }
+.tn small { color: #64748B; font-size: 14pt; }
+.tn.hit { background: #FEF3C7; font-weight: bold; }
+.cards4 { display: flex; flex-direction: column; gap: .06in; }
+.cards4 span { font: 15pt "DejaVu Sans Mono", monospace; border: 1px solid #CBD5E1; border-radius: 6px; padding: .04in .1in; background: #F8FAFC; }
+
+/* session map + exercise 3 */
+.sm-q { border: 3px solid #991B1B; border-radius: 14px; padding: .1in .2in; font-size: 24pt; font-style: italic; background: #FEF2F2; align-self: flex-start; flex-shrink: 0; }
+.sm-q b { font-style: normal; color: #991B1B; }
+.sm-phases { flex: 1; min-height: 0; display: flex; gap: .14in; align-items: stretch; }
+.sm-phase { flex: 1; border: 2px solid #CBD5E1; border-radius: 12px; padding: .14in .2in; }
+.sm-phase.sm-p3 { border: 3px solid #15803D; background: #F0FDF4; }
+.sm-head { display: flex; gap: .14in; align-items: center; border-bottom: 2px solid #E2E8F0; padding-bottom: .08in; margin-bottom: .08in; }
+.sm-head b { font-size: 26pt; display: block; line-height: 1.1; }
+.sm-head small { font-size: 16pt; color: #64748B; }
+.sm-step { background: #991B1B; color: #FFF; border-radius: 50%; width: .5in; height: .5in; display: flex; align-items: center; justify-content: center; font-size: 20pt; font-weight: bold; flex-shrink: 0; }
+.sm-p3 .sm-step { background: #15803D; }
+.sm-phase p { font-size: 22pt; margin: .1in 0; line-height: 1.2; display: flex; }
+.sm-phase i { font-style: normal; font-family: "DejaVu Sans Mono", monospace; font-weight: bold; color: #991B1B; min-width: .6in; flex-shrink: 0; }
+.sm-p3 i { color: #15803D; }
+.sm-arrow { align-self: center; font-size: 34pt; color: #991B1B; }
+ol.ex3 { margin: .06in 0 0; padding-left: .36in; }
+ol.ex3 li { font-size: 18pt; line-height: 1.25; margin: .06in 0; }
+
+.card p.remember { font-size: 17pt; margin-top: .08in; color: #991B1B; }
+.card p.remember b { color: #991B1B; }
+.f7 .card ul { margin-top: .02in; }
+.f7 .card li { font-size: 17pt; }
+.f7 .card h2 { font-size: 21pt; }
+
+
+.fitbox { min-height: 0; overflow: hidden; }
+.card.fitbox p, .card.fitbox li { font-size: 18pt; }
+.mdtable { border-collapse: collapse; width: 100%; margin: .06in 0; }
+.mdtable th, .mdtable td { text-align: left; padding: .05in .1in; border-bottom: 1px solid #E2E8F0; font-size: 17pt; vertical-align: top; }
+.mdtable th { border-bottom: 2px solid #18181B; font-weight: bold; }
+.mdtable code { white-space: normal; }
+.card ul.tight { margin: .04in 0 0; padding-left: .3in; }
+.card ul.tight li { margin: .05in 0; line-height: 1.25; }
+.outbox { background: #18181B; color: #34D399; border-radius: 8px; padding: .1in .14in; font: 13.5pt/1.35 "DejaVu Sans Mono", monospace; white-space: pre; overflow: hidden; }
+.card p.remember { color: #991B1B; margin-top: .06in; }
+.card p.remember b { color: #991B1B; }
+.f7 .card h2 { font-size: 24pt; margin-bottom: .12in; }
+.f7 .card p.remember { margin-top: .16in; }
+.exg .card h2 { font-size: 24pt; }
+.exg .card p { margin: .1in 0; }
+.exg .card p code { font-size: .88em; }
+.big-q { font-size: 20pt; }
+.mdtable.cols td:first-child code { white-space: nowrap; overflow-wrap: normal; }
+.card code, .check code, .mdtable code, .card h2 { white-space: normal; overflow-wrap: anywhere; }
+.notes .card.how { flex: 1 1 auto; }
+.notes .card.out { flex: 0 0 auto; }
+
+
+/* session map with content */
+.sm-phase.fitbox { display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
+.sm-phase p.sm-item { display: flex; gap: .1in; margin: .06in 0; line-height: 1.15; }
+.sm-item i { font-style: normal; font-family: "DejaVu Sans Mono", monospace; font-weight: bold; color: #991B1B; min-width: .5in; flex-shrink: 0; }
+.sm-p3 .sm-item i { color: #15803D; }
+.sm-item b { display: block; font-size: 1em; }
+.sm-item span.d { display: block; font-size: .9em; color: #334155; }
+.sm-item code { font-size: .85em; white-space: normal; overflow-wrap: anywhere; }
+/* end session map */
+
+</style>
+</head>
+<body>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">1-2. Purpose and Outcomes</span></div>
+  <div class="title">Session 4.3: AI Applications in Business Decision-Making Part 2: Pricing Optimization and Revenue Management</div><div class="rule"></div>
+  <div class="body grid2 overview"><div class="card fitbox"><div class="tag">THE BUSINESS SITUATION</div><ul class="tight"><li>An online retailer sells 12 seasonal products; the season ends in 12 days, and stock left after that must be sold off cheaply</li><li>Prices were set by gut feeling: some may be too low (leaving profit on the table), others too high (leaving stock unsold)</li><li>The pricing manager asks: which prices should we raise, which should we cut, and how do we clear the stock before the season ends? Today, you measure how customers react to price and simulate profit before changing a single price</li></ul><p class="flow">Today's flow: 60 min lecture, then 120 min hands-on lab</p></div><div class="card fitbox"><div class="tag">EXPECTED OUTCOMES</div><h2>By the end of today, you will be able to:</h2><ol class="biz"><li><span class="q">"How strongly do customers react to price?"</span> Estimate the price elasticity of demand (the % change in units sold for a 1% change in price) from a price test</li><li><span class="q">"Would a price change raise profit?"</span> Simulate units, revenue, and gross profit for several price changes before making them</li><li><span class="q">"How do we clear the stock in time?"</span> Calculate the price cut each product needs to sell out before the season ends, and fix a <code>SyntaxError</code> (an unclosed bracket)</li></ol></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 1 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Session Map</span></div>
+  <div class="title">Session Map: Follow the Numbers</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: .14in;"><div class="sm-q"><b>Today's question:</b> Which prices should we raise, which should we cut, and how do we clear the stock before the season ends?</div><div class="sm-phases"><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">1</span><span><b>Why it matters</b><small>Lecture, part 1</small></span></div><p class="sm-item"><i>1.</i><span><b>Session Purpose</b><span class="d">answer today&#x27;s question</span></span></p><p class="sm-item"><i>2.</i><span><b>Learning Outcomes</b><span class="d">3 skills you will show today</span></span></p><p class="sm-item"><i>3.</i><span><b>Business Context</b><span class="d">Price, Volume, and Profit</span></span></p><p class="sm-item"><i>4.</i><span><b>Data Basics</b><span class="d">Measuring Elasticity with a Price Test</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">2</span><span><b>Learn the tools</b><small>Lecture, part 2</small></span></div><p class="sm-item"><i>5.</i><span><b>Lab Dataset</b><span class="d">2 CSVs</span></span></p><p class="sm-item"><i>6.</i><span><b>Keywords</b><span class="d">6 terms</span></span></p><p class="sm-item"><i>7.</i><span><b>Core Foundations</b><span class="d">5 ideas, one at a time</span></span></p><p class="sm-item"><i>8.</i><span><b>IDE Setup</b><span class="d">name files, run in the Terminal</span></span></p><p class="sm-item"><i>9.</i><span><b>Code Examples</b><span class="d">3 demos + Quick Checks</span></span></p><p class="sm-item"><i>10.</i><span><b>References</b><span class="d">3 official docs</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox sm-p3" data-start="22"><div class="sm-head"><span class="sm-step">3</span><span><b>Practice</b><small>Lab</small></span></div><p class="sm-item"><i>11.</i><span><b>Exercise 1: Guided</b><span class="d">Catalog Profit Curve</span></span></p><p class="sm-item"><i>12.</i><span><b>Exercise 2: Applied</b><span class="d">Markdowns That Clear the Stock</span></span></p><p class="sm-item"><i>13.</i><span><b>Exercise 3: Advanced</b><span class="d">The Best Season Price for Each Product</span></span></p></div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 2 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">3. Business Context</span></div>
+  <div class="title">Price, Volume, and Profit</div><div class="rule"></div>
+  <div class="body grid2" style="grid-template-columns: 1fr 1.15fr;"><div class="card fitbox"><div class="tag">KEY POINTS</div><ul class="tight"><li>A lower price sells more units but earns less on each one; a higher price earns more per unit but sells fewer.</li><li>Price elasticity of demand (PED): if elasticity is <code>-1.5</code>, a 1% price increase loses about 1.5% of units.</li><li>The goal is profit, not revenue: a cut can raise revenue and still lower profit, because each extra unit brings in less margin.</li><li>Seasonal stock: units left at the season&#x27;s end lose most of their value.</li></ul></div><div class="card fitbox"><div class="tag">SEE IT ON REAL DATA</div><table class="mdtable"><tr><th>Term</th><th>Meaning</th><th>Example (<code>PRD-200</code>)</th></tr><tr><td>Unit margin</td><td>price - unit cost</td><td><code>$49.99 - $22.50 = $27.49</code></td></tr><tr><td>Gross margin %</td><td>unit margin / price x 100</td><td><code>55.0</code>%</td></tr><tr><td>Daily gross profit</td><td>unit margin x daily units</td><td><code>$27.49 x 32 = $879.68</code></td></tr><tr><td>Days of stock</td><td>inventory / daily units</td><td><code>450 / 32 = 14.1</code> days</td></tr></table></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 3 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">4. Data Basics</span></div>
+  <div class="title">Measuring Elasticity with a Price Test</div><div class="rule"></div>
+  <div class="body grid2" style="grid-template-columns: 1fr 1.15fr;"><div class="card fitbox"><div class="tag">KEY POINTS</div><ul class="tight"><li>To measure how customers react, the retailer changed the price of <code>PRD-202</code> once a week for 5 weeks and recorded daily units sold:</li><li>Elasticity is the slope of a straight line through <code>log(units)</code> against <code>log(price)</code>.</li><li><code>np.polyfit(x, y, 1)</code> fits that straight line and returns its slope and intercept.</li><li>Using elasticity for a small price change: new units = old units x (1 + elasticity x price change).</li></ul></div><div class="card fitbox"><div class="tag">AT A GLANCE</div><table class="mdtable"><tr><th>Week</th><th>Price</th><th>Daily units</th></tr><tr><td>1</td><td><code>$59.99</code></td><td><code>27.9</code></td></tr><tr><td>3</td><td><code>$69.99</code></td><td><code>22.0</code></td></tr><tr><td>5</td><td><code>$79.99</code></td><td><code>18.1</code></td></tr></table></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 4 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">5. Lab Practice Dataset</span></div>
+  <div class="title">The Data for Today</div><div class="rule"></div>
+  <div class="body grid2" style="grid-template-columns: 1fr 2.2fr;"><div class="card fitbox"><div class="tag">FILES</div><ul class="tight"><li><code>data/session_04_03_dataset.csv</code></li><li><code>data/session_04_03_price_test.csv</code></li></ul><p>Price test columns: <code>Test_Week</code> (1 to 5), <code>Product_ID</code>, <code>Test_Price_USD</code>, and <code>Avg_Daily_Units</code> (average units sold per day that week).</p></div><div class="card fitbox"><div class="tag">COLUMNS</div><table class="mdtable cols"><tr><td><code>Product_ID</code></td><td>Product code (e.g., <code>PRD-201</code>).</td></tr><tr><td><code>Current_Price_USD</code></td><td>Our current price in U.S. Dollars.</td></tr><tr><td><code>Competitor_Price_USD</code></td><td>The main competitor&#x27;s price for the same product.</td></tr><tr><td><code>Inventory_Units_Count</code></td><td>Units in stock.</td></tr><tr><td><code>Historical_Daily_Sales_Units</code></td><td>Average units sold per day at the current price.</td></tr><tr><td><code>Unit_Cost_USD</code></td><td>What one unit costs us, delivered to the warehouse.</td></tr></table></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 5 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">6. Keywords</span></div>
+  <div class="title">6 Terms You Need Today</div><div class="rule"></div>
+  <div class="body grid3" style="grid-template-rows: repeat(2, 1fr);"><div class="card fitbox"><div class="tag">TERM 1</div><h2><code>Price Elasticity of Demand (PED)</code></h2><p class="what"><b>What:</b> the % change in units sold for a 1% change in price</p><p class="why"><b>Why:</b> tells you whether a price rise loses a few customers or many</p></div><div class="card fitbox"><div class="tag">TERM 2</div><h2><code>Unit Margin</code> and <code>Gross Profit</code></h2><p class="what"><b>What:</b> price minus unit cost, and unit margin times units sold</p><p class="why"><b>Why:</b> the measure a pricing decision should maximize</p></div><div class="card fitbox"><div class="tag">TERM 3</div><h2><code>Price Simulation</code></h2><p class="what"><b>What:</b> computing units and profit for several possible prices before choosing one</p><p class="why"><b>Why:</b> test a decision on paper, not on real customers</p></div><div class="card fitbox"><div class="tag">TERM 4</div><h2><code>Days of Stock</code></h2><p class="what"><b>What:</b> inventory divided by daily sales</p><p class="why"><b>Why:</b> shows which products will not sell out in time</p></div><div class="card fitbox"><div class="tag">TERM 5</div><h2><code>Markdown</code></h2><p class="what"><b>What:</b> a planned price cut to sell stock faster</p><p class="why"><b>Why:</b> a smaller, earlier cut usually loses less than a fire sale at the end</p></div><div class="card fitbox"><div class="tag">TERM 6</div><h2><code>Salvage Value</code></h2><p class="what"><b>What:</b> what leftover stock is still worth after the season</p><p class="why"><b>Why:</b> decides how costly it is to be left with unsold units</p></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 6 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">7. Core Foundations</span></div>
+  <div class="title">How It Works</div><div class="rule"></div>
+  <div class="body f7" data-uniform style="display:grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: .16in;"><div class="card fitbox" data-start="24"><div class="tag">7.1</div><h2>Price elasticity</h2><p class="remember"><b>Remember:</b> elasticity = % change in units / % change in price; estimate it from several observations.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.2</div><h2>Why logs</h2><p class="remember"><b>Remember:</b> log price against log units: the slope is the elasticity.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.3</div><h2>Simulating a price change</h2><p class="remember"><b>Remember:</b> simulate profit, not revenue, and keep changes small.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.4</div><h2>Stock and time</h2><p class="remember"><b>Remember:</b> compare days of stock with days left; cut just enough to sell out.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.5</div><h2>Leftover stock has a cost</h2><p class="remember"><b>Remember:</b> count the cost of leftovers when you choose a price.</p></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 7 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">7. Core Foundations: On Real Data</span></div>
+  <div class="title">7.1 Price elasticity: On Real Data</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: .12in;"><div class="card fitbox" data-start="19"><div class="tag">SEE IT ON REAL DATA</div><table class="mdtable"><tr><th>Weeks</th><th>Price change</th><th>Units change</th><th>Elasticity of that step</th></tr><tr><td>1 to 2</td><td><code>+8.3</code>%</td><td><code>-12.5</code>%</td><td><code>-1.51</code></td></tr><tr><td>2 to 3</td><td><code>+7.7</code>%</td><td><code>-9.8</code>%</td><td><code>-1.28</code></td></tr><tr><td>3 to 4</td><td><code>+7.1</code>%</td><td><code>-10.9</code>%</td><td><code>-1.53</code></td></tr><tr><td>4 to 5</td><td><code>+6.7</code>%</td><td><code>-7.7</code>%</td><td><code>-1.15</code></td></tr></table></div><div class="check"><b>Remember:</b> elasticity = % change in units / % change in price; estimate it from several observations.</div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 8 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Code Demonstration 1</span></div>
+  <div class="title">Estimate Elasticity from the Price Test</div><div class="rule"></div>
+  <div class="body">
+    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
+      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S43_demo_1.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
+<pre><span class="sec"># 1. Input: 5 weeks of tested prices for PRD-202</span>
+import numpy as np
+import pandas as pd
+test = pd.read_csv(&quot;data/session_04_03_price_test.csv&quot;)
+
+<span class="sec"># 2. Process: a straight line through log(units) against log(price)</span>
+slope, intercept = np.polyfit(np.log(test[&quot;Test_Price_USD&quot;]),
+                              np.log(test[&quot;Avg_Daily_Units&quot;]), 1)
+elasticity = round(slope, 2)
+
+<span class="sec"># 3. Output: the elasticity and what it means</span>
+print(&quot;Price elasticity of demand:&quot;, elasticity)
+print(f&quot;A 1% price rise loses about {abs(elasticity)}% of units sold.&quot;)
+</pre>
+    </div>
+    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>import numpy as np</code> loads NumPy, the number library that pandas is built on.</li><li><code>np.log(...)</code> takes the logarithm of every price and every unit count (section 7.2).</li><li><code>np.polyfit(x, y, 1)</code> fits the best straight line through the 5 points and returns its slope and intercept.</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><div class="outbox">Price elasticity of demand: -1.51
+A 1% price rise loses about 1.51% of units sold.
+</div><ul class="tight"><li><code>-1.51</code> is below <code>-1</code>: customers of this product react strongly to price.</li></ul></div></div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 9 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Quick Check 1</span></div>
+  <div class="title">Quick Check 1: <code>.pct_change()</code></div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid2 qc" style="flex: 1; min-height: 0;">
+      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>.pct_change()</code></h2><p><code>column.pct_change()</code> gives the change from the previous row, as a share (<code>0.08</code> = 8%). Why: shows the week-to-week reactions behind the single slope.</p></div>
+      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add one line to part <b>3. Output</b>: <code>print((test[[&quot;Test_Price_USD&quot;, &quot;Avg_Daily_Units&quot;]].__________() * 100).round(1))</code></p></div>
+    </div>
+    <div class="check"><b>Check:</b> the second row shows <code>8.3</code> (price up 8.3%) and <code>-12.5</code> (units down 12.5%). The first row is <code>NaN</code>, because week 1 has no previous week.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 10 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Code Demonstration 2</span></div>
+  <div class="title">Simulate Profit for Several Price Changes</div><div class="rule"></div>
+  <div class="body">
+    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
+      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S43_demo_2.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
+<pre><span class="sec"># 1. Input: the catalog and the elasticity from Micro-Example 1</span>
+import pandas as pd
+df = pd.read_csv(&quot;data/session_04_03_dataset.csv&quot;)
+elasticity = -1.51
+
+<span class="sec"># 2. Process: one function, used for every price change</span>
+def simulate(price_change):
+    price = df[&quot;Current_Price_USD&quot;] * (1 + price_change)
+    units = df[&quot;Historical_Daily_Sales_Units&quot;] * (1 + elasticity * price_change)
+    return round(((price - df[&quot;Unit_Cost_USD&quot;]) * units).sum(), 2)
+
+profit_curve = {}
+for change in [-0.10, -0.05, 0.0, 0.05, 0.10]:
+    profit_curve[f&quot;{change * 100:+.0f}%&quot;] = simulate(change)
+
+<span class="sec"># 3. Output: daily gross profit for the whole catalog at each change</span>
+for label, profit in profit_curve.items():
+    print(f&quot;{label}: ${profit:,.2f}&quot;)
+</pre>
+    </div>
+    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>elasticity = -1.51</code> uses the value measured in Micro-Example 1 for every product.</li><li><code>simulate(price_change)</code> computes the new price, the new units (section 7.3), and the total daily gross profit of the whole catalog.</li><li>The loop runs the function for 5 price changes and stores each result in a dictionary, labeled like <code>+5%</code>.</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><div class="outbox">-10%: $6,881.85
+-5%: $7,163.83
++0%: $7,342.85
+...</div><ul class="tight"><li>Profit rises from <code>-10</code>% up to <code>+5</code>%, then falls again at <code>+10</code>%: there is a best point in between.</li></ul></div></div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 11 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Quick Check 2</span></div>
+  <div class="title">Quick Check 2: <code>max(..., key=...)</code></div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid2 qc" style="flex: 1; min-height: 0;">
+      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>max(..., key=...)</code></h2><p><code>max(profit_curve, key=profit_curve.get)</code> returns the label with the highest profit. Why: finds the best scenario without reading the list by eye.</p></div>
+      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add one line to part <b>3. Output</b>: <code>print(&quot;Best change:&quot;, ___(profit_curve, key=profit_curve.get))</code></p></div>
+    </div>
+    <div class="check"><b>Check:</b> the Terminal shows <code>Best change: +5%</code>.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 12 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Code Demonstration 3</span></div>
+  <div class="title">Which Products Will Not Sell Out in 12 Days?</div><div class="rule"></div>
+  <div class="body">
+    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
+      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S43_demo_3.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
+<pre><span class="sec"># 1. Input: the catalog</span>
+import pandas as pd
+df = pd.read_csv(&quot;data/session_04_03_dataset.csv&quot;)
+season_days = 12
+
+<span class="sec"># 2. Process: days of stock and our price gap to the competitor</span>
+df[&quot;Days_Of_Stock&quot;] = (
+    df[&quot;Inventory_Units_Count&quot;] / df[&quot;Historical_Daily_Sales_Units&quot;]
+).round(1)
+df[&quot;Price_Gap_Pct&quot;] = (
+    (df[&quot;Current_Price_USD&quot;] - df[&quot;Competitor_Price_USD&quot;])
+    / df[&quot;Competitor_Price_USD&quot;] * 100
+).round(1)
+at_risk = df[df[&quot;Days_Of_Stock&quot;] &gt; season_days]
+
+<span class="sec"># 3. Output: the products that need action</span>
+print(at_risk[[&quot;Product_ID&quot;, &quot;Days_Of_Stock&quot;, &quot;Price_Gap_Pct&quot;]])
+</pre>
+    </div>
+    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>Days_Of_Stock</code> divides inventory by daily sales (section 7.4).</li><li><code>Price_Gap_Pct</code> compares our price with the competitor&#x27;s: negative means we are cheaper.</li><li><code>df[df[&quot;Days_Of_Stock&quot;] &gt; season_days]</code> keeps the products that will not sell out in 12 days.</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><div class="outbox">  Product_ID  Days_Of_Stock  Price_Gap_Pct
+0     PRD-200           14.1           -3.9
+1     PRD-201           13.6            2.5
+...</div><ul class="tight"><li>6 of 12 products would still have stock at the end of the season.</li></ul></div></div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 13 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Quick Check 3</span></div>
+  <div class="title">Quick Check 3: <code>np.where()</code></div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid2 qc" style="flex: 1; min-height: 0;">
+      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>np.where()</code></h2><p><code>np.where(condition, value_if_true, value_if_false)</code> fills a whole column with one of two values. Why: a one-line alternative to setting a default and overwriting it with <code>.loc[]</code>.</p></div>
+      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add <code>import numpy as np</code> to part <b>1. Input</b>, and one line at the end of part <b>2. Process</b>: <code>df[&quot;Action&quot;] = np._____(df[&quot;Days_Of_Stock&quot;] &gt; season_days, &quot;Markdown&quot;, &quot;Keep&quot;)</code>. Then print <code>df[&quot;Action&quot;].value_counts()</code>.</p></div>
+    </div>
+    <div class="check"><b>Check:</b> <code>Keep</code> <code>6</code>, <code>Markdown</code> <code>6</code>.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 14 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">10. Official References</span></div>
+  <div class="title">Where to Look Things Up</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: .14in;"><div class="card fitbox"><div class="tag">REFERENCE</div><h2>NumPy API Reference: numpy.polyfit</h2><p>https://numpy.org/doc/stable/reference/generated/numpy.polyfit.html</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>NumPy API Reference: numpy.where</h2><p>https://numpy.org/doc/stable/reference/generated/numpy.where.html</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Phillips: Pricing and Revenue Optimization (Stanford Business Books)</h2><p>https://www.sup.org/books/title/?id=7234</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Talluri &amp; van Ryzin: The Theory and Practice of Revenue Management (Springer Standards)</h2><p>https://link.springer.com/book/10.1007/b139000</p></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 15 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">11-13. Exercises</span></div>
+  <div class="title">Three Exercises</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid3 exg" data-uniform style="flex: 1; min-height: 0;"><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 1: GUIDED</div><h2>Catalog Profit Curve</h2><p><b>Goal:</b> Simulate a wider range of price changes</p><p><b>File:</b> <code>YourName_S43_pricing.py</code></p><p class="remember"><b>Check:</b> gross margins from <code>52.5</code>% to <code>55.0</code>%</p></div><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 2: APPLIED</div><h2>Markdowns That Clear the Stock</h2><p><b>Goal:</b> Find the price cut each at-risk product needs</p><p><b>File:</b> <code>YourName_S43_practice.py</code></p><p class="remember"><b>Check:</b> <code>PRD-200</code> needs the deepest cut (<code>-11.4</code>%)</p></div><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 3: ADVANCED</div><h2>The Best Season Price for Each Product</h2><p><b>Goal:</b> Find each product&#x27;s best price for the season</p><p><b>File:</b> <code>YourName_S43_challenge.py</code></p><p class="remember"><b>Check:</b> 5 cuts, 4 rises, 3 unchanged</p></div></div>
+    <div class="check">Full steps for all three exercises: sections 11-13 of the course page.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 16 / 16</span></div>
+</section>
+
+<script>
+window.__fitDone = false;
+function fitAll() {
+  document.querySelectorAll('.fitbox').forEach((box) => {
+    let size = parseFloat(box.dataset.start || '18');
+    const floor = parseFloat(box.dataset.floor || '15');
+    const apply = () => box.querySelectorAll('p, li, td, th, .outbox, pre').forEach((el) => {
+      if (el.tagName === 'PRE') { el.style.fontSize = Math.max(9.5, size - 3.5) + 'pt'; return; }
+      if (el.classList.contains('outbox')) { el.style.fontSize = Math.max(11, size - 4.5) + 'pt'; return; }
+      el.style.fontSize = size + 'pt';
+    });
+    apply();
+    const over = () => box.scrollHeight > box.clientHeight + 1 || box.scrollWidth > box.clientWidth + 1
+      || [...box.querySelectorAll('pre')].some((pre) => pre.scrollHeight > pre.clientHeight + 6 || pre.scrollWidth > pre.clientWidth + 6);
+    while (over() && size > floor) { size -= 0.5; apply(); }
+    if (over()) box.dataset.overflow = 'yes';
+    box.__apply = (v) => { size = v; apply(); };
+    box.dataset.size = size;
+  });
+  // cards on one slide share one size, so they read as a set
+  document.querySelectorAll('[data-uniform]').forEach((group) => {
+    const boxes = [...group.querySelectorAll('.fitbox')];
+    const min = Math.min(...boxes.map((b) => parseFloat(b.dataset.size)));
+    boxes.forEach((b) => b.__apply(min));
+  });
+  window.__fitDone = true;
+}
+document.fonts.ready.then(() => { fitAll(); document.querySelectorAll('[data-overflow]').forEach((el) => el.removeAttribute('data-overflow')); fitAll(); });
+</script>
+
+</body>
+</html>

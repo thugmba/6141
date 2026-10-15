@@ -1,30 +1,587 @@
-<!doctype html><html lang="en-US"><meta charset="utf-8"><title>Session 2.4</title><style>
-@page{size:16in 9in;margin:0}*{box-sizing:border-box}body{margin:0;font-family:"Times New Roman",serif;color:#18181B}.slide{width:16in;height:9in;padding:.45in .8in .4in;display:flex;flex-direction:column;background:#fff;page-break-after:always}header{font-size:15pt;color:#991B1B;font-weight:bold}header span{margin-left:.25in;color:#64748B;font-weight:normal}h1{font-size:34pt;line-height:1.08;margin:.13in 0 .08in}h2{font-size:21pt;margin:.06in 0}.slide>i{display:block;width:1.2in;height:4px;background:#991B1B;margin-bottom:.2in}main{flex:1;min-height:0;display:grid;grid-template-columns:repeat(2,1fr);gap:.2in}main.three{grid-template-columns:repeat(3,1fr);gap:.18in}article{border:1px solid #CBD5E1;border-radius:10px;padding:.18in;overflow:hidden}article b{font-size:14pt;color:#991B1B}p,li{font-size:17pt;line-height:1.25;margin:.06in 0}footer{margin-top:.18in;border-top:1px solid #CBD5E1;padding-top:.1in;font-size:15pt;color:#64748B;display:flex;justify-content:space-between}main.overview{grid-template-columns:2fr 3fr}main.overview article{display:flex;flex-direction:column}.overview ul.lead{margin:.12in 0 0;padding-left:.32in}.overview ul.lead li{font-size:21pt}.overview .flow{margin-top:auto;font-size:16pt;color:#64748B;border-top:1px solid #CBD5E1;padding-top:.1in}.overview ol{margin:.1in 0 0;padding-left:.38in}.overview li{font-size:20pt;line-height:1.3;margin:0 0 .16in}.code{display:flex;gap:.3in}.code pre{width:58%;margin:0;background:#18181B;border-radius:10px;color:#E5E7EB;padding:.22in;font:13.5pt/1.28 "DejaVu Sans Mono",monospace;white-space:pre-wrap;overflow-wrap:anywhere;overflow:hidden}.code aside{flex:1;display:flex;flex-direction:column;gap:.13in}.code aside article{flex:1}</style><body>
-<section class="slide"><header><b>MODULE 2</b><span>Session Overview</span></header><h1>Session 2.4: Midterm Analytics Pipeline Defense Part 2: Exploratory Findings and Executive Review</h1><i></i><main class="overview"><article><b>TODAY'S PURPOSE</b><h2>Why This Session Matters</h2><ul class="lead"><li>Present your midterm analysis pipeline</li><li>Show that your code is reproducible</li><li>Explain findings to a business audience</li></ul><p class="flow">Today's flow: 60 min lecture, then 120 min hands-on lab</p></article><article><b>EXPECTED OUTCOMES</b><h2>By the end of today, you will be able to:</h2><ol><li>Run the full pipeline in one script</li><li>Explain findings in plain business language</li><li>Review a peer analysis and fix a TypeError</li></ol></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 1 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 2</b><span>Core Vocabulary</span></header><h1>Concepts for This Session</h1><i></i><main class="three"><article><b>CONCEPT 1</b><h2>Reproducible Data Pipeline</h2><p> A self-contained, end-to-end Python script execution sequence that reliably transforms raw data into verified executive reports with zero manual intervention.</p></article><article><b>CONCEPT 2</b><h2>Executive Code Defense</h2><p> Articulating the business rationale, methodology, and computational assumptions behind an analytics codebase to executive decision-makers.</p></article><article><b>CONCEPT 3</b><h2>Exploratory Data Findings</h2><p> Structuring quantitative insights into concise, actionable findings linked directly to operating cash flows and margin expansion.</p></article><article><b>CONCEPT 4</b><h2>Cross-Functional Technical Translation</h2><p> The ability to explain computational trade-offs, data limitations, and algorithmic results to non-technical stakeholders.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 2 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 2</b><span>Computational Foundations</span></header><h1>How the Concept Works in Practice</h1><i></i><main><article><b>FOUNDATION 1</b><h2>Code Auditability in High-Stakes Environments</h2><p> In corporate finance and strategic planning, unverified analytics pipelines create catastrophic financial risks. A formal code defense requires students to demonstrate that every calculation traces back to audited primary records.</p></article><article><b>FOUNDATION 2</b><h2>Communicating Analytics to Non-Technical Leadership</h2><p> Senior leadership rarely reads raw Python code. Analysts must present clear visual exhibits, executive summary metrics, and explicit strategic trade-offs, maintaining code as the verifiable engine underneath.</p></article><article><b>FOUNDATION 3</b><h2>Peer Review and Code Auditing</h2><p> Evaluating external codebases builds critical debugging and quality assurance skills. Analysts inspect code for hard-coded assumptions, fragile cell dependencies, and unhandled exception paths.</p></article><article><b>FOUNDATION 4</b><h2>Establishing Enterprise Production Baselines</h2><p> Concluding Module 2 by formalizing baseline operational performance metrics, preparing the analytical foundation for predictive machine learning models in Module 3.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 3 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 2</b><span>Development Workflow</span></header><h1>Build, Test, and Diagnose in the IDE</h1><i></i><main><article><b>[1] FILE EXPLORER</b><h2>Organize Assets</h2><p>Use the session dataset and keep scripts in a clear workspace.</p></article><article><b>[2] CODE EDITOR</b><h2>Write Small Segments</h2><p>Run each completed segment before expanding the program.</p></article><article><b>[3] AI AGENT CHAT</b><h2>Diagnose Errors</h2><p>Capture the traceback, request an explanation, and review the fix.</p></article><article><b>[4] INTEGRATED TERMINAL</b><h2>Verify Execution</h2><p>Confirm the final program completes with return code 0.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 4 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE</b><span>Style 2 Harvard Dual-Pane Editor</span></header><h1>Script Demonstration 1: Midterm Analytics Pipeline Defense Part 2: Exploratory Findings and Executive Review</h1><i></i><main class="code"><pre>import time
-    import pandas as pd
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<title>Session 2.4 Lecture</title>
+<style>
+@page { size: 16in 9in; margin: 0; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "Times New Roman", serif; color: #18181B; }
+.slide { width: 16in; height: 9in; padding: .45in .8in .4in; display: flex; flex-direction: column; background: #FFF; page-break-after: always; }
+.eyebrow { color: #991B1B; font-size: 15pt; font-weight: bold; letter-spacing: .02em; }
+.kicker { color: #64748B; font-size: 15pt; margin-left: .25in; }
+.title { font-size: 36pt; line-height: 1.05; font-weight: bold; margin: .12in 0 .08in; }
+.rule { height: 4px; background: #991B1B; width: 1.2in; margin-bottom: .18in; flex-shrink: 0; }
+.body { flex: 1; min-height: 0; display: flex; gap: .25in; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: .2in; width: 100%; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: .18in; width: 100%; }
+.card { border: 1px solid #CBD5E1; border-radius: 10px; padding: .16in .2in; background: #FFF; min-height: 0; overflow: hidden; }
+.card h2 { font-size: 22pt; margin: .04in 0 .08in; }
+.card p, .card li { font-size: 18pt; line-height: 1.25; margin: .05in 0; }
+.card ul { margin: .04in 0 0; padding-left: .3in; }
+.tag { color: #991B1B; font-size: 15pt; font-weight: bold; }
+.what, .why { font-size: 18pt; line-height: 1.25; margin: .05in 0; }
+.what b, .why b { color: #991B1B; }
+code { font-family: "DejaVu Sans Mono", monospace; font-size: .86em; background: #F1F5F9; border: 1px solid #E2E8F0; border-radius: 4px; padding: 0 .04in; white-space: nowrap; }
+h2 code { font-size: .82em; }
+.footer { border-top: 1px solid #CBD5E1; min-height: .42in; margin-top: .18in; display: flex; align-items: end; justify-content: space-between; color: #475569; font-size: 15pt; flex-shrink: 0; }
 
-    start_time = time.time()
-    df = pd.read_csv("data/session_02_04_dataset.csv")
+/* Slide 1 */
+.overview { grid-template-columns: 2fr 3fr; }
+.overview .card { display: flex; flex-direction: column; }
+.overview ul.lead { margin: .1in 0 0; padding-left: .32in; }
+.overview ul.lead li { font-size: 20pt; line-height: 1.25; margin: 0 0 .1in; }
+.overview .card .flow { margin-top: auto; font-size: 16pt; color: #64748B; border-top: 1px solid #CBD5E1; padding-top: .1in; }
+.overview ol { margin: .06in 0 0; padding-left: .38in; }
+.overview ol > li { font-size: 21pt; line-height: 1.25; margin: 0 0 .12in; }
+.gloss { display: block; font-size: 18pt; color: #475569; margin-top: .03in; }
 
-    # Compute platform take rate and cash flows
-    df["Recognized_Revenue_USD_M"] = df["Gross_Merchandise_Value_USD_M"] * (df["Platform_Take_Rate_Pct"] / 100.0)
-    df["Cash_Flow_Conversion_Pct"] = (df["Operating_Cash_Flow_USD_M"] / df["Recognized_Revenue_USD_M"]) * 100.0
+/* Code slides */
+.code-panel { width: 60%; background: #18181B; border-radius: 10px; color: #E5E7EB; padding: .16in .22in; display: flex; flex-direction: column; flex-shrink: 0; }
+.code-header { color: #CBD5E1; font: 14pt "DejaVu Sans Mono", monospace; border-bottom: 1px solid #3F3F46; padding-bottom: .08in; display: flex; align-items: center; gap: .08in; }
+.dot { width: .13in; height: .13in; border-radius: 50%; display: inline-block; }
+pre { white-space: pre; font: 14.5pt/1.38 "DejaVu Sans Mono", monospace; margin: .12in 0 0; overflow: hidden; }
+.cm { color: #94A3B8; }
+.sec { color: #FBBF24; font-weight: bold; }
+.ipo { margin-left: auto; color: #FBBF24; font-size: 13pt; }
+.notes .card.wide { flex: 1.6; }
 
-    elapsed_time = time.time() - start_time
-    print(f"Pipeline Executed in {elapsed_time:.4f} seconds | Processed {len(df)} records.")</pre><aside><article><b>SYNTAX</b><h2>Readable Structure</h2><p>Observe the syntax and indentation that control execution.</p></article><article><b>RUNTIME</b><h2>Verified Execution</h2><p>Run the example in the integrated terminal and inspect the output.</p></article><article><b>BUSINESS VALUE</b><h2>Applied Automation</h2><p>Use the pattern to automate a repeatable business decision.</p></article></aside></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 5 / 8</span></footer></section><section class="slide"><header><b>MODULE</b><span>Style 2 Harvard Dual-Pane Editor</span></header><h1>Script Demonstration 2: Midterm Analytics Pipeline Defense Part 2: Exploratory Findings and Executive Review</h1><i></i><main class="code"><pre>segment_audit = df.groupby("Market_Segment").agg(
-        Total_GMV_USD_M=("Gross_Merchandise_Value_USD_M", "sum"),
-        Total_Revenue_USD_M=("Recognized_Revenue_USD_M", "sum"),
-        Total_Operating_Cash_Flow_USD_M=("Operating_Cash_Flow_USD_M", "sum"),
-        Mean_Take_Rate=("Platform_Take_Rate_Pct", "mean")
+/* Rows and columns slide */
+.table-wrap { width: 60%; flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; }
+table.df { border-collapse: collapse; font: 16pt/1.3 "DejaVu Sans Mono", monospace; }
+table.df td, table.df th { padding: .07in .14in; text-align: left; white-space: nowrap; }
+table.df thead th { border-bottom: 2px solid #18181B; }
+table.df tbody td { border-bottom: 1px solid #E2E8F0; }
+table.df .num { text-align: right; }
+table.df .idx { color: #64748B; }
+table.df .lbl { font: bold 15pt "Times New Roman", serif; border: none; padding: 0 .1in .04in; }
+.row-lbl { color: #1D4ED8; text-align: right !important; }
+.col-lbl { color: #B45309; text-align: center !important; }
+table.df .hl-row td { background: #DBEAFE; }
+table.df .hl-col { background: #FEF3C7; }
+table.df .hl-row td.hl-col { background: #FDE68A; outline: 3px solid #991B1B; outline-offset: -3px; font-weight: bold; }
+table.df .more { color: #64748B; font-family: "Times New Roman", serif; font-style: italic; }
+.card .tag.blue { color: #1D4ED8; }
+.card .tag.amber { color: #B45309; }
+.card.row-card { border: 2px solid #93C5FD; }
+.card.col-card { border: 2px solid #FCD34D; }
+.card.cell-card { border: 2px solid #991B1B; }
+.notes { flex: 1; display: flex; flex-direction: column; gap: .12in; min-width: 0; }
+.notes .card { flex: 1; }
+.notes .card h2 { font-size: 20pt; }
+
+.check { margin-top: .14in; background: #FEF2F2; border: 1px solid #FCA5A5; border-radius: 10px; padding: .12in .2in; font-size: 18pt; flex-shrink: 0; }
+
+/* Six terms visual map */
+.fit { flex: 1; min-height: 0; display: grid; grid-template-rows: 1fr 1fr; gap: .16in; }
+.fit-row { display: flex; gap: .14in; align-items: stretch; min-height: 0; }
+.fit-box { border: 1px solid #CBD5E1; border-radius: 10px; padding: .12in .16in; display: flex; flex-direction: column; min-width: 0; }
+.fit-box .tag { margin-bottom: .04in; }
+.fit-box .cap { font-size: 18pt; margin: .06in 0 0; line-height: 1.2; }
+.fit-arrow { display: flex; flex-direction: column; justify-content: center; align-items: center; color: #991B1B; flex-shrink: 0; }
+.fit-arrow .big { font-size: 40pt; line-height: 1; }
+.fit-arrow code { font-size: 14pt; }
+.rawcsv { background: #18181B; color: #E5E7EB; border-radius: 8px; padding: .1in .14in; font: 15pt/1.4 "DejaVu Sans Mono", monospace; white-space: pre; }
+.rawcsv b { color: #FBBF24; }
+table.mini { border-collapse: collapse; font: 15pt/1.3 "DejaVu Sans Mono", monospace; }
+table.mini th, table.mini td { padding: .03in .1in; text-align: left; white-space: nowrap; border-bottom: 1px solid #E2E8F0; }
+table.mini th { border-bottom: 2px solid #18181B; }
+table.mini .num { text-align: right; }
+table.mini .idx { color: #64748B; }
+table.mini .ser { background: #FEF3C7; }
+table.mini .new { background: #DCFCE7; font-weight: bold; }
+table.mini tr.keep td { background: #DBEAFE; font-weight: bold; }
+table.mini tr.drop td { color: #CBD5E1; }
+.op { font: bold 26pt "DejaVu Sans Mono", monospace; color: #991B1B; align-self: center; padding: 0 .06in; }
+.toolbar { font-size: 17pt; color: #475569; margin-bottom: .1in; flex-shrink: 0; }
+.toolbar b { color: #991B1B; }
+
+/* DataFrame visual map */
+.xl th, .xl td { font-size: 15pt; }
+.xl .rn { background: #F1F5F9; color: #64748B; text-align: center; }
+.xl .bad { background: #FEE2E2; color: #B91C1C; font-weight: bold; }
+.side { display: flex; gap: .22in; align-items: flex-start; }
+.side .lab { font-size: 17pt; font-weight: bold; margin-bottom: .04in; }
+.brace { border-left: 4px solid #16A34A; padding-left: .1in; }
+.anat .ix { background: #DBEAFE; color: #1D4ED8; }
+.anat .hd { background: #FEF3C7; }
+.anat .vl { background: #DCFCE7; }
+.chips { display: flex; gap: .12in; flex-wrap: wrap; margin-top: .08in; }
+.chip { font-size: 16pt; padding: .02in .1in; border-radius: 6px; }
+.dt { font-size: 14pt; padding: .01in .08in; border-radius: 5px; background: #18181B; color: #FBBF24; font-family: "DejaVu Sans Mono", monospace; }
+.insp td { font-size: 15pt; vertical-align: top; }
+.insp td:first-child { color: #991B1B; }
+.pr, .insp td.pr { font: 18pt/1.3 "Times New Roman", serif; }
+td.pr { white-space: normal !important; }
+
+/* IDE slide */
+.shot { width: 60%; flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; }
+.shot img { width: 100%; border: 1px solid #CBD5E1; border-radius: 10px; display: block; }
+.shot .cap { font-size: 17pt; margin: .1in 0 0; }
+.steps { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .1in; justify-content: center; }
+.step { display: flex; gap: .14in; align-items: flex-start; border: 1px solid #CBD5E1; border-radius: 10px; padding: .1in .14in; }
+.badge { background: #991B1B; color: #FFF; font: bold 16pt "DejaVu Sans Mono", monospace; border-radius: 6px; padding: .02in .08in; flex-shrink: 0; }
+.step h3 { font-size: 20pt; margin: 0 0 .02in; }
+.step p { font-size: 18pt; line-height: 1.22; margin: .02in 0; }
+.step p.eg { font-size: 16pt; color: #475569; }
+
+/* Quick check slides */
+.qc { grid-template-columns: 1fr 1.15fr; }
+.qc .card { display: flex; flex-direction: column; }
+.snip { background: #18181B; color: #E5E7EB; border-radius: 8px; padding: .1in .16in; font: 16pt/1.4 "DejaVu Sans Mono", monospace; white-space: pre; margin: .04in 0 .1in; }
+.snip .blank { background: #FBBF24; color: #18181B; padding: 0 .06in; border-radius: 3px; font-weight: bold; }
+.snip .cm { color: #94A3B8; }
+.snip-lab { font-size: 17pt; font-weight: bold; margin-top: .06in; }
+.strip { display: flex; gap: .05in; margin: .1in 0 .04in; }
+.strip span { flex: 1; text-align: center; font: 15pt "DejaVu Sans Mono", monospace; padding: .06in 0; border-radius: 5px; background: #F1F5F9; color: #94A3B8; }
+.strip .h { background: #DBEAFE; color: #1D4ED8; font-weight: bold; }
+.strip .t { background: #DCFCE7; color: #15803D; font-weight: bold; }
+.strip-lab { display: flex; justify-content: space-between; font-size: 16pt; }
+.flowline { display: flex; align-items: center; gap: .14in; margin: .1in 0; font: 17pt "DejaVu Sans Mono", monospace; }
+.flowline .box { background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 6px; padding: .04in .12in; }
+.flowline .arr { color: #991B1B; font-size: 22pt; }
+.flowline .res { background: #DCFCE7; border: 1px solid #86EFAC; border-radius: 6px; padding: .04in .12in; font-weight: bold; }
+.vstack { margin-top: .08in; }
+.vstack td, .vstack th { padding: .02in .12in; }
+.vstack tr.h td:not(.side-lab) { background: #DBEAFE; color: #1D4ED8; font-weight: bold; }
+.vstack tr.t td:not(.side-lab) { background: #DCFCE7; color: #15803D; font-weight: bold; }
+.vstack tr.gap td { color: #94A3B8; font-family: "Times New Roman", serif; font-style: italic; }
+.vstack .side-lab { border: none; font: 17pt "Times New Roman", serif; vertical-align: middle; }
+.vstack .h-lab { color: #1D4ED8; }
+.vstack .t-lab { color: #15803D; }
+table.mini th.plain { font: bold 17pt "Times New Roman", serif; }
+.overview ol.biz > li { font-size: 20pt; margin: 0 0 .1in; }
+.overview .q { display: block; color: #991B1B; font-style: italic; font-weight: bold; }
+.overview .sit-note { font-size: 19pt; font-weight: bold; margin: .04in 0 0; }
+
+/* CSV intro slide */
+.csvflow { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr auto 1.25fr auto 1fr; gap: .14in; align-items: stretch; }
+.csvflow .col { border: 1px solid #CBD5E1; border-radius: 10px; padding: .14in .18in; display: flex; flex-direction: column; gap: .1in; }
+.csvflow .item { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: .08in .12in; font-size: 18pt; line-height: 1.2; }
+.csvflow .item small { display: block; font-size: 16pt; color: #475569; }
+.csvflow .mid { border: 2px solid #991B1B; }
+.csvflow .arrow { display: flex; align-items: center; color: #991B1B; font-size: 40pt; }
+.csvflow li { font-size: 18pt; line-height: 1.3; margin: .04in 0; }
+.csvflow .fname { font: bold 15pt "DejaVu Sans Mono", monospace; color: #18181B; }
+
+/* CSV vs XLSX */
+.src-row { display: flex; gap: .14in; align-items: stretch; flex-shrink: 0; }
+.src-box { flex: 1; border: 1px solid #CBD5E1; border-radius: 10px; padding: .1in .16in; }
+.chips2 { display: flex; gap: .1in; flex-wrap: wrap; margin-top: .06in; }
+.chips2 span { background: #F1F5F9; border: 1px solid #E2E8F0; border-radius: 6px; padding: .03in .12in; font-size: 18pt; }
+.arrow2 { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #991B1B; font-size: 34pt; line-height: 1; }
+.arrow2 small { font-size: 15pt; }
+.files { display: flex; gap: .12in; align-items: center; margin-top: .06in; }
+.file { font: bold 16pt "DejaVu Sans Mono", monospace; padding: .03in .12in; border-radius: 6px; color: #FFF; }
+.file.xlsx { background: #64748B; }
+.file.csv { background: #15803D; }
+.vs { flex: 1; min-height: 0; display: flex; gap: .16in; }
+.vs-col { flex: 1; border-radius: 12px; padding: .14in .2in; display: flex; flex-direction: column; }
+.vs-col.bad { border: 2px solid #CBD5E1; background: #F8FAFC; }
+.vs-col.good { border: 3px solid #15803D; background: #F0FDF4; flex: 1.35; }
+.vs-head { font-size: 24pt; font-weight: bold; display: flex; align-items: center; gap: .12in; }
+.vs-sub { font-size: 18pt; margin: .06in 0 .1in; color: #334155; }
+.vs-mid { align-self: center; font: bold 26pt "Times New Roman", serif; color: #64748B; }
+.apps { display: flex; flex-wrap: wrap; gap: .1in; }
+.app { font-size: 18pt; background: #FFF; border-radius: 8px; padding: .06in .14in; display: flex; flex-direction: column; min-width: 1.5in; }
+.app b { font-size: 24pt; line-height: 1; }
+.app small { font-size: 15pt; color: #64748B; }
+.rawcsv.garbled { color: #94A3B8; }
+.app.ok { border: 2px solid #86EFAC; }
+.app.ok b { color: #15803D; }
+.app.no { border: 2px solid #FCA5A5; }
+.app.no b { color: #B91C1C; }
+
+/* Session 1.4 additions */
+table.terms { border-collapse: collapse; width: 100%; margin: .04in 0 .1in; }
+table.terms td { font-size: 18pt; padding: .05in .08in; border-bottom: 1px solid #E2E8F0; }
+table.terms td.num { text-align: right; }
+.vbars { display: flex; flex-direction: column; gap: .1in; margin-top: .12in; }
+.vrow { display: flex; align-items: center; gap: .12in; }
+.vq { width: .45in; font: bold 17pt "DejaVu Sans Mono", monospace; }
+.vval { width: 1.1in; font: 16pt "DejaVu Sans Mono", monospace; text-align: right; }
+.vtrack { flex: 1; height: .42in; position: relative; background: #F8FAFC; border-radius: 4px; }
+.vzero { position: absolute; left: 40%; top: 0; bottom: 0; border-left: 2px solid #18181B; }
+.vth { position: absolute; left: 52%; top: -.04in; bottom: -.04in; border-left: 2px dashed #B91C1C; }
+.vbar { position: absolute; top: .07in; bottom: .07in; border-radius: 3px; }
+.vbar.over { background: #EF4444; }
+.vbar.warn { background: #F59E0B; }
+.vbar.under { background: #22C55E; }
+.vtrack-lab { flex: 1; position: relative; height: .3in; }
+.vtrack-lab span { position: absolute; transform: translateX(-50%); font-size: 15pt; color: #475569; white-space: nowrap; }
+.bridge { flex: 1; min-height: 0; display: flex; gap: .16in; align-items: stretch; }
+.bridge .b-xl, .bridge .b-pd { border-radius: 10px; padding: .1in .18in; display: flex; flex-direction: column; justify-content: center; }
+.bridge .b-xl { flex: 1; border: 2px solid #CBD5E1; background: #F8FAFC; }
+.bridge .b-pd { flex: 1.5; border: 2px solid #15803D; background: #F0FDF4; }
+.bridge h2 { font-size: 22pt; margin: .02in 0; }
+.bridge p { font-size: 18pt; margin: .02in 0; }
+.b-arrow { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #991B1B; font-size: 40pt; line-height: 1; }
+.b-arrow.small { font-size: 30pt; }
+.b-arrow small { font-size: 15pt; }
+.sac { display: flex; gap: .16in; align-items: center; flex-wrap: wrap; }
+.sac-col { display: flex; flex-direction: column; gap: .06in; }
+.sac-lab { font-size: 16pt; color: #475569; }
+.grp { font: 15pt "DejaVu Sans Mono", monospace; padding: .03in .1in; border-radius: 5px; }
+.g1 { background: #DBEAFE; } .g2 { background: #FEF3C7; } .g3 { background: #EDE9FE; } .g4 { background: #DCFCE7; }
+table.mini .keycol { background: #FEF3C7; }
+table.mini .hl-c { background: #DCFCE7; font-weight: bold; }
+table.mini .bad-c { background: #FEE2E2; color: #B91C1C; font-weight: bold; }
+table.mini tr.nan-row td { background: #FEF3C7; font-style: italic; }
+.snip .bad-t { color: #F87171; font-weight: bold; }
+.snip .ok-t { color: #4ADE80; font-weight: bold; }
+table.mini td.tcell { background: #DBEAFE; color: #1D4ED8; font-weight: bold; }
+table.mini td.fcell { color: #94A3B8; }
+.qc { grid-template-columns: 1fr 1.4fr; }
+.qc .snip { font-size: 14.5pt; }
+.fit-box .snip { font-size: 14.5pt; margin: .04in 0; }
+.flip { display: flex; gap: .1in; align-items: center; font: 16pt "DejaVu Sans Mono", monospace; margin: .08in 0; }
+.flip .t { background: #DBEAFE; padding: .03in .1in; border-radius: 5px; }
+.flip .f { background: #F1F5F9; padding: .03in .1in; border-radius: 5px; }
+
+/* Session 2.1 additions */
+.big-li { font-size: 22pt; margin: .1in 0; }
+.notes .card.xwide { flex: 2.4; }
+.rules { border: 2px solid #991B1B; border-radius: 10px; padding: .1in .18in; flex-shrink: 0; }
+.rule-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: .12in; margin-top: .06in; }
+.rule-row span { font-size: 17pt; background: #FEF2F2; border-radius: 6px; padding: .06in .1in; }
+.http { display: flex; align-items: center; gap: .2in; flex-shrink: 0; }
+.http .node { border: 2px solid #18181B; border-radius: 10px; padding: .12in .2in; font-size: 20pt; font-weight: bold; text-align: center; min-width: 2.4in; }
+.http .node small { font: 15pt "DejaVu Sans Mono", monospace; font-weight: normal; color: #475569; }
+.msgs { flex: 1; display: flex; flex-direction: column; gap: .1in; }
+.msg { display: flex; align-items: center; gap: .1in; font-size: 19pt; border-radius: 8px; padding: .06in .14in; }
+.msg b { font-size: 28pt; color: #991B1B; }
+.msg.req { background: #DBEAFE; justify-content: space-between; }
+.msg.res { background: #DCFCE7; }
+.render { border: 1px solid #CBD5E1; border-radius: 10px; padding: .16in; background: #FFF; box-shadow: 0 2px 6px rgba(0,0,0,.08); width: 3.6in; margin: .08in 0; }
+.render .r-name { font: bold 22pt Arial, sans-serif; }
+.render .r-price { font: bold 26pt Arial, sans-serif; color: #B91C1C; margin: .04in 0; }
+.render .r-stock { font: 16pt Arial, sans-serif; color: #15803D; }
+.rawcsv.small { font-size: 13.5pt; }
+.rawcsv b { color: #FBBF24; }
+.tree { font: 16pt/1.6 "DejaVu Sans Mono", monospace; margin-top: .08in; }
+.tn { border-left: 2px solid #CBD5E1; padding-left: .1in; }
+.tn.t1 { margin-left: .3in; }
+.tn.t2 { margin-left: .6in; }
+.tn small { color: #64748B; font-size: 14pt; }
+.tn.hit { background: #FEF3C7; font-weight: bold; }
+.cards4 { display: flex; flex-direction: column; gap: .06in; }
+.cards4 span { font: 15pt "DejaVu Sans Mono", monospace; border: 1px solid #CBD5E1; border-radius: 6px; padding: .04in .1in; background: #F8FAFC; }
+
+/* session map + exercise 3 */
+.sm-q { border: 3px solid #991B1B; border-radius: 14px; padding: .1in .2in; font-size: 24pt; font-style: italic; background: #FEF2F2; align-self: flex-start; flex-shrink: 0; }
+.sm-q b { font-style: normal; color: #991B1B; }
+.sm-phases { flex: 1; min-height: 0; display: flex; gap: .14in; align-items: stretch; }
+.sm-phase { flex: 1; border: 2px solid #CBD5E1; border-radius: 12px; padding: .14in .2in; }
+.sm-phase.sm-p3 { border: 3px solid #15803D; background: #F0FDF4; }
+.sm-head { display: flex; gap: .14in; align-items: center; border-bottom: 2px solid #E2E8F0; padding-bottom: .08in; margin-bottom: .08in; }
+.sm-head b { font-size: 26pt; display: block; line-height: 1.1; }
+.sm-head small { font-size: 16pt; color: #64748B; }
+.sm-step { background: #991B1B; color: #FFF; border-radius: 50%; width: .5in; height: .5in; display: flex; align-items: center; justify-content: center; font-size: 20pt; font-weight: bold; flex-shrink: 0; }
+.sm-p3 .sm-step { background: #15803D; }
+.sm-phase p { font-size: 22pt; margin: .1in 0; line-height: 1.2; display: flex; }
+.sm-phase i { font-style: normal; font-family: "DejaVu Sans Mono", monospace; font-weight: bold; color: #991B1B; min-width: .6in; flex-shrink: 0; }
+.sm-p3 i { color: #15803D; }
+.sm-arrow { align-self: center; font-size: 34pt; color: #991B1B; }
+ol.ex3 { margin: .06in 0 0; padding-left: .36in; }
+ol.ex3 li { font-size: 18pt; line-height: 1.25; margin: .06in 0; }
+
+.card p.remember { font-size: 17pt; margin-top: .08in; color: #991B1B; }
+.card p.remember b { color: #991B1B; }
+.f7 .card ul { margin-top: .02in; }
+.f7 .card li { font-size: 17pt; }
+.f7 .card h2 { font-size: 21pt; }
+
+
+.fitbox { min-height: 0; overflow: hidden; }
+.card.fitbox p, .card.fitbox li { font-size: 18pt; }
+.mdtable { border-collapse: collapse; width: 100%; margin: .06in 0; }
+.mdtable th, .mdtable td { text-align: left; padding: .05in .1in; border-bottom: 1px solid #E2E8F0; font-size: 17pt; vertical-align: top; }
+.mdtable th { border-bottom: 2px solid #18181B; font-weight: bold; }
+.mdtable code { white-space: normal; }
+.card ul.tight { margin: .04in 0 0; padding-left: .3in; }
+.card ul.tight li { margin: .05in 0; line-height: 1.25; }
+.outbox { background: #18181B; color: #34D399; border-radius: 8px; padding: .1in .14in; font: 13.5pt/1.35 "DejaVu Sans Mono", monospace; white-space: pre; overflow: hidden; }
+.card p.remember { color: #991B1B; margin-top: .06in; }
+.card p.remember b { color: #991B1B; }
+.f7 .card h2 { font-size: 24pt; margin-bottom: .12in; }
+.f7 .card p.remember { margin-top: .16in; }
+.exg .card h2 { font-size: 24pt; }
+.exg .card p { margin: .1in 0; }
+.exg .card p code { font-size: .88em; }
+.big-q { font-size: 20pt; }
+.mdtable.cols td:first-child code { white-space: nowrap; overflow-wrap: normal; }
+.card code, .check code, .mdtable code, .card h2 { white-space: normal; overflow-wrap: anywhere; }
+.notes .card.how { flex: 1 1 auto; }
+.notes .card.out { flex: 0 0 auto; }
+
+
+/* session map with content */
+.sm-phase.fitbox { display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
+.sm-phase p.sm-item { display: flex; gap: .1in; margin: .06in 0; line-height: 1.15; }
+.sm-item i { font-style: normal; font-family: "DejaVu Sans Mono", monospace; font-weight: bold; color: #991B1B; min-width: .5in; flex-shrink: 0; }
+.sm-p3 .sm-item i { color: #15803D; }
+.sm-item b { display: block; font-size: 1em; }
+.sm-item span.d { display: block; font-size: .9em; color: #334155; }
+.sm-item code { font-size: .85em; white-space: normal; overflow-wrap: anywhere; }
+/* end session map */
+
+</style>
+</head>
+<body>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 2</span><span class="kicker">1-2. Purpose and Outcomes</span></div>
+  <div class="title">Session 2.4: Midterm Analytics Pipeline Defense Part 2: Exploratory Findings and Executive Review</div><div class="rule"></div>
+  <div class="body grid2 overview"><div class="card fitbox"><div class="tag">THE BUSINESS SITUATION</div><ul class="tight"><li>An online marketplace earns a fee on every sale its sellers make, in three regions: North America, Europe, and Asia Pacific</li><li>Big sales are not the same as cash in the bank: the region that sells the most may not be the one that generates the most cash</li><li>The CFO (Chief Financial Officer) asks: which region turns its sales into the most cash, and where should we invest next year? Today, you answer with one script that anyone can rerun, and present your midterm findings in the same way</li></ul><p class="flow">Today's flow: 60 min lecture, then 120 min hands-on lab</p></div><div class="card fitbox"><div class="tag">EXPECTED OUTCOMES</div><h2>By the end of today, you will be able to:</h2><ol class="biz"><li><span class="q">"Can someone else get the same numbers?"</span> Build a reproducible pipeline (one script that goes from the raw file to the final report with no manual steps), organized into functions</li><li><span class="q">"Which region turns sales into the most cash?"</span> Calculate revenue and the operating cash flow margin by region and quarter</li><li><span class="q">"How do I explain it to the CFO?"</span> Write findings as finding, evidence, and recommendation; review a classmate&#x27;s script; and fix a <code>TypeError</code> (mixing text and numbers)</li></ol></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 1 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 2</span><span class="kicker">Session Map</span></div>
+  <div class="title">Session Map: Follow the Numbers</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: .14in;"><div class="sm-q"><b>Today's question:</b> Which region turns its sales into the most cash, and where should we invest next year?</div><div class="sm-phases"><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">1</span><span><b>Why it matters</b><small>Lecture, part 1</small></span></div><p class="sm-item"><i>1.</i><span><b>Session Purpose</b><span class="d">answer today&#x27;s question</span></span></p><p class="sm-item"><i>2.</i><span><b>Learning Outcomes</b><span class="d">3 skills you will show today</span></span></p><p class="sm-item"><i>3.</i><span><b>Business Context</b><span class="d">How a Marketplace Makes Money and Cash</span></span></p><p class="sm-item"><i>4.</i><span><b>Data Basics</b><span class="d">What Makes a Pipeline Reproducible</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">2</span><span><b>Learn the tools</b><small>Lecture, part 2</small></span></div><p class="sm-item"><i>5.</i><span><b>Lab Dataset</b><span class="d">1 CSV</span></span></p><p class="sm-item"><i>6.</i><span><b>Keywords</b><span class="d">6 terms</span></span></p><p class="sm-item"><i>7.</i><span><b>Core Foundations</b><span class="d">5 ideas, one at a time</span></span></p><p class="sm-item"><i>8.</i><span><b>IDE Setup</b><span class="d">name files, run in the Terminal</span></span></p><p class="sm-item"><i>9.</i><span><b>Code Examples</b><span class="d">3 demos + Quick Checks</span></span></p><p class="sm-item"><i>10.</i><span><b>References</b><span class="d">4 official docs</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox sm-p3" data-start="22"><div class="sm-head"><span class="sm-step">3</span><span><b>Practice</b><small>Lab</small></span></div><p class="sm-item"><i>11.</i><span><b>Exercise 1: Guided</b><span class="d">Quarterly Review Pipeline</span></span></p><p class="sm-item"><i>12.</i><span><b>Exercise 2: Applied</b><span class="d">Peer Review a Classmate&#x27;s Script</span></span></p><p class="sm-item"><i>13.</i><span><b>Exercise 3: Advanced</b><span class="d">Where Should We Invest Next Year?</span></span></p></div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 2 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 2</span><span class="kicker">3. Business Context</span></div>
+  <div class="title">How a Marketplace Makes Money and Cash</div><div class="rule"></div>
+  <div class="body grid2" style="grid-template-columns: 1fr 1.15fr;"><div class="card fitbox"><div class="tag">KEY POINTS</div><ul class="tight"><li>Four terms, one example (North America, 2024-Q1):</li><li>OCF margin = OCF / revenue x 100.</li><li><b>Midterm Project, Step 2 of 2: present your findings.</b> In a short presentation, walk through:<ul class="tight"><li>Your Question Card from Session 2.3 (worry, question, hypothesis, data, baseline)</li><li>Your audit result: what you checked and what you fixed</li><li>Your findings, each written in three parts:</li><li>A live run of your script, from the raw file to the final report</li></ul></li></ul></div><div class="card fitbox"><div class="tag">SEE IT ON REAL DATA</div><table class="mdtable"><tr><th>Term</th><th>Meaning</th><th>Example</th></tr><tr><td>GMV (Gross Merchandise Value)</td><td>the total value of everything sold on the platform</td><td><code>145.2</code> USD M</td></tr><tr><td>Take rate</td><td>the share of GMV the platform keeps as its fee</td><td><code>12.5</code>%</td></tr><tr><td>Revenue</td><td>GMV x take rate / 100: the platform&#x27;s own income</td><td><code>18.15</code> USD M</td></tr><tr><td>OCF (Operating Cash Flow)</td><td>the cash the business actually generated after paying its operating costs</td><td><code>5.6</code> USD M</td></tr></table></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 3 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 2</span><span class="kicker">4. Data Basics</span></div>
+  <div class="title">What Makes a Pipeline Reproducible</div><div class="rule"></div>
+  <div class="body grid2" style="grid-template-columns: 1fr 1.15fr;"><div class="card fitbox"><div class="tag">KEY POINTS</div><ul class="tight"><li>A reproducible pipeline runs from top to bottom and produces the same numbers on any computer.</li><li>Three habits that make a script reproducible:<ul class="tight"><li>Use relative paths such as <code>data/...</code>, never paths that only exist on your computer, such as <code>C:/Users/Reacher/Desktop/...</code></li><li>Calculate every number from the data; never type a result into the code by hand</li><li>Before presenting, delete your output files and run the script again from the start</li></ul></li></ul></div><div class="card fitbox"><div class="tag">AT A GLANCE</div><table class="mdtable"><tr><th>Stage</th><th>What it does</th><th>Example in today&#x27;s script</th></tr><tr><td>Load</td><td>Read the raw file</td><td><code>pd.read_csv(&quot;data/session_02_04_dataset.csv&quot;)</code></td></tr><tr><td>Check</td><td>Stop if the data breaks a rule</td><td><code>assert (df[&quot;Gross_Merchandise_Value_USD_M&quot;] &gt; 0).all()</code></td></tr><tr><td>Calculate</td><td>Add the measures</td><td>revenue and OCF margin</td></tr><tr><td>Report</td><td>Print and save the result</td><td><code>summary.to_csv(&quot;data/region_summary.csv&quot;)</code></td></tr></table></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 4 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 2</span><span class="kicker">5. Lab Practice Dataset</span></div>
+  <div class="title">The Data for Today</div><div class="rule"></div>
+  <div class="body grid2" style="grid-template-columns: 1fr 2.2fr;"><div class="card fitbox"><div class="tag">FILES</div><ul class="tight"><li><code>data/session_02_04_dataset.csv</code></li></ul><p>Audited 12-row quarterly marketplace dataset (fictional teaching data): 3 regions x 4 quarters, one row per region and quarter:</p></div><div class="card fitbox"><div class="tag">COLUMNS</div><table class="mdtable cols"><tr><td><code>Quarter_Code</code></td><td>Reporting quarter, <code>2024-Q1</code> through <code>2024-Q4</code>.</td></tr><tr><td><code>Market_Segment</code></td><td>Region: <code>North_America</code>, <code>Europe</code>, or <code>Asia_Pacific</code>.</td></tr><tr><td><code>Gross_Merchandise_Value_USD_M</code></td><td>GMV (Gross Merchandise Value) in millions of U.S. Dollars.</td></tr><tr><td><code>Platform_Take_Rate_Pct</code></td><td>The platform&#x27;s fee as a percentage of GMV.</td></tr><tr><td><code>Operating_Cash_Flow_USD_M</code></td><td>OCF (Operating Cash Flow) in millions of U.S. Dollars.</td></tr></table></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 5 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 2</span><span class="kicker">6. Keywords</span></div>
+  <div class="title">6 Terms You Need Today</div><div class="rule"></div>
+  <div class="body grid3" style="grid-template-rows: repeat(2, 1fr);"><div class="card fitbox"><div class="tag">TERM 1</div><h2><code>Reproducible Pipeline</code></h2><p class="what"><b>What:</b> one script that goes from the raw file to the final report, with no manual steps</p><p class="why"><b>Why:</b> anyone can rerun it and check your numbers</p></div><div class="card fitbox"><div class="tag">TERM 2</div><h2><code>Function</code> (<code>def</code> / <code>return</code>)</h2><p class="what"><b>What:</b> a named block of code that takes inputs and gives back a result</p><p class="why"><b>Why:</b> each pipeline stage gets a clear name, and you can reuse it</p></div><div class="card fitbox"><div class="tag">TERM 3</div><h2><code>Relative Path</code></h2><p class="what"><b>What:</b> a file path that starts from the project folder, such as <code>data/session_02_04_dataset.csv</code></p><p class="why"><b>Why:</b> works on every computer that has the project folder</p></div><div class="card fitbox"><div class="tag">TERM 4</div><h2><code>Data Type</code> and <code>TypeError</code></h2><p class="what"><b>What:</b> text (<code>str</code>) and numbers (<code>float</code>, <code>int</code>) are different types; <code>&quot;Total: &quot; + 204.3</code> raises a <code>TypeError</code></p><p class="why"><b>Why:</b> printing a result is where this mistake happens most</p></div><div class="card fitbox"><div class="tag">TERM 5</div><h2><code>Executive Finding</code></h2><p class="what"><b>What:</b> a finding, its evidence, and a recommendation</p><p class="why"><b>Why:</b> managers act on clear statements backed by numbers, not on code</p></div><div class="card fitbox"><div class="tag">TERM 6</div><h2><code>Peer Review</code></h2><p class="what"><b>What:</b> a classmate checks your script against a short checklist</p><p class="why"><b>Why:</b> a second reader catches mistakes the author no longer sees</p></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 6 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 2</span><span class="kicker">7. Core Foundations</span></div>
+  <div class="title">How It Works</div><div class="rule"></div>
+  <div class="body f7" data-uniform style="display:grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: .16in;"><div class="card fitbox" data-start="24"><div class="tag">7.1</div><h2>Functions</h2><p class="remember"><b>Remember:</b> <code>def</code> to define, <code>return</code> to hand back, and store the result when you call it.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.2</div><h2>A reproducible pipeline</h2><p class="remember"><b>Remember:</b> one script, top to bottom, same numbers every time.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.3</div><h2>Text and numbers do not mix</h2><p class="remember"><b>Remember:</b> put numbers into text with an f-string, and format them for the reader.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.4</div><h2>Hard-coded numbers</h2><p class="remember"><b>Remember:</b> read every input from the data; type a number into code only when it is a rule, and give it a name, such as <code>MARGIN_LIMIT = 20</code>.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.5</div><h2>Writing findings for managers</h2><p class="remember"><b>Remember:</b> finding, evidence, recommendation, and every number from the data.</p></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 7 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 2</span><span class="kicker">7. Core Foundations: On Real Data</span></div>
+  <div class="title">7.1 Functions: On Real Data</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: .12in;"><div class="card fitbox" data-start="19"><div class="tag">SEE IT ON REAL DATA</div><table class="mdtable"><tr><th>Call</th><th>Result</th><th>What happened</th></tr><tr><td><code>revenue_usd_m(145.2, 12.5)</code></td><td><code>18.15</code></td><td>North America, Q1: <code>145.2 x 12.5 / 100</code></td></tr><tr><td><code>revenue_usd_m(160.8, 13.0)</code></td><td><code>20.9</code> (rounded)</td><td>North America, Q4: same function, new inputs</td></tr><tr><td><code>revenue_usd_m(df[&quot;Gross_Merchandise_Value_USD_M&quot;], df[&quot;Platform_Take_Rate_Pct&quot;])</code></td><td>12 values</td><td>the same function works on whole columns</td></tr></table></div><div class="check"><b>Remember:</b> <code>def</code> to define, <code>return</code> to hand back, and store the result when you call it.</div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 8 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 2</span><span class="kicker">9. Code Demonstration 1</span></div>
+  <div class="title">From GMV to Cash, Row by Row</div><div class="rule"></div>
+  <div class="body">
+    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
+      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S24_demo_1.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
+<pre><span class="sec"># 1. Input: load the quarterly results</span>
+import pandas as pd
+df = pd.read_csv(&quot;data/session_02_04_dataset.csv&quot;)
+
+<span class="sec"># 2. Process: revenue, then OCF margin, for every row</span>
+df[&quot;Revenue_USD_M&quot;] = (
+    df[&quot;Gross_Merchandise_Value_USD_M&quot;] * df[&quot;Platform_Take_Rate_Pct&quot;] / 100
+).round(2)
+df[&quot;OCF_Margin_Pct&quot;] = (
+    df[&quot;Operating_Cash_Flow_USD_M&quot;] / df[&quot;Revenue_USD_M&quot;] * 100
+).round(1)
+
+<span class="sec"># 3. Output: the 3 rows with the lowest margin</span>
+lowest = df.sort_values(&quot;OCF_Margin_Pct&quot;).head(3)
+print(lowest[[&quot;Quarter_Code&quot;, &quot;Market_Segment&quot;, &quot;OCF_Margin_Pct&quot;]])
+</pre>
+    </div>
+    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li>The first calculation multiplies each row&#x27;s GMV by that row&#x27;s take rate and divides by 100: revenue in USD millions.</li><li>The second divides each row&#x27;s OCF by its revenue: the OCF margin, the share of revenue that became cash.</li><li><code>df.sort_values(&quot;OCF_Margin_Pct&quot;)</code> orders the rows from the lowest margin to the highest, and <code>.head(3)</code> keeps the 3 lowest.</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><div class="outbox">  Quarter_Code Market_Segment  OCF_Margin_Pct
+8      2024-Q1   Asia_Pacific            15.0
+5      2024-Q2   Asia_Pacific            16.8
+2      2024-Q3   Asia_Pacific            18.6
+</div><ul class="tight"><li>The 3 weakest quarters all belong to Asia Pacific: in Q1, only <code>15.0</code> cents of every revenue dollar became cash.</li></ul></div></div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 9 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 2</span><span class="kicker">9. Quick Check 1</span></div>
+  <div class="title">Quick Check 1: <code>.pivot_table()</code></div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid2 qc" style="flex: 1; min-height: 0;">
+      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>.pivot_table()</code></h2><p><code>df.pivot_table(index=&quot;A&quot;, columns=&quot;B&quot;, values=&quot;C&quot;)</code> makes a grid with one row per value of <code>A</code> and one column per value of <code>B</code>, like an Excel pivot table. Why: shows all 12 margins in one readable grid.</p></div>
+      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add one line to part <b>3. Output</b>: <code>print(df.___________(index=&quot;Market_Segment&quot;, columns=&quot;Quarter_Code&quot;, values=&quot;OCF_Margin_Pct&quot;))</code></p></div>
+    </div>
+    <div class="check"><b>Check:</b> the <code>Asia_Pacific</code> row reads <code>15.0</code>, <code>16.8</code>, <code>18.6</code>, <code>22.0</code>: its margin improved every quarter.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 10 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 2</span><span class="kicker">9. Code Demonstration 2</span></div>
+  <div class="title">The Same Work as a Pipeline of Functions</div><div class="rule"></div>
+  <div class="body">
+    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
+      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S24_demo_2.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
+<pre><span class="sec"># 1. Input: a function that loads and checks the raw file</span>
+import pandas as pd
+
+def load_data(path):
+    df = pd.read_csv(path)
+    assert (df[&quot;Gross_Merchandise_Value_USD_M&quot;] &gt; 0).all(), &quot;GMV must be above 0&quot;
+    return df
+
+<span class="sec"># 2. Process: functions that add measures and summarize by region</span>
+def add_metrics(df):
+    df[&quot;Revenue_USD_M&quot;] = (
+        df[&quot;Gross_Merchandise_Value_USD_M&quot;] * df[&quot;Platform_Take_Rate_Pct&quot;] / 100
+    ).round(2)
+    return df
+
+def summarize(df):
+    summary = df.groupby(&quot;Market_Segment&quot;).agg(
+        Revenue_USD_M=(&quot;Revenue_USD_M&quot;, &quot;sum&quot;),
+        OCF_USD_M=(&quot;Operating_Cash_Flow_USD_M&quot;, &quot;sum&quot;),
     )
-    print("Geographic Cash Flow Conversion Audit:\\n", segment_audit)</pre><aside><article><b>SYNTAX</b><h2>Readable Structure</h2><p>Observe the syntax and indentation that control execution.</p></article><article><b>RUNTIME</b><h2>Verified Execution</h2><p>Run the example in the integrated terminal and inspect the output.</p></article><article><b>BUSINESS VALUE</b><h2>Applied Automation</h2><p>Use the pattern to automate a repeatable business decision.</p></article></aside></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 6 / 8</span></footer></section><section class="slide"><header><b>MODULE</b><span>Style 2 Harvard Dual-Pane Editor</span></header><h1>Script Demonstration 3: Midterm Analytics Pipeline Defense Part 2: Exploratory Findings and Executive Review</h1><i></i><main class="code"><pre>import hashlib
+    summary[&quot;OCF_Margin_Pct&quot;] = (
+        summary[&quot;OCF_USD_M&quot;] / summary[&quot;Revenue_USD_M&quot;] * 100
+    ).round(1)
+    return summary
 
-    summary_str = segment_audit.to_string()
-    audit_hash = hashlib.sha256(summary_str.encode("utf-8")).hexdigest()[:12]
-    segment_audit.to_csv("data/midterm_defense_summary.csv")
-    print(f"Audited Executive Summary Exported. Verification Hash: {audit_hash}")</pre><aside><article><b>SYNTAX</b><h2>Readable Structure</h2><p>Observe the syntax and indentation that control execution.</p></article><article><b>RUNTIME</b><h2>Verified Execution</h2><p>Run the example in the integrated terminal and inspect the output.</p></article><article><b>BUSINESS VALUE</b><h2>Applied Automation</h2><p>Use the pattern to automate a repeatable business decision.</p></article></aside></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 7 / 8</span></footer></section>
-<section class="slide"><header><b>MODULE 2</b><span>Hands-On Practice</span></header><h1>Exercise 1 and Exercise 2</h1><i></i><main><article><b>EXERCISE 1: GUIDED</b><h2>Foundational Practice</h2><p>Follow the lab protocol, run the script, and verify its output with the session dataset.</p></article><article><b>EXERCISE 2: DEBUGGING</b><h2>Applied Challenge</h2><p>Extend the program, diagnose an intentional error, apply the verified correction, and confirm return code 0.</p></article></main><footer>Business Analytics &amp; AI Application | Course 6141 <span>Slide 8 / 8</span></footer></section></body></html>
+<span class="sec"># 3. Output: run the stages in order, then print and save</span>
+df = load_data(&quot;data/session_02_04_dataset.csv&quot;)
+df = add_metrics(df)
+summary = summarize(df)
+print(summary)
+summary.to_csv(&quot;data/region_summary.csv&quot;)
+</pre>
+    </div>
+    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>load_data(path)</code> reads the file and checks with <code>assert</code> that every GMV is above 0; bad data stops the pipeline here (section 7.2).</li><li><code>add_metrics(df)</code> adds the revenue column and returns the table.</li><li><code>summarize(df)</code> groups by region, sums revenue and OCF, and computes each region&#x27;s margin <b>from its totals</b> (section 7.5).</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><ul class="tight"><li>Asia Pacific earns the most revenue (<code>70.39</code>) but keeps the least as cash (<code>18.5</code>%).</li></ul></div></div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 11 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 2</span><span class="kicker">9. Quick Check 2</span></div>
+  <div class="title">Quick Check 2: Docstring</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid2 qc" style="flex: 1; min-height: 0;">
+      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2>Docstring</h2><p>a docstring, a text in triple quotes on the first line inside a function. <code>help(function_name)</code> prints it. Why: a reviewer learns what each stage does without reading its code.</p></div>
+      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add one line directly under <code>def add_metrics(df):</code>, indented like the line below it: <code>&quot;&quot;&quot;Add revenue in USD M from GMV and the take rate.&quot;&quot;&quot;</code>. Then add <code>help(add_metrics)</code> to part <b>3. Output</b>.</p></div>
+    </div>
+    <div class="check"><b>Check:</b> the Terminal prints a help page that includes <code>Add revenue in USD M from GMV and the take rate.</code></div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 12 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 2</span><span class="kicker">9. Code Demonstration 3</span></div>
+  <div class="title">Write the Findings for the CFO</div><div class="rule"></div>
+  <div class="body">
+    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
+      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S24_demo_3.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
+<pre><span class="sec"># 1. Input: load the data and build the region summary</span>
+import pandas as pd
+df = pd.read_csv(&quot;data/session_02_04_dataset.csv&quot;)
+df[&quot;Revenue_USD_M&quot;] = (
+    df[&quot;Gross_Merchandise_Value_USD_M&quot;] * df[&quot;Platform_Take_Rate_Pct&quot;] / 100
+).round(2)
+summary = df.groupby(&quot;Market_Segment&quot;).agg(
+    Revenue_USD_M=(&quot;Revenue_USD_M&quot;, &quot;sum&quot;),
+    OCF_USD_M=(&quot;Operating_Cash_Flow_USD_M&quot;, &quot;sum&quot;),
+)
+
+<span class="sec"># 2. Process: margin, then the best region by margin</span>
+summary[&quot;OCF_Margin_Pct&quot;] = (
+    summary[&quot;OCF_USD_M&quot;] / summary[&quot;Revenue_USD_M&quot;] * 100
+).round(1)
+ranked = summary.sort_values(&quot;OCF_Margin_Pct&quot;, ascending=False)
+best_region = ranked.index[0]
+best_margin = ranked[&quot;OCF_Margin_Pct&quot;].iloc[0]
+
+<span class="sec"># 3. Output: finding, evidence, recommendation</span>
+print(f&quot;Finding: {best_region} turns the most revenue into cash.&quot;)
+print(f&quot;Evidence: its OCF margin is {best_margin}%.&quot;)
+print(&quot;Recommendation: study its cost structure before expanding elsewhere.&quot;)
+</pre>
+    </div>
+    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li>Part 1 rebuilds the region summary, as in Micro-Example 2.</li><li><code>summary.sort_values(&quot;OCF_Margin_Pct&quot;, ascending=False)</code> puts the best margin first.</li><li><code>ranked.index[0]</code> reads the first row label, here the name of the best region.</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><ul class="tight"><li>The region and the margin come from the data, not from typing: if next year&#x27;s file changes, the sentence changes with it.</li></ul></div></div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 13 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 2</span><span class="kicker">9. Quick Check 3</span></div>
+  <div class="title">Quick Check 3: <code>.idxmax()</code></div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid2 qc" style="flex: 1; min-height: 0;">
+      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>.idxmax()</code></h2><p><code>column.idxmax()</code> returns the row label of the largest value, in one step. Why: finds &quot;which region?&quot; without sorting.</p></div>
+      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add one line to part <b>3. Output</b>: <code>print(&quot;Most revenue:&quot;, summary[&quot;Revenue_USD_M&quot;].______())</code></p></div>
+    </div>
+    <div class="check"><b>Check:</b> the Terminal shows <code>Most revenue: Asia_Pacific</code>. The region with the most revenue is not the one with the best margin.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 14 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 2</span><span class="kicker">10. Official References</span></div>
+  <div class="title">Where to Look Things Up</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: .14in;"><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Python Tutorial: Defining Functions</h2><p>https://docs.python.org/3/tutorial/controlflow.html#defining-functions</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>PEP 257: Docstring Conventions</h2><p>https://peps.python.org/pep-0257/</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Pandas API Reference: DataFrame.pivot_table</h2><p>https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.pivot_table.html</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Cookiecutter Data Science: A Logical, Reasonably Standardized Project Structure</h2><p>https://drivendata.github.io/cookiecutter-data-science/</p></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 15 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 2</span><span class="kicker">11-13. Exercises</span></div>
+  <div class="title">Three Exercises</div><div class="rule"></div>
+  <div class="body" style="flex-direction: column; gap: 0;">
+    <div class="grid3 exg" data-uniform style="flex: 1; min-height: 0;"><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 1: GUIDED</div><h2>Quarterly Review Pipeline</h2><p><b>Goal:</b> Build the quarterly review as a reproducible pipeline</p><p><b>File:</b> <code>YourName_S24_defense.py</code></p><p class="remember"><b>Check:</b> <code>2024-Q4</code> has the highest GMV (<code>524.4</code>)</p></div><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 2: APPLIED</div><h2>Peer Review a Classmate&#x27;s Script</h2><p><b>Goal:</b> Peer review a classmate&#x27;s script with the checklist</p><p><b>File:</b> <code>YourName_S24_practice.py</code></p><p class="remember"><b>Check:</b> the hard-coded <code>0.125</code> fails question 3</p></div><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 3: ADVANCED</div><h2>Where Should We Invest Next Year?</h2><p><b>Goal:</b> Rank regions by size, cash efficiency, and trend</p><p><b>File:</b> <code>YourName_S24_challenge.py</code></p><p class="remember"><b>Check:</b> <code>North_America</code> first (margin <code>31.0</code>)</p></div></div>
+    <div class="check">Full steps for all three exercises: sections 11-13 of the course page.</div>
+  </div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 16 / 16</span></div>
+</section>
+
+<script>
+window.__fitDone = false;
+function fitAll() {
+  document.querySelectorAll('.fitbox').forEach((box) => {
+    let size = parseFloat(box.dataset.start || '18');
+    const floor = parseFloat(box.dataset.floor || '15');
+    const apply = () => box.querySelectorAll('p, li, td, th, .outbox, pre').forEach((el) => {
+      if (el.tagName === 'PRE') { el.style.fontSize = Math.max(9.5, size - 3.5) + 'pt'; return; }
+      if (el.classList.contains('outbox')) { el.style.fontSize = Math.max(11, size - 4.5) + 'pt'; return; }
+      el.style.fontSize = size + 'pt';
+    });
+    apply();
+    const over = () => box.scrollHeight > box.clientHeight + 1 || box.scrollWidth > box.clientWidth + 1
+      || [...box.querySelectorAll('pre')].some((pre) => pre.scrollHeight > pre.clientHeight + 6 || pre.scrollWidth > pre.clientWidth + 6);
+    while (over() && size > floor) { size -= 0.5; apply(); }
+    if (over()) box.dataset.overflow = 'yes';
+    box.__apply = (v) => { size = v; apply(); };
+    box.dataset.size = size;
+  });
+  // cards on one slide share one size, so they read as a set
+  document.querySelectorAll('[data-uniform]').forEach((group) => {
+    const boxes = [...group.querySelectorAll('.fitbox')];
+    const min = Math.min(...boxes.map((b) => parseFloat(b.dataset.size)));
+    boxes.forEach((b) => b.__apply(min));
+  });
+  window.__fitDone = true;
+}
+document.fonts.ready.then(() => { fitAll(); document.querySelectorAll('[data-overflow]').forEach((el) => el.removeAttribute('data-overflow')); fitAll(); });
+</script>
+
+</body>
+</html>
