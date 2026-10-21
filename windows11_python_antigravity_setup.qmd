@@ -1,0 +1,116 @@
+---
+title: "Windows 11: Install Python and Google Antigravity"
+format:
+  pdf:
+    pdf-engine: lualatex
+    papersize: a4
+    mainfont: "Times New Roman"
+    fontsize: 11pt
+    linestretch: 1.15
+    geometry:
+      - margin=2.2cm
+    fig-width: 6
+    fig-height: 4
+    fig-align: center
+    number-sections: false
+    colorlinks: true
+    mermaid:
+      theme: neutral
+    include-in-header:
+      text: |
+        \usepackage{booktabs}
+        \usepackage{longtable}
+        \usepackage{array}
+        \usepackage{ragged2e}
+        \setlength{\LTleft}{0pt}
+        \setlength{\LTright}{0pt}
+        \AtBeginDocument{\justifying\pagenumbering{arabic}\pagestyle{plain}}
+editor: visual
+---
+
+Use this guide to remove old Python installations first, then install a fresh copy of Python and Google Antigravity.
+
+## 1. Remove all existing Python installations
+
+1. Close Command Prompt, Python, and any IDEs.
+2. Press `Win + R`, type `control`, and press Enter to open **Control Panel**.
+3. Select **Programs** > **Programs and Features**.
+4. Find every entry whose name starts with **Python** (for example, Python 3.x, Python Launcher, or Python Documentation).
+5. Select each Python-related entry and choose **Uninstall**. Complete every uninstaller.
+
+## 2. Remove Python from Microsoft Store
+
+1. Open **Microsoft Store**.
+2. Select **Library** in the lower-left corner.
+3. Search for **Python**.
+4. Uninstall every installed Python app or version.
+
+## 3. Restart Windows
+
+1. Restart the computer: **Start** > **Power** > **Restart**.
+
+## 4. Confirm that Python is no longer available
+
+1. After Windows restarts, open **Command Prompt**: press `Win + R`, type `cmd`, and press Enter.
+2. Run these commands:
+
+   ```cmd
+   python --version
+   python3 --version
+   ```
+
+3. If both commands report that they are not recognized, continue to the installation steps.
+4. If Windows opens Microsoft Store instead, turn off the `python.exe` and `python3.exe` entries in **Settings** > **Apps** > **Advanced app settings** > **App execution aliases**, then open a new Command Prompt and repeat the check.
+5. If either command still shows a version, remove the remaining Python installation before continuing.
+
+## 5. Install Python
+
+1. Go to the official Python download page: <https://www.python.org/downloads/windows/>.
+2. Download the latest stable **Python 3** Windows installer (normally **Windows installer (64-bit)**).
+3. Run the downloaded installer.
+4. On the first installer screen, **select `Add python.exe to PATH`**.
+5. Select **Install Now** and allow the installation to finish.
+6. If Windows asks for permission, select **Yes**.
+
+## 6. Verify Python and pip
+
+1. Close Command Prompt and open a **new** Command Prompt window.
+2. Run:
+
+   ```cmd
+   python --version
+   python -m pip --version
+   pip --version
+   ```
+
+3. Confirm that each command displays a Python or pip version. If `pip --version` does not work but `python -m pip --version` does, close and reopen Command Prompt once more. If necessary, rerun the Python installer and ensure the PATH option is selected.
+
+## 7. Install Google Antigravity
+
+1. Go to the official Google Antigravity download page: <https://antigravity.google/download>.
+2. In the **Antigravity IDE** section, choose the Windows installer matching your computer:
+
+   - Choose **x64** for most Windows 11 PCs.
+   - Choose **ARM64** only for a Windows-on-ARM device.
+
+3. Run the downloaded `.exe` file.
+4. Follow the installation wizard and complete the setup.
+5. Start **Google Antigravity** from the Start menu.
+6. Sign in with the Google account you will use for Antigravity, if prompted.
+
+## 8. Final check
+
+Open Command Prompt and run:
+
+```cmd
+python --version
+pip --version
+```
+
+Both commands should display version information. Open Google Antigravity once to confirm that it launches successfully.
+
+## Official links
+
+- Python for Windows: <https://www.python.org/downloads/windows/>
+- Google Antigravity download: <https://antigravity.google/download>
+- Google Antigravity setup documentation: <https://www.antigravity.google/docs/getting-started?tab=ide>
