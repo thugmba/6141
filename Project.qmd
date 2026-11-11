@@ -1,0 +1,446 @@
+---
+title: "Business Analytics and AI Application: Term Project 2026"
+subtitle: "What Changed in [Company]'s Annual Reports? Finding Themes with Machine Learning"
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    toc-location: left
+    number-sections: true
+    embed-resources: true
+    code-copy: true
+    theme: default
+    fontsize: 1.05em
+editor: visual
+---
+
+# Project Overview
+
+Every US-listed company files an annual report with the US Securities and Exchange Commission (SEC). This report, called **Form 10-K**, explains the business, its results, and its risks in management's own words. It is long (30,000 to 60,000 words), and most of it is repeated from one year to the next. The new parts are where the news is.
+
+You will pick one company, collect its five most recent 10-K reports, and use machine learning to answer one question:
+
+> **What did [Company]'s management start to talk about in the last five years, and what does that mean for an investor?**
+
+| Step | What you do | Course session |
+|---|---|---|
+| Collect | Find and save five 10-K reports | 2.1 (HTTP requests, User-Agent) |
+| Build the table | Read each report with Beautiful Soup; make a table of paragraphs | 2.1, 1.3 |
+| Turn words into numbers | Represent each paragraph as a TF-IDF vector | New tool |
+| Topic map | Group all paragraphs into topics with K-Means clustering | 3.4 |
+| Find what changed | Compare each paragraph with last year's report | New tool |
+| Themes of change | Group the changed paragraphs into themes with K-Means | 3.4 |
+| Interpret | Read the paragraphs; explain why each theme appeared when it did | 2.4, 4.4 |
+
+# Company List and Selection Rules
+
+## The 25 companies
+
+Every company on the list files Form 10-K with the SEC, so the reports have the same structure and are free to download. Each one also has a clear story in 2025-2026 that its reports may reveal.
+
+| # | Company (Ticker) | Industry | Story to look for |
+|---|---|---|---|
+| 1 | NVIDIA (NVDA) | Semiconductors | AI chip demand and supply |
+| 2 | Advanced Micro Devices (AMD) | Semiconductors | The AI challenger |
+| 3 | Intel (INTC) | Semiconductors | Restructuring and a US government stake |
+| 4 | Micron Technology (MU) | Memory chips | The memory cycle and AI memory demand |
+| 5 | Oracle (ORCL) | Software and cloud | Large AI cloud contracts and rising debt |
+| 6 | Microsoft (MSFT) | Software and cloud | Azure growth and AI spending |
+| 7 | United Parcel Service (UPS) | Logistics | Fewer packages and cost cuts |
+| 8 | Amazon (AMZN) | E-commerce and cloud | AWS and heavy investment |
+| 9 | Alphabet (GOOGL) | Internet | Search vs. AI, and antitrust cases |
+| 10 | Meta Platforms (META) | Internet | AI spending and regulation |
+| 11 | Netflix (NFLX) | Media | From subscriber growth to profit growth |
+| 12 | Adobe (ADBE) | Software | The fear that AI replaces its products |
+| 13 | Salesforce (CRM) | Software | Slower growth and AI agents |
+| 14 | Tesla (TSLA) | Automobiles | Falling car margins and a story about AI and robots |
+| 15 | Nike (NKE) | Apparel | Weak results, tariffs, and a turnaround plan |
+| 16 | Walmart (WMT) | Retail | A traditional retailer valued like a technology company |
+| 17 | Costco (COST) | Retail | The membership model |
+| 18 | Target (TGT) | Retail | Falling sales and a falling stock |
+| 19 | Coca-Cola (KO) | Beverages | A defensive company: does its story change at all? |
+| 20 | Eli Lilly (LLY) | Pharmaceuticals | Fast growth from obesity drugs (GLP-1) |
+| 21 | Pfizer (PFE) | Pharmaceuticals | Revenue falls after COVID-19 |
+| 22 | UnitedHealth Group (UNH) | Health care | Rising medical costs and a CEO change in 2025 |
+| 23 | Chevron (CVX) | Energy | The oil price cycle and acquisitions |
+| 24 | Caterpillar (CAT) | Machinery | Power equipment for data centers |
+| 25 | NextEra Energy (NEE) | Electric utilities | AI power demand and interest rates |
+
+## Selection rules
+
+* **One company per student.** Sign up for your company in iLearn. The first student to sign up gets the company.
+* **Sign up before you write Chapter 1.** Write your choice and two or three sentences on why you chose it.
+* **Do not change companies after Week 10** unless the instructor agrees.
+
+# Collect the Data
+
+Use the **five most recent 10-K reports filed by November 1, 2026**, one per fiscal year. Keep this set even if the company files a new 10-K during the project. Some companies end their fiscal year in a month other than December (NVIDIA in January, Microsoft in June, Costco in August), so your five years may be, for example, fiscal years 2022 to 2026.
+
+1. Open the company's filing list in SEC EDGAR, the SEC's free filing database. Replace `NKE` with your ticker:
+   `https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=NKE&type=10-K`
+2. For each of the five most recent rows with the type **10-K** (not 10-K/A, which is a correction), click **Documents**, then click the document whose type is **10-K**.
+3. Copy the web address of the report. If it starts with `https://www.sec.gov/ix?doc=`, delete `ix?doc=` so that it starts with `https://www.sec.gov/Archives/`.
+4. Save each report with Python. The SEC asks every script to name itself with a User-Agent (Session 2.1), so put your name and school email in it:
+
+```python
+import time
+import requests
+
+headers = {"User-Agent": "Your Name your.email@thu.edu.tw"}
+reports = {
+    2026: "https://www.sec.gov/Archives/edgar/data/320187/000032018726000088/nke-20260531.htm",
+    # add the other four years here
+}
+
+for year, url in reports.items():
+    html_text = requests.get(url, headers=headers).text
+    with open(f"NKE_{year}.htm", "w", encoding="utf-8") as f:
+        f.write(html_text)
+    time.sleep(2)                       # pause between requests
+```
+
+If the saved file is very small and contains "Request Rejected" or "Undeclared Automated Tool", the SEC refused your request: check that the `User-Agent` has your real name and email, wait a few minutes, and try again.
+
+# Analysis Steps
+
+You will need one new library feature, `TfidfVectorizer`, and one new function, `cosine_similarity`. Both come with Scikit-Learn. If a library is missing, run this once in the Terminal:
+
+```
+pip install requests beautifulsoup4 pandas scikit-learn
+```
+
+## Step 1: Build a table of paragraphs
+
+Read each report with Beautiful Soup, as you read the saved web page in Session 2.1, and keep every paragraph of at least 30 words. Short lines are mostly headings, page numbers, and table cells.
+
+```python
+import pandas as pd
+from bs4 import BeautifulSoup
+
+rows = []
+for year in [2022, 2023, 2024, 2025, 2026]:
+    html_text = open(f"NKE_{year}.htm", encoding="utf-8").read()
+    soup = BeautifulSoup(html_text, "html.parser")
+    for line in soup.get_text("\n").split("\n"):
+        paragraph = " ".join(line.split())          # remove extra spaces
+        if len(paragraph.split()) >= 30:
+            rows.append({"Year": year, "Paragraph": paragraph})
+
+df = pd.DataFrame(rows)
+print(df.groupby("Year").size())                    # paragraphs per year
+```
+
+## Step 2: Turn paragraphs into numbers with TF-IDF
+
+A machine learning model needs numbers, not words. **TF-IDF** (Term Frequency-Inverse Document Frequency) gives each paragraph one number per word:
+
+* **Term frequency:** a word that appears often in this paragraph gets a higher number.
+* **Inverse document frequency:** a word that appears in almost every paragraph (such as "company") gets a lower number, because it says little about this paragraph.
+
+```python
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+vectorizer = TfidfVectorizer(stop_words="english",
+                             token_pattern=r"(?u)\b[a-zA-Z]{2,}\b",
+                             min_df=3, max_df=0.5)
+X = vectorizer.fit_transform(df["Paragraph"])
+words = vectorizer.get_feature_names_out()
+```
+
+* `stop_words="english"` drops common words such as "the" and "and".
+* `token_pattern` keeps only words of two or more letters, so numbers and years do not count as words.
+* `min_df=3` drops words that appear in fewer than 3 paragraphs; `max_df=0.5` drops words that appear in more than half of the paragraphs.
+
+## Step 3: Make a topic map with K-Means
+
+Group all paragraphs into topics with K-Means clustering (Session 3.4). Paragraphs in the same cluster use similar words.
+
+```python
+from sklearn.cluster import KMeans
+
+model = KMeans(n_clusters=8, random_state=0, n_init=10).fit(X)
+df["Topic"] = model.labels_
+
+for k in range(8):
+    top = [words[i] for i in model.cluster_centers_[k].argsort()[-8:][::-1]]
+    print(k, top)                                   # the 8 most typical words
+
+share = pd.crosstab(df["Year"], df["Topic"], normalize="index") * 100
+print(share.round(1))                               # % of each year's paragraphs
+```
+
+* **Name each topic** from its top words and from two or three of its paragraphs (for example, "taxes", "share buybacks", "supply chain risks").
+* **Choose the number of topics.** Try 6, 8, and 10. Keep the number that gives topics you can name clearly, and explain your choice.
+* You will see that the topic shares hardly move from year to year. Most of a 10-K is repeated, so the changes are hidden. Step 4 finds them.
+
+## Step 4: Find the paragraphs that changed
+
+Compare every paragraph with all the paragraphs of the previous year's report. **Cosine similarity** measures how alike two paragraphs are, from 0 (no words in common) to 1 (the same words in the same proportions). Each paragraph keeps its highest similarity to last year:
+
+```python
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
+
+sim_vectorizer = TfidfVectorizer(stop_words="english",
+                                 token_pattern=r"(?u)\b[a-zA-Z]{2,}\b")
+S = sim_vectorizer.fit_transform(df["Paragraph"])
+
+years = sorted(df["Year"].unique())
+df["Best_Similarity"] = np.nan
+for prev, year in zip(years, years[1:]):
+    this_rows = df.index[df["Year"] == year]
+    prev_rows = df.index[df["Year"] == prev]
+    best = cosine_similarity(S[this_rows], S[prev_rows]).max(axis=1)
+    df.loc[this_rows, "Best_Similarity"] = best
+```
+
+Then label each paragraph:
+
+| Best similarity | Label | Meaning |
+|---|---|---|
+| 0.9 or more | `Same` | Repeated from last year |
+| 0.5 to 0.9 | `Revised` | Last year's paragraph, rewritten (for example, a new sentence added) |
+| Below 0.5 | `New` | No similar paragraph last year |
+
+```python
+df["Status"] = np.where(df["Best_Similarity"] >= 0.9, "Same",
+               np.where(df["Best_Similarity"] >= 0.5, "Revised", "New"))
+df.loc[df["Year"] == years[0], "Status"] = "First year"
+print(pd.crosstab(df["Year"], df["Status"]))
+```
+
+The first year has no previous report, so leave it out of this step. Report, for each year, the number of `Same`, `Revised`, and `New` paragraphs and the **change rate**: the percentage of paragraphs that are `Revised` or `New`.
+
+**Test your thresholds.** Try 0.4 and 0.6 instead of 0.5, and 0.85 and 0.95 instead of 0.9. Report whether your main findings stay the same.
+
+## Step 5: Group the changed paragraphs into themes
+
+Keep only the `Revised` and `New` paragraphs and run K-Means again, this time with 4 to 6 clusters. Fit a new `TfidfVectorizer` on these paragraphs only.
+
+```python
+changed = df[df["Status"].isin(["Revised", "New"])].copy()
+
+vectorizer2 = TfidfVectorizer(stop_words="english",
+                              token_pattern=r"(?u)\b[a-zA-Z]{2,}\b",
+                              min_df=2, max_df=0.5)
+X_changed = vectorizer2.fit_transform(changed["Paragraph"])
+words2 = vectorizer2.get_feature_names_out()
+
+n_themes = 5
+theme_model = KMeans(n_clusters=n_themes, random_state=0, n_init=10).fit(X_changed)
+changed["Theme"] = theme_model.labels_
+print(pd.crosstab(changed["Theme"], changed["Year"]))    # themes by year
+```
+
+* Name each theme from its top words, as in Step 3.
+* Read the table of themes by year. **A theme that grows over the years is your strongest evidence.**
+* Find the **representative paragraph** of each theme: the paragraph closest to the cluster center. `theme_model.transform(X_changed)` gives every paragraph's distance to every center.
+
+```python
+distances = theme_model.transform(X_changed)
+for k in range(n_themes):
+    members = np.where(theme_model.labels_ == k)[0]
+    closest = members[distances[members, k].argmin()]
+    print(k, changed["Paragraph"].iloc[closest][:400])
+```
+
+## Step 6: Read and interpret
+
+The numbers tell you *where* to look; reading tells you *what it means*.
+
+1. For your two or three most important themes, **quote at least three sentences** from the changed paragraphs.
+2. Explain **why the theme appeared in that year**: an event in the company (a new product, a lawsuit, a new CEO), in its industry, or a new rule (for example, the SEC required a new cybersecurity section, Item 1C, in 10-K reports for fiscal years ending on or after December 15, 2023).
+3. Say what an investor should **watch next year** because of it.
+
+Watch out for these mistakes:
+
+* **Routine updates are not news.** Some paragraphs change every year only because the dates and figures change (sales results, share buybacks, the auditor's report). Name these themes, but focus your interpretation on the others.
+* **A cluster is not always one idea.** Read several paragraphs before you name a theme.
+* **K-Means can give slightly different clusters** with a different `random_state`. Keep `random_state=0` so that your results can be repeated.
+
+# Example: Apple (not on the list)
+
+This example uses Apple's five most recent 10-K reports (fiscal years 2022 to 2026, ending in late September), with the settings above.
+
+**Table A. Paragraphs and change rate**
+
+| Fiscal year | Paragraphs | Same | Revised | New | Change rate |
+|---|---|---|---|---|---|
+| 2022 | 271 | (first year) | | | |
+| 2023 | 253 | 204 | 38 | 11 | 19.4% |
+| 2024 | 258 | 212 | 28 | 18 | 17.8% |
+| 2025 | 244 | 193 | 41 | 10 | 20.9% |
+| 2026 | 254 | 199 | 35 | 20 | 21.7% |
+
+**Table B. Themes of change** (5 clusters of the 201 changed paragraphs; number of changed paragraphs per year)
+
+| Theme (our name) | Top words | 2023 | 2024 | 2025 | 2026 |
+|---|---|---|---|---|---|
+| New products and AI | products, services, components, intelligence, technologies, artificial | 3 | 5 | 20 | 34 |
+| Sales results | net, sales, iphone, ipad, compared, dollar | 10 | 4 | 3 | 3 |
+| Share buybacks | shares, billion, repurchase, program | 10 | 16 | 10 | 6 |
+| Taxes | tax, foreign, rate, effective | 22 | 12 | 13 | 7 |
+| App Store and courts | court, app, store, commission, developers | 4 | 9 | 5 | 5 |
+
+**A good interpretation reads like this:**
+
+* **Most of the report is repeated.** About 80% of Apple's paragraphs are the same every year, and the topic map barely moves. The news is in the 18% to 22% that changes each year.
+* **AI is the theme that grows.** Changed paragraphs about new products and artificial intelligence rose from 3 in 2023 to 34 in 2026. The 2026 report adds a new risk: *"The Company's business, including its artificial intelligence and machine learning offerings, also depends on access to sufficient compute capacity and storage resources. Demand for cloud compute and storage services and other artificial intelligence infrastructure has increased substantially across the technology industry, resulting in constrained supply, extended lead times, and increasing costs."* Apple now tells investors that its AI plans depend on computing power it partly buys from others.
+* **Some themes are events.** The tax theme peaks in 2023-2024: the 2024 report explains *"a one-time income tax charge of $10.2 billion, net, related to the State Aid Decision"* of the European Commission. The App Store theme peaks in 2024, when new rules in the European Union and court cases in the US changed how Apple may charge app developers.
+* **Some themes are routine.** Sales results and share buybacks change every year because their figures change; they are not new risks.
+* **For investors:** the question to watch next year is whether the cost and supply of AI computing power starts to show up in Apple's margins.
+
+# What to Submit
+
+| Deadline (Taiwan time) | What to submit | File name | Where |
+|---|---|---|---|
+| Week 10: Friday, November 20, 5 pm | Report, **Chapter 1 only** (PDF, Word template) | `StudentID_Name_Ch1.pdf` | iLearn |
+| Week 14: Friday, December 18, 5 pm | **Full report**: Chapters 1-4 and appendix, at least 10 pages (PDF, Word template) | `StudentID_Name_Report.pdf` | iLearn |
+| | **Slides**: at least 15 (PDF) | `StudentID_Name_Slides.pdf` | iLearn |
+| | **Presentation video**: 5 minutes, face visible (uploaded to Google Drive) | Link only | iLearn |
+
+Example file name: `S11312345_JohnSmith_Report.pdf` (your name in English letters, no spaces).
+
+# Report
+
+Write the report in four chapters plus an appendix. The main text (Chapters 1-4) is at least **10 pages**, counted in the Word template's format from the start of Chapter 1 to the end of Chapter 4, including tables and figures. The title, abstract, references, and appendix do not count toward this minimum.
+
+| Chapter | Sections | Suggested length | Due |
+|---|---|---|---|
+| 1. Introduction | 1.1 The company and why you chose it<br>1.2 Its 2025-2026 story<br>1.3 Your research question<br>1.4 Data: a table of your five 10-K reports (fiscal year, filing date, link) | 2 pages | Week 10 |
+| 2. Data and Method | 2.1 From five reports to a table of paragraphs (paragraphs per year)<br>2.2 TF-IDF and its settings<br>2.3 K-Means and how you chose the number of clusters<br>2.4 Cosine similarity and your thresholds | 2-3 pages | Week 14 |
+| 3. Results | 3.1 The topic map: topic names and shares by year<br>3.2 The change rate by year (`Same`, `Revised`, `New`)<br>3.3 Themes of change by year<br>3.4 Representative paragraphs<br>3.5 The threshold test | 3-4 pages | Week 14 |
+| 4. Conclusion | 4.1 Interpretation of the main themes, with quotes<br>4.2 What investors should watch next year<br>4.3 Limitations of the method<br>4.4 Summary | 2-3 pages | Week 14 |
+| Appendix | A. Your complete Python script<br>B. Sources with dates<br>C. AI use: tool names and prompts (see [Use of AI Tools](#use-of-ai-tools)) | No limit | Week 14 |
+: {tbl-colwidths="[18,56,14,12]"}
+
+* **Use the Word template for both Chapter 1 (Week 10) and the final report (Week 14):** download [`template.docx`](https://github.com/thugmba/6141/raw/main/template.docx), fill in the title, your name, a short abstract (about 100 words), and keywords, then replace the template's sample sections with Chapters 1-4 and the appendix. Use the template's heading, table, and figure styles, and convert the finished report to PDF.
+* Your script follows the course structure (1. Input, 2. Process, 3. Output) and runs from start to finish without errors. Name it `StudentID_Name_Project.py`.
+* Number every table and figure (Table 1, Figure 1) and refer to it in the text.
+* The final report includes all four chapters. Improve Chapter 1 using the feedback you received in Week 10.
+* **Quote and cite carefully.** Put every quote from a 10-K in quotation marks and cite it the way the template does: a reference number in order of appearance, plus the item of the report, for example [3], Item 1A. List your five 10-K reports and any other sources in the template's References section.
+* Everything is in English: the report, the slides, the video, and the live presentation.
+
+# Presentation
+
+## Final presentations (Weeks 15-16)
+
+The live presentation in class and the presentation video (see below) are **separate**. You must do both.
+
+* **Every student must present in class.** The presentation order is set in class.
+* **Duration:** 6 minutes in total: a 5-minute presentation and 1 minute of questions and answers (Q&A).
+* **Attendance:** mandatory.
+
+## Structure (5 minutes)
+
+| Section | Time |
+|---|---|
+| Company and question | 0:45 |
+| Data and method: from five reports to clusters | 1:00 |
+| Results: change rate and themes of change | 1:30 |
+| Interpretation and recommendation: "If I Advised This Company's Investors" | 1:15 |
+| Summary | 0:30 |
+
+Practice several times to stay within the time. Presentations will be stopped at 5 minutes.
+
+## Slides (at least 15)
+
+| # | Slide | Section |
+|---|---|---|
+| 1 | Title: company, your name, student ID (and, if you used AI for the slides, the AI tool's name and your prompts) | Company and question |
+| 2 | Research question and why you chose this company | Company and question |
+| 3 | The company's 2025-2026 story | Company and question |
+| 4 | Data: the five 10-K reports | Data and method |
+| 5 | Method: from reports to paragraphs, TF-IDF, and clusters (one diagram) | Data and method |
+| 6 | Settings: number of clusters and similarity thresholds, and why | Data and method |
+| 7 | Topic map: the topics and their names | Results |
+| 8 | Topic shares by year (chart) | Results |
+| 9 | Change rate by year: `Same`, `Revised`, `New` (chart) | Results |
+| 10 | Themes of change by year (table or chart) | Results |
+| 11 | Theme 1: a quote and why it appeared that year | Interpretation |
+| 12 | Theme 2: a quote and why it appeared that year | Interpretation |
+| 13 | Real news vs. routine updates | Interpretation |
+| 14 | Recommendation: "If I Advised This Company's Investors" | Interpretation |
+| 15 | Limitations and summary | Summary |
+
+You may add slides (for example, a third theme), but keep within 5 minutes.
+
+* **Design the slides your own way**, in any tool you like (PowerPoint, Google Slides, Canva, or others). There is no template. Submit them as PDF.
+* If you used an AI tool to make the slides, show the **AI tool's name and your prompts on the title slide**.
+
+![Example title slide: title, author, and AI use (fictional student; the prompt is only an example)](assets/project_title_slide_example.png){width=100%}
+
+## Presentation video
+
+* Record your 5-minute presentation in English.
+* **Only you need to be in the video:** your face must be visible throughout. Slides are not needed in the video.
+* **Sample video:** [A Plan Is Not a Strategy](https://youtu.be/iuYlGRnC7J8) (Harvard Business Review). Watch it for the format:
+  * One speaker, framed from the waist up, in the middle of the screen.
+  * A plain, quiet background with nothing distracting behind the speaker.
+  * The speaker looks at the camera and talks to the viewer, using natural hand gestures, without reading from a script.
+  * Only a short caption with the speaker's name appears on screen. No slides.
+* Upload the video to Google Drive. Set sharing to **"Anyone with the link"** with the role **Viewer**, and submit the link in iLearn by the Week 14 deadline.
+
+![A frame from the sample video: one speaker, waist up, plain background, no slides. Source: Harvard Business Review, "A Plan Is Not a Strategy" (YouTube).](assets/project_sample_video_screenshot.png){width=80%}
+
+## Q&A (1 minute)
+
+Be ready to answer questions about:
+
+* How TF-IDF turns a paragraph into numbers
+* Why you chose your number of clusters and your similarity thresholds
+* Why one of your themes appeared in the year it did
+* What one of your quoted sentences really says
+* Which of your themes are real news and which are routine updates
+
+# Submission
+
+## Deadlines
+
+| Deadline | Submission |
+|---|---|
+| Week 10 (Friday, November 20, 5 pm Taiwan time) | Chapter 1 (PDF) |
+| Week 14 (Friday, December 18, 5 pm Taiwan time) | Final report (PDF), slides (PDF), and the link to your presentation video |
+
+## Submission process
+
+1. **Convert to PDF:** both the report and the slides. Put your Python script in the report appendix.
+2. **Name your files:**
+   * `StudentID_Name_Ch1.pdf`
+   * `StudentID_Name_Report.pdf`
+   * `StudentID_Name_Slides.pdf`
+   * Example: `S11312345_JohnSmith_Report.pdf` (your name in English letters, no spaces)
+3. **Upload your presentation video to Google Drive** and submit only its link in iLearn. Set sharing to "Anyone with the link" (Viewer), then open the link in a private browser window to make sure anyone can view it.
+4. **Submit to iLearn:** upload each file, or the video link, to the submission folder for that deadline.
+
+## Use of AI Tools
+
+You may use AI tools (for example, ChatGPT, Claude, Gemini, or the agent in Google Antigravity) to help write the report, the code, or the slides. If you do, you **must** report it:
+
+* In **Appendix C. AI Use** of your report, list for each tool:
+  1. The tool's name (and model, if shown), for example "ChatGPT (GPT-5)".
+  2. What you used it for (for example, "fixing an error in Step 4", "improving the English of Chapter 4", "making slide 5").
+  3. **Every prompt you used, copied exactly.**
+* For the slides, also show the AI tool's name and your prompts on the **title slide** (see the Presentation section).
+* If you did not use any AI tool, write "No AI tools were used." in Appendix C.
+
+You are responsible for everything in your report. Check every number, quote, and fact an AI tool gives you against your own results and the 10-K reports.
+
+**A report or slide deck copied directly from AI output will not be graded.** AI may help you, but the analysis, the interpretation, and the writing must be your own.
+
+## Important notes
+
+* All times are Taiwan time (UTC+8).
+* Late submissions will be penalized according to course policy.
+* Only PDF files are accepted.
+* Make sure your files open correctly before you submit them.
+
+# Evaluation
+
+| Item | Points |
+|---|---|
+| Written report | 70 |
+| Presentation (graded from the video and the slides) | 30 |
+| **Total** | **100** |
+
+**Data source:** Form 10-K reports from SEC EDGAR (US Securities and Exchange Commission).
