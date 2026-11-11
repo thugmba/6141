@@ -310,6 +310,55 @@ This example uses Apple's five most recent 10-K reports (fiscal years 2022 to 20
 
 Example file name: `S11312345_JohnSmith_Report.pdf` (your name in English letters, no spaces).
 
+## Checklists before you submit
+
+Late work is not accepted, so check everything **before** the deadline.
+
+**Week 10: Chapter 1**
+
+- [ ] Written in the Word template, in English
+- [ ] Sections 1.1-1.4 are all there (about 2 pages)
+- [ ] The table lists your five most recent 10-K reports filed by November 1, 2026 (fiscal year, filing date, link); no 10-K/A
+- [ ] Word's Spelling & Grammar check is done
+- [ ] Saved as PDF and named `StudentID_Name_Ch1.pdf`; the PDF opens correctly
+- [ ] Uploaded to iLearn before Friday, November 20, 5 pm (Taiwan time)
+
+**Week 14: Final report**
+
+- [ ] Written in the Word template: title, your name, abstract (about 100 words), and keywords are filled in
+- [ ] All of the template's sample text and instructions are deleted
+- [ ] Chapters 1-4 follow the sections in the Report table; Chapter 1 is improved with the Week 10 feedback
+- [ ] The main text (start of Chapter 1 to end of Chapter 4) is at least 10 pages
+- [ ] Results include the topic map, the change rate by year, the themes of change by year, the representative paragraphs, and the threshold test
+- [ ] At least three quotes from the 10-K reports, in quotation marks and cited (for example, [3], Item 1A)
+- [ ] Every table and figure is numbered and mentioned in the text
+- [ ] The References section lists your five 10-K reports and any other sources
+- [ ] Appendix A: your complete script (1. Input, 2. Process, 3. Output), which runs without errors
+- [ ] Appendix B: sources with dates
+- [ ] Appendix C: AI tools, what you used them for, and every prompt; or "No AI tools were used."
+- [ ] Nothing is copied directly from AI output
+- [ ] Word's Spelling & Grammar check is done
+- [ ] Saved as PDF and named `StudentID_Name_Report.pdf`; the PDF opens correctly
+
+**Week 14: Slides**
+
+- [ ] At least 15 slides, in English
+- [ ] The title slide has the title and your name; if you used AI for the slides, it also shows the AI tool's name and your prompts
+- [ ] You practiced and finish within 5 minutes
+- [ ] Saved as PDF and named `StudentID_Name_Slides.pdf`; the PDF opens correctly
+
+**Week 14: Presentation video**
+
+- [ ] About 5 minutes, in English
+- [ ] Your face is visible for the whole video
+- [ ] Uploaded to Google Drive, shared as "Anyone with the link" (Viewer)
+- [ ] The link opens in a private browser window
+- [ ] The link is submitted in iLearn
+
+**All three Week 14 items are uploaded before Friday, December 18, 5 pm (Taiwan time).**
+
+**Only students who submitted all three Week 14 items (the final report, the slides, and the video link) on time may present in class.**
+
 # Report
 
 Write the report in four chapters plus an appendix. The main text (Chapters 1-4) is at least **10 pages**, counted in the Word template's format from the start of Chapter 1 to the end of Chapter 4, including tables and figures. The title, abstract, references, and appendix do not count toward this minimum.
@@ -324,6 +373,7 @@ Write the report in four chapters plus an appendix. The main text (Chapters 1-4)
 : {tbl-colwidths="[18,56,14,12]"}
 
 * **Use the Word template for both Chapter 1 (Week 10) and the final report (Week 14):** download [`template.docx`](https://github.com/thugmba/6141/raw/main/template.docx), fill in the title, your name, a short abstract (about 100 words), and keywords, then replace the template's sample sections with Chapters 1-4 and the appendix. Use the template's heading, table, and figure styles, and convert the finished report to PDF.
+* **See a finished example:** [this journal article](https://github.com/thugmba/6141/blob/main/sustainability-18-11469.pdf) was written in the same template (Aybar-Bellido et al., *Sustainability*, 2026; open access, CC BY). Click it to see how the title, authors, abstract, keywords, numbered headings, tables, figures, and references should look. Use it as a model for the **format** only: your report is shorter and follows the chapters in the table above.
 * Your script follows the course structure (1. Input, 2. Process, 3. Output) and runs from start to finish without errors. Name it `StudentID_Name_Project.py`.
 * Number every table and figure (Table 1, Figure 1) and refer to it in the text.
 * The final report includes all four chapters. Improve Chapter 1 using the feedback you received in Week 10.
@@ -338,6 +388,7 @@ Write the report in four chapters plus an appendix. The main text (Chapters 1-4)
 The live presentation in class and the presentation video (see below) are **separate**. You must do both.
 
 * **Every student must present in class.** The presentation order is set in class.
+* **Only students who submitted all three Week 14 items (the final report, the slides, and the video link) on time may present in class.**
 * **Duration:** 6 minutes in total: a 5-minute presentation and 1 minute of questions and answers (Q&A).
 * **Attendance:** mandatory.
 
