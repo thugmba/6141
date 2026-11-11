@@ -2506,7 +2506,6 @@ vertical-align: -.125em;
 <h2 data-number="2.2" class="anchored" data-anchor-id="selection-rules"><span class="header-section-number">2.2</span> Selection rules</h2>
 <ul>
 <li><strong>One company per student.</strong> Sign up for your company in iLearn. The first student to sign up gets the company.</li>
-<li><strong>Sign up before you write Chapter 1.</strong> Write your choice and two or three sentences on why you chose it.</li>
 <li><strong>Do not change companies after Week 10</strong> unless the instructor agrees.</li>
 </ul>
 </section>
@@ -2515,25 +2514,30 @@ vertical-align: -.125em;
 <h1 data-number="3"><span class="header-section-number">3</span> Collect the Data</h1>
 <p>Use the <strong>five most recent 10-K reports filed by November 1, 2026</strong>, one per fiscal year. Keep this set even if the company files a new 10-K during the project. Some companies end their fiscal year in a month other than December (NVIDIA in January, Microsoft in June, Costco in August), so your five years may be, for example, fiscal years 2022 to 2026.</p>
 <ol type="1">
-<li>Open the company’s filing list in SEC EDGAR, the SEC’s free filing database. Replace <code>NKE</code> with your ticker: <code>https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&amp;CIK=NKE&amp;type=10-K</code></li>
-<li>For each of the five most recent rows with the type <strong>10-K</strong> (not 10-K/A, which is a correction), click <strong>Documents</strong>, then click the document whose type is <strong>10-K</strong>.</li>
-<li>Copy the web address of the report. If it starts with <code>https://www.sec.gov/ix?doc=</code>, delete <code>ix?doc=</code> so that it starts with <code>https://www.sec.gov/Archives/</code>.</li>
-<li>Save each report with Python. The SEC asks every script to name itself with a User-Agent (Session 2.1), so put your name and school email in it:</li>
+<li><strong>Open the company’s list of 10-K filings</strong> in SEC EDGAR, the SEC’s free filing database. This guide uses Apple (<code>AAPL</code>) as the example throughout; replace <code>AAPL</code> with your ticker: <code>https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&amp;CIK=AAPL&amp;type=10-K</code> Each row of the table is one filing, newest first. The first column (<strong>Filings</strong>) shows the form type. Use the five newest rows whose type is exactly <strong>10-K</strong>; skip <strong>10-K/A</strong> rows, which are corrections.</li>
+<li><strong>Open the filing.</strong> In the row, click the <strong>Documents</strong> button. A page called <em>Filing Index</em> opens. Its first table, <em>Document Format Files</em>, lists every file in the filing.</li>
+<li><strong>Find the report file.</strong> In that table, the row whose <strong>Type</strong> is <strong>10-K</strong> is the report itself (the other rows, such as EX-21, are attachments). Its file name tells you the fiscal year: <code>aapl-20260926.htm</code> means the fiscal year that ended on September 26, 2026, so it is the 2026 report.</li>
+<li><strong>Get the address that Python can read.</strong> Click the file name. The report opens in the SEC’s <em>Inline XBRL Viewer</em>, and the address bar shows: <code>https://www.sec.gov/ix?doc=/Archives/edgar/data/320193/000032019326000026/aapl-20260926.htm</code> The viewer is a page for people; Python needs the report file behind it. Delete <code>ix?doc=/</code> from the address, so that it becomes: <code>https://www.sec.gov/Archives/edgar/data/320193/000032019326000026/aapl-20260926.htm</code> Paste this into your browser to check: you should see the plain report, without the viewer’s menus.</li>
+<li><strong>Repeat steps 2-4</strong> for the other four years, and write down the five addresses with their years.</li>
+<li><strong>Save each report with Python.</strong> The SEC asks every script to name itself with a User-Agent (Session 2.1), so put your name and school email in it:</li>
 </ol>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>headers <span class="op">=</span> {<span class="st">&quot;User-Agent&quot;</span>: <span class="st">&quot;Your Name your.email@thu.edu.tw&quot;</span>}</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>reports <span class="op">=</span> {</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="dv">2026</span>: <span class="st">&quot;https://www.sec.gov/Archives/edgar/data/320187/000032018726000088/nke-20260531.htm&quot;</span>,</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># add the other four years here</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> year, url <span class="kw">in</span> reports.items():</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    html_text <span class="op">=</span> requests.get(url, headers<span class="op">=</span>headers).text</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(<span class="ss">f&quot;NKE_</span><span class="sc">{</span>year<span class="sc">}</span><span class="ss">.htm&quot;</span>, <span class="st">&quot;w&quot;</span>, encoding<span class="op">=</span><span class="st">&quot;utf-8&quot;</span>) <span class="im">as</span> f:</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        f.write(html_text)</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    time.sleep(<span class="dv">2</span>)                       <span class="co"># pause between requests</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>reports <span class="op">=</span> {                            <span class="co"># Apple&#39;s five reports; use your company&#39;s</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="dv">2022</span>: <span class="st">&quot;https://www.sec.gov/Archives/edgar/data/320193/000032019322000108/aapl-20220924.htm&quot;</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="dv">2023</span>: <span class="st">&quot;https://www.sec.gov/Archives/edgar/data/320193/000032019323000106/aapl-20230930.htm&quot;</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="dv">2024</span>: <span class="st">&quot;https://www.sec.gov/Archives/edgar/data/320193/000032019324000123/aapl-20240928.htm&quot;</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="dv">2025</span>: <span class="st">&quot;https://www.sec.gov/Archives/edgar/data/320193/000032019325000079/aapl-20250927.htm&quot;</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="dv">2026</span>: <span class="st">&quot;https://www.sec.gov/Archives/edgar/data/320193/000032019326000026/aapl-20260926.htm&quot;</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> year, url <span class="kw">in</span> reports.items():</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    html_text <span class="op">=</span> requests.get(url, headers<span class="op">=</span>headers).text</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(<span class="ss">f&quot;AAPL_</span><span class="sc">{</span>year<span class="sc">}</span><span class="ss">.htm&quot;</span>, <span class="st">&quot;w&quot;</span>, encoding<span class="op">=</span><span class="st">&quot;utf-8&quot;</span>) <span class="im">as</span> f:</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        f.write(html_text)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    time.sleep(<span class="dv">2</span>)                       <span class="co"># pause between requests</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>If the saved file is very small and contains “Request Rejected” or “Undeclared Automated Tool”, the SEC refused your request: check that the <code>User-Agent</code> has your real name and email, wait a few minutes, and try again.</p>
 </section>
 <section id="analysis-steps" class="level1" data-number="4">
@@ -2548,7 +2552,7 @@ vertical-align: -.125em;
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> []</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> year <span class="kw">in</span> [<span class="dv">2022</span>, <span class="dv">2023</span>, <span class="dv">2024</span>, <span class="dv">2025</span>, <span class="dv">2026</span>]:</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    html_text <span class="op">=</span> <span class="bu">open</span>(<span class="ss">f&quot;NKE_</span><span class="sc">{</span>year<span class="sc">}</span><span class="ss">.htm&quot;</span>, encoding<span class="op">=</span><span class="st">&quot;utf-8&quot;</span>).read()</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    html_text <span class="op">=</span> <span class="bu">open</span>(<span class="ss">f&quot;AAPL_</span><span class="sc">{</span>year<span class="sc">}</span><span class="ss">.htm&quot;</span>, encoding<span class="op">=</span><span class="st">&quot;utf-8&quot;</span>).read()</span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    soup <span class="op">=</span> BeautifulSoup(html_text, <span class="st">&quot;html.parser&quot;</span>)</span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> line <span class="kw">in</span> soup.get_text(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>).split(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>):</span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        paragraph <span class="op">=</span> <span class="st">&quot; &quot;</span>.join(line.split())          <span class="co"># remove extra spaces</span></span>
@@ -2930,6 +2934,7 @@ vertical-align: -.125em;
 <li>The final report includes all four chapters. Improve Chapter 1 using the feedback you received in Week 10.</li>
 <li><strong>Quote and cite carefully.</strong> Put every quote from a 10-K in quotation marks and cite it the way the template does: a reference number in order of appearance, plus the item of the report, for example [3], Item 1A. List your five 10-K reports and any other sources in the template’s References section.</li>
 <li>Everything is in English: the report, the slides, the video, and the live presentation.</li>
+<li><strong>Check grammar and spelling with Microsoft Word’s own checker:</strong> on the <strong>Review</strong> tab, click <strong>Spelling &amp; Grammar</strong> (or press <code>F7</code>; in Microsoft 365 it is called <strong>Editor</strong>). This check does not need to be listed in Appendix C.</li>
 </ul>
 </section>
 <section id="presentation" class="level1" data-number="8">
@@ -3181,7 +3186,7 @@ vertical-align: -.125em;
 <h2 data-number="9.4" class="anchored" data-anchor-id="important-notes"><span class="header-section-number">9.4</span> Important notes</h2>
 <ul>
 <li>All times are Taiwan time (UTC+8).</li>
-<li>Late submissions will be penalized according to course policy.</li>
+<li><strong>Late submissions are not accepted.</strong> After the deadline, the iLearn submission is closed and the work receives no points.</li>
 <li>Only PDF files are accepted.</li>
 <li>Make sure your files open correctly before you submit them.</li>
 </ul>
@@ -3193,21 +3198,21 @@ vertical-align: -.125em;
 <thead>
 <tr class="header">
 <th>Item</th>
-<th>Points</th>
+<th>Weight</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td>Written report</td>
-<td>70</td>
+<td>10%</td>
 </tr>
 <tr class="even">
-<td>Presentation (graded from the video and the slides)</td>
-<td>30</td>
+<td>Presentation</td>
+<td>90%</td>
 </tr>
 <tr class="odd">
 <td><strong>Total</strong></td>
-<td><strong>100</strong></td>
+<td><strong>100%</strong></td>
 </tr>
 </tbody>
 </table>
