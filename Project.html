@@ -2968,6 +2968,58 @@ Table 4: Labels for each paragraph, from its best similarity to the previous ye
 </div>
 </figure>
 </div>
+<p><a href="#tbl-label-examples" class="quarto-xref">Table 5</a> shows one real example of each label from Apple’s reports. Words that differ are in <strong>bold</strong>.</p>
+<div id="tbl-label-examples" class="quarto-float quarto-figure quarto-figure-center anchored" data-tbl-colwidths="[14,30,30,26]">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-label-examples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table 5: Examples of the three labels in Apple’s 10-K reports
+</figcaption>
+<div aria-describedby="tbl-label-examples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 30%">
+<col style="width: 30%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Label (best similarity)</th>
+<th style="text-align: left;">This year’s paragraph</th>
+<th style="text-align: left;">Most similar paragraph last year</th>
+<th style="text-align: left;">What changed</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>Same</code> (1.00), 2023</td>
+<td style="text-align: left;">“… As of <strong>September 30, 2023</strong>, the Company had approximately <strong>161,000</strong> full-time equivalent employees.”</td>
+<td style="text-align: left;">“… As of <strong>September 24, 2022</strong>, the Company had approximately <strong>164,000</strong> full-time equivalent employees.”</td>
+<td style="text-align: left;">Only the date and the number. Numbers are not counted as words, so the similarity is 1.00.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Revised</code> (0.85), 2023</td>
+<td style="text-align: left;">“The Company also produces its own digital content, which can be costly to produce due to intense and increasing competition for talent, content and subscribers, and may fail to appeal to the Company’s customers.”</td>
+<td style="text-align: left;">The same sentence, followed by: “<strong>The COVID-19 pandemic has also caused additional restrictions on production and increased costs for digital content.</strong>”</td>
+<td style="text-align: left;">One sentence removed: COVID-19 is no longer a risk for Apple’s content.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>New</code> (0.15), 2026</td>
+<td style="text-align: left;">“The Company’s business, including its artificial intelligence and machine learning offerings, also depends on access to sufficient compute capacity and storage resources. …”</td>
+<td style="text-align: left;">“Additionally, the Company’s new products often utilize custom components available from only one source. …”</td>
+<td style="text-align: left;">Nothing similar last year. The closest paragraph is about a different subject: a new risk.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p><strong>Why 0.9 and 0.5?</strong></p>
+<ul>
+<li><strong>0.9:</strong> numbers and dates are not counted as words, so a paragraph that only updates its figures scores 1.00, and small wording edits stay above 0.9. Below 0.9, a sentence was usually added, removed, or rewritten, as in the <code>Revised</code> example.</li>
+<li><strong>0.5:</strong> below it, the most similar paragraph of last year is about a different subject, as in the <code>New</code> example. It is only the least different paragraph, not an earlier version.</li>
+<li><strong>The data agree:</strong> few paragraphs have a best similarity near 0.5 (<a href="#fig-similarity-hist" class="quarto-xref">Figure 3</a> below), so 0.5 falls in a natural gap between rewritten and new paragraphs.</li>
+</ul>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;Status&quot;</span>] <span class="op">=</span> np.where(df[<span class="st">&quot;Best_Similarity&quot;</span>] <span class="op">&gt;=</span> <span class="fl">0.9</span>, <span class="st">&quot;Same&quot;</span>,</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>               np.where(df[<span class="st">&quot;Best_Similarity&quot;</span>] <span class="op">&gt;=</span> <span class="fl">0.5</span>, <span class="st">&quot;Revised&quot;</span>, <span class="st">&quot;New&quot;</span>))</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>df.loc[df[<span class="st">&quot;Year&quot;</span>] <span class="op">==</span> years[<span class="dv">0</span>], <span class="st">&quot;Status&quot;</span>] <span class="op">=</span> <span class="st">&quot;First year&quot;</span></span>
@@ -3121,7 +3173,7 @@ Figure 4: Changed paragraphs by theme in Apple’s 10-K reports, fiscal years 2
 2 As of September 30, 2023, the Company was authorized by the Board of Directors to purchase up to $90 billion of the Company’s common stock under a share repurchase program announced on May 4, 2023, of which $15.9 billion had been utilized. During the fourth quarter of 2023, the Company also utilized the final $4.6 billion under its previous repurchase program, which was most recently authorized in
 3 The Company’s effective tax rate for 2024 was higher than the statutory federal income tax rate due primarily to a one-time income tax charge of $10.2 billion, net, related to the State Aid Decision (refer to Note 7, “Income Taxes” in the Notes to Consolidated Financial Statements in Part II, Item 8 of this Form 10-K) and state income taxes, partially offset by a lower effective tax rate on foreig
 4 The Company distributes third-party applications for its products through the App Store. For the vast majority of applications, developers keep all of the revenue they generate on the App Store. The Company retains a commission from sales of applications and sales of digital services or goods initiated within an application. From time to time, the Company has made changes to its App Store, includi</code></pre>
-<p>With the top words and these paragraphs, the five themes can be named: new products and AI, sales results, share buybacks, taxes, and App Store and courts (<a href="#tbl-apple-themes" class="quarto-xref">Table 6</a> in the next section).</p>
+<p>With the top words and these paragraphs, the five themes can be named: new products and AI, sales results, share buybacks, taxes, and App Store and courts (<a href="#tbl-apple-themes" class="quarto-xref">Table 7</a> in the next section).</p>
 <p><strong>Chart: a word cloud of one theme.</strong> A word cloud shows a theme’s words at a glance: the larger the word, the more typical it is of the cluster. Install it once with <code>pip install wordcloud</code>.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> wordcloud <span class="im">import</span> WordCloud</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -3171,11 +3223,11 @@ Figure 5: Word cloud of Apple’s theme “New products and AI” (word size: t
 </section>
 <section id="example-apple" class="level1" data-number="5">
 <h1 data-number="5"><span class="header-section-number">5</span> Example: Apple</h1>
-<p>This example uses Apple’s five most recent 10-K reports (fiscal years 2022 to 2026, ending in late September), with the settings above. <a href="#tbl-apple-change" class="quarto-xref">Table 5</a> shows how much of each report changed, and <a href="#tbl-apple-themes" class="quarto-xref">Table 6</a> shows what the changes were about.</p>
+<p>This example uses Apple’s five most recent 10-K reports (fiscal years 2022 to 2026, ending in late September), with the settings above. <a href="#tbl-apple-change" class="quarto-xref">Table 6</a> shows how much of each report changed, and <a href="#tbl-apple-themes" class="quarto-xref">Table 7</a> shows what the changes were about.</p>
 <div id="tbl-apple-change" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-apple-change-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table 5: Paragraphs and change rate in Apple’s 10-K reports, fiscal years 2022-2026
+Table 6: Paragraphs and change rate in Apple’s 10-K reports, fiscal years 2022-2026
 </figcaption>
 <div aria-describedby="tbl-apple-change-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -3243,7 +3295,7 @@ Table 5: Paragraphs and change rate in Apple’s 10-K reports, fiscal years 202
 <div id="tbl-apple-themes" class="quarto-float quarto-figure quarto-figure-center anchored" data-tbl-colwidths="[9,19,48,6,6,6,6]">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-apple-themes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table 6: Themes of change in Apple’s 10-K reports: 5 clusters of the 201 changed paragraphs, with the number of changed paragraphs per year
+Table 7: Themes of change in Apple’s 10-K reports: 5 clusters of the 201 changed paragraphs, with the number of changed paragraphs per year
 </figcaption>
 <div aria-describedby="tbl-apple-themes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -3335,11 +3387,11 @@ Table 6: Themes of change in Apple’s 10-K reports: 5 clusters of the 201 chan
 </section>
 <section id="what-to-submit" class="level1" data-number="6">
 <h1 data-number="6"><span class="header-section-number">6</span> What to Submit</h1>
-<p><a href="#tbl-submit" class="quarto-xref">Table 7</a> lists everything you submit, with its deadline and file name.</p>
+<p><a href="#tbl-submit" class="quarto-xref">Table 8</a> lists everything you submit, with its deadline and file name.</p>
 <div id="tbl-submit" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-submit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table 7: What to submit, when, and under which file name
+Table 8: What to submit, when, and under which file name
 </figcaption>
 <div aria-describedby="tbl-submit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -3441,11 +3493,11 @@ Table 7: What to submit, when, and under which file name
 </section>
 <section id="report" class="level1" data-number="7">
 <h1 data-number="7"><span class="header-section-number">7</span> Report</h1>
-<p>Write the report in four chapters plus an appendix (<a href="#tbl-chapters" class="quarto-xref">Table 8</a>). The main text (Chapters 1-4) is at least <strong>10 pages</strong>, counted in the Word template’s format from the start of Chapter 1 to the end of Chapter 4, including tables and figures. The title, abstract, references, and appendix do not count toward this minimum.</p>
+<p>Write the report in four chapters plus an appendix (<a href="#tbl-chapters" class="quarto-xref">Table 9</a>). The main text (Chapters 1-4) is at least <strong>10 pages</strong>, counted in the Word template’s format from the start of Chapter 1 to the end of Chapter 4, including tables and figures. The title, abstract, references, and appendix do not count toward this minimum.</p>
 <div id="tbl-chapters" class="quarto-float quarto-figure quarto-figure-center anchored" data-tbl-colwidths="[18,56,14,12]">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-chapters-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table 8: Report chapters, sections, and suggested lengths
+Table 9: Report chapters, sections, and suggested lengths
 </figcaption>
 <div aria-describedby="tbl-chapters-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -3501,7 +3553,7 @@ Table 8: Report chapters, sections, and suggested lengths
 </div>
 <ul>
 <li><strong>Use the Word template for both Chapter 1 (Week 10) and the final report (Week 14):</strong> download <a href="template.docx"><code>template.docx</code></a>, fill in the title, your name, a short abstract (about 100 words), and keywords, then replace the template’s sample sections with Chapters 1-4 and the appendix. Use the template’s heading, table, and figure styles, and convert the finished report to PDF.</li>
-<li><strong>See a finished example:</strong> <a href="sustainability-18-11469.pdf">this journal article</a> was written in the same template (Aybar-Bellido et al., <em>Sustainability</em>, 2026; open access, CC BY). Click it to see how the title, authors, abstract, keywords, numbered headings, tables, figures, and references should look. Use it as a model for the <strong>format</strong> only: your report is shorter and follows the chapters in <a href="#tbl-chapters" class="quarto-xref">Table 8</a>.</li>
+<li><strong>See a finished example:</strong> <a href="sustainability-18-11469.pdf">this journal article</a> was written in the same template (Aybar-Bellido et al., <em>Sustainability</em>, 2026; open access, CC BY). Click it to see how the title, authors, abstract, keywords, numbered headings, tables, figures, and references should look. Use it as a model for the <strong>format</strong> only: your report is shorter and follows the chapters in <a href="#tbl-chapters" class="quarto-xref">Table 9</a>.</li>
 <li>Your script follows the course structure (1. Input, 2. Process, 3. Output) and runs from start to finish without errors. Name it <code>StudentID_Name_Project.py</code>.</li>
 <li>Number every table and figure (Table 1, Figure 1) and refer to it in the text.</li>
 <li><strong>Explain every figure.</strong> Right below each figure, write two or three sentences: what the figure shows and what it means. For example: “In Figure 4, the number of changed paragraphs about new products and AI rose from 3 in 2023 to 34 in 2026, while the other themes stayed flat or fell. Apple’s new disclosures are mostly about AI.”</li>
@@ -3525,11 +3577,11 @@ Table 8: Report chapters, sections, and suggested lengths
 </section>
 <section id="structure-5-minutes" class="level2" data-number="8.2">
 <h2 data-number="8.2" class="anchored" data-anchor-id="structure-5-minutes"><span class="header-section-number">8.2</span> Structure (5 minutes)</h2>
-<p>Organize your 5 minutes as in <a href="#tbl-structure" class="quarto-xref">Table 9</a>.</p>
+<p>Organize your 5 minutes as in <a href="#tbl-structure" class="quarto-xref">Table 10</a>.</p>
 <div id="tbl-structure" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-structure-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table 9: Structure of the 5-minute presentation
+Table 10: Structure of the 5-minute presentation
 </figcaption>
 <div aria-describedby="tbl-structure-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -3573,11 +3625,11 @@ Table 9: Structure of the 5-minute presentation
 </section>
 <section id="slides-at-least-15" class="level2" data-number="8.3">
 <h2 data-number="8.3" class="anchored" data-anchor-id="slides-at-least-15"><span class="header-section-number">8.3</span> Slides (at least 15)</h2>
-<p>Use at least the 15 slides in <a href="#tbl-slides" class="quarto-xref">Table 10</a>.</p>
+<p>Use at least the 15 slides in <a href="#tbl-slides" class="quarto-xref">Table 11</a>.</p>
 <div id="tbl-slides" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-slides-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table 10: The 15 slides and their content
+Table 11: The 15 slides and their content
 </figcaption>
 <div aria-describedby="tbl-slides-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -3732,11 +3784,11 @@ Figure 7: A frame from the sample video: one speaker, waist up, plain backgroun
 <h1 data-number="9"><span class="header-section-number">9</span> Submission</h1>
 <section id="deadlines" class="level2" data-number="9.1">
 <h2 data-number="9.1" class="anchored" data-anchor-id="deadlines"><span class="header-section-number">9.1</span> Deadlines</h2>
-<p>All deadlines are in Taiwan time (<a href="#tbl-deadlines" class="quarto-xref">Table 11</a>).</p>
+<p>All deadlines are in Taiwan time (<a href="#tbl-deadlines" class="quarto-xref">Table 12</a>).</p>
 <div id="tbl-deadlines" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-deadlines-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table 11: Submission deadlines (Taiwan time)
+Table 12: Submission deadlines (Taiwan time)
 </figcaption>
 <div aria-describedby="tbl-deadlines-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -3808,11 +3860,11 @@ Table 11: Submission deadlines (Taiwan time)
 </section>
 <section id="evaluation" class="level1" data-number="10">
 <h1 data-number="10"><span class="header-section-number">10</span> Evaluation</h1>
-<p>Your grade has two parts (<a href="#tbl-eval" class="quarto-xref">Table 12</a>).</p>
+<p>Your grade has two parts (<a href="#tbl-eval" class="quarto-xref">Table 13</a>).</p>
 <div id="tbl-eval" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-eval-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table 12: Evaluation weights
+Table 13: Evaluation weights
 </figcaption>
 <div aria-describedby="tbl-eval-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">

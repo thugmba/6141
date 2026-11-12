@@ -335,6 +335,21 @@ Then label each paragraph as in @tbl-labels:
 | Below 0.5 | `New` | No similar paragraph last year |
 : Labels for each paragraph, from its best similarity to the previous year's report {#tbl-labels}
 
+@tbl-label-examples shows one real example of each label from Apple's reports. Words that differ are in **bold**.
+
+| Label (best similarity) | This year's paragraph | Most similar paragraph last year | What changed |
+|:---|:---|:---|:---|
+| `Same` (1.00), 2023 | "... As of **September 30, 2023**, the Company had approximately **161,000** full-time equivalent employees." | "... As of **September 24, 2022**, the Company had approximately **164,000** full-time equivalent employees." | Only the date and the number. Numbers are not counted as words, so the similarity is 1.00. |
+| `Revised` (0.85), 2023 | "The Company also produces its own digital content, which can be costly to produce due to intense and increasing competition for talent, content and subscribers, and may fail to appeal to the Company's customers." | The same sentence, followed by: "**The COVID-19 pandemic has also caused additional restrictions on production and increased costs for digital content.**" | One sentence removed: COVID-19 is no longer a risk for Apple's content. |
+| `New` (0.15), 2026 | "The Company's business, including its artificial intelligence and machine learning offerings, also depends on access to sufficient compute capacity and storage resources. ..." | "Additionally, the Company's new products often utilize custom components available from only one source. ..." | Nothing similar last year. The closest paragraph is about a different subject: a new risk. |
+: Examples of the three labels in Apple's 10-K reports {#tbl-label-examples tbl-colwidths="[14,30,30,26]"}
+
+**Why 0.9 and 0.5?**
+
+* **0.9:** numbers and dates are not counted as words, so a paragraph that only updates its figures scores 1.00, and small wording edits stay above 0.9. Below 0.9, a sentence was usually added, removed, or rewritten, as in the `Revised` example.
+* **0.5:** below it, the most similar paragraph of last year is about a different subject, as in the `New` example. It is only the least different paragraph, not an earlier version.
+* **The data agree:** few paragraphs have a best similarity near 0.5 (@fig-similarity-hist below), so 0.5 falls in a natural gap between rewritten and new paragraphs.
+
 ```python
 df["Status"] = np.where(df["Best_Similarity"] >= 0.9, "Same",
                np.where(df["Best_Similarity"] >= 0.5, "Revised", "New"))
