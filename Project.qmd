@@ -149,6 +149,11 @@ df = pd.DataFrame(rows)
 print(df.groupby("Year").size())                    # paragraphs per year
 ```
 
+* `soup.get_text("\n")` removes the HTML tags and keeps only the text, with a line break between blocks. In a 10-K, one paragraph is usually one block, so one line is usually one paragraph.
+* `" ".join(line.split())` cuts the line into words and joins them again with single spaces. Extra spaces and the non-breaking spaces (`&nbsp;`) common in 10-K files disappear, so two copies of the same paragraph look the same.
+* `len(paragraph.split()) >= 30` counts the words and keeps only paragraphs of 30 words or more.
+* `df.groupby("Year").size()` counts the rows (paragraphs) of each year.
+
 Output for Apple:
 
 ```text
@@ -169,6 +174,36 @@ A machine learning model needs numbers, not words. **TF-IDF** (Term Frequency-In
 
 * **Term frequency:** a word that appears often in this paragraph gets a higher number.
 * **Inverse document frequency:** a word that appears in almost every paragraph (such as "company") gets a lower number, because it says little about this paragraph.
+
+The formula, as Scikit-Learn computes it, for a word $w$ in a paragraph $p$:
+
+$$
+\text{TF-IDF}(w, p) = \text{TF}(w, p) \times \text{IDF}(w)
+$$
+
+$$
+\text{IDF}(w) = \ln\left(\frac{1 + n}{1 + \text{DF}(w)}\right) + 1
+$$
+
+* $\text{TF}(w, p)$: how many times $w$ appears in paragraph $p$.
+* $n$: the number of paragraphs (1,280 for Apple's five reports).
+* $\text{DF}(w)$: the number of paragraphs that contain $w$ at least once.
+* $\ln$ is the natural logarithm. It keeps the IDF from growing too fast for very rare words.
+
+**Example from Apple.** Take this paragraph from Apple's 2022 report: *"The Company's effective tax rate for 2022 was higher compared to 2021 due primarily to a higher effective tax rate on foreign earnings, including the impact to U.S. foreign tax credits as a result of regulatory guidance issued by the U.S. Department of the Treasury in 2022, and lower tax benefits ..."* @tbl-tfidf-example shows three of its words.
+
+| Word | TF in this paragraph | DF (of 1,280) | IDF | TF × IDF |
+|---|---|---|---|---|
+| including | 1 | 371 | $\ln(1281 / 372) + 1 = 2.24$ | $1 \times 2.24 = 2.24$ |
+| treasury | 1 | 3 | $\ln(1281 / 4) + 1 = 6.77$ | $1 \times 6.77 = 6.77$ |
+| tax | 4 | 87 | $\ln(1281 / 88) + 1 = 3.68$ | $4 \times 3.68 = 14.71$ |
+: TF-IDF of three words in one paragraph of Apple's 2022 report {#tbl-tfidf-example}
+
+* "Including" is common in the whole report, so its IDF is low: it says little about this paragraph.
+* "Treasury" is rare, so its IDF is high, but it appears only once.
+* "Tax" is fairly rare **and** appears 4 times, so it gets the largest number. TF-IDF correctly says this paragraph is about tax.
+
+Finally, Scikit-Learn scales each paragraph's numbers so that long and short paragraphs can be compared: it divides them by $\sqrt{\text{sum of their squares}}$, so every row has a length of 1.
 
 ```python
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -192,10 +227,13 @@ Output for Apple:
 * `stop_words="english"` drops common words such as "the" and "and".
 * `token_pattern` keeps only words of two or more letters, so numbers and years do not count as words.
 * `min_df=3` drops words that appear in fewer than 3 paragraphs; `max_df=0.5` drops words that appear in more than half of the paragraphs.
+* `fit_transform()` learns the list of words from all paragraphs (fit) and turns each paragraph into its row of numbers (transform). `get_feature_names_out()` returns that list of words, in the same order as the columns of `X`.
 
 ## Step 3: Make a topic map with K-Means
 
 Group all paragraphs into topics with K-Means clustering (Session 3.4). Paragraphs in the same cluster use similar words.
+
+**What K-Means is for.** Your five reports have about 1,300 paragraphs, too many to read and sort by hand. K-Means sorts them into a few piles (clusters) so that the paragraphs in one pile talk about similar things, like sorting a stack of letters by topic. You choose how many piles (here 8); K-Means decides which paragraph goes into which pile. It does not name the piles: each pile's **top words**, the words most typical of it, give you the hint, and you give the name.
 
 ```python
 from sklearn.cluster import KMeans
@@ -210,6 +248,11 @@ for k in range(8):
 share = pd.crosstab(df["Year"], df["Topic"], normalize="index") * 100
 print(share.round(1))                               # % of each year's paragraphs
 ```
+
+* `KMeans(n_clusters=8, random_state=0, n_init=10)` asks for 8 clusters. `n_init=10` tries 10 different starting centers and keeps the best result; `random_state=0` makes the result the same every time you run it.
+* `model.labels_` gives each paragraph its cluster number (0 to 7).
+* `model.cluster_centers_[k]` is the center of cluster `k`. `.argsort()[-8:][::-1]` finds the positions of its 8 largest weights, from largest to smallest, and `words[i]` turns each position into its word.
+* `pd.crosstab(df["Year"], df["Topic"], normalize="index")` counts the paragraphs of each topic in each year (Session 2.3) and, with `normalize="index"`, divides by the year's total, so each row adds up to 1. `* 100` turns it into percentages.
 
 Output for Apple:
 
@@ -247,6 +290,9 @@ ax.set_ylabel("Fiscal year")
 fig.savefig("topic_heatmap.png", dpi=150, bbox_inches="tight")
 ```
 
+* `annot=True, fmt=".1f"` writes each value in its cell with one decimal place.
+* `cmap="Blues"` colors low values light and high values dark blue.
+
 ![Share of paragraphs by topic in Apple's 10-K reports, fiscal years 2022-2026 (8 K-Means topics; each row adds up to 100%)](assets/project_fig_topic_heatmap.png){#fig-topic-heatmap}
 
 In @fig-topic-heatmap, every column keeps almost the same color in all five years.
@@ -276,6 +322,10 @@ for prev, year in zip(years, years[1:]):
     df.loc[this_rows, "Best_Similarity"] = best
 ```
 
+* `sim_vectorizer` keeps **all** words (no `min_df` or `max_df`), so that a small edit, such as one new word, still lowers the similarity.
+* `zip(years, years[1:])` makes the pairs of consecutive years: (2022, 2023), (2023, 2024), and so on.
+* `cosine_similarity(S[this_rows], S[prev_rows])` makes a table with one row for each paragraph of this year and one column for each paragraph of last year. `.max(axis=1)` keeps the largest value in each row: the similarity to the most similar paragraph of last year.
+
 Then label each paragraph as in @tbl-labels:
 
 | Best similarity | Label | Meaning |
@@ -291,6 +341,9 @@ df["Status"] = np.where(df["Best_Similarity"] >= 0.9, "Same",
 df.loc[df["Year"] == years[0], "Status"] = "First year"
 print(pd.crosstab(df["Year"], df["Status"]))
 ```
+
+* `np.where(condition, value_if_true, value_if_false)` fills a whole column at once (Session 4.3). Two of them inside each other give three labels: 0.9 or more is `Same`; otherwise 0.5 or more is `Revised`; otherwise `New`.
+* A **threshold** is the cut-off value that decides the label. 0.9 and 0.5 are choices, not rules, so you will test them below.
 
 Output for Apple:
 
@@ -328,7 +381,7 @@ fig.savefig("status_bar.png", dpi=150, bbox_inches="tight")
 
 **Test your thresholds.** Try 0.4 and 0.6 instead of 0.5, and 0.85 and 0.95 instead of 0.9. Report whether your main findings stay the same.
 
-**Chart: where the thresholds fall.** A histogram of the best similarities shows how many paragraphs are near each threshold. The two dashed lines are 0.5 and 0.9.
+**Chart: where the thresholds fall.** A **histogram** splits the range of values into equal bins (here 40 bins between 0 and 1) and draws one bar per bin; the height of the bar is the number of paragraphs in that bin. A histogram of the best similarities shows how many paragraphs are near each threshold. The two dashed lines are 0.5 and 0.9.
 
 ```python
 fig, ax = plt.subplots(figsize=(8, 4))
@@ -350,7 +403,7 @@ In @fig-similarity-hist, most of Apple's 1,009 paragraphs sit at or near 1.0 (re
 
 ## Step 5: Group the changed paragraphs into themes
 
-Keep only the `Revised` and `New` paragraphs and run K-Means again, this time with 4 to 6 clusters. Fit a new `TfidfVectorizer` on these paragraphs only.
+Keep only the `Revised` and `New` paragraphs and run K-Means again, this time with 4 to 6 clusters. Fit a new `TfidfVectorizer` on these paragraphs only: the words that matter among the changed paragraphs are different from the words that matter in the whole report.
 
 ```python
 changed = df[df["Status"].isin(["Revised", "New"])].copy()
@@ -370,6 +423,9 @@ for k in range(n_themes):
     top = [words2[i] for i in theme_model.cluster_centers_[k].argsort()[-8:][::-1]]
     print(k, top)
 ```
+
+* `df["Status"].isin(["Revised", "New"])` is `True` for the rows whose label is either of the two. `.copy()` makes `changed` a separate table, so adding the `Theme` column does not change `df`.
+* `min_df=2` instead of 3, because there are far fewer paragraphs (201 for Apple instead of 1,280).
 
 Output for Apple:
 
@@ -426,6 +482,10 @@ for k in range(n_themes):
     print(k, changed["Paragraph"].iloc[closest][:400])
 ```
 
+* `distances[i, k]` is the distance from paragraph `i` to the center of theme `k`.
+* `members` are the positions of the paragraphs in theme `k`; `.argmin()` finds the one with the smallest distance to the center.
+* `.iloc[closest]` takes the paragraph at that position, and `[:400]` prints its first 400 characters.
+
 Output for Apple (each paragraph is cut at 400 characters):
 
 ```text
@@ -478,7 +538,7 @@ Watch out for these mistakes:
 * **A cluster is not always one idea.** Read several paragraphs before you name a theme.
 * **K-Means can give slightly different clusters** with a different `random_state`. Keep `random_state=0` so that your results can be repeated.
 
-# Example: Apple (not on the list)
+# Example: Apple
 
 This example uses Apple's five most recent 10-K reports (fiscal years 2022 to 2026, ending in late September), with the settings above. @tbl-apple-change shows how much of each report changed, and @tbl-apple-themes shows what the changes were about.
 
