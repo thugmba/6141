@@ -1,6 +1,6 @@
 ---
 title: "Business Analytics and AI Application: Term Project 2026"
-subtitle: "What Changed in [Company]'s Annual Reports? Finding Themes with Machine Learning"
+subtitle: "Finding What Matters: Using Machine Learning to Detect New Risks and Strategies in Five Years of [Company]'s 10-K Reports"
 format:
   html:
     toc: true
@@ -9,6 +9,12 @@ format:
     number-sections: true
     embed-resources: true
     code-copy: true
+    code-overflow: wrap
+    include-in-header:
+      text: |
+        <style>
+          table th, table td { vertical-align: middle !important; }
+        </style>
     theme: default
     fontsize: 1.05em
 editor: visual
@@ -22,8 +28,10 @@ You will pick one company, collect its five most recent 10-K reports, and use ma
 
 > **What did [Company]'s management start to talk about in the last five years, and what does that mean for an investor?**
 
+@tbl-steps shows the steps of the project and the course session where you learned each one.
+
 | Step | What you do | Course session |
-|---|---|---|
+|---|:---|:---|
 | Collect | Find and save five 10-K reports | 2.1 (HTTP requests, User-Agent) |
 | Build the table | Read each report with Beautiful Soup; make a table of paragraphs | 2.1, 1.3 |
 | Turn words into numbers | Represent each paragraph as a TF-IDF vector | New tool |
@@ -31,15 +39,16 @@ You will pick one company, collect its five most recent 10-K reports, and use ma
 | Find what changed | Compare each paragraph with last year's report | New tool |
 | Themes of change | Group the changed paragraphs into themes with K-Means | 3.4 |
 | Interpret | Read the paragraphs; explain why each theme appeared when it did | 2.4, 4.4 |
+: Project steps and the course sessions they use {#tbl-steps}
 
 # Company List and Selection Rules
 
 ## The 25 companies
 
-Every company on the list files Form 10-K with the SEC, so the reports have the same structure and are free to download. Each one also has a clear story in 2025-2026 that its reports may reveal.
+Every company on the list files Form 10-K with the SEC, so the reports have the same structure and are free to download. Each one also has a clear story in 2025-2026 that its reports may reveal (@tbl-companies).
 
 | # | Company (Ticker) | Industry | Story to look for |
-|---|---|---|---|
+|---|:---|---|:---|
 | 1 | NVIDIA (NVDA) | Semiconductors | AI chip demand and supply |
 | 2 | Advanced Micro Devices (AMD) | Semiconductors | The AI challenger |
 | 3 | Intel (INTC) | Semiconductors | Restructuring and a US government stake |
@@ -65,6 +74,7 @@ Every company on the list files Form 10-K with the SEC, so the reports have the 
 | 23 | Chevron (CVX) | Energy | The oil price cycle and acquisitions |
 | 24 | Caterpillar (CAT) | Machinery | Power equipment for data centers |
 | 25 | NextEra Energy (NEE) | Electric utilities | AI power demand and interest rates |
+: The 25 companies to choose from, with the story to look for in each company's 10-K reports {#tbl-companies}
 
 ## Selection rules
 
@@ -115,7 +125,7 @@ If the saved file is very small and contains "Request Rejected" or "Undeclared A
 You will need one new library feature, `TfidfVectorizer`, and one new function, `cosine_similarity`. Both come with Scikit-Learn. If a library is missing, run this once in the Terminal:
 
 ```
-pip install requests beautifulsoup4 pandas scikit-learn
+pip install requests beautifulsoup4 pandas scikit-learn matplotlib seaborn wordcloud
 ```
 
 ## Step 1: Build a table of paragraphs
@@ -139,6 +149,20 @@ df = pd.DataFrame(rows)
 print(df.groupby("Year").size())                    # paragraphs per year
 ```
 
+Output for Apple:
+
+```text
+Year
+2022    271
+2023    253
+2024    258
+2025    244
+2026    254
+dtype: int64
+```
+
+Each report gives about 250 paragraphs. If a year has far fewer (for example, 20), check that the saved file is the full report and not an error page.
+
 ## Step 2: Turn paragraphs into numbers with TF-IDF
 
 A machine learning model needs numbers, not words. **TF-IDF** (Term Frequency-Inverse Document Frequency) gives each paragraph one number per word:
@@ -154,7 +178,16 @@ vectorizer = TfidfVectorizer(stop_words="english",
                              min_df=3, max_df=0.5)
 X = vectorizer.fit_transform(df["Paragraph"])
 words = vectorizer.get_feature_names_out()
+print(X.shape)                                      # (paragraphs, words)
 ```
+
+Output for Apple:
+
+```text
+(1280, 2222)
+```
+
+`X` is a table with one row for each of the 1,280 paragraphs (all five years) and one column for each of the 2,222 words that were kept.
 
 * `stop_words="english"` drops common words such as "the" and "and".
 * `token_pattern` keeps only words of two or more letters, so numbers and years do not count as words.
@@ -177,6 +210,46 @@ for k in range(8):
 share = pd.crosstab(df["Year"], df["Topic"], normalize="index") * 100
 print(share.round(1))                               # % of each year's paragraphs
 ```
+
+Output for Apple:
+
+```text
+0 ['products', 'services', 'sales', 'net', 'product', 'property', 'intellectual', 'software']
+1 ['notes', 'certificate', 'dated', 'forms', 'representing', 'officer', 'registrant', 'floating']
+2 ['tax', 'billion', 'taxes', 'positions', 'income', 'state', 'decision', 'aid']
+3 ['statements', 'consolidated', 'fiscal', 'financial', 'years', 'form', 'september', 'item']
+4 ['securities', 'cash', 'pursuant', 'program', 'registrant', 'billion', 'marketable', 'act']
+5 ['foreign', 'currency', 'rates', 'instruments', 'exchange', 'denominated', 'hedges', 'dollar']
+6 ['business', 'components', 'operations', 'adversely', 'products', 'materially', 'stock', 'financial']
+7 ['internal', 'control', 'reporting', 'financial', 'accordance', 'audit', 'reasonable', 'statements']
+Topic     0    1    2    3    4    5     6    7
+Year
+2022   15.5  5.9  7.7  6.6  8.1  6.6  43.2  6.3
+2023   17.8  6.7  7.9  7.1  7.9  5.5  40.3  6.7
+2024   14.7  6.6  8.5  6.6  8.5  5.4  43.0  6.6
+2025   14.3  7.4  7.4  7.0  8.6  6.1  42.2  7.0
+2026   15.0  7.1  7.1  6.3  7.5  5.9  44.5  6.7
+```
+
+How to read it: topic 2 is about taxes (tax, income, state aid), topic 5 is about currency risk, and topic 6 (business, adversely, materially) is the risk factors, which make up more than 40% of the report every year. Each row adds up to 100%.
+
+**Chart: topic shares as a heatmap.** Draw the table as a heatmap, as in Session 2.2. Each cell is colored by its value, so a column that changes color from year to year is a topic that grew or shrank.
+
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+fig, ax = plt.subplots(figsize=(10, 4))
+sns.heatmap(share, annot=True, fmt=".1f", cmap="Blues", ax=ax)
+ax.set_title("Share of paragraphs by topic (%)")
+ax.set_xlabel("Topic")
+ax.set_ylabel("Fiscal year")
+fig.savefig("topic_heatmap.png", dpi=150, bbox_inches="tight")
+```
+
+![Share of paragraphs by topic in Apple's 10-K reports, fiscal years 2022-2026 (8 K-Means topics; each row adds up to 100%)](assets/project_fig_topic_heatmap.png){#fig-topic-heatmap}
+
+In @fig-topic-heatmap, every column keeps almost the same color in all five years.
 
 * **Name each topic** from its top words and from two or three of its paragraphs (for example, "taxes", "share buybacks", "supply chain risks").
 * **Choose the number of topics.** Try 6, 8, and 10. Keep the number that gives topics you can name clearly, and explain your choice.
@@ -203,13 +276,14 @@ for prev, year in zip(years, years[1:]):
     df.loc[this_rows, "Best_Similarity"] = best
 ```
 
-Then label each paragraph:
+Then label each paragraph as in @tbl-labels:
 
 | Best similarity | Label | Meaning |
-|---|---|---|
+|---|---|:---|
 | 0.9 or more | `Same` | Repeated from last year |
 | 0.5 to 0.9 | `Revised` | Last year's paragraph, rewritten (for example, a new sentence added) |
 | Below 0.5 | `New` | No similar paragraph last year |
+: Labels for each paragraph, from its best similarity to the previous year's report {#tbl-labels}
 
 ```python
 df["Status"] = np.where(df["Best_Similarity"] >= 0.9, "Same",
@@ -218,9 +292,61 @@ df.loc[df["Year"] == years[0], "Status"] = "First year"
 print(pd.crosstab(df["Year"], df["Status"]))
 ```
 
+Output for Apple:
+
+```text
+Status  First year  New  Revised  Same
+Year
+2022           271    0        0     0
+2023             0   11       38   204
+2024             0   18       28   212
+2025             0   10       41   193
+2026             0   20       35   199
+```
+
+For 2026, 35 + 20 = 55 of 254 paragraphs changed, so the change rate is 55 / 254 = 21.7%.
+
 The first year has no previous report, so leave it out of this step. Report, for each year, the number of `Same`, `Revised`, and `New` paragraphs and the **change rate**: the percentage of paragraphs that are `Revised` or `New`.
 
+**Chart: the change rate as a stacked bar chart.** One bar per year; the gray part is `Same`, and the colored parts on top are the paragraphs that changed.
+
+```python
+status_counts = pd.crosstab(df["Year"], df["Status"]).loc[years[1:], ["Same", "Revised", "New"]]
+
+fig, ax = plt.subplots(figsize=(8, 4))
+status_counts.plot(kind="bar", stacked=True, color=["lightgray", "orange", "firebrick"], rot=0, ax=ax)
+ax.set_title("Paragraphs compared with the previous year")
+ax.set_xlabel("Fiscal year")
+ax.set_ylabel("Number of paragraphs")
+fig.savefig("status_bar.png", dpi=150, bbox_inches="tight")
+```
+
+* `.loc[years[1:], ["Same", "Revised", "New"]]` leaves out the first year and puts the columns in this order, so that `Same` is at the bottom of each bar.
+* `status_counts.plot(kind="bar", stacked=True, ax=ax)` is a pandas shortcut: it draws one bar per row and stacks the columns on top of each other.
+
+![Same, Revised, and New paragraphs in Apple's 10-K reports, compared with the previous year's report](assets/project_fig_status_bar.png){#fig-status-bar}
+
 **Test your thresholds.** Try 0.4 and 0.6 instead of 0.5, and 0.85 and 0.95 instead of 0.9. Report whether your main findings stay the same.
+
+**Chart: where the thresholds fall.** A histogram of the best similarities shows how many paragraphs are near each threshold. The two dashed lines are 0.5 and 0.9.
+
+```python
+fig, ax = plt.subplots(figsize=(8, 4))
+ax.hist(df["Best_Similarity"].dropna(), bins=40, color="steelblue")
+ax.axvline(0.5, color="firebrick", linestyle="--")
+ax.axvline(0.9, color="firebrick", linestyle="--")
+ax.set_title("Best similarity to the previous year")
+ax.set_xlabel("Best similarity")
+ax.set_ylabel("Number of paragraphs")
+fig.savefig("similarity_hist.png", dpi=150, bbox_inches="tight")
+```
+
+* `.dropna()` removes the first year, which has no similarity.
+* `ax.axvline(0.5)` draws a vertical line at 0.5.
+
+![Best similarity of each paragraph to the previous year's report, Apple, fiscal years 2023-2026 (dashed lines: thresholds 0.5 and 0.9)](assets/project_fig_similarity_hist.png){#fig-similarity-hist}
+
+In @fig-similarity-hist, most of Apple's 1,009 paragraphs sit at or near 1.0 (repeated word for word). Moving a threshold changes the label only of the paragraphs between the old and the new line. Few paragraphs are near 0.5: moving it to 0.4 relabels 9 paragraphs, and moving it to 0.6 relabels 14. Many more are near 0.9: moving it to 0.85 relabels 39, and moving it to 0.95 relabels 61. So check the effect of the 0.9 threshold more carefully.
 
 ## Step 5: Group the changed paragraphs into themes
 
@@ -239,7 +365,54 @@ n_themes = 5
 theme_model = KMeans(n_clusters=n_themes, random_state=0, n_init=10).fit(X_changed)
 changed["Theme"] = theme_model.labels_
 print(pd.crosstab(changed["Theme"], changed["Year"]))    # themes by year
+
+for k in range(n_themes):
+    top = [words2[i] for i in theme_model.cluster_centers_[k].argsort()[-8:][::-1]]
+    print(k, top)
 ```
+
+Output for Apple:
+
+```text
+Year   2023  2024  2025  2026
+Theme
+0         3     5    20    34
+1        10     4     3     3
+2        10    16    10     6
+3        22    12    13     7
+4         4     9     5     5
+0 ['products', 'services', 'components', 'intelligence', 'technologies', 'business', 'artificial', 'new']
+1 ['net', 'sales', 'year', 'ipad', 'iphone', 'compared', 'higher', 'dollar']
+2 ['shares', 'billion', 'security', 'plan', 'programs', 'repurchase', 'securities', 'share']
+3 ['tax', 'foreign', 'rate', 'rates', 'asu', 'financial', 'gross', 'effective']
+4 ['court', 'app', 'store', 'commission', 'changes', 'district', 'dma', 'developers']
+```
+
+Theme 0 grows from 3 to 34 changed paragraphs, and its top words include "artificial" and "intelligence". This is the theme to read first.
+
+**Chart: themes of change as a line chart.** Replace the theme numbers with your theme names, and draw one line per theme.
+
+```python
+theme_names = {0: "New products and AI", 1: "Sales results", 2: "Share buybacks",
+               3: "Taxes", 4: "App Store and courts"}      # use your own names
+theme_counts = pd.crosstab(changed["Year"], changed["Theme"]).rename(columns=theme_names)
+
+fig, ax = plt.subplots(figsize=(8, 4))
+theme_counts.plot(marker="o", ax=ax)
+ax.set_xticks(theme_counts.index)
+ax.set_title("Changed paragraphs by theme")
+ax.set_xlabel("Fiscal year")
+ax.set_ylabel("Number of changed paragraphs")
+fig.savefig("theme_lines.png", dpi=150, bbox_inches="tight")
+```
+
+* `pd.crosstab(changed["Year"], changed["Theme"])` puts years in rows and themes in columns, so each theme becomes one line.
+* `.rename(columns=theme_names)` turns the column names 0 to 4 into your theme names, which then appear in the legend.
+* `ax.set_xticks(theme_counts.index)` shows whole years (2023, 2024, ...) on the x-axis instead of values such as 2023.5.
+
+![Changed paragraphs by theme in Apple's 10-K reports, fiscal years 2023-2026](assets/project_fig_theme_lines.png){#fig-theme-lines}
+
+In @fig-theme-lines, the AI line climbs while the others stay flat or fall. This is the main finding of the Apple example.
 
 * Name each theme from its top words, as in Step 3.
 * Read the table of themes by year. **A theme that grows over the years is your strongest evidence.**
@@ -252,6 +425,44 @@ for k in range(n_themes):
     closest = members[distances[members, k].argmin()]
     print(k, changed["Paragraph"].iloc[closest][:400])
 ```
+
+Output for Apple (each paragraph is cut at 400 characters):
+
+```text
+0 Due to the highly volatile and competitive nature of the markets and industries in which the Company competes, the Company must continually introduce new products, services and technologies, enhance existing products and services, effectively stimulate customer demand for new and upgraded products, services and technologies, navigate global regulatory requirements and barriers to market access, an
+1 The Company’s total net sales decreased 3% or $11.0 billion during 2023 compared to 2022. The weakness in foreign currencies relative to the U.S. dollar accounted for more than the entire year-over-year decrease in total net sales, which consisted primarily of lower net sales of Mac and iPhone, partially offset by higher net sales of Services.
+2 As of September 30, 2023, the Company was authorized by the Board of Directors to purchase up to $90 billion of the Company’s common stock under a share repurchase program announced on May 4, 2023, of which $15.9 billion had been utilized. During the fourth quarter of 2023, the Company also utilized the final $4.6 billion under its previous repurchase program, which was most recently authorized in
+3 The Company’s effective tax rate for 2024 was higher than the statutory federal income tax rate due primarily to a one-time income tax charge of $10.2 billion, net, related to the State Aid Decision (refer to Note 7, “Income Taxes” in the Notes to Consolidated Financial Statements in Part II, Item 8 of this Form 10-K) and state income taxes, partially offset by a lower effective tax rate on foreig
+4 The Company distributes third-party applications for its products through the App Store. For the vast majority of applications, developers keep all of the revenue they generate on the App Store. The Company retains a commission from sales of applications and sales of digital services or goods initiated within an application. From time to time, the Company has made changes to its App Store, includi
+```
+
+With the top words and these paragraphs, the five themes can be named: new products and AI, sales results, share buybacks, taxes, and App Store and courts (@tbl-apple-themes in the next section).
+
+**Chart: a word cloud of one theme.** A word cloud shows a theme's words at a glance: the larger the word, the more typical it is of the cluster. Install it once with `pip install wordcloud`.
+
+```python
+from wordcloud import WordCloud
+
+k = 0                                                     # the theme to show
+weights = dict(zip(words2, theme_model.cluster_centers_[k]))
+cloud = WordCloud(width=800, height=400, background_color="white",
+                  max_words=50).generate_from_frequencies(weights)
+
+fig, ax = plt.subplots(figsize=(8, 4))
+ax.imshow(cloud)
+ax.axis("off")
+ax.set_title(f"Theme {k}: {theme_names[k]}")
+fig.savefig("theme_wordcloud.png", dpi=150, bbox_inches="tight")
+```
+
+* `theme_model.cluster_centers_[k]` holds one weight per word for theme `k`; these are the same weights that gave the top words above.
+* `dict(zip(words2, ...))` pairs each word with its weight, for example `{"products": 0.087, "services": 0.071, ...}`.
+* `generate_from_frequencies(weights)` sizes each word by its weight; `max_words=50` keeps only the 50 largest.
+* `ax.imshow(cloud)` shows the picture, and `ax.axis("off")` hides the axes, which mean nothing here.
+
+![Word cloud of Apple's theme "New products and AI" (word size: the word's weight in the cluster center)](assets/project_fig_theme_wordcloud.png){#fig-theme-wordcloud}
+
+A word cloud is a quick picture, not evidence. Use it to introduce a theme on a slide, and support your interpretation with the top words, the counts, and the quotes.
 
 ## Step 6: Read and interpret
 
@@ -269,9 +480,7 @@ Watch out for these mistakes:
 
 # Example: Apple (not on the list)
 
-This example uses Apple's five most recent 10-K reports (fiscal years 2022 to 2026, ending in late September), with the settings above.
-
-**Table A. Paragraphs and change rate**
+This example uses Apple's five most recent 10-K reports (fiscal years 2022 to 2026, ending in late September), with the settings above. @tbl-apple-change shows how much of each report changed, and @tbl-apple-themes shows what the changes were about.
 
 | Fiscal year | Paragraphs | Same | Revised | New | Change rate |
 |---|---|---|---|---|---|
@@ -280,16 +489,26 @@ This example uses Apple's five most recent 10-K reports (fiscal years 2022 to 20
 | 2024 | 258 | 212 | 28 | 18 | 17.8% |
 | 2025 | 244 | 193 | 41 | 10 | 20.9% |
 | 2026 | 254 | 199 | 35 | 20 | 21.7% |
+: Paragraphs and change rate in Apple's 10-K reports, fiscal years 2022-2026 {#tbl-apple-change}
 
-**Table B. Themes of change** (5 clusters of the 201 changed paragraphs; number of changed paragraphs per year)
+* **Rows:** one fiscal year each. **Columns:** the number of paragraphs in that year's report, and how many of them are `Same`, `Revised`, or `New` compared with the previous year.
+* **From the code:** Paragraphs (Step 1), Same, Revised, and New (Step 4).
+* **Added by the researcher:** the change rate, calculated by hand as (Revised + New) / Paragraphs, for example (35 + 20) / 254 = 21.7% for 2026; and the note "(first year)", because 2022 has no previous report to compare with.
 
-| Theme (our name) | Top words | 2023 | 2024 | 2025 | 2026 |
-|---|---|---|---|---|---|
-| New products and AI | products, services, components, intelligence, technologies, artificial | 3 | 5 | 20 | 34 |
-| Sales results | net, sales, iphone, ipad, compared, dollar | 10 | 4 | 3 | 3 |
-| Share buybacks | shares, billion, repurchase, program | 10 | 16 | 10 | 6 |
-| Taxes | tax, foreign, rate, effective | 22 | 12 | 13 | 7 |
-| App Store and courts | court, app, store, commission, developers | 4 | 9 | 5 | 5 |
+| Cluster | Theme (our name) | Top words (from the code) | 2023 | 2024 | 2025 | 2026 |
+|---|---|:---|---|---|---|---|
+| 0 | New products and AI | products, services, components, intelligence, technologies, business, artificial, new | 3 | 5 | 20 | 34 |
+| 1 | Sales results | net, sales, year, ipad, iphone, compared, higher, dollar | 10 | 4 | 3 | 3 |
+| 2 | Share buybacks | shares, billion, security, plan, programs, repurchase, securities, share | 10 | 16 | 10 | 6 |
+| 3 | Taxes | tax, foreign, rate, rates, asu, financial, gross, effective | 22 | 12 | 13 | 7 |
+| 4 | App Store and courts | court, app, store, commission, changes, district, dma, developers | 4 | 9 | 5 | 5 |
+: Themes of change in Apple's 10-K reports: 5 clusters of the 201 changed paragraphs, with the number of changed paragraphs per year {#tbl-apple-themes tbl-colwidths="[9,19,48,6,6,6,6]"}
+
+* **Rows:** one cluster of changed paragraphs each. **Columns:** the cluster number, its name, its top words, and how many changed paragraphs of each year belong to it.
+* **From the code (Step 5):** the cluster number, the top words (in the order the code prints them), and the counts per year.
+* **Added by the researcher:** the theme names. K-Means gives only numbers; we named each cluster after reading its top words and its representative paragraph. The total of 201 is the sum of the counts.
+
+In your own report, keep the same rule: say which values your code printed and which ones you calculated or named yourself.
 
 **A good interpretation reads like this:**
 
@@ -301,12 +520,15 @@ This example uses Apple's five most recent 10-K reports (fiscal years 2022 to 20
 
 # What to Submit
 
+@tbl-submit lists everything you submit, with its deadline and file name.
+
 | Deadline (Taiwan time) | What to submit | File name | Where |
-|---|---|---|---|
+|:---|:---|:---|---|
 | Week 10: Friday, November 20, 5 pm | Report, **Chapter 1 only** (PDF, Word template) | `StudentID_Name_Ch1.pdf` | iLearn |
 | Week 14: Friday, December 18, 5 pm | **Full report**: Chapters 1-4 and appendix, at least 10 pages (PDF, Word template) | `StudentID_Name_Report.pdf` | iLearn |
 | | **Slides**: at least 15 (PDF) | `StudentID_Name_Slides.pdf` | iLearn |
 | | **Presentation video**: 5 minutes, face visible (uploaded to Google Drive) | Link only | iLearn |
+: What to submit, when, and under which file name {#tbl-submit}
 
 Example file name: `S11312345_JohnSmith_Report.pdf` (your name in English letters, no spaces).
 
@@ -327,11 +549,13 @@ Late work is not accepted, so check everything **before** the deadline.
 
 - [ ] Written in the Word template: title, your name, abstract (about 100 words), and keywords are filled in
 - [ ] All of the template's sample text and instructions are deleted
-- [ ] Chapters 1-4 follow the sections in the Report table; Chapter 1 is improved with the Week 10 feedback
+- [ ] Chapters 1-4 follow the sections in the report chapters table; Chapter 1 is improved with the Week 10 feedback
 - [ ] The main text (start of Chapter 1 to end of Chapter 4) is at least 10 pages
 - [ ] Results include the topic map, the change rate by year, the themes of change by year, the representative paragraphs, and the threshold test
+- [ ] Results include the five figures from the Analysis Steps (heatmap, stacked bar chart, similarity histogram, theme line chart, and at least one word cloud), each with a title and axis labels
 - [ ] At least three quotes from the 10-K reports, in quotation marks and cited (for example, [3], Item 1A)
 - [ ] Every table and figure is numbered and mentioned in the text
+- [ ] Every figure is followed by two or three sentences on what it shows and what it means
 - [ ] The References section lists your five 10-K reports and any other sources
 - [ ] Appendix A: your complete script (1. Input, 2. Process, 3. Output), which runs without errors
 - [ ] Appendix B: sources with dates
@@ -344,6 +568,7 @@ Late work is not accepted, so check everything **before** the deadline.
 
 - [ ] At least 15 slides, in English
 - [ ] The title slide has the title and your name; if you used AI for the slides, it also shows the AI tool's name and your prompts
+- [ ] Each results slide shows one figure, and its title states the finding in a full sentence
 - [ ] You practiced and finish within 5 minutes
 - [ ] Saved as PDF and named `StudentID_Name_Slides.pdf`; the PDF opens correctly
 
@@ -361,21 +586,22 @@ Late work is not accepted, so check everything **before** the deadline.
 
 # Report
 
-Write the report in four chapters plus an appendix. The main text (Chapters 1-4) is at least **10 pages**, counted in the Word template's format from the start of Chapter 1 to the end of Chapter 4, including tables and figures. The title, abstract, references, and appendix do not count toward this minimum.
+Write the report in four chapters plus an appendix (@tbl-chapters). The main text (Chapters 1-4) is at least **10 pages**, counted in the Word template's format from the start of Chapter 1 to the end of Chapter 4, including tables and figures. The title, abstract, references, and appendix do not count toward this minimum.
 
 | Chapter | Sections | Suggested length | Due |
-|---|---|---|---|
+|---|:---|---|---|
 | 1. Introduction | 1.1 The company and why you chose it<br>1.2 Its 2025-2026 story<br>1.3 Your research question<br>1.4 Data: a table of your five 10-K reports (fiscal year, filing date, link) | 2 pages | Week 10 |
 | 2. Data and Method | 2.1 From five reports to a table of paragraphs (paragraphs per year)<br>2.2 TF-IDF and its settings<br>2.3 K-Means and how you chose the number of clusters<br>2.4 Cosine similarity and your thresholds | 2-3 pages | Week 14 |
-| 3. Results | 3.1 The topic map: topic names and shares by year<br>3.2 The change rate by year (`Same`, `Revised`, `New`)<br>3.3 Themes of change by year<br>3.4 Representative paragraphs<br>3.5 The threshold test | 3-4 pages | Week 14 |
+| 3. Results | 3.1 The topic map: topic names and shares by year (heatmap)<br>3.2 The change rate by year (`Same`, `Revised`, `New`; stacked bar chart)<br>3.3 Themes of change by year (line chart and word clouds)<br>3.4 Representative paragraphs<br>3.5 The threshold test (similarity histogram) | 4-5 pages | Week 14 |
 | 4. Conclusion | 4.1 Interpretation of the main themes, with quotes<br>4.2 What investors should watch next year<br>4.3 Limitations of the method<br>4.4 Summary | 2-3 pages | Week 14 |
 | Appendix | A. Your complete Python script<br>B. Sources with dates<br>C. AI use: tool names and prompts (see [Use of AI Tools](#use-of-ai-tools)) | No limit | Week 14 |
-: {tbl-colwidths="[18,56,14,12]"}
+: Report chapters, sections, and suggested lengths {#tbl-chapters tbl-colwidths="[18,56,14,12]"}
 
 * **Use the Word template for both Chapter 1 (Week 10) and the final report (Week 14):** download [`template.docx`](template.docx), fill in the title, your name, a short abstract (about 100 words), and keywords, then replace the template's sample sections with Chapters 1-4 and the appendix. Use the template's heading, table, and figure styles, and convert the finished report to PDF.
-* **See a finished example:** [this journal article](sustainability-18-11469.pdf) was written in the same template (Aybar-Bellido et al., *Sustainability*, 2026; open access, CC BY). Click it to see how the title, authors, abstract, keywords, numbered headings, tables, figures, and references should look. Use it as a model for the **format** only: your report is shorter and follows the chapters in the table above.
+* **See a finished example:** [this journal article](sustainability-18-11469.pdf) was written in the same template (Aybar-Bellido et al., *Sustainability*, 2026; open access, CC BY). Click it to see how the title, authors, abstract, keywords, numbered headings, tables, figures, and references should look. Use it as a model for the **format** only: your report is shorter and follows the chapters in @tbl-chapters.
 * Your script follows the course structure (1. Input, 2. Process, 3. Output) and runs from start to finish without errors. Name it `StudentID_Name_Project.py`.
 * Number every table and figure (Table 1, Figure 1) and refer to it in the text.
+* **Explain every figure.** Right below each figure, write two or three sentences: what the figure shows and what it means. For example: "In Figure 4, the number of changed paragraphs about new products and AI rose from 3 in 2023 to 34 in 2026, while the other themes stayed flat or fell. Apple's new disclosures are mostly about AI."
 * The final report includes all four chapters. Improve Chapter 1 using the feedback you received in Week 10.
 * **Quote and cite carefully.** Put every quote from a 10-K in quotation marks and cite it the way the template does: a reference number in order of appearance, plus the item of the report, for example [3], Item 1A. List your five 10-K reports and any other sources in the template's References section.
 * Everything is in English: the report, the slides, the video, and the live presentation.
@@ -394,55 +620,63 @@ The live presentation in class and the presentation video (see below) are **sepa
 
 ## Structure (5 minutes)
 
+Organize your 5 minutes as in @tbl-structure.
+
 | Section | Time |
-|---|---|
+|:---|---|
 | Company and question | 0:45 |
 | Data and method: from five reports to clusters | 1:00 |
 | Results: change rate and themes of change | 1:30 |
 | Interpretation and recommendation: "If I Advised This Company's Investors" | 1:15 |
 | Summary | 0:30 |
+: Structure of the 5-minute presentation {#tbl-structure}
 
 Practice several times to stay within the time. Presentations will be stopped at 5 minutes.
 
 ## Slides (at least 15)
 
+Use at least the 15 slides in @tbl-slides.
+
 | # | Slide | Section |
-|---|---|---|
+|---|:---|---|
 | 1 | Title: company, your name, student ID (and, if you used AI for the slides, the AI tool's name and your prompts) | Company and question |
 | 2 | Research question and why you chose this company | Company and question |
 | 3 | The company's 2025-2026 story | Company and question |
 | 4 | Data: the five 10-K reports | Data and method |
 | 5 | Method: from reports to paragraphs, TF-IDF, and clusters (one diagram) | Data and method |
-| 6 | Settings: number of clusters and similarity thresholds, and why | Data and method |
+| 6 | Settings: number of clusters and similarity thresholds, and why (similarity histogram) | Data and method |
 | 7 | Topic map: the topics and their names | Results |
-| 8 | Topic shares by year (chart) | Results |
-| 9 | Change rate by year: `Same`, `Revised`, `New` (chart) | Results |
-| 10 | Themes of change by year (table or chart) | Results |
-| 11 | Theme 1: a quote and why it appeared that year | Interpretation |
-| 12 | Theme 2: a quote and why it appeared that year | Interpretation |
+| 8 | Topic shares by year (heatmap) | Results |
+| 9 | Change rate by year: `Same`, `Revised`, `New` (stacked bar chart) | Results |
+| 10 | Themes of change by year (line chart) | Results |
+| 11 | Theme 1: a word cloud, a quote, and why it appeared that year | Interpretation |
+| 12 | Theme 2: a word cloud, a quote, and why it appeared that year | Interpretation |
 | 13 | Real news vs. routine updates | Interpretation |
 | 14 | Recommendation: "If I Advised This Company's Investors" | Interpretation |
 | 15 | Limitations and summary | Summary |
+: The 15 slides and their content {#tbl-slides}
 
 You may add slides (for example, a third theme), but keep within 5 minutes.
 
-* **Design the slides your own way**, in any tool you like (PowerPoint, Google Slides, Canva, or others). There is no template. Submit them as PDF.
-* If you used an AI tool to make the slides, show the **AI tool's name and your prompts on the title slide**.
+* **One figure and one message per results slide (slides 6 and 8-12).** Show one figure, and write the slide title as the finding, in a full sentence. For example, slide 10 is titled "AI became the fastest-growing theme of change", not "Themes by year". With 15 slides in 5 minutes, you have about 20 seconds per slide.
 
-![Example title slide: title, author, and AI use (fictional student; the prompt is only an example)](assets/project_title_slide_example.png){width=100%}
+* **Design the slides your own way**, in any tool you like (PowerPoint, Google Slides, Canva, or others). There is no template. Submit them as PDF.
+* If you used an AI tool to make the slides, show the **AI tool's name and your prompts on the title slide**, as in @fig-title-slide.
+
+![Example title slide: title, author, and AI use (fictional student; the prompt is only an example)](assets/project_title_slide_example.png){#fig-title-slide width=100%}
 
 ## Presentation video
 
 * Record your 5-minute presentation in English.
 * **Only you need to be in the video:** your face must be visible throughout. Slides are not needed in the video.
-* **Sample video:** [A Plan Is Not a Strategy](https://youtu.be/iuYlGRnC7J8) (Harvard Business Review). Watch it for the format:
+* **Sample video:** [A Plan Is Not a Strategy](https://youtu.be/iuYlGRnC7J8) (Harvard Business Review; @fig-sample-video). Watch it for the format:
   * One speaker, framed from the waist up, in the middle of the screen.
   * A plain, quiet background with nothing distracting behind the speaker.
   * The speaker looks at the camera and talks to the viewer, using natural hand gestures, without reading from a script.
   * Only a short caption with the speaker's name appears on screen. No slides.
 * Upload the video to Google Drive. Set sharing to **"Anyone with the link"** with the role **Viewer**, and submit the link in iLearn by the Week 14 deadline.
 
-![A frame from the sample video: one speaker, waist up, plain background, no slides. Source: Harvard Business Review, "A Plan Is Not a Strategy" (YouTube).](assets/project_sample_video_screenshot.png){width=80%}
+![A frame from the sample video: one speaker, waist up, plain background, no slides. Source: Harvard Business Review, "A Plan Is Not a Strategy" (YouTube).](assets/project_sample_video_screenshot.png){#fig-sample-video width=80%}
 
 ## Q&A (1 minute)
 
@@ -458,10 +692,13 @@ Be ready to answer questions about:
 
 ## Deadlines
 
+All deadlines are in Taiwan time (@tbl-deadlines).
+
 | Deadline | Submission |
-|---|---|
+|:---|:---|
 | Week 10 (Friday, November 20, 5 pm Taiwan time) | Chapter 1 (PDF) |
 | Week 14 (Friday, December 18, 5 pm Taiwan time) | Final report (PDF), slides (PDF), and the link to your presentation video |
+: Submission deadlines (Taiwan time) {#tbl-deadlines}
 
 ## Submission process
 
@@ -498,10 +735,13 @@ You are responsible for everything in your report. Check every number, quote, an
 
 # Evaluation
 
+Your grade has two parts (@tbl-eval).
+
 | Item | Weight |
 |---|---|
 | Written report | 10% |
 | Presentation | 90% |
 | **Total** | **100%** |
+: Evaluation weights {#tbl-eval}
 
 **Data source:** Form 10-K reports from SEC EDGAR (US Securities and Exchange Commission).
