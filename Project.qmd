@@ -646,6 +646,7 @@ Late work is not accepted, so check everything **before** the deadline.
 - [ ] Each results slide shows one figure, and its title states the finding in a full sentence
 - [ ] You practiced and finish within 5 minutes
 - [ ] Saved as PDF and named `StudentID_Name_Slides.pdf`; the PDF opens correctly
+- [ ] This is the final version: you will present with exactly these slides
 
 **Week 14: Presentation video**
 
@@ -690,6 +691,7 @@ The live presentation in class and the presentation video (see below) are **sepa
 
 * **Every student must present in class.** The presentation order is set in class.
 * **Only students who submitted all three Week 14 items (the final report, the slides, and the video link) on time may present in class.**
+* **You present with the slides you submitted in iLearn.** The slides cannot be changed on the presentation day.
 * **Duration:** 6 minutes in total: a 5-minute presentation and 1 minute of questions and answers (Q&A).
 * **Attendance:** mandatory.
 
