@@ -543,7 +543,7 @@ A word cloud is a quick picture, not evidence. Use it to introduce a theme on a 
 
 The numbers tell you *where* to look; reading tells you *what it means*.
 
-1. For your two or three most important themes, **quote at least three sentences** from the changed paragraphs.
+1. Choose your two or three most important themes. In the whole report, **quote at least three sentences** from their changed paragraphs, in quotation marks and cited (for example, [3], Item 1A).
 2. Explain **why the theme appeared in that year**: an event in the company (a new product, a lawsuit, a new CEO), in its industry, or a new rule (for example, the SEC required a new cybersecurity section, Item 1C, in 10-K reports for fiscal years ending on or after December 15, 2023).
 3. Say what an investor should **watch next year** because of it.
 
@@ -613,7 +613,7 @@ Late work is not accepted, so check everything **before** the deadline.
 
 **Week 10: Chapter 1**
 
-- [ ] Written in the Word template, in English
+- [ ] Written in the Word template, in English; the title, your name, and your student ID are filled in
 - [ ] Sections 1.1-1.4 are all there (about 2 pages)
 - [ ] The table lists your five most recent 10-K reports filed by November 1, 2026 (fiscal year, filing date, link); no 10-K/A
 - [ ] Word's Spelling & Grammar check is done
@@ -622,8 +622,8 @@ Late work is not accepted, so check everything **before** the deadline.
 
 **Week 14: Final report**
 
-- [ ] Written in the Word template: title, your name, abstract (about 100 words), and keywords are filled in
-- [ ] All of the template's sample text and instructions are deleted
+- [ ] Written in the Word template: title, your name and student ID, abstract (about 100 words), and keywords are filled in
+- [ ] All of the template's instructions in square brackets and sample entries (such as "Day Month Year" and "URL") are deleted or replaced
 - [ ] Chapters 1-4 follow the sections in the report chapters table; Chapter 1 is improved with the Week 10 feedback
 - [ ] The main text (start of Chapter 1 to end of Chapter 4) is at least 10 pages
 - [ ] Results include the topic map, the change rate by year, the themes of change by year, the representative paragraphs, and the threshold test
@@ -673,11 +673,12 @@ Write the report in four chapters plus an appendix (@tbl-chapters). The main tex
 | Appendix | A. Your complete Python script<br>B. Sources with dates<br>C. AI use: tool names and prompts (see [Use of AI Tools](#use-of-ai-tools)) | No limit | Week 14 |
 : Report chapters, sections, and suggested lengths {#tbl-chapters tbl-colwidths="[18,56,14,12]"}
 
-* **Use the Word template for both Chapter 1 (Week 10) and the final report (Week 14):** download [`template.docx`](template.docx), fill in the title, your name, a short abstract (about 100 words), and keywords, then replace the template's sample sections with Chapters 1-4 and the appendix. Use the template's heading, table, and figure styles, and convert the finished report to PDF.
+* **Use the Word template for both Chapter 1 (Week 10) and the final report (Week 14):** download [`template.docx`](template.docx). It already has the headings of Chapters 1-4, Appendices A-C, and the References, with a short instruction in square brackets under each heading. Fill in the title, your name and student ID, a short abstract (about 100 words), and three to six keywords; write under each heading; and delete every instruction in square brackets. Use the template's heading, table, figure, and reference styles, and convert the finished report to PDF.
 * **See a finished example:** [this journal article](sustainability-18-11469.pdf) was written in the same template (Aybar-Bellido et al., *Sustainability*, 2026; open access, CC BY). Click it to see how the title, authors, abstract, keywords, numbered headings, tables, figures, and references should look. Use it as a model for the **format** only: your report is shorter and follows the chapters in @tbl-chapters.
 * Your script follows the course structure (1. Input, 2. Process, 3. Output) and runs from start to finish without errors. Name it `StudentID_Name_Project.py`.
 * Number every table and figure (Table 1, Figure 1) and refer to it in the text.
 * **Explain every figure.** Right below each figure, write two or three sentences: what the figure shows and what it means. For example: "In Figure 4, the number of changed paragraphs about new products and AI rose from 3 in 2023 to 34 in 2026, while the other themes stayed flat or fell. Apple's new disclosures are mostly about AI."
+* **For Week 10,** submit Chapter 1 and the References only: delete the headings of Chapters 2-4 and the appendices. You can leave out the abstract until the final report.
 * The final report includes all four chapters. Improve Chapter 1 using the feedback you received in Week 10.
 * **Quote and cite carefully.** Put every quote from a 10-K in quotation marks and cite it the way the template does: a reference number in order of appearance, plus the item of the report, for example [3], Item 1A. List your five 10-K reports and any other sources in the template's References section.
 * Everything is in English: the report, the slides, the video, and the live presentation.
