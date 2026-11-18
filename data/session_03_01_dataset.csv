@@ -1,11 +1,21 @@
-Project_ID,Department_Name,Implementation_Cost_USD,Annual_Labor_Hours_Saved_Count,Projected_Cost_Savings_USD,Payback_Period_Months_Count
-AI-PRJ-101,Supply Chain,150000.0,4200,294000.0,6.1
-AI-PRJ-102,Customer Service,80000.0,3100,155000.0,6.2
-AI-PRJ-103,Marketing,120000.0,2800,196000.0,7.3
-AI-PRJ-104,Finance,200000.0,5600,392000.0,6.1
-AI-PRJ-105,Fraud Operations,175000.0,6200,496000.0,4.2
-AI-PRJ-106,Supply Chain,160000.0,4500,315000.0,6.1
-AI-PRJ-107,Customer Service,90000.0,3400,170000.0,6.4
-AI-PRJ-108,Marketing,130000.0,3000,210000.0,7.4
-AI-PRJ-109,Finance,220000.0,6100,427000.0,6.2
-AI-PRJ-110,Fraud Operations,190000.0,6800,544000.0,4.2
+Message_ID,Subject,Link_Count,Is_Spam_Binary
+MSG-101,Group project meeting at 3 pm,0,0
+MSG-102,You won a free iPhone!,5,1
+MSG-103,Library book due tomorrow,1,0
+MSG-104,Weekly news from the campus,3,0
+MSG-105,Verify your bank account now,2,1
+MSG-106,Your order has shipped,2,0
+MSG-107,Cheap watches 90% off,6,1
+MSG-108,Midterm grades are posted,1,0
+MSG-109,Your package could not be delivered,4,1
+MSG-110,Club dinner photos,3,0
+MSG-111,Earn $500 a day from home,7,1
+MSG-112,Lunch on Friday?,0,0
+MSG-113,Claim your prize today,5,1
+MSG-114,Course registration opens Monday,2,0
+MSG-115,Last chance: free gift card,8,1
+MSG-116,Monthly phone bill,1,0
+MSG-117,Your account will be closed,6,1
+MSG-118,Flight booking confirmation,3,0
+MSG-119,Double your money with crypto,9,1
+MSG-120,Happy birthday!,0,0

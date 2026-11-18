@@ -32,9 +32,9 @@ EXERCISES = {
         ("Rank regions by size, cash efficiency, and trend", "`North_America` first (margin `31.0`)"),
     ],
     "3.1": [
-        ("Rank the AI portfolio and compare departments", "Fraud Operations leads (`709.6`)"),
-        ("Fund projects by hours per dollar until $500,000 runs out", "4 projects, `$480,000`, `16,100` hours a year"),
-        ("Test the simple method against every combination", "`1023` groups checked, `163` fit the budget"),
+        ("Split the mistakes into missed spam and false alarms", "learned rule: missed spam `1`, false alarms `0`"),
+        ("Find a better inactivity threshold for the music app", "best `3` weeks: accuracy `0.875` vs `0.8125`"),
+        ("Let the computer try every threshold by itself", "best `4` links, `1` mistake; `8` of `10` new correct"),
     ],
     "3.2": [
         ("Encode, split, fill, and scale the credit data", "every training average `0.0`, spread `1.0`"),

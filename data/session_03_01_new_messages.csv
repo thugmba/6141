@@ -1,0 +1,11 @@
+Message_ID,Subject,Link_Count,Is_Spam_Binary
+MSG-201,Team meeting moved to Tuesday,0,0
+MSG-202,Reset your password here,2,1
+MSG-203,Your exam seat number,1,0
+MSG-204,You have a gift waiting,5,1
+MSG-205,Concert tickets confirmed,3,0
+MSG-206,Lose 10 kg in a week,6,1
+MSG-207,Summer internship fair,3,0
+MSG-208,Online course newsletter,4,0
+MSG-209,Free movie streaming,8,1
+MSG-210,Dorm Wi-Fi maintenance,2,0

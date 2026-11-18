@@ -325,225 +325,193 @@ ol.ex3 li { font-size: 18pt; line-height: 1.25; margin: .06in 0; }
 .sm-item code { font-size: .85em; white-space: normal; overflow-wrap: anywhere; }
 /* end session map */
 
+
+.stack { display: flex; flex-direction: column; gap: .14in; width: 100%; min-height: 0; }
+.answer { font-size: 19pt; margin: .06in 0; line-height: 1.25; }
+.answer b { color: #991B1B; }
+.mdtable td.good { background: #DCFCE7; font-weight: bold; }
+.mdtable td.bad { background: #FEE2E2; }
+.mdtable tr.best td { background: #DCFCE7; font-weight: bold; }
+.mdtable tr.old td { background: #FEF3C7; }
+.code-panel.w55 { width: 55%; }
+.code-panel.w48 { width: 48%; }
+.lead-q { font-size: 22pt; font-style: italic; color: #991B1B; margin: .06in 0 .1in; }
+.mdtable td, .mdtable th { vertical-align: middle; }
+.check { font-size: 22pt; }
+.check p { margin: 0; }
+.stack .card { flex-shrink: 0; }
+.mdtable.files code { white-space: nowrap; overflow-wrap: normal; }
+.overview { grid-template-columns: 1fr 1.25fr; }
+.answer { font-size: inherit; }
 </style>
 </head>
 <body>
-
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">1-2. Purpose and Outcomes</span></div>
-  <div class="title">Session 3.1: Foundations of Artificial Intelligence: Enterprise Value Creation and Decision Automation</div><div class="rule"></div>
-  <div class="body grid2 overview"><div class="card fitbox"><div class="tag">THE BUSINESS SITUATION</div><ul class="tight"><li>Five departments have proposed 10 AI projects, costing between $80,000 and $220,000 each</li><li>The total request is $1.5 million, but this year&#x27;s AI budget is only $500,000</li><li>The COO (Chief Operating Officer) asks: which AI projects should we fund with $500,000, and how fast will they pay back? Today, you learn what AI can and cannot do, and use Python to compare the proposals on the same financial terms</li></ul><p class="flow">Today's flow: 60 min lecture, then 120 min hands-on lab</p></div><div class="card fitbox"><div class="tag">EXPECTED OUTCOMES</div><h2>By the end of today, you will be able to:</h2><ol class="biz"><li><span class="q">"Is this project really AI?"</span> Tell apart AI (Artificial Intelligence), ML (Machine Learning), and DL (Deep Learning), and decide when a simple rule is enough</li><li><span class="q">"Which projects pay back fastest?"</span> Calculate the payback period (months until the savings repay the cost) and the 3-year ROI (Return on Investment)</li><li><span class="q">"Which projects fit in $500,000?"</span> Allocate a fixed budget with a loop, and fix a <code>ZeroDivisionError</code> (dividing by zero)</li></ol></div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 1 / 16</span></div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">The Problem and the Result</span></div>
+  <div class="title">Session 3.1: Can a Spam Filter Learn a Better Rule?</div><div class="rule"></div>
+  <div class="body grid2 overview"><div class="card fitbox" data-start="23"><div class="tag">THE PROBLEM</div><ul class="tight"><li>Every email service decides: inbox or spam folder?</li><li>Two ways to be wrong: <b>missed spam</b> (a scam in your inbox) and <b>false alarm</b> (a real email hidden in spam)</li><li>The team&#x27;s old rule: <b>3 or more links = spam</b>. The number 3 was a guess</li><li>The manager asks: can a rule learned from our past emails do better, and can we trust its score?</li></ul><p class="flow">Today: the result first, then how machine learning got it</p></div><div class="card fitbox" data-start="23"><div class="tag">THE RESULT</div><table class="mdtable"><thead><tr><th>Rule</th><th>Mistakes (20 past emails)</th><th>Accuracy, past</th><th>Accuracy, 10 new</th></tr></thead><tbody><tr class="old"><td>Old rule: <code>3</code> or more links → spam</td><td><code>4</code></td><td><code>80%</code></td><td><code>60%</code></td></tr><tr class="best"><td>Learned rule: <code>4</code> or more links → spam</td><td><code>1</code></td><td><code>95%</code></td><td><code>80%</code></td></tr></tbody></table><p class="answer"><b>1.</b> The learned rule is better: it removes all 3 false alarms.</p><p class="answer"><b>2.</b> Report <b>80%</b>, not 95%: only new emails give an honest score.</p><p class="answer"><b>3.</b> Nobody guessed <code>4</code>: Python tried many thresholds and kept the one with the fewest mistakes.</p></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 1 / 15</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Session Map</span></div>
-  <div class="title">Session Map: Follow the Numbers</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: .14in;"><div class="sm-q"><b>Today's question:</b> Which AI projects should we fund with $500,000, and how fast will they pay back?</div><div class="sm-phases"><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">1</span><span><b>Why it matters</b><small>Lecture, part 1</small></span></div><p class="sm-item"><i>1.</i><span><b>Session Purpose</b><span class="d">answer today&#x27;s question</span></span></p><p class="sm-item"><i>2.</i><span><b>Learning Outcomes</b><span class="d">3 skills you will show today</span></span></p><p class="sm-item"><i>3.</i><span><b>Business Context</b><span class="d">How to Judge an AI Project</span></span></p><p class="sm-item"><i>4.</i><span><b>Data Basics</b><span class="d">AI, ML, DL, and When a Rule Is Enough</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">2</span><span><b>Learn the tools</b><small>Lecture, part 2</small></span></div><p class="sm-item"><i>5.</i><span><b>Lab Dataset</b><span class="d">1 CSV</span></span></p><p class="sm-item"><i>6.</i><span><b>Keywords</b><span class="d">6 terms</span></span></p><p class="sm-item"><i>7.</i><span><b>Core Foundations</b><span class="d">4 ideas, one at a time</span></span></p><p class="sm-item"><i>8.</i><span><b>IDE Setup</b><span class="d">name files, run in the Terminal</span></span></p><p class="sm-item"><i>9.</i><span><b>Code Examples</b><span class="d">3 demos + Quick Checks</span></span></p><p class="sm-item"><i>10.</i><span><b>References</b><span class="d">4 official docs</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox sm-p3" data-start="22"><div class="sm-head"><span class="sm-step">3</span><span><b>Practice</b><small>Lab</small></span></div><p class="sm-item"><i>11.</i><span><b>Exercise 1: Guided</b><span class="d">AI Portfolio Ranking</span></span></p><p class="sm-item"><i>12.</i><span><b>Exercise 2: Applied</b><span class="d">Fund Projects Within $500,000</span></span></p><p class="sm-item"><i>13.</i><span><b>Exercise 3: Advanced</b><span class="d">Is the Greedy Choice the Best Choice?</span></span></p></div></div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 2 / 16</span></div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Key Ideas</span></div>
+  <div class="title">AI, ML, and DL: Three Nested Ideas</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><table class="mdtable"><thead><tr><th>Term</th><th>What it is</th><th>Example you know</th></tr></thead><tbody><tr><td>AI (Artificial Intelligence)</td><td>any computer system that does a task we link to human thinking</td><td>a chatbot that answers questions</td></tr><tr><td>ML (Machine Learning)</td><td>AI that <b>learns a rule from past examples</b> with known answers</td><td>a spam filter that learns from emails marked as spam</td></tr><tr><td>DL (Deep Learning)</td><td>ML with many-layered neural networks, for images, sound, and text</td><td>your phone recognizing your face</td></tr></tbody></table></div><div class="card fitbox" data-start="24"><div class="tag">RULE-BASED SYSTEM</div><ul class="tight"><li>Code that follows a rule a person wrote, such as &quot;3 or more links&quot;: the old rule is one</li><li>An app sold as &quot;AI&quot; can still be rule-based. Ask: which past examples did it learn from?</li></ul></div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 2 / 15</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">3. Business Context</span></div>
-  <div class="title">How to Judge an AI Project</div><div class="rule"></div>
-  <div class="body grid2" style="grid-template-columns: 1fr 1.15fr;"><div class="card fitbox"><div class="tag">KEY POINTS</div><ul class="tight"><li>Every AI proposal is an investment: money now, savings later.</li><li>Savings are forecasts, not facts.</li><li>Labor hours saved are not the same as money saved: hours only become savings if the freed time is used for other valuable work.</li></ul></div><div class="card fitbox"><div class="tag">SEE IT ON REAL DATA</div><table class="mdtable"><tr><th>Term</th><th>Meaning</th><th>Example</th></tr><tr><td>Implementation cost</td><td>one-time cost to build the system</td><td><code>150,000</code></td></tr><tr><td>Running cost</td><td>yearly cost to keep it working (cloud computing, updates); here 15% of the build cost</td><td><code>22,500</code></td></tr><tr><td>Net annual benefit</td><td>yearly savings minus the running cost</td><td><code>294,000 - 22,500 = 271,500</code></td></tr><tr><td>Payback period</td><td>months until the benefit repays the build cost: cost / net benefit x 12</td><td><code>6.6</code> months</td></tr><tr><td>3-year ROI</td><td>(net benefit x 3 - cost) / cost x 100</td><td><code>443.0</code>%</td></tr></table></div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 3 / 16</span></div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Key Ideas</span></div>
+  <div class="title">How to Judge a Rule: Four Cases and Accuracy</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><div class="tag">THRESHOLD = THE CUT-OFF VALUE: EMAILS WITH 3 OR MORE LINKS GO TO SPAM</div><table class="mdtable"><thead><tr><th>Email</th><th>Links</th><th>Real answer</th><th>Spam folder?</th><th>Case</th></tr></thead><tbody><tr><td>&quot;You won a free iPhone!&quot;</td><td><code>5</code></td><td>spam</td><td>yes</td><td>spam caught: correct</td></tr><tr><td>&quot;Lunch on Friday?&quot;</td><td><code>0</code></td><td>real</td><td>no</td><td>real email delivered: correct</td></tr><tr><td>&quot;Weekly news from the campus&quot;</td><td><code>3</code></td><td>real</td><td>yes</td><td><b>false alarm: mistake</b></td></tr><tr><td>&quot;Verify your bank account now&quot;</td><td><code>2</code></td><td>spam</td><td>no</td><td><b>missed spam: mistake</b></td></tr></tbody></table></div><div class="check"><b>Accuracy</b> = correct decisions / all decisions. The old rule is right on 16 of 20 past emails: <code>16 / 20 = 0.80</code> = 80%.</div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 3 / 15</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">4. Data Basics</span></div>
-  <div class="title">AI, ML, DL, and When a Rule Is Enough</div><div class="rule"></div>
-  <div class="body grid2" style="grid-template-columns: 1fr 1.15fr;"><div class="card fitbox"><div class="tag">KEY POINTS</div><ul class="tight"><li>Three nested ideas:</li><li>Rule or ML?<ul class="tight"><li><b>Use a rule</b> when the policy is fixed and written down: &quot;sales tax is 5% of the price&quot;. A rule is cheaper, exact, and easy to explain.</li><li><b>Use ML</b> when the pattern is complex or changes over time, and you have many past examples with known outcomes: &quot;which invoices look like fraud?&quot;</li></ul></li><li>ML makes a prediction; a person or a business rule still decides what to do with it.</li></ul></div><div class="card fitbox"><div class="tag">AT A GLANCE</div><table class="mdtable"><tr><th>Term</th><th>What it is</th><th>Business example</th></tr><tr><td>AI (Artificial Intelligence)</td><td>any computer system that does a task we link to human thinking</td><td>a chatbot answering customers</td></tr><tr><td>ML (Machine Learning)</td><td>AI that <b>learns a rule from past examples</b> instead of being told the rule</td><td>flagging likely fraud from past fraud cases</td></tr><tr><td>DL (Deep Learning)</td><td>ML with many-layered neural networks, for images, sound, and text</td><td>reading scanned invoices</td></tr></table></div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 4 / 16</span></div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">The Data</span></div>
+  <div class="title">Three Small Files (Fictional Teaching Data)</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><ul class="tight"><li><code>session_03_01_dataset.csv</code>: <b>20 past emails</b> (9 spam), for Steps 1-3. Columns: <code>Message_ID</code>, <code>Subject</code>, <code>Link_Count</code>, <code>Is_Spam_Binary</code></li><li><code>session_03_01_new_messages.csv</code>: <b>10 emails from next month</b>, the same 4 columns. Step 3 uses them as &quot;the future&quot;</li><li><code>session_03_01_churn.csv</code>: <b>16 music app users</b> (7 cancelled), for Exercises 2-3. Columns: <code>User_ID</code>, <code>Weeks_Inactive_Count</code>, <code>Cancelled_Binary</code></li></ul></div><div class="check"><code>Is_Spam_Binary</code>: <code>1</code> = spam, <code>0</code> = real email. These known answers are what the computer learns from.</div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 4 / 15</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">5. Lab Practice Dataset</span></div>
-  <div class="title">The Data for Today</div><div class="rule"></div>
-  <div class="body grid2" style="grid-template-columns: 1fr 2.2fr;"><div class="card fitbox"><div class="tag">FILES</div><ul class="tight"><li><code>data/session_03_01_dataset.csv</code></li></ul><p>Audited 10-row AI project proposal dataset (fictional teaching data), one row per proposal:</p></div><div class="card fitbox"><div class="tag">COLUMNS</div><table class="mdtable cols"><tr><td><code>Project_ID</code></td><td>Proposal code (e.g., <code>AI-PRJ-101</code>).</td></tr><tr><td><code>Department_Name</code></td><td>Sponsoring department (Supply Chain, Customer Service, Marketing, Finance, Fraud Operations).</td></tr><tr><td><code>Implementation_Cost_USD</code></td><td>One-time build cost in U.S. Dollars.</td></tr><tr><td><code>Annual_Labor_Hours_Saved_Count</code></td><td>Staff hours the system is expected to save per year.</td></tr><tr><td><code>Projected_Cost_Savings_USD</code></td><td>Expected yearly savings in U.S. Dollars.</td></tr><tr><td><code>Payback_Period_Months_Count</code></td><td>The department&#x27;s own payback estimate. It ignores running costs, so it is shorter than the payback you calculate today (for example, <code>6.1</code> against <code>6.6</code> months for <code>AI-PRJ-101</code>).</td></tr></table></div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 5 / 16</span></div>
-</section>
-
-<section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">6. Keywords</span></div>
-  <div class="title">6 Terms You Need Today</div><div class="rule"></div>
-  <div class="body grid3" style="grid-template-rows: repeat(2, 1fr);"><div class="card fitbox"><div class="tag">TERM 1</div><h2><code>Artificial Intelligence (AI)</code></h2><p class="what"><b>What:</b> computer systems that do tasks we link to human thinking</p><p class="why"><b>Why:</b> the umbrella term in every vendor pitch; ask which kind of AI is inside</p></div><div class="card fitbox"><div class="tag">TERM 2</div><h2><code>Machine Learning (ML)</code></h2><p class="what"><b>What:</b> a system that learns a decision rule from past examples</p><p class="why"><b>Why:</b> handles patterns too complex to write down by hand</p></div><div class="card fitbox"><div class="tag">TERM 3</div><h2><code>Deep Learning (DL)</code></h2><p class="what"><b>What:</b> ML with many-layered neural networks</p><p class="why"><b>Why:</b> needed for images, sound, and free text; costly to build and run</p></div><div class="card fitbox"><div class="tag">TERM 4</div><h2><code>Rule-Based System</code></h2><p class="what"><b>What:</b> code that follows rules a person wrote, such as <code>if amount &gt; 250000:</code></p><p class="why"><b>Why:</b> the right choice when the policy is clear and fixed</p></div><div class="card fitbox"><div class="tag">TERM 5</div><h2><code>Payback Period</code></h2><p class="what"><b>What:</b> months until the net benefit repays the build cost</p><p class="why"><b>Why:</b> shows how fast the money comes back</p></div><div class="card fitbox"><div class="tag">TERM 6</div><h2><code>ROI (Return on Investment)</code></h2><p class="what"><b>What:</b> total gain compared with the cost, in percent</p><p class="why"><b>Why:</b> compares projects of different sizes on one scale</p></div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 6 / 16</span></div>
-</section>
-
-<section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">7. Core Foundations</span></div>
-  <div class="title">How It Works</div><div class="rule"></div>
-  <div class="body f7" data-uniform style="display:grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); gap: .16in;"><div class="card fitbox" data-start="24"><div class="tag">7.1</div><h2>Rule or learning</h2><p class="remember"><b>Remember:</b> clear, fixed policy: write a rule; complex pattern with many past answers: learn it.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.2</div><h2>Payback and ROI</h2><p class="remember"><b>Remember:</b> same formula for every project, running costs included.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.3</div><h2>Division by zero</h2><p class="remember"><b>Remember:</b> a zero in the bottom of a fraction must be caught, not ignored.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.4</div><h2>Choosing under a budget</h2><p class="remember"><b>Remember:</b> greedy is fast and simple; with few options, check the combinations too.</p></div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 7 / 16</span></div>
-</section>
-
-<section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">7. Core Foundations: On Real Data</span></div>
-  <div class="title">7.1 Rule or learning: On Real Data</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: .12in;"><div class="card fitbox" data-start="19"><div class="tag">SEE IT ON REAL DATA</div><table class="mdtable"><tr><th>Approach</th><th>The rule</th><th>Mistakes on the 10 invoices</th></tr><tr><td>Rule-based</td><td>a person chose &quot;above 250,000&quot;</td><td><code>1</code> (the honest <code>260000</code> invoice is flagged)</td></tr><tr><td>Learned</td><td>the search tried every amount as a threshold and found &quot;300,000 or more&quot;</td><td><code>0</code></td></tr></table></div><div class="check"><b>Remember:</b> clear, fixed policy: write a rule; complex pattern with many past answers: learn it.</div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 8 / 16</span></div>
-</section>
-
-<section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Code Demonstration 1</span></div>
-  <div class="title">Payback and ROI for Every Proposal</div><div class="rule"></div>
-  <div class="body">
-    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
-      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S31_demo_1.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
-<pre><span class="sec"># 1. Input: load the 10 proposals</span>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Step 1</span></div>
+  <div class="title">Step 1: Count the Old Rule&#x27;s Mistakes</div><div class="rule"></div>
+  <div class="body"><div class="code-panel w55 fitbox" data-start="21" data-floor="13"><div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S31_step_1.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div><pre><span class="sec"># 1. Input: 20 past emails, each marked spam or not by its reader</span>
 import pandas as pd
 df = pd.read_csv(&quot;data/session_03_01_dataset.csv&quot;)
 
-<span class="sec"># 2. Process: net benefit, payback, and 3-year ROI</span>
-df[&quot;Net_Annual_Benefit_USD&quot;] = (
-    df[&quot;Projected_Cost_Savings_USD&quot;] - df[&quot;Implementation_Cost_USD&quot;] * 0.15
-)
-df[&quot;Payback_Months&quot;] = (
-    df[&quot;Implementation_Cost_USD&quot;] / df[&quot;Net_Annual_Benefit_USD&quot;] * 12
-).round(1)
-df[&quot;ROI_3yr_Pct&quot;] = (
-    (df[&quot;Net_Annual_Benefit_USD&quot;] * 3 - df[&quot;Implementation_Cost_USD&quot;])
-    / df[&quot;Implementation_Cost_USD&quot;] * 100
-).round(1)
+<span class="sec"># 2. Process: apply the rule and compare it with the real answers</span>
+df[&quot;Flagged&quot;] = df[&quot;Link_Count&quot;] &gt;= 3
+df[&quot;Is_Mistake&quot;] = df[&quot;Flagged&quot;] != (df[&quot;Is_Spam_Binary&quot;] == 1)
 
-<span class="sec"># 3. Output: the 3 proposals with the highest ROI</span>
-top3 = df.sort_values(&quot;ROI_3yr_Pct&quot;, ascending=False).head(3)
-print(top3[[&quot;Project_ID&quot;, &quot;Department_Name&quot;, &quot;Payback_Months&quot;, &quot;ROI_3yr_Pct&quot;]])
-</pre>
-    </div>
-    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>df[&quot;Implementation_Cost_USD&quot;] * 0.15</code> is the yearly running cost; subtracting it from the projected savings gives the net annual benefit, for all 10 proposals at once.</li><li>The payback divides the build cost by the net benefit and multiplies by 12 to turn years into months.</li><li>The 3-year ROI compares 3 years of net benefit with the build cost, in percent (section 7.2).</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><ul class="tight"><li>Both Fraud Operations projects pay back in under 5 months and return about 7 times their cost over 3 years.</li></ul></div></div>
-  </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 9 / 16</span></div>
+<span class="sec"># 3. Output: the mistakes and how many there are</span>
+mistakes = df[df[&quot;Is_Mistake&quot;]]
+print(mistakes[[&quot;Subject&quot;, &quot;Link_Count&quot;, &quot;Is_Spam_Binary&quot;]])
+print(&quot;Mistakes:&quot;, df[&quot;Is_Mistake&quot;].sum(), &quot;of&quot;, len(df))</pre></div><div class="notes"><div class="card fitbox how" data-start="21"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>&gt;= 3</code> applies the rule to all 20 emails at once: <code>True</code> = spam folder</li><li><code>== 1</code> turns the answer <code>1</code> / <code>0</code> into <code>True</code> / <code>False</code></li><li><code>!=</code> marks a mistake: the rule and the real answer disagree</li><li><code>.sum()</code> counts the <code>True</code> values</li></ul></div><div class="card fitbox out" data-start="21"><div class="tag">OUTPUT</div><div class="outbox">                         Subject  Link_Count  Is_Spam_Binary
+3    Weekly news from the campus           3               0
+4   Verify your bank account now           2               1
+9             Club dinner photos           3               0
+17   Flight booking confirmation           3               0
+Mistakes: 4 of 20</div></div><div class="check fitbox" data-start="20"><p><b>Quick Check:</b> add <code>df[&quot;Flagged&quot;].mean()</code>: the share sent to spam is <code>0.55</code></p></div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 5 / 15</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Quick Check 1</span></div>
-  <div class="title">Quick Check 1: <code>.rank()</code></div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid2 qc" style="flex: 1; min-height: 0;">
-      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>.rank()</code></h2><p><code>column.rank(ascending=False)</code> gives each row its place, 1 for the largest. Equal values share the average place, such as <code>4.5</code>. Why: a ranking column is easy to show in a decision memo.</p></div>
-      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add one line at the end of part <b>2. Process</b>: <code>df[&quot;ROI_Rank&quot;] = df[&quot;ROI_3yr_Pct&quot;].____(ascending=False)</code>, then add <code>&quot;ROI_Rank&quot;</code> to the printed columns.</p></div>
-    </div>
-    <div class="check"><b>Check:</b> <code>AI-PRJ-110</code> has rank <code>1.0</code> and <code>AI-PRJ-105</code> has rank <code>2.0</code>.</div>
-  </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 10 / 16</span></div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Step 1</span></div>
+  <div class="title">Step 1: What the Mistakes Tell Us</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="20"><ul class="tight"><li>Three <b>real</b> emails with exactly 3 links went to spam: a newsletter, photos, a booking. <b>False alarms</b></li><li>One scam, &quot;Verify your bank account now&quot;, has only 2 links and reached the inbox: <b>missed spam</b></li><li>4 mistakes in 20 decisions: accuracy <b>80%</b></li></ul></div><div class="check"><b>Common mistake:</b> judging a rule by the cases you remember (the obvious spam it caught). Count every case.</div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 6 / 15</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Code Demonstration 2</span></div>
-  <div class="title">A Fixed Rule vs a Rule Learned from Examples</div><div class="rule"></div>
-  <div class="body">
-    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
-      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S31_demo_2.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
-<pre><span class="sec"># 1. Input: 10 past invoices, checked by auditors (fictional)</span>
-import pandas as pd
-past = pd.DataFrame({
-    &quot;Amount_USD&quot;: [120000, 180000, 210000, 240000, 260000,
-                   300000, 330000, 410000, 450000, 520000],
-    &quot;Was_Fraud&quot;: [False] * 5 + [True] * 5,
-})
-
-<span class="sec"># 2. Process: a rule a person chose vs a threshold learned from the data</span>
-rule_flags = past[&quot;Amount_USD&quot;] &gt; 250000
-rule_mistakes = (rule_flags != past[&quot;Was_Fraud&quot;]).sum()
-
-best_threshold, best_mistakes = None, len(past)
-for threshold in past[&quot;Amount_USD&quot;]:
-    flags = past[&quot;Amount_USD&quot;] &gt;= threshold
-    mistakes = (flags != past[&quot;Was_Fraud&quot;]).sum()
-    if mistakes &lt; best_mistakes:
-        best_threshold, best_mistakes = threshold, mistakes
-
-<span class="sec"># 3. Output: compare the mistakes</span>
-print(&quot;Fixed rule (above 250,000) mistakes:&quot;, rule_mistakes)
-print(&quot;Learned threshold:&quot;, best_threshold, &quot;mistakes:&quot;, best_mistakes)
-</pre>
-    </div>
-    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>pd.DataFrame({...})</code> builds 10 fictional past invoices with known answers.</li><li><code>past[&quot;Amount_USD&quot;] &gt; 250000</code> applies the person&#x27;s rule and gives one <code>True</code> / <code>False</code> per invoice.</li><li><code>(rule_flags != past[&quot;Was_Fraud&quot;]).sum()</code> counts the rows where the rule and the auditors disagree: the mistakes.</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><div class="outbox">Fixed rule (above 250,000) mistakes: 1
-Learned threshold: 300000 mistakes: 0
-</div><ul class="tight"><li>The person&#x27;s rule flags the honest <code>260000</code> invoice: 1 mistake.</li></ul></div></div>
-  </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 11 / 16</span></div>
-</section>
-
-<section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Quick Check 2</span></div>
-  <div class="title">Quick Check 2: <code>.mean()</code> of True/False</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid2 qc" style="flex: 1; min-height: 0;">
-      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>.mean()</code> of True/False</h2><p><code>.mean()</code> on a <code>True</code> / <code>False</code> column gives the share of <code>True</code> values, because <code>True</code> counts as 1. Why: tells a manager what share of invoices a rule would send to review.</p></div>
-      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add one line to part <b>3. Output</b>: <code>print(&quot;Share flagged by the fixed rule:&quot;, rule_flags.____())</code></p></div>
-    </div>
-    <div class="check"><b>Check:</b> the Terminal shows <code>Share flagged by the fixed rule: 0.6</code>, so 6 of 10 invoices would go to review.</div>
-  </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 12 / 16</span></div>
-</section>
-
-<section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Code Demonstration 3</span></div>
-  <div class="title">A Shortlist That Does Not Fit the Budget</div><div class="rule"></div>
-  <div class="body">
-    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
-      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S31_demo_3.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
-<pre><span class="sec"># 1. Input: load the proposals and add the payback period</span>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Step 2</span></div>
+  <div class="title">Step 2: Let the Data Choose the Threshold</div><div class="rule"></div>
+  <div class="body"><div class="code-panel w55 fitbox" data-start="21" data-floor="13"><div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S31_step_2.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div><pre><span class="sec"># 1. Input: the same 20 past emails</span>
 import pandas as pd
 df = pd.read_csv(&quot;data/session_03_01_dataset.csv&quot;)
-df[&quot;Net_Annual_Benefit_USD&quot;] = (
-    df[&quot;Projected_Cost_Savings_USD&quot;] - df[&quot;Implementation_Cost_USD&quot;] * 0.15
-)
-df[&quot;Payback_Months&quot;] = (
-    df[&quot;Implementation_Cost_USD&quot;] / df[&quot;Net_Annual_Benefit_USD&quot;] * 12
-).round(1)
+is_spam = df[&quot;Is_Spam_Binary&quot;] == 1
 
-<span class="sec"># 2. Process: fast payback AND many hours saved</span>
-shortlist = df[
-    (df[&quot;Payback_Months&quot;] &lt;= 7.0)
-    &amp; (df[&quot;Annual_Labor_Hours_Saved_Count&quot;] &gt;= 4000)
-]
-shortlist_cost = shortlist[&quot;Implementation_Cost_USD&quot;].sum()
+<span class="sec"># 2. Process: one function counts the mistakes of any threshold</span>
+def count_mistakes(threshold):
+    flagged = df[&quot;Link_Count&quot;] &gt;= threshold
+    return (flagged != is_spam).sum()
 
-<span class="sec"># 3. Output: compare the shortlist with the budget</span>
-print(shortlist[[&quot;Project_ID&quot;, &quot;Department_Name&quot;, &quot;Payback_Months&quot;]])
-print(f&quot;Shortlist cost: ${shortlist_cost:,.0f} against a budget of $500,000&quot;)
-</pre>
-    </div>
-    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li>Part 1 recomputes the net benefit and payback, as in Micro-Example 1.</li><li>The two conditions keep projects that pay back within 7 months <b>and</b> save at least 4,000 hours a year; each condition is in its own brackets, joined with <code>&amp;</code> (Session 1.4).</li><li><code>shortlist[&quot;Implementation_Cost_USD&quot;].sum()</code> adds up what the shortlist would cost.</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><div class="outbox">   Project_ID   Department_Name  Payback_Months
-0  AI-PRJ-101      Supply Chain             6.6
-3  AI-PRJ-104           Finance             6.6
-...</div><ul class="tight"><li>6 projects pass both rules, but together they cost more than twice the budget.</li></ul></div></div>
-  </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 13 / 16</span></div>
+<span class="sec"># 3. Output: try thresholds from 1 to 6 links</span>
+for threshold in [1, 2, 3, 4, 5, 6]:
+    print(f&quot;{threshold}+ links: mistakes {count_mistakes(threshold)}&quot;)</pre></div><div class="notes"><div class="card fitbox how" data-start="21"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>count_mistakes()</code> packs Step 1 into a function (Session 2.4)</li><li>The <code>for</code> loop tries each threshold and prints its mistakes</li><li>Trying rules and keeping the best is the &quot;learning&quot; in machine learning</li></ul></div><div class="card fitbox out" data-start="21"><div class="tag">OUTPUT</div><div class="outbox">1+ links: mistakes 8
+2+ links: mistakes 5
+3+ links: mistakes 4
+4+ links: mistakes 1
+5+ links: mistakes 2
+6+ links: mistakes 4</div></div><div class="check fitbox" data-start="20"><p><b>Quick Check:</b> use <code>range(1, 10, 2)</code>: the best of <code>1, 3, 5, 7, 9</code> is <code>5</code>; the step skipped <code>4</code></p></div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 7 / 15</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Quick Check 3</span></div>
-  <div class="title">Quick Check 3: <code>.isin()</code></div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid2 qc" style="flex: 1; min-height: 0;">
-      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>.isin()</code></h2><p><code>column.isin([...])</code> is <code>True</code> when the value is in the list. Why: answers questions about a few named groups, such as &quot;show only Finance and Fraud Operations&quot;.</p></div>
-      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add one line to part <b>3. Output</b>: <code>print(len(df[df[&quot;Department_Name&quot;].____([&quot;Finance&quot;, &quot;Fraud Operations&quot;])]))</code></p></div>
-    </div>
-    <div class="check"><b>Check:</b> the Terminal shows <code>4</code>.</div>
-  </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 14 / 16</span></div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Step 2</span></div>
+  <div class="title">Step 2: Why 4 Links Is the Best Balance</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><table class="mdtable"><thead><tr><th>Spam if links are</th><th>Missed spam</th><th>False alarms</th><th>Mistakes</th></tr></thead><tbody><tr><td><code>1</code> or more links</td><td><code>0</code></td><td><code>8</code></td><td><code>8</code></td></tr><tr><td><code>2</code> or more links</td><td><code>0</code></td><td><code>5</code></td><td><code>5</code></td></tr><tr class="old"><td><code>3</code> or more links (old rule)</td><td><code>1</code></td><td><code>3</code></td><td><code>4</code></td></tr><tr class="best"><td><code>4</code> or more links (learned)</td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td></tr><tr><td><code>5</code> or more links</td><td><code>2</code></td><td><code>0</code></td><td><code>2</code></td></tr><tr><td><code>6</code> or more links</td><td><code>4</code></td><td><code>0</code></td><td><code>4</code></td></tr></tbody></table></div><div class="check">Too low: real emails go to spam. Too high: spam gets through. The computer does not "understand" spam; it finds the rule that best matches the known answers.</div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 8 / 15</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">10. Official References</span></div>
-  <div class="title">Where to Look Things Up</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: .14in;"><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Scikit-Learn: Machine Learning in Python Official Overview</h2><p>https://scikit-learn.org/stable/</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Russell &amp; Norvig: Artificial Intelligence: A Modern Approach (Reference Standards)</h2><p>https://aima.cs.berkeley.edu/</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Agrawal, Gans, Goldfarb: Prediction Machines: The Simple Economics of AI (Harvard Business Review Press)</h2><p>https://www.predictionmachines.ai/</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Python Library: itertools.combinations</h2><p>https://docs.python.org/3/library/itertools.html#itertools.combinations</p></div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 15 / 16</span></div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Step 3</span></div>
+  <div class="title">Step 3: Test Both Rules on New Emails</div><div class="rule"></div>
+  <div class="body"><div class="code-panel w55 fitbox" data-start="21" data-floor="13"><div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S31_step_3.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div><pre><span class="sec"># 1. Input: the past emails and next month&#x27;s new emails</span>
+import pandas as pd
+past = pd.read_csv(&quot;data/session_03_01_dataset.csv&quot;)
+new = pd.read_csv(&quot;data/session_03_01_new_messages.csv&quot;)
+
+<span class="sec"># 2. Process: accuracy = the share of emails the rule gets right</span>
+def accuracy(data, threshold):
+    flagged = data[&quot;Link_Count&quot;] &gt;= threshold
+    return (flagged == (data[&quot;Is_Spam_Binary&quot;] == 1)).mean()
+
+<span class="sec"># 3. Output: both rules, on past and on new emails</span>
+for name, threshold in [(&quot;Old rule&quot;, 3), (&quot;Learned rule&quot;, 4)]:
+    print(f&quot;{name} ({threshold}+ links): past {accuracy(past, threshold):.0%}, &quot;
+          f&quot;new {accuracy(new, threshold):.0%}&quot;)</pre></div><div class="notes"><div class="card fitbox how" data-start="21"><div class="tag">HOW IT WORKS</div><ul class="tight"><li>The function takes the table too, so one function scores past and new emails</li><li><code>==</code> marks correct decisions; <code>.mean()</code> turns them into accuracy</li><li><code>:.0%</code> prints <code>0.95</code> as <code>95%</code></li></ul></div><div class="card fitbox out" data-start="21"><div class="tag">OUTPUT</div><div class="outbox">Old rule (3+ links): past 80%, new 60%
+Learned rule (4+ links): past 95%, new 80%</div></div><div class="check fitbox" data-start="20"><p><b>Quick Check:</b> add <code>(&quot;Strict rule&quot;, 6)</code>: past <code>80%</code>, new <code>80%</code></p></div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 9 / 15</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">11-13. Exercises</span></div>
-  <div class="title">Three Exercises</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid3 exg" data-uniform style="flex: 1; min-height: 0;"><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 1: GUIDED</div><h2>AI Portfolio Ranking</h2><p><b>Goal:</b> Rank the AI portfolio and compare departments</p><p><b>File:</b> <code>YourName_S31_portfolio.py</code></p><p class="remember"><b>Check:</b> Fraud Operations leads (<code>709.6</code>)</p></div><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 2: APPLIED</div><h2>Fund Projects Within $500,000</h2><p><b>Goal:</b> Fund projects by hours per dollar until $500,000 runs out</p><p><b>File:</b> <code>YourName_S31_practice.py</code></p><p class="remember"><b>Check:</b> 4 projects, <code>$480,000</code>, <code>16,100</code> hours a year</p></div><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 3: ADVANCED</div><h2>Is the Greedy Choice the Best Choice?</h2><p><b>Goal:</b> Test the simple method against every combination</p><p><b>File:</b> <code>YourName_S31_challenge.py</code></p><p class="remember"><b>Check:</b> <code>1023</code> groups checked, <code>163</code> fit the budget</p></div></div>
-    <div class="check">Full steps for all three exercises: sections 11-13 of the course page.</div>
-  </div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 16 / 16</span></div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Step 3</span></div>
+  <div class="title">Step 3: Why the Score Drops on New Emails</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><div class="tag">THE NEW EMAILS SHOW CASES THE PAST EMAILS DID NOT</div><table class="mdtable"><thead><tr><th>New email</th><th>Links</th><th>Real answer</th><th>Learned rule</th><th>Case</th></tr></thead><tbody><tr><td>&quot;Online course newsletter&quot;</td><td><code>4</code></td><td>real</td><td>spam folder</td><td>false alarm</td></tr><tr><td>&quot;Reset your password here&quot;</td><td><code>2</code></td><td>spam</td><td>inbox</td><td>missed spam</td></tr></tbody></table><ul class="tight"><li>A scam with few links looks real when links are the only clue</li><li>Real spam filters use many clues: the sender, the words, a new address</li></ul></div><div class="check"><b>Common mistake:</b> reporting the past score ("95% accurate"). It shows how well the rule fits the emails it was chosen from, not next month.</div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 10 / 15</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Summary</span></div>
+  <div class="title">What Machine Learning Did</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><table class="mdtable"><thead><tr><th>Step</th><th>Today</th><th>Later in Module 3</th></tr></thead><tbody><tr><td>1. Collect examples with known answers</td><td>20 emails marked spam or not</td><td>loan applicants (3.2), property sales (3.3)</td></tr><tr><td>2. Try many rules, keep the fewest mistakes</td><td>thresholds <code>1</code> to <code>6</code>; best <code>4</code> links</td><td>Scikit-Learn&#x27;s <code>.fit()</code> does the search (3.3)</td></tr><tr><td>3. Test on data not used to choose the rule</td><td>10 new emails: 80%, not 95%</td><td>train/test split (3.2), test scores (3.3, 3.4)</td></tr></tbody></table></div><div class="check"><b>Remember:</b> try many rules on past examples, keep the one with the fewest mistakes, then judge it only on new examples.</div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 11 / 15</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Summary</span></div>
+  <div class="title">When Is a Written Rule Enough?</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><table class="mdtable"><thead><tr><th>Decision</th><th>Rule or ML?</th><th>Why</th></tr></thead><tbody><tr><td>Student discount with a valid student ID</td><td>rule</td><td>the policy is clear and never guesses</td></tr><tr><td>Free delivery for orders over $30</td><td>rule</td><td>a fixed, written shop policy</td></tr><tr><td>Which emails are spam?</td><td>ML</td><td>spammers keep changing their tricks</td></tr><tr><td>Which songs will you like next?</td><td>ML</td><td>many signals combine in ways no one can write down</td></tr><tr><td>Unlocking a phone with your face</td><td>ML (deep learning)</td><td>images need many-layered models</td></tr></tbody></table></div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 12 / 15</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Exercise 1: Guided</span></div>
+  <div class="title">Exercise 1: Missed Spam or False Alarm?</div><div class="rule"></div>
+  <div class="body"><div class="code-panel w55 fitbox" data-start="21" data-floor="13"><div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S31_mistakes.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div><pre><span class="sec"># 1. Input: the 20 past emails</span>
+import pandas as pd
+df = pd.read_csv(&quot;data/session_03_01_dataset.csv&quot;)
+is_spam = df[&quot;Is_Spam_Binary&quot;] == 1
+
+<span class="sec"># 2. Process: count the two kinds of mistakes for one threshold</span>
+def mistake_report(threshold):
+    flagged = df[&quot;Link_Count&quot;] &gt;= threshold
+    missed = (flagged == False) &amp; is_spam
+    false_alarm = flagged &amp; (is_spam == False)
+    print(f&quot;{threshold}+ links: missed spam {missed.sum()}, &quot;
+          f&quot;false alarms {false_alarm.sum()}&quot;)
+    print(&quot;  Missed:&quot;, list(df.loc[missed, &quot;Subject&quot;]))
+
+<span class="sec"># 3. Output: the old rule and the learned rule</span>
+mistake_report(3)
+mistake_report(4)</pre></div><div class="notes"><div class="card fitbox how" data-start="21"><div class="tag">TYPE, RUN, INTERPRET</div><ul class="tight"><li><code>(flagged == False) &amp; is_spam</code> = spam that reached the inbox</li><li><code>df.loc[missed, &quot;Subject&quot;]</code> lists those emails</li><li>In two comment lines: which mistake did the learned rule remove? Why can no link threshold catch &quot;Verify your bank account now&quot;?</li></ul></div><div class="check fitbox" data-start="20"><p><b>Check:</b> old rule: missed spam <code>1</code>, false alarms <code>3</code>; learned rule: missed spam <code>1</code>, false alarms <code>0</code></p></div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 13 / 15</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Exercise 2: Applied</span></div>
+  <div class="title">Exercise 2: Who Will Cancel the Music App?</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><p><b>Goal:</b> the app sends a &quot;come back&quot; discount to users inactive for <code>2</code>+ weeks. Is there a better threshold?</p><p><b>Script:</b> <code>YourName_S31_cancel.py</code></p><ul class="tight"><li>Load <code>data/session_03_01_churn.csv</code>; print the cancel share with <code>.mean()</code></li><li>Write <code>count_mistakes(threshold)</code> on <code>Weeks_Inactive_Count</code>, as in Step 2</li><li>Try <code>range(1, 7)</code> and print the accuracy of the best threshold and of <code>2</code> weeks</li></ul></div><div class="check"><b>Check:</b> best <code>3</code> weeks: accuracy <code>0.875</code> vs <code>0.8125</code></div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 14 / 15</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Exercise 3: Advanced</span></div>
+  <div class="title">Exercise 3: Let the Computer Search</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><p><b>Goal:</b> write <code>find_best_threshold(data, feature, target)</code> that tries every value in a column and keeps the best</p><p><b>Script:</b> <code>YourName_S31_search.py</code></p><ul class="tight"><li>Run it on the emails and on the music app users</li><li>Apply the best email threshold to the 10 new emails</li><li>Requirements and hints: section 13 of the reading</li></ul></div><div class="check"><b>Check:</b> emails: best <code>4</code> links, <code>1</code> mistake (<code>20</code> tried); users: best <code>3</code> weeks (<code>16</code> tried); new emails: <code>8</code> of <code>10</code> correct</div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 15 / 15</span></div>
 </section>
 
 <script>
@@ -559,7 +527,7 @@ function fitAll() {
     });
     apply();
     const over = () => box.scrollHeight > box.clientHeight + 1 || box.scrollWidth > box.clientWidth + 1
-      || [...box.querySelectorAll('pre')].some((pre) => pre.scrollHeight > pre.clientHeight + 6 || pre.scrollWidth > pre.clientWidth + 6);
+      || [...box.querySelectorAll('pre, .outbox')].some((pre) => pre.scrollHeight > pre.clientHeight + 6 || pre.scrollWidth > pre.clientWidth + 2);
     while (over() && size > floor) { size -= 0.5; apply(); }
     if (over()) box.dataset.overflow = 'yes';
     box.__apply = (v) => { size = v; apply(); };

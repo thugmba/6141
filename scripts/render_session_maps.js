@@ -15,7 +15,7 @@ const plain = (text) => text.replace(/`/g, '').replace(/\*+/g, '').trim();
 
 const shortName = (number, heading) => {
   const name = heading.replace(/\s*\(.*\)\s*/, ' ').replace(/:\s*$/, '').trim();
-  if (number === 2) return 'Learning Outcomes';
+  if (name.startsWith('Expected Learning Outcomes')) return 'Learning Outcomes';
   if (name.startsWith('Core Programming')) return 'Core Foundations';
   if (name.startsWith('Development Workflow')) return 'IDE Workflow';
   if (name.startsWith('Hands-On Coding')) return 'Code Examples + Quick Checks';
