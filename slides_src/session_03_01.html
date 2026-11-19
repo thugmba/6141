@@ -343,6 +343,12 @@ ol.ex3 li { font-size: 18pt; line-height: 1.25; margin: .06in 0; }
 .mdtable.files code { white-space: nowrap; overflow-wrap: normal; }
 .overview { grid-template-columns: 1fr 1.25fr; }
 .answer { font-size: inherit; }
+.stack { height: 100%; }
+.figbox { flex: 1 1 0; min-height: 0; display: flex; align-items: center; justify-content: center; }
+.figbox img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
+.figrow { display: grid; gap: .22in; width: 100%; min-height: 0; }
+.figrow > .figbox { height: 100%; }
+.figrow > .card { align-self: center; }
 </style>
 </head>
 <body>
@@ -350,28 +356,28 @@ ol.ex3 li { font-size: 18pt; line-height: 1.25; margin: .06in 0; }
   <div><span class="eyebrow">MODULE 3</span><span class="kicker">The Problem and the Result</span></div>
   <div class="title">Session 3.1: Can a Spam Filter Learn a Better Rule?</div><div class="rule"></div>
   <div class="body grid2 overview"><div class="card fitbox" data-start="23"><div class="tag">THE PROBLEM</div><ul class="tight"><li>Every email service decides: inbox or spam folder?</li><li>Two ways to be wrong: <b>missed spam</b> (a scam in your inbox) and <b>false alarm</b> (a real email hidden in spam)</li><li>The team&#x27;s old rule: <b>3 or more links = spam</b>. The number 3 was a guess</li><li>The manager asks: can a rule learned from our past emails do better, and can we trust its score?</li></ul><p class="flow">Today: the result first, then how machine learning got it</p></div><div class="card fitbox" data-start="23"><div class="tag">THE RESULT</div><table class="mdtable"><thead><tr><th>Rule</th><th>Mistakes (20 past emails)</th><th>Accuracy, past</th><th>Accuracy, 10 new</th></tr></thead><tbody><tr class="old"><td>Old rule: <code>3</code> or more links → spam</td><td><code>4</code></td><td><code>80%</code></td><td><code>60%</code></td></tr><tr class="best"><td>Learned rule: <code>4</code> or more links → spam</td><td><code>1</code></td><td><code>95%</code></td><td><code>80%</code></td></tr></tbody></table><p class="answer"><b>1.</b> The learned rule is better: it removes all 3 false alarms.</p><p class="answer"><b>2.</b> Report <b>80%</b>, not 95%: only new emails give an honest score.</p><p class="answer"><b>3.</b> Nobody guessed <code>4</code>: Python tried many thresholds and kept the one with the fewest mistakes.</p></div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 1 / 15</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 1 / 16</span></div>
 </section>
 
 <section class="slide">
   <div><span class="eyebrow">MODULE 3</span><span class="kicker">Key Ideas</span></div>
   <div class="title">AI, ML, and DL: Three Nested Ideas</div><div class="rule"></div>
-  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><table class="mdtable"><thead><tr><th>Term</th><th>What it is</th><th>Example you know</th></tr></thead><tbody><tr><td>AI (Artificial Intelligence)</td><td>any computer system that does a task we link to human thinking</td><td>a chatbot that answers questions</td></tr><tr><td>ML (Machine Learning)</td><td>AI that <b>learns a rule from past examples</b> with known answers</td><td>a spam filter that learns from emails marked as spam</td></tr><tr><td>DL (Deep Learning)</td><td>ML with many-layered neural networks, for images, sound, and text</td><td>your phone recognizing your face</td></tr></tbody></table></div><div class="card fitbox" data-start="24"><div class="tag">RULE-BASED SYSTEM</div><ul class="tight"><li>Code that follows a rule a person wrote, such as &quot;3 or more links&quot;: the old rule is one</li><li>An app sold as &quot;AI&quot; can still be rule-based. Ask: which past examples did it learn from?</li></ul></div></div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 2 / 15</span></div>
+  <div class="body"><div class="stack"><div class="figbox"><img src="../assets/session_03_01_fig_ai_ml_dl.png" alt="AI, ML, and DL nested; rule-based system compared with machine learning"></div><div class="check"><b>The one difference today:</b> in a rule-based system a person writes the rule; in machine learning the computer finds it from past examples. An app sold as "AI" can still be rule-based: ask which examples it learned from.</div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 2 / 16</span></div>
 </section>
 
 <section class="slide">
   <div><span class="eyebrow">MODULE 3</span><span class="kicker">Key Ideas</span></div>
   <div class="title">How to Judge a Rule: Four Cases and Accuracy</div><div class="rule"></div>
-  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><div class="tag">THRESHOLD = THE CUT-OFF VALUE: EMAILS WITH 3 OR MORE LINKS GO TO SPAM</div><table class="mdtable"><thead><tr><th>Email</th><th>Links</th><th>Real answer</th><th>Spam folder?</th><th>Case</th></tr></thead><tbody><tr><td>&quot;You won a free iPhone!&quot;</td><td><code>5</code></td><td>spam</td><td>yes</td><td>spam caught: correct</td></tr><tr><td>&quot;Lunch on Friday?&quot;</td><td><code>0</code></td><td>real</td><td>no</td><td>real email delivered: correct</td></tr><tr><td>&quot;Weekly news from the campus&quot;</td><td><code>3</code></td><td>real</td><td>yes</td><td><b>false alarm: mistake</b></td></tr><tr><td>&quot;Verify your bank account now&quot;</td><td><code>2</code></td><td>spam</td><td>no</td><td><b>missed spam: mistake</b></td></tr></tbody></table></div><div class="check"><b>Accuracy</b> = correct decisions / all decisions. The old rule is right on 16 of 20 past emails: <code>16 / 20 = 0.80</code> = 80%.</div></div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 3 / 15</span></div>
+  <div class="body"><div class="figrow" style="grid-template-columns: 1.55fr 1fr;"><div class="figbox"><img src="../assets/session_03_01_fig_four_cases.png" alt="The four cases of the old rule on 20 past emails"></div><div class="card fitbox" data-start="22"><div class="tag">ONE EMAIL IN EACH BOX</div><ul class="tight"><li><b>Threshold</b> = the cut-off value: 3 or more links → spam folder</li><li>&quot;You won a free iPhone!&quot; (<code>5</code> links): spam caught</li><li>&quot;Lunch on Friday?&quot; (<code>0</code>): real email delivered</li><li>&quot;Weekly news from the campus&quot; (<code>3</code>): <b>false alarm</b></li><li>&quot;Verify your bank account now&quot; (<code>2</code>): <b>missed spam</b></li><li><b>Accuracy</b> = correct / all = <code>16 / 20</code> = 80%</li></ul></div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 3 / 16</span></div>
 </section>
 
 <section class="slide">
   <div><span class="eyebrow">MODULE 3</span><span class="kicker">The Data</span></div>
   <div class="title">Three Small Files (Fictional Teaching Data)</div><div class="rule"></div>
   <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><ul class="tight"><li><code>session_03_01_dataset.csv</code>: <b>20 past emails</b> (9 spam), for Steps 1-3. Columns: <code>Message_ID</code>, <code>Subject</code>, <code>Link_Count</code>, <code>Is_Spam_Binary</code></li><li><code>session_03_01_new_messages.csv</code>: <b>10 emails from next month</b>, the same 4 columns. Step 3 uses them as &quot;the future&quot;</li><li><code>session_03_01_churn.csv</code>: <b>16 music app users</b> (7 cancelled), for Exercises 2-3. Columns: <code>User_ID</code>, <code>Weeks_Inactive_Count</code>, <code>Cancelled_Binary</code></li></ul></div><div class="check"><code>Is_Spam_Binary</code>: <code>1</code> = spam, <code>0</code> = real email. These known answers are what the computer learns from.</div></div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 4 / 15</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 4 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -394,14 +400,14 @@ print(&quot;Mistakes:&quot;, df[&quot;Is_Mistake&quot;].sum(), &quot;of&quot;, l
 9             Club dinner photos           3               0
 17   Flight booking confirmation           3               0
 Mistakes: 4 of 20</div></div><div class="check fitbox" data-start="20"><p><b>Quick Check:</b> add <code>df[&quot;Flagged&quot;].mean()</code>: the share sent to spam is <code>0.55</code></p></div></div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 5 / 15</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 5 / 16</span></div>
 </section>
 
 <section class="slide">
   <div><span class="eyebrow">MODULE 3</span><span class="kicker">Step 1</span></div>
   <div class="title">Step 1: What the Mistakes Tell Us</div><div class="rule"></div>
-  <div class="body"><div class="stack"><div class="card fitbox" data-start="20"><ul class="tight"><li>Three <b>real</b> emails with exactly 3 links went to spam: a newsletter, photos, a booking. <b>False alarms</b></li><li>One scam, &quot;Verify your bank account now&quot;, has only 2 links and reached the inbox: <b>missed spam</b></li><li>4 mistakes in 20 decisions: accuracy <b>80%</b></li></ul></div><div class="check"><b>Common mistake:</b> judging a rule by the cases you remember (the obvious spam it caught). Count every case.</div></div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 6 / 15</span></div>
+  <div class="body"><div class="stack"><div class="figbox"><img src="../assets/session_03_01_fig_old_rule_line.png" alt="The 20 past emails by link count with the old rule&#x27;s threshold and its 4 mistakes ringed"></div><div class="check"><b>False alarms:</b> 3 real emails with exactly 3 links (newsletter, photos, booking). <b>Missed spam:</b> "Verify your bank account now" (2 links). 4 of 20 wrong = <b>80%</b>.</div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 6 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -425,14 +431,21 @@ for threshold in [1, 2, 3, 4, 5, 6]:
 4+ links: mistakes 1
 5+ links: mistakes 2
 6+ links: mistakes 4</div></div><div class="check fitbox" data-start="20"><p><b>Quick Check:</b> use <code>range(1, 10, 2)</code>: the best of <code>1, 3, 5, 7, 9</code> is <code>5</code>; the step skipped <code>4</code></p></div></div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 7 / 15</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 7 / 16</span></div>
 </section>
 
 <section class="slide">
   <div><span class="eyebrow">MODULE 3</span><span class="kicker">Step 2</span></div>
   <div class="title">Step 2: Why 4 Links Is the Best Balance</div><div class="rule"></div>
-  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><table class="mdtable"><thead><tr><th>Spam if links are</th><th>Missed spam</th><th>False alarms</th><th>Mistakes</th></tr></thead><tbody><tr><td><code>1</code> or more links</td><td><code>0</code></td><td><code>8</code></td><td><code>8</code></td></tr><tr><td><code>2</code> or more links</td><td><code>0</code></td><td><code>5</code></td><td><code>5</code></td></tr><tr class="old"><td><code>3</code> or more links (old rule)</td><td><code>1</code></td><td><code>3</code></td><td><code>4</code></td></tr><tr class="best"><td><code>4</code> or more links (learned)</td><td><code>1</code></td><td><code>0</code></td><td><code>1</code></td></tr><tr><td><code>5</code> or more links</td><td><code>2</code></td><td><code>0</code></td><td><code>2</code></td></tr><tr><td><code>6</code> or more links</td><td><code>4</code></td><td><code>0</code></td><td><code>4</code></td></tr></tbody></table></div><div class="check">Too low: real emails go to spam. Too high: spam gets through. The computer does not "understand" spam; it finds the rule that best matches the known answers.</div></div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 8 / 15</span></div>
+  <div class="body"><div class="figrow" style="grid-template-columns: 1.6fr 1fr;"><div class="figbox"><img src="../assets/session_03_01_fig_mistakes_by_threshold.png" alt="False alarms and missed spam for thresholds 1 to 6"></div><div class="card fitbox" data-start="22"><ul class="tight"><li><b>Too low</b> (1 or 2 links): many real emails go to spam (blue)</li><li><b>Too high</b> (5 or 6 links): spam gets through (red)</li><li><b>4 links</b> has the fewest mistakes: <code>1</code></li><li>The computer does not &quot;understand&quot; spam; it finds the rule that best matches the known answers</li></ul></div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 8 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Step 2</span></div>
+  <div class="title">Step 2: Move the Line from 3 to 4 Links</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="figbox"><img src="../assets/session_03_01_fig_learned_rule_line.png" alt="The learned rule at 4 links on the 20 past emails, with its 1 mistake ringed"></div><div class="check">Compare with Step 1: one step to the right, the three real emails with 3 links return to the inbox, and the same spam is still caught. Only the 2-link scam is left.</div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 9 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -453,28 +466,28 @@ for name, threshold in [(&quot;Old rule&quot;, 3), (&quot;Learned rule&quot;, 4)
     print(f&quot;{name} ({threshold}+ links): past {accuracy(past, threshold):.0%}, &quot;
           f&quot;new {accuracy(new, threshold):.0%}&quot;)</pre></div><div class="notes"><div class="card fitbox how" data-start="21"><div class="tag">HOW IT WORKS</div><ul class="tight"><li>The function takes the table too, so one function scores past and new emails</li><li><code>==</code> marks correct decisions; <code>.mean()</code> turns them into accuracy</li><li><code>:.0%</code> prints <code>0.95</code> as <code>95%</code></li></ul></div><div class="card fitbox out" data-start="21"><div class="tag">OUTPUT</div><div class="outbox">Old rule (3+ links): past 80%, new 60%
 Learned rule (4+ links): past 95%, new 80%</div></div><div class="check fitbox" data-start="20"><p><b>Quick Check:</b> add <code>(&quot;Strict rule&quot;, 6)</code>: past <code>80%</code>, new <code>80%</code></p></div></div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 9 / 15</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 10 / 16</span></div>
 </section>
 
 <section class="slide">
   <div><span class="eyebrow">MODULE 3</span><span class="kicker">Step 3</span></div>
   <div class="title">Step 3: Why the Score Drops on New Emails</div><div class="rule"></div>
-  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><div class="tag">THE NEW EMAILS SHOW CASES THE PAST EMAILS DID NOT</div><table class="mdtable"><thead><tr><th>New email</th><th>Links</th><th>Real answer</th><th>Learned rule</th><th>Case</th></tr></thead><tbody><tr><td>&quot;Online course newsletter&quot;</td><td><code>4</code></td><td>real</td><td>spam folder</td><td>false alarm</td></tr><tr><td>&quot;Reset your password here&quot;</td><td><code>2</code></td><td>spam</td><td>inbox</td><td>missed spam</td></tr></tbody></table><ul class="tight"><li>A scam with few links looks real when links are the only clue</li><li>Real spam filters use many clues: the sender, the words, a new address</li></ul></div><div class="check"><b>Common mistake:</b> reporting the past score ("95% accurate"). It shows how well the rule fits the emails it was chosen from, not next month.</div></div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 10 / 15</span></div>
+  <div class="body"><div class="figrow" style="grid-template-columns: 1.75fr 1fr;"><div class="figbox"><img src="../assets/session_03_01_fig_past_vs_new.png" alt="Accuracy on past and new emails for both rules"></div><div class="card fitbox" data-start="22"><div class="tag">NEW CASES THE PAST DID NOT SHOW</div><ul class="tight"><li>&quot;Online course newsletter&quot; (<code>4</code> links, real): false alarm</li><li>&quot;Reset your password here&quot; (<code>2</code> links, spam): missed spam</li><li>Links alone cannot catch every scam; real filters use many clues</li></ul><p><b>Common mistake:</b> reporting the past score ("95%"). Compare rules by the red bars.</p></div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 11 / 16</span></div>
 </section>
 
 <section class="slide">
   <div><span class="eyebrow">MODULE 3</span><span class="kicker">Summary</span></div>
   <div class="title">What Machine Learning Did</div><div class="rule"></div>
-  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><table class="mdtable"><thead><tr><th>Step</th><th>Today</th><th>Later in Module 3</th></tr></thead><tbody><tr><td>1. Collect examples with known answers</td><td>20 emails marked spam or not</td><td>loan applicants (3.2), property sales (3.3)</td></tr><tr><td>2. Try many rules, keep the fewest mistakes</td><td>thresholds <code>1</code> to <code>6</code>; best <code>4</code> links</td><td>Scikit-Learn&#x27;s <code>.fit()</code> does the search (3.3)</td></tr><tr><td>3. Test on data not used to choose the rule</td><td>10 new emails: 80%, not 95%</td><td>train/test split (3.2), test scores (3.3, 3.4)</td></tr></tbody></table></div><div class="check"><b>Remember:</b> try many rules on past examples, keep the one with the fewest mistakes, then judge it only on new examples.</div></div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 11 / 15</span></div>
+  <div class="body"><div class="stack"><div class="figbox"><img src="../assets/session_03_01_fig_ml_steps.png" alt="Collect examples, search for the best rule, test on new data"></div><div class="card fitbox" data-start="22"><ul class="tight"><li>Later in Module 3: music app users (3.2) and property sales (3.3) as examples</li><li>Scikit-Learn&#x27;s <code>.fit()</code> does the search for you (3.3); the train/test split keeps new data aside (3.2)</li></ul></div><div class="check"><b>Remember:</b> try many rules on past examples, keep the one with the fewest mistakes, then judge it only on new examples.</div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 12 / 16</span></div>
 </section>
 
 <section class="slide">
   <div><span class="eyebrow">MODULE 3</span><span class="kicker">Summary</span></div>
   <div class="title">When Is a Written Rule Enough?</div><div class="rule"></div>
   <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><table class="mdtable"><thead><tr><th>Decision</th><th>Rule or ML?</th><th>Why</th></tr></thead><tbody><tr><td>Student discount with a valid student ID</td><td>rule</td><td>the policy is clear and never guesses</td></tr><tr><td>Free delivery for orders over $30</td><td>rule</td><td>a fixed, written shop policy</td></tr><tr><td>Which emails are spam?</td><td>ML</td><td>spammers keep changing their tricks</td></tr><tr><td>Which songs will you like next?</td><td>ML</td><td>many signals combine in ways no one can write down</td></tr><tr><td>Unlocking a phone with your face</td><td>ML (deep learning)</td><td>images need many-layered models</td></tr></tbody></table></div></div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 12 / 15</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 13 / 16</span></div>
 </section>
 
 <section class="slide">
@@ -497,21 +510,21 @@ def mistake_report(threshold):
 <span class="sec"># 3. Output: the old rule and the learned rule</span>
 mistake_report(3)
 mistake_report(4)</pre></div><div class="notes"><div class="card fitbox how" data-start="21"><div class="tag">TYPE, RUN, INTERPRET</div><ul class="tight"><li><code>(flagged == False) &amp; is_spam</code> = spam that reached the inbox</li><li><code>df.loc[missed, &quot;Subject&quot;]</code> lists those emails</li><li>In two comment lines: which mistake did the learned rule remove? Why can no link threshold catch &quot;Verify your bank account now&quot;?</li></ul></div><div class="check fitbox" data-start="20"><p><b>Check:</b> old rule: missed spam <code>1</code>, false alarms <code>3</code>; learned rule: missed spam <code>1</code>, false alarms <code>0</code></p></div></div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 13 / 15</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 14 / 16</span></div>
 </section>
 
 <section class="slide">
   <div><span class="eyebrow">MODULE 3</span><span class="kicker">Exercise 2: Applied</span></div>
   <div class="title">Exercise 2: Who Will Cancel the Music App?</div><div class="rule"></div>
   <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><p><b>Goal:</b> the app sends a &quot;come back&quot; discount to users inactive for <code>2</code>+ weeks. Is there a better threshold?</p><p><b>Script:</b> <code>YourName_S31_cancel.py</code></p><ul class="tight"><li>Load <code>data/session_03_01_churn.csv</code>; print the cancel share with <code>.mean()</code></li><li>Write <code>count_mistakes(threshold)</code> on <code>Weeks_Inactive_Count</code>, as in Step 2</li><li>Try <code>range(1, 7)</code> and print the accuracy of the best threshold and of <code>2</code> weeks</li></ul></div><div class="check"><b>Check:</b> best <code>3</code> weeks: accuracy <code>0.875</code> vs <code>0.8125</code></div></div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 14 / 15</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 15 / 16</span></div>
 </section>
 
 <section class="slide">
   <div><span class="eyebrow">MODULE 3</span><span class="kicker">Exercise 3: Advanced</span></div>
   <div class="title">Exercise 3: Let the Computer Search</div><div class="rule"></div>
   <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><p><b>Goal:</b> write <code>find_best_threshold(data, feature, target)</code> that tries every value in a column and keeps the best</p><p><b>Script:</b> <code>YourName_S31_search.py</code></p><ul class="tight"><li>Run it on the emails and on the music app users</li><li>Apply the best email threshold to the 10 new emails</li><li>Requirements and hints: section 13 of the reading</li></ul></div><div class="check"><b>Check:</b> emails: best <code>4</code> links, <code>1</code> mistake (<code>20</code> tried); users: best <code>3</code> weeks (<code>16</code> tried); new emails: <code>8</code> of <code>10</code> correct</div></div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 15 / 15</span></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 16 / 16</span></div>
 </section>
 
 <script>

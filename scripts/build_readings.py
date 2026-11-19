@@ -73,6 +73,12 @@ def convert(module, session, title, body):
             if img and not line.startswith(" "):
                 out.append(f"\\noindent ![](../../{img.group(1)}){{width=100%}}\n")
                 continue
+            if img:
+                # a diagram inside a section keeps its indent and its alt text
+                indent = line[:len(line) - len(line.lstrip())]
+                alt = re.match(r"!\[([^\]]*)\]", stripped).group(1).replace('"', "'")
+                out.append(f'{indent[2:]}![](../../{img.group(1)}){{width=95% fig-alt="{alt}"}}')
+                continue
             if stripped.startswith(("* **Lecture Presentation:**", "* **Reading (PDF):**")):
                 continue
             head = re.match(r"^\* \*\*(.+?)\*\*\s*(.*)$", line)
