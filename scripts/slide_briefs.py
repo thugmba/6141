@@ -57,9 +57,9 @@ EXERCISES = {
         ("One function for the whole night", "10 records, 5 coupons, `needs_review: True`"),
     ],
     "4.2": [
-        ("Price a campaign for customers at `0.5` or above", "net benefit `$1,899.68`; ROI `633.2`%"),
-        ("Highest ROI or most money? Test thresholds 0.3 to 0.8", "best ROI at `0.8`; most money at `0.4`"),
-        ("Choose the best offer for each customer", "VIP for 4, Call for 3, None for 3"),
+        ("The business case at one cut-off", "3 members; net NT$`689.36`; ROI `510.6`%"),
+        ("Highest ROI or most profit?", "best ROI `0.7`; best net `0.3` (NT$`1,348.89`)"),
+        ("The best offer for each member", "7 BOGO, 1 coupon: NT$`2,059.42`"),
     ],
     "4.3": [
         ("Simulate a wider range of price changes", "gross margins from `52.5`% to `55.0`%"),

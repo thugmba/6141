@@ -325,234 +325,222 @@ ol.ex3 li { font-size: 18pt; line-height: 1.25; margin: .06in 0; }
 .sm-item code { font-size: .85em; white-space: normal; overflow-wrap: anywhere; }
 /* end session map */
 
+
+.stack { display: flex; flex-direction: column; gap: .14in; width: 100%; min-height: 0; }
+.answer { font-size: 19pt; margin: .06in 0; line-height: 1.25; }
+.answer b { color: #991B1B; }
+.mdtable td.good { background: #DCFCE7; font-weight: bold; }
+.mdtable td.bad { background: #FEE2E2; }
+.mdtable tr.best td { background: #DCFCE7; font-weight: bold; }
+.mdtable tr.old td { background: #FEF3C7; }
+.code-panel.w55 { width: 55%; }
+.code-panel.w48 { width: 48%; }
+.lead-q { font-size: 22pt; font-style: italic; color: #991B1B; margin: .06in 0 .1in; }
+.mdtable td, .mdtable th { vertical-align: middle; }
+.check { font-size: 22pt; }
+.check p { margin: 0; }
+.stack .card { flex-shrink: 0; }
+.mdtable.files code { white-space: nowrap; overflow-wrap: normal; }
+.overview { grid-template-columns: 1fr 1.25fr; }
+.answer { font-size: inherit; }
+.outbox.wrap { white-space: pre-wrap; overflow-wrap: anywhere; }
+.code-panel.w46 { width: 46%; }
+.stack { height: 100%; }
+.figbox { flex: 1 1 0; min-height: 0; display: flex; align-items: center; justify-content: center; }
+.figbox img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
+.figrow { display: grid; gap: .22in; width: 100%; min-height: 0; }
+.figrow > .figbox { height: 100%; }
+.figrow > .card { align-self: center; }
 </style>
 </head>
 <body>
-
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">1-2. Purpose and Outcomes</span></div>
-  <div class="title">Session 4.2: AI Applications in Business Decision-Making Part 1: Predictive Customer Analytics and Churn</div><div class="rule"></div>
-  <div class="body grid2 overview"><div class="card fitbox"><div class="tag">THE BUSINESS SITUATION</div><ul class="tight"><li>A subscription telecom company loses customers every month to churn (customers cancelling their contract)</li><li>Its retention team can call customers or assign them an account manager, but every contact costs money, and calling customers who would stay anyway wastes it</li><li>The head of customer retention asks: which of our current customers should we contact first, and will the campaign pay for itself? Today, you turn churn predictions into revenue at risk and a campaign plan with a measurable return</li></ul><p class="flow">Today's flow: 60 min lecture, then 120 min hands-on lab</p></div><div class="card fitbox"><div class="tag">EXPECTED OUTCOMES</div><h2>By the end of today, you will be able to:</h2><ol class="biz"><li><span class="q">"Who is likely to leave?"</span> Train a churn model on past customers and score current customers with a churn probability</li><li><span class="q">"How much money is at stake?"</span> Calculate revenue at risk (churn probability x yearly customer value) and rank customers by it</li><li><span class="q">"Will the campaign pay off?"</span> Calculate a campaign&#x27;s expected net benefit and ROI (Return on Investment), choose who to target, and fix a <code>ValueError</code> caused by missing feature columns</li></ol></div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">The Problem and the Result</span></div>
+  <div class="title">Session 4.2: Which Members Should Get Which Offer?</div><div class="rule"></div>
+  <div class="body grid2 overview" style="grid-template-columns: 1fr 1.2fr;"><div class="card fitbox" data-start="22"><div class="tag">THE PROBLEM</div><ul class="tight"><li>A drink shop&#x27;s membership app: some regulars slowly stop coming</li><li>Offers: a <b>free drink</b> (NT$45, brings back 25%) or a <b>BOGO month</b> (NT$150, 45%)</li><li>Members bring in very different profit: NT$30 to NT$265 a month</li><li>The owner asks: who is about to stop, how much profit is at stake, and which offer pays?</li></ul><p class="flow">Today: the result first, then the steps</p></div><div class="card fitbox" data-start="22"><div class="tag">THE RESULT (12 CURRENT MEMBERS)</div><table class="mdtable"><thead><tr><th>Plan</th><th>Contacted</th><th>Net benefit</th></tr></thead><tbody><tr class="old"><td>Coupon if chance 0.5 or more</td><td>3</td><td>NT$689</td></tr><tr><td>Coupon if chance 0.3 or more</td><td>7</td><td>NT$1,349</td></tr><tr><td>Coupon where it pays</td><td>8</td><td>NT$1,441</td></tr><tr class="best"><td>Best offer per member</td><td>8</td><td>NT$2,059</td></tr></tbody></table><p class="answer">Profit at risk: <b>NT$7,355</b>. Judge each member by expected money, not by one cut-off.</p></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 1 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Session Map</span></div>
-  <div class="title">Session Map: Follow the Numbers</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: .14in;"><div class="sm-q"><b>Today's question:</b> Which of our current customers should we contact first, and will the campaign pay for itself?</div><div class="sm-phases"><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">1</span><span><b>Why it matters</b><small>Lecture, part 1</small></span></div><p class="sm-item"><i>1.</i><span><b>Session Purpose</b><span class="d">answer today&#x27;s question</span></span></p><p class="sm-item"><i>2.</i><span><b>Learning Outcomes</b><span class="d">3 skills you will show today</span></span></p><p class="sm-item"><i>3.</i><span><b>Business Context</b><span class="d">Pricing a Retention Campaign</span></span></p><p class="sm-item"><i>4.</i><span><b>Data Basics</b><span class="d">Learn from the Past, Act on the Present</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">2</span><span><b>Learn the tools</b><small>Lecture, part 2</small></span></div><p class="sm-item"><i>5.</i><span><b>Lab Dataset</b><span class="d">2 CSVs</span></span></p><p class="sm-item"><i>6.</i><span><b>Keywords</b><span class="d">6 terms</span></span></p><p class="sm-item"><i>7.</i><span><b>Core Foundations</b><span class="d">4 ideas, one at a time</span></span></p><p class="sm-item"><i>8.</i><span><b>IDE Setup</b><span class="d">name files, run in the Terminal</span></span></p><p class="sm-item"><i>9.</i><span><b>Code Examples</b><span class="d">3 demos + Quick Checks</span></span></p><p class="sm-item"><i>10.</i><span><b>References</b><span class="d">3 official docs</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox sm-p3" data-start="22"><div class="sm-head"><span class="sm-step">3</span><span><b>Practice</b><small>Lab</small></span></div><p class="sm-item"><i>11.</i><span><b>Exercise 1: Guided</b><span class="d">Campaign Business Case</span></span></p><p class="sm-item"><i>12.</i><span><b>Exercise 2: Applied</b><span class="d">Highest ROI or Most Money?</span></span></p><p class="sm-item"><i>13.</i><span><b>Exercise 3: Advanced</b><span class="d">The Best Offer for Each Customer</span></span></p></div></div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Key Ideas</span></div>
+  <div class="title">Learn from the Past, Act on the Present</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><table class="mdtable"><thead><tr><th>File</th><th>Members</th><th>Outcome known?</th><th>Used to</th></tr></thead><tbody><tr><td>History</td><td>30 past members</td><td>yes: stopped or stayed</td><td>train the churn model</td></tr><tr><td>Active</td><td>12 current members</td><td>no, not yet</td><td>score and choose offers</td></tr></tbody></table></div><div class="check">An offer can only help members who have not left yet. <b>Churn</b> = customers leaving.</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 2 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">3. Business Context</span></div>
-  <div class="title">Pricing a Retention Campaign</div><div class="rule"></div>
-  <div class="body grid2" style="grid-template-columns: 1fr 1.15fr;"><div class="card fitbox"><div class="tag">KEY POINTS</div><ul class="tight"><li>Four ideas, one example (current customer <code>ACT-101</code>):</li><li>CLV (Customer Lifetime Value) is the total value of a customer over the whole relationship, often several years.</li><li>A campaign is worth it for a customer when expected saved revenue is larger than the contact cost.</li><li>Net benefit vs ROI: net benefit = saved revenue - cost, in dollars; ROI = net benefit / cost x 100, in percent.</li></ul></div><div class="card fitbox"><div class="tag">SEE IT ON REAL DATA</div><table class="mdtable"><tr><th>Term</th><th>Meaning</th><th>Example</th></tr><tr><td>Churn probability</td><td>the model&#x27;s estimate that this customer leaves within 60 days</td><td><code>0.876</code></td></tr><tr><td>Annual value</td><td>monthly fee x 12: one year of revenue from this customer</td><td><code>$2,399.88</code></td></tr><tr><td>Revenue at risk</td><td>churn probability x annual value: the revenue we expect to lose</td><td><code>$2,102.29</code></td></tr><tr><td>Expected saved revenue</td><td>revenue at risk x success rate of the campaign</td><td><code>$2,102.29 x 0.40 = $840.92</code></td></tr></table></div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Key Ideas</span></div>
+  <div class="title">Expected Value: A Chance Times an Amount</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="figbox"><img src="../assets/session_04_02_fig_expected_value.png" alt="Expected value of a coupon for one member"></div><div class="card fitbox" data-start="22"><ul class="tight"><li><b>Net benefit</b> = saved profit - cost (NT$): what the campaign adds to profit</li><li><b>ROI</b> = net benefit / cost x 100 (%): what each NT$1 spent brings back</li></ul></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 3 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">4. Data Basics</span></div>
-  <div class="title">Learn from the Past, Act on the Present</div><div class="rule"></div>
-  <div class="body grid2" style="grid-template-columns: 1fr 1.15fr;"><div class="card fitbox"><div class="tag">KEY POINTS</div><ul class="tight"><li>Two groups of customers, two files:</li><li>A retention campaign only makes sense for customers who have not left yet.</li><li>What drives churn in our history: after scaling, the model&#x27;s coefficients are <code>-0.718</code> for tenure (longer customers stay), <code>+0.897</code> for support calls, and <code>+0.878</code> for usage drop (more calls and falling usage signal leaving).</li></ul></div><div class="card fitbox"><div class="tag">AT A GLANCE</div><table class="mdtable"><tr><th>File</th><th>Customers</th><th>Has the answer (<code>Churned</code>)?</th><th>Used to</th></tr><tr><td>History</td><td>14 past customers</td><td>yes</td><td>train the model</td></tr><tr><td>Active</td><td>10 current customers</td><td>no, not yet known</td><td>score and target</td></tr></table></div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">The Data</span></div>
+  <div class="title">Two Small Files (Fictional Teaching Data)</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><ul class="tight"><li><code>session_04_02_dataset.csv</code>: <b>30 past members</b>; 11 stopped coming within 60 days</li><li><code>session_04_02_active.csv</code>: <b>12 current members</b>, same columns, no outcome</li><li>Clues: months as member, visits last month, days since last visit</li><li><code>Monthly_Profit_TWD</code>: the shop&#x27;s profit from the member per month (NT$30-265)</li></ul></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 4 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">5. Lab Practice Dataset</span></div>
-  <div class="title">The Data for Today</div><div class="rule"></div>
-  <div class="body grid2" style="grid-template-columns: 1fr 2.2fr;"><div class="card fitbox"><div class="tag">FILES</div><ul class="tight"><li><code>data/session_04_02_dataset.csv</code></li><li><code>data/session_04_02_active.csv</code></li></ul><p>Columns:</p></div><div class="card fitbox"><div class="tag">COLUMNS</div><table class="mdtable cols"><tr><td><code>Subscriber_ID</code></td><td>Customer code (<code>SUB-...</code> in the history, <code>ACT-...</code> for active customers).</td></tr><tr><td><code>Tenure_Months_Count</code></td><td>Months as a customer.</td></tr><tr><td><code>Monthly_Subscription_Fee_USD</code></td><td>Monthly fee in U.S. Dollars.</td></tr><tr><td><code>Customer_Support_Calls_Count</code></td><td>Calls to customer support in the last 90 days.</td></tr><tr><td><code>Usage_Drop_Last_30_Days_Pct</code></td><td>How much the customer&#x27;s use of the service fell in the last 30 days, in percent.</td></tr></table></div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Step 1</span></div>
+  <div class="title">Step 1: Who Is About to Stop Coming?</div><div class="rule"></div>
+  <div class="body"><div class="code-panel w55 fitbox" data-start="21" data-floor="13"><div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S42_step_1.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div><pre><span class="sec"># 1. Input: 30 past members with their outcome, and 12 current members</span>
+import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+history = pd.read_csv(&quot;data/session_04_02_dataset.csv&quot;, index_col=&quot;Member_ID&quot;)
+active = pd.read_csv(&quot;data/session_04_02_active.csv&quot;, index_col=&quot;Member_ID&quot;)
+features = [&quot;Months_As_Member_Count&quot;, &quot;Visits_Last_Month_Count&quot;,
+            &quot;Days_Since_Last_Visit_Count&quot;]
+
+<span class="sec"># 2. Process: learn from the past members, then score the current ones</span>
+model = make_pipeline(StandardScaler(), LogisticRegression())
+model.fit(history[features], history[&quot;Stopped_Visiting_Binary&quot;])
+active[&quot;Chance&quot;] = model.predict_proba(active[features])[:, 1].round(3)
+
+<span class="sec"># 3. Output: the current members, most likely to stop first</span>
+ranked = active.sort_values(&quot;Chance&quot;, ascending=False)
+print(ranked[[&quot;Days_Since_Last_Visit_Count&quot;, &quot;Chance&quot;]])</pre></div><div class="notes"><div class="card fitbox how" data-start="21"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>history</code> trains the model; <code>active</code> is only scored</li><li>Same pipeline as 3.4 and 4.1: scale, then classify</li></ul></div><div class="card fitbox out" data-start="21"><div class="tag">OUTPUT</div><div class="outbox">           Days_Since_Last_Visit_Count  Chance
+Member_ID                                     
+NOW-209                             29   0.748
+NOW-203                             51   0.736
+NOW-201                             53   0.715
+NOW-210                             33   0.426
+NOW-204                             37   0.396
+NOW-212                             22   0.389
+... (6 more members)</div></div><div class="check fitbox" data-start="20"><p><b>Quick Check:</b> past stop rate: <code>0.37</code> (11 of 30)</p></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 5 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">6. Keywords</span></div>
-  <div class="title">6 Terms You Need Today</div><div class="rule"></div>
-  <div class="body grid3" style="grid-template-rows: repeat(2, 1fr);"><div class="card fitbox"><div class="tag">TERM 1</div><h2><code>Churn</code></h2><p class="what"><b>What:</b> customers ending their relationship with the company</p><p class="why"><b>Why:</b> in subscription businesses, keeping a customer is usually cheaper than winning a new one</p></div><div class="card fitbox"><div class="tag">TERM 2</div><h2><code>Churn Probability</code></h2><p class="what"><b>What:</b> the model&#x27;s estimate, from 0 to 1, that a customer will leave</p><p class="why"><b>Why:</b> ranks customers by risk instead of treating everyone the same</p></div><div class="card fitbox"><div class="tag">TERM 3</div><h2><code>Revenue at Risk</code></h2><p class="what"><b>What:</b> churn probability x annual value</p><p class="why"><b>Why:</b> turns a probability into dollars a manager can budget against</p></div><div class="card fitbox"><div class="tag">TERM 4</div><h2><code>Customer Lifetime Value (CLV)</code></h2><p class="what"><b>What:</b> the total value of a customer over the whole relationship</p><p class="why"><b>Why:</b> decides how much a customer is worth saving</p></div><div class="card fitbox"><div class="tag">TERM 5</div><h2><code>Net Benefit</code> and <code>ROI</code></h2><p class="what"><b>What:</b> saved revenue minus cost (dollars), and net benefit divided by cost (percent)</p><p class="why"><b>Why:</b> the two numbers a finance team asks for before approving a campaign</p></div><div class="card fitbox"><div class="tag">TERM 6</div><h2><code>Targeting Threshold</code></h2><p class="what"><b>What:</b> the minimum churn probability for a customer to be contacted</p><p class="why"><b>Why:</b> sets the size and cost of the campaign</p></div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Step 1</span></div>
+  <div class="title">Step 1: Three Members Are Very Likely to Stop</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><ul class="tight"><li><code>NOW-209</code>, <code>NOW-203</code>, <code>NOW-201</code>: chances above <code>0.7</code></li><li><code>NOW-201</code> and <code>NOW-203</code>: no visit for over 50 days</li><li><code>NOW-209</code>: last visit 29 days ago, but no visit at all last month</li><li>Four members are clearly safe (chances below <code>0.03</code>)</li></ul></div><div class="check"><b>Common mistake:</b> training on the current members. They have no outcome yet: they are only scored.</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 6 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">7. Core Foundations</span></div>
-  <div class="title">How It Works</div><div class="rule"></div>
-  <div class="body f7" data-uniform style="display:grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); gap: .16in;"><div class="card fitbox" data-start="24"><div class="tag">7.1</div><h2>Learn from the past, predict the present</h2><p class="remember"><b>Remember:</b> fit on the past, score the present.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.2</div><h2>Expected value</h2><p class="remember"><b>Remember:</b> revenue at risk = probability x value; rank by dollars.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.3</div><h2>The economics of a campaign</h2><p class="remember"><b>Remember:</b> contact a customer only when expected savings exceed the contact cost.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.4</div><h2>Matching the offer to the customer</h2><p class="remember"><b>Remember:</b> set a default, then overwrite from the cheapest offer to the most valuable.</p></div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Step 2</span></div>
+  <div class="title">Step 2: How Much Profit Is at Risk?</div><div class="rule"></div>
+  <div class="body"><div class="code-panel w55 fitbox" data-start="21" data-floor="13"><div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S42_step_2.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div><pre><span class="sec"># 1. Input: score the current members, as in Step 1</span>
+import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+history = pd.read_csv(&quot;data/session_04_02_dataset.csv&quot;, index_col=&quot;Member_ID&quot;)
+active = pd.read_csv(&quot;data/session_04_02_active.csv&quot;, index_col=&quot;Member_ID&quot;)
+features = [&quot;Months_As_Member_Count&quot;, &quot;Visits_Last_Month_Count&quot;,
+            &quot;Days_Since_Last_Visit_Count&quot;]
+model = make_pipeline(StandardScaler(), LogisticRegression())
+model.fit(history[features], history[&quot;Stopped_Visiting_Binary&quot;])
+active[&quot;Chance&quot;] = model.predict_proba(active[features])[:, 1].round(3)
+
+<span class="sec"># 2. Process: one year of profit, and the part of it that is at risk</span>
+active[&quot;Annual_Profit&quot;] = active[&quot;Monthly_Profit_TWD&quot;] * 12
+active[&quot;Profit_At_Risk&quot;] = (active[&quot;Chance&quot;] * active[&quot;Annual_Profit&quot;]).round(0)
+
+<span class="sec"># 3. Output: the members ranked by profit at risk, and the total</span>
+ranked = active.sort_values(&quot;Profit_At_Risk&quot;, ascending=False)
+print(ranked[[&quot;Chance&quot;, &quot;Annual_Profit&quot;, &quot;Profit_At_Risk&quot;]])
+total = active[&quot;Profit_At_Risk&quot;].sum()
+print(f&quot;Total profit at risk: NT${total:,.0f}&quot;)</pre></div><div class="notes"><div class="card fitbox how" data-start="21"><div class="tag">HOW IT WORKS</div><ul class="tight"><li>Yearly profit = monthly profit x 12</li><li>Profit at risk = chance x yearly profit: the expected loss</li></ul></div><div class="card fitbox out" data-start="21"><div class="tag">OUTPUT</div><div class="outbox">           Chance  Annual_Profit  Profit_At_Risk
+Member_ID                                       
+NOW-209     0.748           2040          1526.0
+NOW-201     0.715           1860          1330.0
+NOW-204     0.396           3180          1259.0
+NOW-212     0.389           2280           887.0
+NOW-205     0.341           1980           675.0
+NOW-202     0.296           1860           551.0
+... (6 more members)
+Total profit at risk: NT$7,355</div></div><div class="check fitbox" data-start="20"><p><b>Quick Check:</b> the top 3 hold <code>0.56</code> of the risk</p></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 7 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">7. Core Foundations: On Real Data</span></div>
-  <div class="title">7.1 Learn from the past, predict the present: On Real Data</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: .12in;"><div class="card fitbox" data-start="19"><div class="tag">SEE IT ON REAL DATA</div><table class="mdtable"><tr><th>Average of past customers</th><th>Stayed (9)</th><th>Left (5)</th></tr><tr><td>Months as a customer</td><td><code>36.9</code></td><td><code>6.8</code></td></tr><tr><td>Support calls (last 90 days)</td><td><code>1.1</code></td><td><code>4.6</code></td></tr><tr><td>Usage drop (last 30 days)</td><td><code>9.4</code>%</td><td><code>46.0</code>%</td></tr></table></div><div class="check"><b>Remember:</b> fit on the past, score the present.</div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Step 2</span></div>
+  <div class="title">Step 2: Ranked by Money, the Order Changes</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="figbox"><img src="../assets/session_04_02_fig_chance_vs_risk.png" alt="Ranked by chance and by profit at risk"></div><div class="check"><code>NOW-203</code>: very likely to stop, but only NT$600 a year. <code>NOW-204</code>: a lower chance, but the most profit (NT$3,180).</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 8 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Code Demonstration 1</span></div>
-  <div class="title">Learn from the Past, Score the Present</div><div class="rule"></div>
-  <div class="body">
-    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
-      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S42_demo_1.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
-<pre><span class="sec"># 1. Input: past customers (with outcomes) and current customers</span>
-import pandas as pd
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LogisticRegression
-history = pd.read_csv(&quot;data/session_04_02_dataset.csv&quot;)
-active = pd.read_csv(&quot;data/session_04_02_active.csv&quot;)
-features = [&quot;Tenure_Months_Count&quot;, &quot;Customer_Support_Calls_Count&quot;,
-            &quot;Usage_Drop_Last_30_Days_Pct&quot;]
-
-<span class="sec"># 2. Process: train on history, then score the active customers</span>
-model = Pipeline([
-    (&quot;scale&quot;, StandardScaler()),
-    (&quot;classify&quot;, LogisticRegression()),
-])
-model.fit(history[features], history[&quot;Churned_Within_60_Days_Binary&quot;])
-active[&quot;Churn_Probability&quot;] = model.predict_proba(active[features])[:, 1].round(3)
-
-<span class="sec"># 3. Output: the active customers, most at risk first</span>
-print(active.sort_values(&quot;Churn_Probability&quot;, ascending=False)[
-    [&quot;Subscriber_ID&quot;, &quot;Tenure_Months_Count&quot;, &quot;Churn_Probability&quot;]
-])
-</pre>
-    </div>
-    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li>Two files are loaded: <code>history</code> (past customers, with the answer) and <code>active</code> (current customers, without it).</li><li>The <code>Pipeline</code> scales the 3 features and fits a logistic regression on the history (section 7.1).</li><li><code>model.predict_proba(active[features])[:, 1]</code> scores the current customers: the second column is the probability of leaving.</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><ul class="tight"><li>The top 3 have all been customers for less than 8 months, like the past customers who left.</li></ul></div></div>
-  </div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Step 2</span></div>
+  <div class="title">Why Multiply by the Chance?</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><ul class="tight"><li>A member with a <code>0.4</code> chance costs, on average, 40% of their profit, not 100%</li><li>The expected value is a fair average over many members like them</li><li>One year of profit is a cautious basis; a member&#x27;s whole value over many years is the <b>CLV</b> (Customer Lifetime Value)</li></ul></div><div class="check">Total profit at risk for the 12 members: <b>NT$7,355</b>.</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 9 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Quick Check 1</span></div>
-  <div class="title">Quick Check 1: <code>named_steps</code> and <code>.coef_</code></div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid2 qc" style="flex: 1; min-height: 0;">
-      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>named_steps</code> and <code>.coef_</code></h2><p><code>model.named_steps[&quot;classify&quot;].coef_</code> returns the learned coefficients of the logistic regression inside the pipeline. Why: shows which signals push a customer toward leaving.</p></div>
-      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add one line to part <b>3. Output</b>: <code>print(dict(zip(features, model.named_steps[&quot;classify&quot;].____[0].round(3).tolist())))</code></p></div>
-    </div>
-    <div class="check"><b>Check:</b> tenure <code>-0.718</code>, support calls <code>0.897</code>, usage drop <code>0.878</code>. A negative coefficient lowers the churn probability; a positive one raises it.</div>
-  </div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Step 3</span></div>
+  <div class="title">Step 3: Is a Coupon Worth It for Each Member?</div><div class="rule"></div>
+  <div class="body"><div class="code-panel w55 fitbox" data-start="21" data-floor="13"><div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S42_step_3.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div><pre><span class="sec"># 1. Input: score the members and add Annual_Profit, as in Step 2</span>
+# (full code: section 8 of the reading)
+
+<span class="sec"># 2. Process: the expected net value of a free-drink coupon for each member</span>
+COUPON_COST = 45        # a free drink costs the shop NT$45
+SUCCESS_RATE = 0.25     # a coupon brings back 1 in 4 members who would stop
+saved = active[&quot;Chance&quot;] * SUCCESS_RATE * active[&quot;Annual_Profit&quot;]
+active[&quot;Coupon_Net&quot;] = (saved - COUPON_COST).round(0)
+worth_it = active[active[&quot;Coupon_Net&quot;] &gt; 0]
+
+<span class="sec"># 3. Output: each member&#x27;s coupon value, then the campaign</span>
+ranked = active.sort_values(&quot;Coupon_Net&quot;, ascending=False)
+print(ranked[[&quot;Chance&quot;, &quot;Annual_Profit&quot;, &quot;Coupon_Net&quot;]])
+net = worth_it[&quot;Coupon_Net&quot;].sum()
+print(f&quot;Coupons worth sending: {len(worth_it)} of {len(active)}&quot;)
+print(f&quot;Net benefit: NT${net:,.0f}&quot;)</pre></div><div class="notes"><div class="card fitbox how" data-start="21"><div class="tag">HOW IT WORKS</div><ul class="tight"><li>Saved = chance x success rate x yearly profit</li><li>Coupon net = saved - NT$45; send only where it is above 0</li></ul></div><div class="card fitbox out" data-start="21"><div class="tag">OUTPUT</div><div class="outbox">           Chance  Annual_Profit  Coupon_Net
+Member_ID                                   
+NOW-209     0.748           2040       336.0
+NOW-201     0.715           1860       287.0
+NOW-204     0.396           3180       270.0
+NOW-212     0.389           2280       177.0
+... (8 more members)
+Coupons worth sending: 8 of 12
+Net benefit: NT$1,441</div></div><div class="check fitbox" data-start="20"><p><b>Quick Check:</b> success rate <code>0.15</code>: 8 coupons, net NT$<code>721</code></p></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 10 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Code Demonstration 2</span></div>
-  <div class="title">Revenue at Risk</div><div class="rule"></div>
-  <div class="body">
-    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
-      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S42_demo_2.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
-<pre><span class="sec"># 1. Input: train and score, as in Micro-Example 1</span>
-import pandas as pd
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LogisticRegression
-history = pd.read_csv(&quot;data/session_04_02_dataset.csv&quot;)
-active = pd.read_csv(&quot;data/session_04_02_active.csv&quot;)
-features = [&quot;Tenure_Months_Count&quot;, &quot;Customer_Support_Calls_Count&quot;,
-            &quot;Usage_Drop_Last_30_Days_Pct&quot;]
-model = Pipeline([(&quot;scale&quot;, StandardScaler()),
-                  (&quot;classify&quot;, LogisticRegression())])
-model.fit(history[features], history[&quot;Churned_Within_60_Days_Binary&quot;])
-active[&quot;Churn_Probability&quot;] = model.predict_proba(active[features])[:, 1].round(3)
-
-<span class="sec"># 2. Process: one year of value, and the part of it at risk</span>
-active[&quot;Annual_Value_USD&quot;] = (active[&quot;Monthly_Subscription_Fee_USD&quot;] * 12).round(2)
-active[&quot;Revenue_At_Risk_USD&quot;] = (
-    active[&quot;Churn_Probability&quot;] * active[&quot;Annual_Value_USD&quot;]
-).round(2)
-ranked = active.sort_values(&quot;Revenue_At_Risk_USD&quot;, ascending=False)
-
-<span class="sec"># 3. Output: the ranking and the total</span>
-print(ranked[[&quot;Subscriber_ID&quot;, &quot;Churn_Probability&quot;, &quot;Annual_Value_USD&quot;,
-              &quot;Revenue_At_Risk_USD&quot;]])
-print(f&quot;Total revenue at risk: ${active[&#x27;Revenue_At_Risk_USD&#x27;].sum():,.2f}&quot;)
-</pre>
-    </div>
-    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li>Part 1 repeats the training and scoring of Micro-Example 1.</li><li><code>Monthly_Subscription_Fee_USD * 12</code> is one year of revenue from each customer.</li><li>Multiplying by the churn probability gives the revenue at risk (section 7.2).</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><ul class="tight"><li>The order differs from Micro-Example 1: <code>ACT-101</code> moves to the top because it pays the most, and <code>ACT-110</code> jumps to fourth despite its lower probability.</li></ul></div></div>
-  </div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Step 3</span></div>
+  <div class="title">Step 3: 8 Coupons Pay, 4 Do Not</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><ul class="tight"><li>A coupon pays even for <code>NOW-202</code> (chance <code>0.296</code>): it brings in enough profit</li><li>For the 4 safe members, each coupon loses about NT$30 to NT$45</li><li>Net benefit <b>NT$1,441</b>: more than any single cut-off on the chance</li></ul></div><div class="check"><b>Common mistake:</b> sending an offer to everyone "just in case".</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 11 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Quick Check 2</span></div>
-  <div class="title">Quick Check 2: <code>.cumsum()</code></div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid2 qc" style="flex: 1; min-height: 0;">
-      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>.cumsum()</code></h2><p><code>column.cumsum()</code> gives a running total down the rows. Why: shows how much of the total risk the first few customers carry.</p></div>
-      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add one line at the end of part <b>2. Process</b>: <code>ranked[&quot;Running_Total_USD&quot;] = ranked[&quot;Revenue_At_Risk_USD&quot;].______().round(2)</code>, and add <code>&quot;Running_Total_USD&quot;</code> to the printed columns.</p></div>
-    </div>
-    <div class="check"><b>Check:</b> the third row shows <code>4851.27</code>: the top 3 customers carry 63% of the total risk.</div>
-  </div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Plans</span></div>
+  <div class="title">Highest ROI or Most Profit?</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><table class="mdtable"><thead><tr><th>Cut-off</th><th>Contacted</th><th>Net benefit</th><th>ROI</th></tr></thead><tbody><tr class="best"><td>0.3</td><td>7</td><td>NT$1,348.89</td><td>428.2%</td></tr><tr><td>0.4</td><td>4</td><td>NT$778.54</td><td>432.5%</td></tr><tr class="old"><td>0.5 to 0.7</td><td>3</td><td>NT$689.36</td><td>510.6%</td></tr></tbody></table></div><div class="check">The small campaign has the highest ROI; the larger one adds the most profit. If the shop can afford it, choose the net benefit.</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 12 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Code Demonstration 3</span></div>
-  <div class="title">Assign a Campaign to Each Customer</div><div class="rule"></div>
-  <div class="body">
-    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
-      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S42_demo_3.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
-<pre><span class="sec"># 1. Input: train and score, as in Micro-Example 2</span>
-import pandas as pd
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LogisticRegression
-history = pd.read_csv(&quot;data/session_04_02_dataset.csv&quot;)
-active = pd.read_csv(&quot;data/session_04_02_active.csv&quot;)
-features = [&quot;Tenure_Months_Count&quot;, &quot;Customer_Support_Calls_Count&quot;,
-            &quot;Usage_Drop_Last_30_Days_Pct&quot;]
-model = Pipeline([(&quot;scale&quot;, StandardScaler()),
-                  (&quot;classify&quot;, LogisticRegression())])
-model.fit(history[features], history[&quot;Churned_Within_60_Days_Binary&quot;])
-active[&quot;Churn_Probability&quot;] = model.predict_proba(active[features])[:, 1].round(3)
-active[&quot;Annual_Value_USD&quot;] = (active[&quot;Monthly_Subscription_Fee_USD&quot;] * 12).round(2)
-
-<span class="sec"># 2. Process: rules from the cheapest to the most valuable campaign</span>
-active[&quot;Campaign&quot;] = &quot;Newsletter&quot;
-active.loc[active[&quot;Churn_Probability&quot;] &gt;= 0.4, &quot;Campaign&quot;] = &quot;Retention_Call&quot;
-active.loc[
-    (active[&quot;Churn_Probability&quot;] &gt;= 0.7) &amp; (active[&quot;Annual_Value_USD&quot;] &gt;= 1500),
-    &quot;Campaign&quot;,
-] = &quot;VIP_Account_Manager&quot;
-
-<span class="sec"># 3. Output: how many customers get each campaign</span>
-print(active[&quot;Campaign&quot;].value_counts())
-print(active[[&quot;Subscriber_ID&quot;, &quot;Churn_Probability&quot;, &quot;Campaign&quot;]])
-</pre>
-    </div>
-    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li>Part 1 scores the customers and computes their annual value, as before.</li><li><code>active[&quot;Campaign&quot;] = &quot;Newsletter&quot;</code> gives everyone the default.</li><li>The first <code>.loc[]</code> line overwrites the default with &quot;Retention_Call&quot; for customers at <code>0.4</code> or above.</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><div class="outbox">Campaign
-Newsletter             4
-Retention_Call         4
-...</div><ul class="tight"><li>2 customers get a personal account manager, 4 get a call, and 4 only get the newsletter.</li></ul></div></div>
-  </div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Summary</span></div>
+  <div class="title">From a Chance to a Decision in NT$</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="figbox"><img src="../assets/session_04_02_fig_chance_to_decision.png" alt="From a chance to a decision"></div><div class="check"><b>Remember:</b> chance x money = expected value; send an offer only when its expected saved profit beats its cost; the highest ROI is not always the most profit.</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 13 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Quick Check 3</span></div>
-  <div class="title">Quick Check 3: <code>pd.cut()</code></div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid2 qc" style="flex: 1; min-height: 0;">
-      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>pd.cut()</code></h2><p><code>pd.cut(column, bins=[0, 0.4, 0.7, 1.0], labels=[&quot;Low&quot;, &quot;Medium&quot;, &quot;High&quot;])</code> puts each value into a band. Why: managers think in risk bands, not in decimals.</p></div>
-      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add two lines to part <b>3. Output</b>: <code>active[&quot;Risk_Band&quot;] = pd.___(active[&quot;Churn_Probability&quot;], bins=[0, 0.4, 0.7, 1.0], labels=[&quot;Low&quot;, &quot;Medium&quot;, &quot;High&quot;])</code> and <code>print(active[&quot;Risk_Band&quot;].value_counts())</code></p></div>
-    </div>
-    <div class="check"><b>Check:</b> <code>Low</code> <code>4</code>, <code>Medium</code> <code>3</code>, <code>High</code> <code>3</code>.</div>
-  </div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Exercise 1: Guided</span></div>
+  <div class="title">Exercise 1: The Business Case at One Cut-Off</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><p><b>Goal:</b> price a coupon campaign for members with a chance of 0.5 or more</p><p><b>Script:</b> <code>YourName_S42_case.py</code></p><ul class="tight"><li>Copy part 1 of Step 3; parts 2-3 in section 11 of the reading</li><li>Saved profit, cost, net benefit, and ROI</li><li>In two comments: why multiply by the chance instead of counting the full yearly profit?</li></ul></div><div class="check"><b>Check:</b> 3 members; net NT$<code>689.36</code>; ROI <code>510.6</code>%</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 14 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">10. Official References</span></div>
-  <div class="title">Where to Look Things Up</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: .14in;"><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Scikit-Learn Logistic Regression: predict_proba Documentation</h2><p>https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html#sklearn.linear_model.LogisticRegression.predict_proba</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Pandas API Reference: pandas.cut</h2><p>https://pandas.pydata.org/docs/reference/api/pandas.cut.html</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Fader &amp; Hardie: Probability Models for Customer-Base Analysis (Wharton Marketing Standards)</h2><p>https://www.brucehardie.com/papers/</p></div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Exercise 2: Applied</span></div>
+  <div class="title">Exercise 2: Highest ROI or Most Profit?</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><p><b>Goal:</b> repeat the business case for the cut-offs 0.3 to 0.7</p><p><b>Script:</b> <code>YourName_S42_cutoffs.py</code></p><ul class="tight"><li>Collect cut-off, targeted, saved, cost, net benefit, ROI in one DataFrame</li><li>Scoring with 2 features stops with a <code>ValueError</code>: ask the AI Chat why</li><li>Print the best ROI and the best net benefit</li></ul></div><div class="check"><b>Check:</b> best ROI <code>0.7</code> (<code>510.6</code>%); best net <code>0.3</code> (NT$<code>1,348.89</code>)</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 15 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">11-13. Exercises</span></div>
-  <div class="title">Three Exercises</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid3 exg" data-uniform style="flex: 1; min-height: 0;"><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 1: GUIDED</div><h2>Campaign Business Case</h2><p><b>Goal:</b> Price a campaign for customers at <code>0.5</code> or above</p><p><b>File:</b> <code>YourName_S42_churn.py</code></p><p class="remember"><b>Check:</b> net benefit <code>$1,899.68</code>; ROI <code>633.2</code>%</p></div><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 2: APPLIED</div><h2>Highest ROI or Most Money?</h2><p><b>Goal:</b> Highest ROI or most money? Test thresholds 0.3 to 0.8</p><p><b>File:</b> <code>YourName_S42_practice.py</code></p><p class="remember"><b>Check:</b> best ROI at <code>0.8</code>; most money at <code>0.4</code></p></div><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 3: ADVANCED</div><h2>The Best Offer for Each Customer</h2><p><b>Goal:</b> Choose the best offer for each customer</p><p><b>File:</b> <code>YourName_S42_challenge.py</code></p><p class="remember"><b>Check:</b> VIP for 4, Call for 3, None for 3</p></div></div>
-    <div class="check">Full steps for all three exercises: sections 11-13 of the course page.</div>
-  </div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Exercise 3: Advanced</span></div>
+  <div class="title">Exercise 3: The Best Offer for Each Member</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><p><b>Goal:</b> choose BOGO, coupon, or nothing for each member by expected net value</p><p><b>Script:</b> <code>YourName_S42_offers.py</code></p><ul class="tight"><li>Coupon: NT$45, 25%; BOGO: NT$150, 45%</li><li>Ordered rules with <code>.loc[]</code>: default None, then Coupon, then BOGO</li><li>Requirements and hints: section 13 of the reading</li></ul></div><div class="check"><b>Check:</b> 7 BOGO, 1 coupon, 4 none: NT$<code>2,059.42</code></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 16 / 16</span></div>
 </section>
 
@@ -569,7 +557,7 @@ function fitAll() {
     });
     apply();
     const over = () => box.scrollHeight > box.clientHeight + 1 || box.scrollWidth > box.clientWidth + 1
-      || [...box.querySelectorAll('pre')].some((pre) => pre.scrollHeight > pre.clientHeight + 6 || pre.scrollWidth > pre.clientWidth + 6);
+      || [...box.querySelectorAll('pre, .outbox')].some((pre) => pre.scrollHeight > pre.clientHeight + 6 || pre.scrollWidth > pre.clientWidth + 2);
     while (over() && size > floor) { size -= 0.5; apply(); }
     if (over()) box.dataset.overflow = 'yes';
     box.__apply = (v) => { size = v; apply(); };
