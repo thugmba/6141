@@ -2,12 +2,14 @@
 
 // Renders a session map image (assets/session_MM_SS_map.png) for every session in
 // 6141.md whose learning sections are numbered ("* **1. Session Purpose:**" ... "* **13. ...").
+// Usage: node scripts/render_session_maps.js [3.1 3.2 ...]   (no arguments = all sessions)
 const fs = require('fs');
 const path = require('path');
 const { pathToFileURL } = require('url');
 const { chromium } = require('playwright');
 
 const root = process.cwd();
+const wanted = process.argv.slice(2);
 const course = fs.readFileSync(path.join(root, '6141.md'), 'utf8');
 const sessions = [...course.matchAll(/### Session (\d)\.(\d): ([^\n]+)([\s\S]*?)(?=\n---\n|\n## Module|\n<a id=|\n### Session|$)/g)];
 const escape = (text) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -67,8 +69,10 @@ ${items.filter((item) => item.number >= phase.range[0] && item.number <= phase.r
   const tab = await browser.newPage({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1 });
   const stage = fs.mkdtempSync(path.join(require('os').tmpdir(), 'session-map-'));
   let count = 0;
+  try {
   for (const match of sessions) {
     const [, module, session, title, body] = match;
+    if (wanted.length && !wanted.includes(`${module}.${session}`)) continue;
     const items = [...body.matchAll(/^\* \*\*(\d+)\. ([^*]+)\*\*/gm)].map((m) => ({ number: Number(m[1]), name: shortName(Number(m[1]), plain(m[2])) }));
     if (items.length !== 13) continue;
     const asks = body.match(/asks: ([^?]+\?)/);
@@ -78,11 +82,16 @@ ${items.filter((item) => item.number >= phase.range[0] && item.number <= phase.r
     fs.writeFileSync(file, page(`${module}.${session}`, title, question, items));
     await tab.goto(pathToFileURL(file).href);
     await tab.evaluate(() => document.fonts.ready);
-    const overflow = await tab.evaluate(() => [...document.querySelectorAll('.phase, .question, h1')].some((el) => el.scrollHeight > el.clientHeight + 1 || el.scrollWidth > el.clientWidth + 1));
-    if (overflow) throw new Error(`Session ${module}.${session}: map content overflows its box.`);
+    const overflow = await tab.evaluate(() => [...document.querySelectorAll('.phase, .question, h1')]
+      .filter((el) => el.scrollHeight > el.clientHeight + 1 || el.scrollWidth > el.clientWidth + 1)
+      .map((el) => el.textContent.trim().slice(0, 40)));
+    if (overflow.length) throw new Error(`Session ${module}.${session}: map content overflows its box: ${overflow.join(' | ')}`);
     await tab.screenshot({ path: path.join(root, 'assets', `session_0${module}_0${session}_map.png`) });
     count += 1;
   }
-  await browser.close();
+  } finally {
+    // an error above must not leave the browser running, or the script never exits
+    await browser.close();
+  }
   console.log(`Rendered ${count} session map images (1920 x 1080).`);
 })().catch((error) => { console.error(error); process.exitCode = 1; });

@@ -37,9 +37,9 @@ EXERCISES = {
         ("Let the computer try every threshold by itself", "best `4` links, `1` mistake; `8` of `10` new correct"),
     ],
     "3.2": [
-        ("Encode, split, fill, and scale the credit data", "every training average `0.0`, spread `1.0`"),
-        ("Add one feature, then see what data leakage hides", "leaky test averages are all `0.0`"),
-        ("Build one pipeline that also handles unseen categories", "6 output columns; no crash on the new applicant"),
+        ("Check the prepared music app data", "no gaps; training averages `0.0`, spreads `1.0`"),
+        ("Add one clue, then see what data leakage hides", "correct test averages `1.24`, `-0.78`; leaky all `0.0`"),
+        ("Build one pipeline that also handles an unseen plan", "6 output columns; no crash on the `Duo` plan"),
     ],
     "3.3": [
         ("Train, predict, and evaluate a price model", "`Test RMSE: $11,539 | R-squared: 0.996`"),
