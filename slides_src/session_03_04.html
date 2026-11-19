@@ -325,205 +325,222 @@ ol.ex3 li { font-size: 18pt; line-height: 1.25; margin: .06in 0; }
 .sm-item code { font-size: .85em; white-space: normal; overflow-wrap: anywhere; }
 /* end session map */
 
+
+.stack { display: flex; flex-direction: column; gap: .14in; width: 100%; min-height: 0; }
+.answer { font-size: 19pt; margin: .06in 0; line-height: 1.25; }
+.answer b { color: #991B1B; }
+.mdtable td.good { background: #DCFCE7; font-weight: bold; }
+.mdtable td.bad { background: #FEE2E2; }
+.mdtable tr.best td { background: #DCFCE7; font-weight: bold; }
+.mdtable tr.old td { background: #FEF3C7; }
+.code-panel.w55 { width: 55%; }
+.code-panel.w48 { width: 48%; }
+.lead-q { font-size: 22pt; font-style: italic; color: #991B1B; margin: .06in 0 .1in; }
+.mdtable td, .mdtable th { vertical-align: middle; }
+.check { font-size: 22pt; }
+.check p { margin: 0; }
+.stack .card { flex-shrink: 0; }
+.mdtable.files code { white-space: nowrap; overflow-wrap: normal; }
+.overview { grid-template-columns: 1fr 1.25fr; }
+.answer { font-size: inherit; }
+.outbox.wrap { white-space: pre-wrap; overflow-wrap: anywhere; }
+.code-panel.w46 { width: 46%; }
+.stack { height: 100%; }
+.figbox { flex: 1 1 0; min-height: 0; display: flex; align-items: center; justify-content: center; }
+.figbox img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
+.figrow { display: grid; gap: .22in; width: 100%; min-height: 0; }
+.figrow > .figbox { height: 100%; }
+.figrow > .card { align-self: center; }
 </style>
 </head>
 <body>
-
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">1-2. Purpose and Outcomes</span></div>
-  <div class="title">Session 3.4: Core Concepts of Machine Learning: Supervised vs. Unsupervised Learning and Evaluation Metrics</div><div class="rule"></div>
-  <div class="body grid2 overview"><div class="card fitbox"><div class="tag">THE BUSINESS SITUATION</div><ul class="tight"><li>A card issuer&#x27;s fraud model gives every transaction a risk score from 1 to 100; above a cut-off score (the threshold), the transaction is held and the customer gets a verification text</li><li>The two possible mistakes have very different costs: a false alarm costs about $5 of checking, while a missed fraud costs the stolen money</li><li>The fraud operations manager asks: at what risk score should we stop a transaction, and what does each kind of mistake cost us? Today, you judge a model by business cost, not by a single accuracy number</li></ul><p class="flow">Today's flow: 60 min lecture, then 120 min hands-on lab</p></div><div class="card fitbox"><div class="tag">EXPECTED OUTCOMES</div><h2>By the end of today, you will be able to:</h2><ol class="biz"><li><span class="q">"Which kind of learning fits this problem?"</span> Tell supervised learning (learning from examples with known answers) from unsupervised learning (finding groups without answers), and group transactions with K-Means</li><li><span class="q">"How good is the risk score, really?"</span> Read a confusion matrix (a 2x2 count of right and wrong decisions) and calculate precision, recall, and ROC-AUC</li><li><span class="q">"Where should we set the threshold?"</span> Choose the threshold with the lowest business cost, and fix the <code>ValueError</code> raised when scores are passed in place of 0/1 decisions</li></ol></div></div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">The Problem and the Result</span></div>
+  <div class="title">Session 3.4: Who Should Get a &quot;Come Back&quot; Coupon?</div><div class="rule"></div>
+  <div class="body grid2 overview" style="grid-template-columns: 1fr 1.3fr;"><div class="card fitbox" data-start="22"><div class="tag">THE PROBLEM</div><ul class="tight"><li>The music app sends a NT$60 coupon to users likely to cancel</li><li><b>Missed</b> canceller: NT$1,800 lost. <b>False alarm</b>: NT$60 wasted</li><li>Marketing also wants to know what kinds of listeners there are</li><li>The manager asks: who gets a coupon, how good is the model beyond accuracy, and what groups exist?</li></ul><p class="flow">Today: the result first, then the classifier and K-Means</p></div><div class="card fitbox" data-start="22"><div class="tag">THE RESULT (20 TEST USERS)</div><table class="mdtable"><thead><tr><th>Threshold</th><th>Missed</th><th>False alarms</th><th>Cost</th></tr></thead><tbody><tr class="old"><td>0.5 (default)</td><td>2 of 7</td><td>2</td><td>NT$3,720</td></tr><tr class="best"><td>0.3 (by cost)</td><td>0 of 7</td><td>3</td><td>NT$180</td></tr></tbody></table><p class="answer"><b>1.</b> Coupon at a chance of <b>0.3</b> or more: a miss costs 30 times a coupon.</p><p class="answer"><b>2.</b> 80% accurate, yet 2 of 7 cancellers missed: look at <b>recall</b> and cost.</p><p class="answer"><b>3.</b> K-Means finds steady (0% cancel), casual (29%), and drifting (79%) listeners.</p></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 1 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Session Map</span></div>
-  <div class="title">Session Map: Follow the Numbers</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: .14in;"><div class="sm-q"><b>Today's question:</b> At what risk score should we stop a transaction, and what does each kind of mistake cost us?</div><div class="sm-phases"><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">1</span><span><b>Why it matters</b><small>Lecture, part 1</small></span></div><p class="sm-item"><i>1.</i><span><b>Session Purpose</b><span class="d">answer today&#x27;s question</span></span></p><p class="sm-item"><i>2.</i><span><b>Learning Outcomes</b><span class="d">3 skills you will show today</span></span></p><p class="sm-item"><i>3.</i><span><b>Business Context</b><span class="d">Not All Mistakes Cost the Same</span></span></p><p class="sm-item"><i>4.</i><span><b>Data Basics</b><span class="d">Reading a Classifier&#x27;s Report Card</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">2</span><span><b>Learn the tools</b><small>Lecture, part 2</small></span></div><p class="sm-item"><i>5.</i><span><b>Lab Dataset</b><span class="d">1 CSV</span></span></p><p class="sm-item"><i>6.</i><span><b>Keywords</b><span class="d">6 terms</span></span></p><p class="sm-item"><i>7.</i><span><b>Core Foundations</b><span class="d">5 ideas, one at a time</span></span></p><p class="sm-item"><i>8.</i><span><b>IDE Setup</b><span class="d"><code>pip install scikit-learn</code></span></span></p><p class="sm-item"><i>9.</i><span><b>Code Examples</b><span class="d">3 demos + Quick Checks</span></span></p><p class="sm-item"><i>10.</i><span><b>References</b><span class="d">2 official docs</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox sm-p3" data-start="22"><div class="sm-head"><span class="sm-step">3</span><span><b>Practice</b><small>Lab</small></span></div><p class="sm-item"><i>11.</i><span><b>Exercise 1: Guided</b><span class="d">Fraud Model Cost Report</span></span></p><p class="sm-item"><i>12.</i><span><b>Exercise 2: Applied</b><span class="d">Find the Cheapest Threshold</span></span></p><p class="sm-item"><i>13.</i><span><b>Exercise 3: Advanced</b><span class="d">Price the Misses with Real Amounts</span></span></p></div></div></div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Key Ideas</span></div>
+  <div class="title">Two Kinds of Learning</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="figbox"><img src="../assets/session_03_04_fig_two_kinds.png" alt="Supervised and unsupervised learning"></div><div class="check"><b>Supervised:</b> past examples come with the answer; the model learns to predict it. <b>Unsupervised:</b> no answers; the method finds groups by itself.</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 2 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">3. Business Context</span></div>
-  <div class="title">Not All Mistakes Cost the Same</div><div class="rule"></div>
-  <div class="body grid2" style="grid-template-columns: 1fr 1.15fr;"><div class="card fitbox"><div class="tag">KEY POINTS</div><ul class="tight"><li>Every decision on a transaction lands in one of four boxes:</li><li>In our cost model, a missed fraud costs <code>$1,500</code> and a false alarm costs <code>$5</code>, so one miss costs as much as 300 false alarms.</li><li>The accuracy trap: if only 1% of transactions are fraud, a model that says &quot;never fraud&quot; is 99% accurate and catches nothing.</li></ul></div><div class="card fitbox"><div class="tag">SEE IT ON REAL DATA</div><table class="mdtable"><tr><th></th><th>Model says: fraud (hold it)</th><th>Model says: legitimate (let it pass)</th></tr><tr><td><b>Really fraud</b></td><td>TP (True Positive): fraud caught</td><td>FN (False Negative): fraud missed, the money is lost</td></tr><tr><td><b>Really legitimate</b></td><td>FP (False Positive): false alarm, about $5 to check</td><td>TN (True Negative): normal purchase, no cost</td></tr></table></div></div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Key Ideas</span></div>
+  <div class="title">Four Cases and Three Scores</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="22"><div class="tag">A CLASSIFIER GIVES A CHANCE; A THRESHOLD DECIDES</div><table class="mdtable"><thead><tr><th></th><th>Coupon</th><th>No coupon</th></tr></thead><tbody><tr><td><b>Cancelled</b></td><td>TP: caught</td><td>FN: missed (NT$1,800)</td></tr><tr><td><b>Stayed</b></td><td>FP: false alarm (NT$60)</td><td>TN: left alone</td></tr></tbody></table></div><div class="card fitbox" data-start="22"><table class="mdtable"><thead><tr><th>Score</th><th>Formula</th><th>Question</th></tr></thead><tbody><tr><td>Accuracy</td><td>(TP+TN) / all</td><td>share of decisions right?</td></tr><tr><td>Precision</td><td>TP / (TP+FP)</td><td>coupons that went to real cancellers?</td></tr><tr><td>Recall</td><td>TP / (TP+FN)</td><td>cancellers we caught?</td></tr></tbody></table></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 3 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">4. Data Basics</span></div>
-  <div class="title">Reading a Classifier&#x27;s Report Card</div><div class="rule"></div>
-  <div class="body grid2" style="grid-template-columns: 1fr 1.15fr;"><div class="card fitbox"><div class="tag">KEY POINTS</div><ul class="tight"><li>Four measures, each answering one question:</li><li>A higher threshold holds fewer transactions: fewer false alarms (higher precision) but more missed fraud (lower recall).</li><li>ROC-AUC (Area Under the Receiver Operating Characteristic Curve): <code>0.5</code> means the score ranks no better than a coin flip; <code>1.0</code> means every fraud scores above every legitimate transaction.</li><li>Supervised vs unsupervised:<ul class="tight"><li><b>Supervised:</b> past examples come with the answer (<code>Actual_Fraud_Binary</code>), and the model learns to predict it. Today&#x27;s risk score is a supervised model&#x27;s output.</li><li><b>Unsupervised:</b> no answer column; the method finds groups of similar rows by itself. K-Means is the most common example.</li></ul></li></ul></div><div class="card fitbox"><div class="tag">AT A GLANCE</div><table class="mdtable"><tr><th>Measure</th><th>Formula</th><th>Question it answers</th></tr><tr><td>Accuracy</td><td>(TP + TN) / all</td><td>What share of all decisions was right?</td></tr><tr><td>Precision</td><td>TP / (TP + FP)</td><td>Of the transactions we held, what share was really fraud?</td></tr><tr><td>Recall</td><td>TP / (TP + FN)</td><td>Of all the fraud, what share did we catch?</td></tr><tr><td>ROC-AUC</td><td>area under the ROC curve, from 0.5 to 1.0</td><td>How well does the score rank fraud above legitimate transactions, at every threshold?</td></tr></table></div></div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">The Data</span></div>
+  <div class="title">One Small File (Fictional Teaching Data)</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><ul class="tight"><li><code>session_03_04_dataset.csv</code>: <b>40 music app users</b>, one row per user; 15 cancelled</li><li><code>User_ID</code> (label), <code>Weeks_Inactive_Count</code> (0-7), <code>Monthly_Minutes_Count</code> (60-2,800)</li><li><code>Cancelled_Binary</code>: <code>1</code> = cancelled the next month, <code>0</code> = stayed</li><li>20 users train the classifier; 20 test it. K-Means uses all 40, without the answers</li></ul></div><div class="check">Activate your <code>.venv</code> first (Python Setup Clinic).</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 4 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">5. Lab Practice Dataset</span></div>
-  <div class="title">The Data for Today</div><div class="rule"></div>
-  <div class="body grid2" style="grid-template-columns: 1fr 2.2fr;"><div class="card fitbox"><div class="tag">FILES</div><ul class="tight"><li><code>data/session_03_04_dataset.csv</code></li></ul><p>Audited 16-row card transaction dataset (fictional teaching data), one row per transaction, checked afterwards by fraud investigators:</p></div><div class="card fitbox"><div class="tag">COLUMNS</div><table class="mdtable cols"><tr><td><code>Transaction_ID</code></td><td>Transaction code (e.g., <code>F-TXN-8001</code>).</td></tr><tr><td><code>Transaction_Amount_USD</code></td><td>Purchase amount in U.S. Dollars.</td></tr><tr><td><code>Foreign_IP_Flag</code></td><td><code>1</code> if the purchase came from a foreign IP (Internet Protocol) address, the network address of the device; <code>0</code> if domestic.</td></tr><tr><td><code>Failed_Login_Attempts_Count</code></td><td>Failed login attempts before the purchase.</td></tr><tr><td><code>Cardholder_Risk_Score</code></td><td>The fraud model&#x27;s risk score, from 1 (safe) to 100 (very risky).</td></tr><tr><td><code>Actual_Fraud_Binary</code></td><td>The investigators&#x27; answer: <code>1</code> = fraud, <code>0</code> = legitimate. 7 of the 16 transactions were fraud.</td></tr></table></div></div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Step 1</span></div>
+  <div class="title">Step 1: Train a Classifier</div><div class="rule"></div>
+  <div class="body"><div class="code-panel w55 fitbox" data-start="21" data-floor="13"><div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S34_step_1.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div><pre><span class="sec"># 1. Input: 40 users; half train the model, half test it</span>
+import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+df = pd.read_csv(&quot;data/session_03_04_dataset.csv&quot;, index_col=&quot;User_ID&quot;)
+features = [&quot;Weeks_Inactive_Count&quot;, &quot;Monthly_Minutes_Count&quot;]
+X_train, X_test, y_train, y_test = train_test_split(
+    df[features], df[&quot;Cancelled_Binary&quot;], test_size=0.5, random_state=42,
+    stratify=df[&quot;Cancelled_Binary&quot;])
+
+<span class="sec"># 2. Process: scale, then learn to classify; score each test user</span>
+model = make_pipeline(StandardScaler(), LogisticRegression())
+model.fit(X_train, y_train)
+chance = model.predict_proba(X_test)[:, 1]
+
+<span class="sec"># 3. Output: the test users, highest chance of cancelling first</span>
+result = pd.DataFrame({&quot;Weeks&quot;: X_test[&quot;Weeks_Inactive_Count&quot;],
+                       &quot;Minutes&quot;: X_test[&quot;Monthly_Minutes_Count&quot;],
+                       &quot;Chance&quot;: chance.round(2), &quot;Cancelled&quot;: y_test})
+print(result.sort_values(&quot;Chance&quot;, ascending=False))</pre></div><div class="notes"><div class="card fitbox how" data-start="21"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>make_pipeline(StandardScaler(), LogisticRegression())</code>: scale, then classify</li><li><code>predict_proba(X_test)[:, 1]</code>: each user&#x27;s chance of cancelling</li></ul></div><div class="card fitbox out" data-start="21"><div class="tag">OUTPUT</div><div class="outbox">         Weeks  Minutes  Chance  Cancelled
+User_ID                                   
+USR-309      7      100    0.97          1
+USR-328      6       60    0.95          1
+USR-301      6      650    0.88          1
+USR-326      6     1200    0.77          1
+USR-334      4      520    0.73          0
+USR-337      4      840    0.63          0
+... (14 more users)</div></div><div class="check fitbox" data-start="20"><p><b>Quick Check:</b> <code>model.predict(X_test).sum()</code> gives <code>7</code> coupons at 0.5</p></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 5 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">6. Keywords</span></div>
-  <div class="title">6 Terms You Need Today</div><div class="rule"></div>
-  <div class="body grid3" style="grid-template-rows: repeat(2, 1fr);"><div class="card fitbox"><div class="tag">TERM 1</div><h2><code>Supervised vs Unsupervised Learning</code></h2><p class="what"><b>What:</b> learning with known answers vs finding groups without answers</p><p class="why"><b>Why:</b> the first question to ask about any ML project</p></div><div class="card fitbox"><div class="tag">TERM 2</div><h2><code>Threshold</code></h2><p class="what"><b>What:</b> the cut-off score above which the model&#x27;s answer becomes &quot;yes&quot;</p><p class="why"><b>Why:</b> the business sets it, not the model</p></div><div class="card fitbox"><div class="tag">TERM 3</div><h2><code>Confusion Matrix</code></h2><p class="what"><b>What:</b> the 2x2 count of TP, FP, FN, and TN</p><p class="why"><b>Why:</b> shows each kind of mistake separately, so each can be priced</p></div><div class="card fitbox"><div class="tag">TERM 4</div><h2><code>Precision</code> and <code>Recall</code></h2><p class="what"><b>What:</b> the share of holds that were fraud, and the share of fraud that was held</p><p class="why"><b>Why:</b> the two sides of the trade-off a threshold controls</p></div><div class="card fitbox"><div class="tag">TERM 5</div><h2><code>ROC-AUC</code></h2><p class="what"><b>What:</b> one number for how well a score ranks positives above negatives</p><p class="why"><b>Why:</b> compares scoring models before any threshold is chosen</p></div><div class="card fitbox"><div class="tag">TERM 6</div><h2><code>K-Means Clustering</code></h2><p class="what"><b>What:</b> an unsupervised method that splits rows into K groups of similar values</p><p class="why"><b>Why:</b> finds customer or transaction segments when no labels exist</p></div></div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Step 1</span></div>
+  <div class="title">Step 1: A Good Ranking, Not a Perfect One</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><ul class="tight"><li>Long inactive and few minutes: chances near <code>1</code>; heavy recent listeners: near <code>0</code></li><li><code>USR-334</code> (<code>0.73</code>) and <code>USR-337</code> (<code>0.63</code>) <b>stayed</b></li><li><code>USR-315</code> (<code>0.40</code>) and <code>USR-338</code> (<code>0.36</code>) <b>cancelled</b></li><li>The model gives chances, not decisions: the threshold decides</li></ul></div><div class="check"><b>Common mistake:</b> keeping both columns of <code>predict_proba()</code>. Keep <code>[:, 1]</code>, the chance of cancelling.</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 6 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">7. Core Foundations</span></div>
-  <div class="title">How It Works</div><div class="rule"></div>
-  <div class="body f7" data-uniform style="display:grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: .16in;"><div class="card fitbox" data-start="24"><div class="tag">7.1</div><h2>From a score to a decision</h2><p class="remember"><b>Remember:</b> the model gives scores; the threshold turns them into decisions.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.2</div><h2>The confusion matrix</h2><p class="remember"><b>Remember:</b> TP and TN are right; FP and FN are the two different mistakes.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.3</div><h2>Accuracy, precision, and recall</h2><p class="remember"><b>Remember:</b> precision asks &quot;were the holds right?&quot;; recall asks &quot;did we catch the fraud?&quot;</p></div><div class="card fitbox" data-start="24"><div class="tag">7.4</div><h2>ROC-AUC</h2><p class="remember"><b>Remember:</b> AUC compares scores; precision and recall judge decisions.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.5</div><h2>Unsupervised learning</h2><p class="remember"><b>Remember:</b> supervised = learn the answer; unsupervised = find the groups, then name them.</p></div></div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Step 2</span></div>
+  <div class="title">Step 2: From Chances to Coupons</div><div class="rule"></div>
+  <div class="body"><div class="code-panel w55 fitbox" data-start="21" data-floor="13"><div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S34_step_2.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div><pre><span class="sec"># 1. Input: the same users, split, and model as Step 1</span>
+import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import accuracy_score, precision_score, recall_score
+df = pd.read_csv(&quot;data/session_03_04_dataset.csv&quot;, index_col=&quot;User_ID&quot;)
+features = [&quot;Weeks_Inactive_Count&quot;, &quot;Monthly_Minutes_Count&quot;]
+X_train, X_test, y_train, y_test = train_test_split(
+    df[features], df[&quot;Cancelled_Binary&quot;], test_size=0.5, random_state=42,
+    stratify=df[&quot;Cancelled_Binary&quot;])
+model = make_pipeline(StandardScaler(), LogisticRegression()).fit(X_train, y_train)
+chance = model.predict_proba(X_test)[:, 1]
+
+<span class="sec"># 2. Process: send a coupon when the chance is 0.5 or more, then count the 4 cases</span>
+coupon = (chance &gt;= 0.5).astype(int)
+tn, fp, fn, tp = confusion_matrix(y_test, coupon).ravel()
+
+<span class="sec"># 3. Output: the four cases and three scores</span>
+print(f&quot;Caught: {tp} | False alarms: {fp} | Missed: {fn} | Left alone: {tn}&quot;)
+print(f&quot;Accuracy: {accuracy_score(y_test, coupon):.2f}&quot;)
+print(f&quot;Precision: {precision_score(y_test, coupon):.2f}&quot;)
+print(f&quot;Recall: {recall_score(y_test, coupon):.2f}&quot;)</pre></div><div class="notes"><div class="card fitbox how" data-start="21"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>chance &gt;= 0.5</code>: coupon or not, as <code>1</code> / <code>0</code></li><li><code>confusion_matrix(...).ravel()</code>: TN, FP, FN, TP in that order</li></ul></div><div class="card fitbox out" data-start="21"><div class="tag">OUTPUT</div><div class="outbox">Caught: 5 | False alarms: 2 | Missed: 2 | Left alone: 11
+Accuracy: 0.80
+Precision: 0.71
+Recall: 0.71</div></div><div class="check fitbox" data-start="20"><p><b>Quick Check:</b> &quot;never send&quot; is <code>0.65</code> accurate with recall <code>0</code></p></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 7 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">7. Core Foundations: On Real Data</span></div>
-  <div class="title">7.1 From a score to a decision: On Real Data</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: .12in;"><div class="card fitbox" data-start="19"><div class="tag">SEE IT ON REAL DATA</div><table class="mdtable"><tr><th>Transaction</th><th>Score</th><th>Really fraud?</th><th>Held at 70?</th><th>Held at 75?</th></tr><tr><td><code>F-TXN-8006</code></td><td><code>22</code></td><td>no</td><td>no</td><td>no</td></tr><tr><td><code>F-TXN-8009</code></td><td><code>71</code></td><td>no</td><td><b>yes</b> (false alarm)</td><td>no</td></tr><tr><td><code>F-TXN-8005</code></td><td><code>74</code></td><td>yes</td><td>yes</td><td><b>no</b> (missed fraud)</td></tr><tr><td><code>F-TXN-8015</code></td><td><code>76</code></td><td>yes</td><td>yes</td><td>yes</td></tr><tr><td><code>F-TXN-8001</code></td><td><code>78</code></td><td>yes</td><td>yes</td><td>yes</td></tr><tr><td><code>F-TXN-8011</code> to <code>F-TXN-8007</code></td><td><code>85</code> to <code>92</code></td><td>yes</td><td>yes</td><td>yes</td></tr></table></div><div class="check"><b>Remember:</b> the model gives scores; the threshold turns them into decisions.</div></div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Step 2</span></div>
+  <div class="title">Step 2: The Four Cases at Threshold 0.5</div><div class="rule"></div>
+  <div class="body"><div class="figrow" style="grid-template-columns: 1.5fr 1fr;"><div class="figbox"><img src="../assets/session_03_04_fig_confusion.png" alt="Confusion matrix at threshold 0.5"></div><div class="card fitbox" data-start="22"><ul class="tight"><li>Accuracy <code>0.80</code>: 16 of 20 decisions right</li><li>Precision <code>0.71</code>: 5 of 7 coupons went to real cancellers</li><li>Recall <code>0.71</code>: 5 of 7 cancellers caught; 2 missed (NT$1,800 each)</li></ul></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 8 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Code Demonstration 1</span></div>
-  <div class="title">Confusion Matrix at Threshold 70</div><div class="rule"></div>
-  <div class="body">
-    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
-      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S34_demo_1.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
-<pre><span class="sec"># 1. Input: the investigators&#x27; answers and the model&#x27;s scores</span>
-import pandas as pd
-from sklearn.metrics import confusion_matrix, precision_score, recall_score
-df = pd.read_csv(&quot;data/session_03_04_dataset.csv&quot;)
-y_true = df[&quot;Actual_Fraud_Binary&quot;]
-
-<span class="sec"># 2. Process: hold every transaction scoring 70 or more</span>
-y_pred = (df[&quot;Cardholder_Risk_Score&quot;] &gt;= 70).astype(int)
-cm = confusion_matrix(y_true, y_pred)
-precision = precision_score(y_true, y_pred)
-recall = recall_score(y_true, y_pred)
-
-<span class="sec"># 3. Output: the 2x2 table, then the two key measures</span>
-print(&quot;Rows: really legitimate, really fraud | Columns: passed, held\n&quot;, cm)
-print(f&quot;Precision: {precision:.3f} | Recall: {recall:.3f}&quot;)
-</pre>
-    </div>
-    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li>First time only, in the Terminal: <code>pip install scikit-learn</code></li><li><code>y_true</code> holds the investigators&#x27; answers: <code>1</code> for fraud, <code>0</code> for legitimate.</li><li><code>(df[&quot;Cardholder_Risk_Score&quot;] &gt;= 70).astype(int)</code> turns each score into a decision at threshold 70 (section 7.1).</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><ul class="tight"><li>Top row: 8 legitimate transactions passed, 1 held by mistake (<code>F-TXN-8009</code>, score <code>71</code>).</li></ul></div></div>
-  </div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Step 2</span></div>
+  <div class="title">Step 2: Move the Threshold</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="figbox"><img src="../assets/session_03_04_fig_threshold_line.png" alt="Test users sorted by chance with thresholds 0.5 and 0.3"></div><div class="check">Down to <b>0.3</b>: the 2 missed cancellers are caught, at the price of 1 more wasted coupon.</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 9 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Quick Check 1</span></div>
-  <div class="title">Quick Check 1: <code>classification_report()</code></div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid2 qc" style="flex: 1; min-height: 0;">
-      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>classification_report()</code></h2><p><code>classification_report(y_true, y_pred)</code> prints precision, recall, and the F1-score (one number that balances precision and recall) for both classes, plus accuracy. Why: the full report card in one call.</p></div>
-      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add <code>classification_report</code> to the import line, then add one line to part <b>3. Output</b>: <code>print(_____________________(y_true, y_pred))</code></p></div>
-    </div>
-    <div class="check"><b>Check:</b> the <code>accuracy</code> line shows <code>0.94</code>, and the row for class <code>1</code> shows precision <code>0.88</code> and recall <code>1.00</code>.</div>
-  </div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Step 2</span></div>
+  <div class="title">Accuracy Hides the Costly Mistakes</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><table class="mdtable"><thead><tr><th>Rule</th><th>Accuracy</th><th>Recall</th><th>Cost of mistakes</th></tr></thead><tbody><tr class="old"><td>Never send a coupon</td><td><code>0.65</code></td><td><code>0.00</code></td><td>NT$<code>12,600</code></td></tr><tr><td>Model, threshold <code>0.5</code></td><td><code>0.80</code></td><td><code>0.71</code></td><td>NT$<code>3,720</code></td></tr><tr class="best"><td>Model, threshold <code>0.3</code></td><td><code>0.85</code></td><td><code>1.00</code></td><td>NT$<code>180</code></td></tr></tbody></table></div><div class="check">Most users stay, so a lazy rule already looks 65% accurate. When one mistake is expensive, judge by <b>recall</b> and <b>cost</b>.</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 10 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Code Demonstration 2</span></div>
-  <div class="title">ROC-AUC: Ranking Quality at Every Threshold</div><div class="rule"></div>
-  <div class="body">
-    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
-      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S34_demo_2.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
-<pre><span class="sec"># 1. Input: the answers and the scores</span>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Step 3</span></div>
+  <div class="title">Step 3: Find Groups Without Answers (K-Means)</div><div class="rule"></div>
+  <div class="body"><div class="code-panel w55 fitbox" data-start="21" data-floor="13"><div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S34_step_3.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div><pre><span class="sec"># 1. Input: all 40 users; the answer column is not used to find the groups</span>
 import pandas as pd
-from sklearn.metrics import roc_auc_score
-df = pd.read_csv(&quot;data/session_03_04_dataset.csv&quot;)
-y_true = df[&quot;Actual_Fraud_Binary&quot;]
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+df = pd.read_csv(&quot;data/session_03_04_dataset.csv&quot;, index_col=&quot;User_ID&quot;)
+features = [&quot;Weeks_Inactive_Count&quot;, &quot;Monthly_Minutes_Count&quot;]
 
-<span class="sec"># 2. Process: AUC uses the scores directly, not 0/1 decisions</span>
-auc = roc_auc_score(y_true, df[&quot;Cardholder_Risk_Score&quot;])
+<span class="sec"># 2. Process: put both columns on one scale, then find 3 groups of similar users</span>
+scaled = StandardScaler().fit_transform(df[features])
+kmeans = KMeans(n_clusters=3, random_state=42, n_init=10)
+df[&quot;Group&quot;] = kmeans.fit_predict(scaled)
 
-<span class="sec"># 3. Output: compare the score ranges of the two groups</span>
-print(f&quot;ROC-AUC: {auc:.3f}&quot;)
-print(df.groupby(&quot;Actual_Fraud_Binary&quot;)[&quot;Cardholder_Risk_Score&quot;].agg([&quot;min&quot;, &quot;max&quot;]))
-</pre>
-    </div>
-    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>roc_auc_score(y_true, df[&quot;Cardholder_Risk_Score&quot;])</code> uses the raw scores, because it checks every possible threshold at once (section 7.4).</li><li><code>df.groupby(&quot;Actual_Fraud_Binary&quot;)[&quot;Cardholder_Risk_Score&quot;].agg([&quot;min&quot;, &quot;max&quot;])</code> shows the lowest and highest score in each group, to see why the AUC is what it is.</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><div class="outbox">ROC-AUC: 1.000
-                     min  max
-Actual_Fraud_Binary
-...</div><ul class="tight"><li>Legitimate transactions score from <code>12</code> to <code>71</code>; fraud from <code>74</code> to <code>92</code>.</li></ul></div></div>
-  </div>
+<span class="sec"># 3. Output: a profile of each group; the cancel rate only helps us read them</span>
+profile = df.groupby(&quot;Group&quot;).agg(
+    Users=(&quot;Cancelled_Binary&quot;, &quot;size&quot;),
+    Weeks=(&quot;Weeks_Inactive_Count&quot;, &quot;mean&quot;),
+    Minutes=(&quot;Monthly_Minutes_Count&quot;, &quot;mean&quot;),
+    Cancel_Rate=(&quot;Cancelled_Binary&quot;, &quot;mean&quot;))
+print(profile.round(2))</pre></div><div class="notes"><div class="card fitbox how" data-start="21"><div class="tag">HOW IT WORKS</div><ul class="tight"><li>Only the 2 listening columns go in: no answers</li><li>Scale first, then <code>KMeans(n_clusters=3)</code>; <code>.fit_predict()</code> gives each user a group</li></ul></div><div class="card fitbox out" data-start="21"><div class="tag">OUTPUT</div><div class="outbox">       Users  Weeks  Minutes  Cancel_Rate
+Group                                    
+0         14   3.00  1485.00         0.29
+1         12   0.58  2116.67         0.00
+2         14   5.29   591.43         0.79</div></div><div class="check fitbox" data-start="20"><p><b>Quick Check:</b> <code>n_clusters=2</code>: two groups of 20 (75% and 0% cancelled)</p></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 11 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Quick Check 2</span></div>
-  <div class="title">Quick Check 2: <code>accuracy_score()</code></div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid2 qc" style="flex: 1; min-height: 0;">
-      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>accuracy_score()</code></h2><p><code>accuracy_score(y_true, y_pred)</code> returns the share of correct decisions. Why: shows how a single accuracy number can look good while hiding the costly mistakes.</p></div>
-      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add two lines to part <b>3. Output</b>: <code>from sklearn.metrics import accuracy_score</code> and <code>print(______________(y_true, (df[&quot;Cardholder_Risk_Score&quot;] &gt;= 90).astype(int)))</code></p></div>
-    </div>
-    <div class="check"><b>Check:</b> the Terminal shows <code>0.625</code>. At threshold 90, 62.5% of the decisions are right, yet 6 of the 7 frauds pass through.</div>
-  </div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Step 3</span></div>
+  <div class="title">Step 3: Three Kinds of Listeners</div><div class="rule"></div>
+  <div class="body"><div class="figrow" style="grid-template-columns: 1.5fr 1fr;"><div class="figbox"><img src="../assets/session_03_04_fig_kmeans_groups.png" alt="K-Means groups of 40 users"></div><div class="card fitbox" data-start="22"><ul class="tight"><li><b>Steady</b>: 0.6 weeks, 2,117 minutes; 0% cancelled</li><li><b>Casual</b>: 3 weeks, 1,485 minutes; 29% cancelled</li><li><b>Drifting away</b>: 5.3 weeks, 591 minutes; 79% cancelled</li><li>Group numbers are only names: read the profile</li></ul></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 12 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Code Demonstration 3</span></div>
-  <div class="title">K-Means: Groups Without Answers</div><div class="rule"></div>
-  <div class="body">
-    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
-      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S34_demo_3.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
-<pre><span class="sec"># 1. Input: two features only; the fraud column is NOT used</span>
-import pandas as pd
-from sklearn.cluster import KMeans
-from sklearn.preprocessing import StandardScaler
-df = pd.read_csv(&quot;data/session_03_04_dataset.csv&quot;)
-features = df[[&quot;Transaction_Amount_USD&quot;, &quot;Cardholder_Risk_Score&quot;]]
-
-<span class="sec"># 2. Process: scale, then form 3 groups of similar transactions</span>
-scaled = StandardScaler().fit_transform(features)
-kmeans = KMeans(n_clusters=3, random_state=42, n_init=10)
-df[&quot;Cluster_ID&quot;] = kmeans.fit_predict(scaled)
-
-<span class="sec"># 3. Output: the average profile of each group, and its fraud share</span>
-profile = df.groupby(&quot;Cluster_ID&quot;)[
-    [&quot;Transaction_Amount_USD&quot;, &quot;Cardholder_Risk_Score&quot;, &quot;Actual_Fraud_Binary&quot;]
-].mean().round(1)
-print(profile)
-</pre>
-    </div>
-    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li>Only two features go in: amount and risk score.</li><li><code>StandardScaler().fit_transform(features)</code> puts both on one scale (Session 3.2), so the dollar amounts do not outweigh the scores.</li><li><code>KMeans(n_clusters=3, random_state=42, n_init=10)</code> asks for 3 groups; <code>n_init=10</code> tries 10 starting points and keeps the best; <code>random_state=42</code> makes the result repeatable.</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><ul class="tight"><li>Group <code>1</code>: small, low-risk purchases, no fraud.</li></ul></div></div>
-  </div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Summary</span></div>
+  <div class="title">Choose the Threshold by Cost</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="figbox"><img src="../assets/session_03_04_fig_cost_by_threshold.png" alt="Cost of mistakes by threshold"></div><div class="check"><b>Remember:</b> a classifier gives chances; a threshold chosen by cost makes the decisions; recall shows what accuracy hides. Supervised predicts answers; unsupervised finds groups.</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 13 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Quick Check 3</span></div>
-  <div class="title">Quick Check 3: <code>.size()</code></div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid2 qc" style="flex: 1; min-height: 0;">
-      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>.size()</code></h2><p><code>df.groupby(&quot;Column&quot;).size()</code> counts the rows in each group. Why: a segment&#x27;s size matters as much as its profile.</p></div>
-      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add one line to part <b>3. Output</b>: <code>print(df.groupby(&quot;Cluster_ID&quot;).____())</code></p></div>
-    </div>
-    <div class="check"><b>Check:</b> group sizes <code>4</code>, <code>8</code>, and <code>4</code>.</div>
-  </div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Exercise 1: Guided</span></div>
+  <div class="title">Exercise 1: What Do the Mistakes Cost?</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><p><b>Goal:</b> put a price on each kind of mistake at threshold 0.5</p><p><b>Script:</b> <code>YourName_S34_cost.py</code></p><ul class="tight"><li>Copy parts 1-2 of Step 2; part 3 in section 11 of the reading</li><li>Cost = missed x NT$1,800 + false alarms x NT$60</li><li>In two comments: which mistake makes most of the cost? Threshold up or down?</li></ul></div><div class="check"><b>Check:</b> NT$<code>3,600</code> + NT$<code>120</code> = NT$<code>3,720</code>: the threshold should go <b>down</b></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 14 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">10. Official References</span></div>
-  <div class="title">Where to Look Things Up</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: .14in;"><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Scikit-Learn: Classification Metrics (Confusion Matrix, Precision-Recall)</h2><p>https://scikit-learn.org/stable/modules/model_evaluation.html#classification-metrics</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Scikit-Learn: Clustering (K-Means Algorithm Overview)</h2><p>https://scikit-learn.org/stable/modules/clustering.html#k-means</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Fawcett: An Introduction to ROC Analysis (Pattern Recognition Letters)</h2><p>https://www.sciencedirect.com/science/article/pii/S016786550500303X</p></div></div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Exercise 2: Applied</span></div>
+  <div class="title">Exercise 2: Find the Cheapest Threshold</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><p><b>Goal:</b> try thresholds 0.2 to 0.8 and keep the cheapest</p><p><b>Script:</b> <code>YourName_S34_threshold.py</code></p><ul class="tight"><li>Loop over <code>[0.2, 0.3, ..., 0.8]</code>; print caught, missed, false alarms, cost</li><li><code>confusion_matrix(y_test, chance)</code> stops with a <code>ValueError</code>: ask the AI Chat about &quot;continuous&quot;</li><li>Print the cheapest threshold and its recall</li></ul></div><div class="check"><b>Check:</b> <code>0.3</code>: NT$<code>180</code>, recall <code>1.00</code></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 15 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">11-13. Exercises</span></div>
-  <div class="title">Three Exercises</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid3 exg" data-uniform style="flex: 1; min-height: 0;"><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 1: GUIDED</div><h2>Fraud Model Cost Report</h2><p><b>Goal:</b> Count the four outcomes and price the mistakes</p><p><b>File:</b> <code>YourName_S34_evaluation.py</code></p><p class="remember"><b>Check:</b> <code>TP=7, FP=1, FN=0, TN=8</code>; cost <code>$5.00</code></p></div><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 2: APPLIED</div><h2>Find the Cheapest Threshold</h2><p><b>Goal:</b> Test thresholds 50 to 90 and find the cheapest</p><p><b>File:</b> <code>YourName_S34_practice.py</code></p><p class="remember"><b>Check:</b> 50 to 70 cost <code>$5</code>; 90 costs <code>$9,000</code></p></div><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 3: ADVANCED</div><h2>Price the Misses with Real Amounts</h2><p><b>Goal:</b> Price each missed fraud with its real amount</p><p><b>File:</b> <code>YourName_S34_challenge.py</code></p><p class="remember"><b>Check:</b> <code>$0</code> at thresholds <code>72</code>, <code>73</code>, and <code>74</code></p></div></div>
-    <div class="check">Full steps for all three exercises: sections 11-13 of the course page.</div>
-  </div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Exercise 3: Advanced</span></div>
+  <div class="title">Exercise 3: Is the Best-Ranking Model the Cheapest?</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><p><b>Goal:</b> compare weeks only, minutes only, and both with ROC-AUC and with the lowest cost</p><p><b>Script:</b> <code>YourName_S34_compare.py</code></p><ul class="tight"><li><code>roc_auc_score(y_test, chance)</code>: how well the chances rank cancellers above stayers</li><li>Find each model&#x27;s cheapest threshold with the loop of Exercise 2</li><li>Requirements and hints: section 13 of the reading</li></ul></div><div class="check"><b>Check:</b> best AUC: weeks only (<code>0.934</code>); cheapest: both (NT$<code>180</code>)</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 16 / 16</span></div>
 </section>
 
@@ -540,7 +557,7 @@ function fitAll() {
     });
     apply();
     const over = () => box.scrollHeight > box.clientHeight + 1 || box.scrollWidth > box.clientWidth + 1
-      || [...box.querySelectorAll('pre')].some((pre) => pre.scrollHeight > pre.clientHeight + 6 || pre.scrollWidth > pre.clientWidth + 6);
+      || [...box.querySelectorAll('pre, .outbox')].some((pre) => pre.scrollHeight > pre.clientHeight + 6 || pre.scrollWidth > pre.clientWidth + 2);
     while (over() && size > floor) { size -= 0.5; apply(); }
     if (over()) box.dataset.overflow = 'yes';
     box.__apply = (v) => { size = v; apply(); };

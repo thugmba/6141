@@ -47,9 +47,9 @@ EXERCISES = {
         ("Which details should the app ask for?", "B: age + storage (MAE NT$`470`)"),
     ],
     "3.4": [
-        ("Count the four outcomes and price the mistakes", "`TP=7, FP=1, FN=0, TN=8`; cost `$5.00`"),
-        ("Test thresholds 50 to 90 and find the cheapest", "50 to 70 cost `$5`; 90 costs `$9,000`"),
-        ("Price each missed fraud with its real amount", "`$0` at thresholds `72`, `73`, and `74`"),
+        ("What do the two kinds of mistakes cost?", "NT$`3,600` + NT$`120` = NT$`3,720` at 0.5"),
+        ("Find the cheapest threshold", "`0.3`: NT$`180`, recall `1.00`"),
+        ("Is the best-ranking model the cheapest?", "best AUC: weeks only; cheapest: both (NT$`180`)"),
     ],
     "4.1": [
         ("Find the nights in the run log that need attention", "alerts on `2024-12-04` and `2024-12-05`"),
