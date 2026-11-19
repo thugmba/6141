@@ -42,9 +42,9 @@ EXERCISES = {
         ("Build one pipeline that also handles an unseen plan", "6 output columns; no crash on the `Duo` plan"),
     ],
     "3.3": [
-        ("Train, predict, and evaluate a price model", "`Test RMSE: $11,539 | R-squared: 0.996`"),
-        ("Show each property's error and price one new building", "MAPE `2.68`%"),
-        ("Do more features give a better price model?", "model C has the lowest average RMSE (`$7,733`)"),
+        ("Suggest prices for three new listings", "NT$`22,600`, NT$`17,600`, NT$`19,500`"),
+        ("Error per test phone, then price one phone", "MAPE `2.7`%; your phone NT$`19,427`"),
+        ("Which details should the app ask for?", "B: age + storage (MAE NT$`470`)"),
     ],
     "3.4": [
         ("Count the four outcomes and price the mistakes", "`TP=7, FP=1, FN=0, TN=8`; cost `$5.00`"),

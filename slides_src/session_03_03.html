@@ -325,224 +325,208 @@ ol.ex3 li { font-size: 18pt; line-height: 1.25; margin: .06in 0; }
 .sm-item code { font-size: .85em; white-space: normal; overflow-wrap: anywhere; }
 /* end session map */
 
+
+.stack { display: flex; flex-direction: column; gap: .14in; width: 100%; min-height: 0; }
+.answer { font-size: 19pt; margin: .06in 0; line-height: 1.25; }
+.answer b { color: #991B1B; }
+.mdtable td.good { background: #DCFCE7; font-weight: bold; }
+.mdtable td.bad { background: #FEE2E2; }
+.mdtable tr.best td { background: #DCFCE7; font-weight: bold; }
+.mdtable tr.old td { background: #FEF3C7; }
+.code-panel.w55 { width: 55%; }
+.code-panel.w48 { width: 48%; }
+.lead-q { font-size: 22pt; font-style: italic; color: #991B1B; margin: .06in 0 .1in; }
+.mdtable td, .mdtable th { vertical-align: middle; }
+.check { font-size: 22pt; }
+.check p { margin: 0; }
+.stack .card { flex-shrink: 0; }
+.mdtable.files code { white-space: nowrap; overflow-wrap: normal; }
+.overview { grid-template-columns: 1fr 1.25fr; }
+.answer { font-size: inherit; }
+.outbox.wrap { white-space: pre-wrap; overflow-wrap: anywhere; }
+.code-panel.w46 { width: 46%; }
+.stack { height: 100%; }
+.figbox { flex: 1 1 0; min-height: 0; display: flex; align-items: center; justify-content: center; }
+.figbox img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
+.figrow { display: grid; gap: .22in; width: 100%; min-height: 0; }
+.figrow > .figbox { height: 100%; }
+.figrow > .card { align-self: center; }
 </style>
 </head>
 <body>
-
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">1-2. Purpose and Outcomes</span></div>
-  <div class="title">Session 3.3: Practical Machine Learning with Scikit-Learn: Model Training and Validation</div><div class="rule"></div>
-  <div class="body grid2 overview"><div class="card fitbox"><div class="tag">THE BUSINESS SITUATION</div><ul class="tight"><li>A commercial property valuation firm prices office buildings by hand, which takes an expert several days per property</li><li>It has the sale records of 14 recent deals: size, number of rooms, distance to the city center, tax rate, and price</li><li>The valuation manager asks: can a model estimate a property&#x27;s sale price from its size and location, and how far off will it be? Today, you train your first machine learning model and measure its error honestly</li></ul><p class="flow">Today's flow: 60 min lecture, then 120 min hands-on lab</p></div><div class="card fitbox"><div class="tag">EXPECTED OUTCOMES</div><h2>By the end of today, you will be able to:</h2><ol class="biz"><li><span class="q">"Can a model learn prices from past deals?"</span> Train a linear regression model with Scikit-Learn&#x27;s <code>.fit()</code> and read its coefficients (how much the price changes for one more unit of each feature)</li><li><span class="q">"How far off are the predictions?"</span> Measure the error with RMSE (Root Mean Squared Error) and MAE (Mean Absolute Error), and check stability with cross-validation (testing on several different splits)</li><li><span class="q">"What will this new building sell for?"</span> Predict the price of one new property, and fix the <code>ValueError</code> a one-row prediction often raises</li></ol></div></div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">The Problem and the Result</span></div>
+  <div class="title">Session 3.3: What Price Should I Ask for My Used Phone?</div><div class="rule"></div>
+  <div class="body grid2 overview"><div class="card fitbox" data-start="22"><div class="tag">THE PROBLEM</div><ul class="tight"><li>Selling a used phone: too high, nobody buys; too low, you lose money</li><li>A marketplace app wants to <b>suggest a fair price</b> from the phone&#x27;s details</li><li>Data: <b>20 used iPhone 13 sales</b>: age, storage, battery health, sold price</li><li>The product manager asks: can a model learned from past sales suggest a price, and how far off will it be?</li></ul><p class="flow">Today: the result first, then how Scikit-Learn got it</p></div><div class="card fitbox" data-start="22"><div class="tag">THE RESULT</div><table class="mdtable"><thead><tr><th>How to price a phone</th><th>Typical error on unseen phones</th></tr></thead><tbody><tr class="old"><td>Guess the average price</td><td>NT$<code>2,448</code></td></tr><tr class="best"><td>Learned formula, 5 test phones</td><td>NT$<code>555</code> (about 3%)</td></tr><tr class="best"><td>Learned formula, 5 rounds of testing</td><td>NT$<code>475</code> on average</td></tr></tbody></table><p class="answer"><b>1.</b> Yes: about 4 to 5 times closer than guessing the average.</p><p class="answer"><b>2.</b> Typically off by about NT$500, so the app can show a range.</p></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 1 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Session Map</span></div>
-  <div class="title">Session Map: Follow the Numbers</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: .14in;"><div class="sm-q"><b>Today's question:</b> Can a model estimate a property&#x27;s sale price from its size and location, and how far off will it be?</div><div class="sm-phases"><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">1</span><span><b>Why it matters</b><small>Lecture, part 1</small></span></div><p class="sm-item"><i>1.</i><span><b>Session Purpose</b><span class="d">answer today&#x27;s question</span></span></p><p class="sm-item"><i>2.</i><span><b>Learning Outcomes</b><span class="d">3 skills you will show today</span></span></p><p class="sm-item"><i>3.</i><span><b>Business Context</b><span class="d">When a Price Model Is Worth Using</span></span></p><p class="sm-item"><i>4.</i><span><b>Data Basics</b><span class="d">How Linear Regression Works</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">2</span><span><b>Learn the tools</b><small>Lecture, part 2</small></span></div><p class="sm-item"><i>5.</i><span><b>Lab Dataset</b><span class="d">1 CSV</span></span></p><p class="sm-item"><i>6.</i><span><b>Keywords</b><span class="d">6 terms</span></span></p><p class="sm-item"><i>7.</i><span><b>Core Foundations</b><span class="d">5 ideas, one at a time</span></span></p><p class="sm-item"><i>8.</i><span><b>IDE Setup</b><span class="d"><code>pip install scikit-learn</code></span></span></p><p class="sm-item"><i>9.</i><span><b>Code Examples</b><span class="d">3 demos + Quick Checks</span></span></p><p class="sm-item"><i>10.</i><span><b>References</b><span class="d">2 official docs</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox sm-p3" data-start="22"><div class="sm-head"><span class="sm-step">3</span><span><b>Practice</b><small>Lab</small></span></div><p class="sm-item"><i>11.</i><span><b>Exercise 1: Guided</b><span class="d">Property Valuation Engine</span></span></p><p class="sm-item"><i>12.</i><span><b>Exercise 2: Applied</b><span class="d">Error per Property and a One-Row Prediction</span></span></p><p class="sm-item"><i>13.</i><span><b>Exercise 3: Advanced</b><span class="d">Does a Bigger Model Price Better?</span></span></p></div></div></div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Key Ideas</span></div>
+  <div class="title">Regression: Learning a Formula for a Number</div><div class="rule"></div>
+  <div class="body"><div class="figrow" style="grid-template-columns: 1.7fr 1fr;"><div class="figbox"><img src="../assets/session_03_03_fig_price_vs_age.png" alt="Sold price against age with the best straight line"></div><div class="card fitbox" data-start="22"><ul class="tight"><li><b>Regression</b> predicts a number (a price); <b>classification</b> predicts a category (spam, cancel)</li><li><b>Linear regression</b>: price = start value + effect x feature + ...</li><li>It picks the effects that make the training errors smallest</li><li><b>Coefficient</b> = change in price for one more unit, the other features held fixed</li></ul></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 2 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">3. Business Context</span></div>
-  <div class="title">When a Price Model Is Worth Using</div><div class="rule"></div>
-  <div class="body"><div class="card fitbox"><div class="tag">KEY POINTS</div><ul class="tight"><li>An estimate is useful if its typical error is small compared with the price.</li><li>A model learns from past deals only.</li><li>Regression vs classification:<ul class="tight"><li><b>Regression</b> predicts a number, such as a price. Today&#x27;s model, linear regression, is one example.</li><li><b>Classification</b> predicts a category, such as &quot;fraud&quot; or &quot;not fraud&quot;. Logistic regression, used in Session 3.4, is one example.</li></ul></li></ul></div></div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Key Ideas</span></div>
+  <div class="title">Every Scikit-Learn Model: Create, Fit, Predict</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="figbox"><img src="../assets/session_03_03_fig_fit_predict.png" alt="Create an empty model, fit it to past sales, predict a new phone"></div><div class="card fitbox" data-start="22"><table class="mdtable"><thead><tr><th>Idea</th><th>Meaning</th></tr></thead><tbody><tr><td>MAE (Mean Absolute Error)</td><td>the typical error, in NT$: lower is better</td></tr><tr><td>Benchmark</td><td>the simplest guess: the average past price for every phone</td></tr><tr><td>Cross-validation</td><td>test several times, each time on different phones</td></tr></tbody></table></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 3 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">4. Data Basics</span></div>
-  <div class="title">How Linear Regression Works</div><div class="rule"></div>
-  <div class="body grid2" style="grid-template-columns: 1fr 1.15fr;"><div class="card fitbox"><div class="tag">KEY POINTS</div><ul class="tight"><li>Linear regression finds the best straight-line formula: <code>price = intercept + coefficient_1 x feature_1 + coefficient_2 x feature_2 + ...</code>. &quot;Best&quot; means the smallest total squared error on the training rows.</li><li>Reading a coefficient: the change in price for one more unit of that feature, <b>while the other features stay the same</b>.</li><li>Coefficients can surprise you.</li><li>Three error measures, in plain words:</li></ul></div><div class="card fitbox"><div class="tag">AT A GLANCE</div><table class="mdtable"><tr><th>Measure</th><th>Meaning</th><th>Lower or higher is better?</th></tr><tr><td>MAE (Mean Absolute Error)</td><td>the average size of the errors, in dollars</td><td>lower</td></tr><tr><td>RMSE (Root Mean Squared Error)</td><td>like MAE, but large errors count extra</td><td>lower</td></tr><tr><td>R-squared</td><td>the share of the price differences the model explains, from 0 to 1</td><td>higher</td></tr></table></div></div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">The Data</span></div>
+  <div class="title">One Small File (Fictional Teaching Data)</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><ul class="tight"><li><code>session_03_03_dataset.csv</code>: <b>20 used iPhone 13 sales</b>, one row per sale</li><li><code>Listing_ID</code> (label), <code>Age_Months</code> (6-42), <code>Storage_GB</code> (128/256/512), <code>Battery_Health_Pct</code> (76-98)</li><li><code>Photos_Count</code>: photos in the listing, only for Exercise 3</li><li><code>Sold_Price_TWD</code>: the sold price in New Taiwan dollars: the target</li></ul></div><div class="check">Activate your <code>.venv</code> first (Python Setup Clinic).</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 4 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">5. Lab Practice Dataset</span></div>
-  <div class="title">The Data for Today</div><div class="rule"></div>
-  <div class="body grid2" style="grid-template-columns: 1fr 2.2fr;"><div class="card fitbox"><div class="tag">FILES</div><ul class="tight"><li><code>data/session_03_03_dataset.csv</code></li></ul><p>Audited 14-row commercial property sales dataset (fictional teaching data), one row per sale:</p></div><div class="card fitbox"><div class="tag">COLUMNS</div><table class="mdtable cols"><tr><td><code>Property_ID</code></td><td>Sale code (e.g., <code>PROP-401</code>).</td></tr><tr><td><code>Square_Feet_Units</code></td><td>Usable floor area in square feet.</td></tr><tr><td><code>Bedrooms_Count</code></td><td>Number of separate rooms or office suites.</td></tr><tr><td><code>Distance_To_CBD_Miles</code></td><td>Distance to the CBD (Central Business District, the city&#x27;s main business center), in miles.</td></tr><tr><td><code>Local_Tax_Rate_Pct</code></td><td>Local property tax rate, in percent.</td></tr><tr><td><code>Sale_Price_USD</code></td><td>The price the property sold for, in U.S. Dollars. This is the target.</td></tr></table></div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 5 / 16</span></div>
-</section>
-
-<section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">6. Keywords</span></div>
-  <div class="title">6 Terms You Need Today</div><div class="rule"></div>
-  <div class="body grid3" style="grid-template-rows: repeat(2, 1fr);"><div class="card fitbox"><div class="tag">TERM 1</div><h2><code>Estimator</code> (<code>.fit()</code> / <code>.predict()</code>)</h2><p class="what"><b>What:</b> any Scikit-Learn model; <code>.fit(X, y)</code> learns from examples, <code>.predict(X)</code> makes predictions</p><p class="why"><b>Why:</b> every model in the library uses the same two methods</p></div><div class="card fitbox"><div class="tag">TERM 2</div><h2><code>Linear Regression</code></h2><p class="what"><b>What:</b> a model that predicts a number with a straight-line formula</p><p class="why"><b>Why:</b> simple, fast, and its coefficients are easy to explain to a manager</p></div><div class="card fitbox"><div class="tag">TERM 3</div><h2><code>Logistic Regression</code></h2><p class="what"><b>What:</b> a model that predicts the probability of a yes/no outcome</p><p class="why"><b>Why:</b> the classification partner of linear regression (Session 3.4)</p></div><div class="card fitbox"><div class="tag">TERM 4</div><h2><code>RMSE</code> and <code>MAE</code></h2><p class="what"><b>What:</b> the typical prediction error, in the target&#x27;s own unit (here, dollars)</p><p class="why"><b>Why:</b> tells the manager how far off an estimate can be</p></div><div class="card fitbox"><div class="tag">TERM 5</div><h2><code>Cross-Validation</code></h2><p class="what"><b>What:</b> splitting the data into K parts and testing K times, each time on a different part</p><p class="why"><b>Why:</b> one lucky split can make a model look better than it is</p></div><div class="card fitbox"><div class="tag">TERM 6</div><h2><code>Overfitting</code></h2><p class="what"><b>What:</b> a model that memorizes its training rows and does worse on new data</p><p class="why"><b>Why:</b> the main risk when data is small; testing on unseen rows reveals it</p></div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 6 / 16</span></div>
-</section>
-
-<section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">7. Core Foundations</span></div>
-  <div class="title">How It Works</div><div class="rule"></div>
-  <div class="body f7" data-uniform style="display:grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: .16in;"><div class="card fitbox" data-start="24"><div class="tag">7.1</div><h2>The estimator pattern</h2><p class="remember"><b>Remember:</b> create, fit, predict; learned values end with <code>_</code>.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.2</div><h2>Reading the price formula</h2><p class="remember"><b>Remember:</b> a coefficient is the effect of one feature with the others held fixed.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.3</div><h2>Measuring error</h2><p class="remember"><b>Remember:</b> MAE is the plain average error; RMSE punishes large errors; test on unseen rows.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.4</div><h2>One split is not enough</h2><p class="remember"><b>Remember:</b> report the average over the folds, and look at the worst fold too.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.5</div><h2>One row is still a table</h2><p class="remember"><b>Remember:</b> one row = a one-row DataFrame with the same column names.</p></div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 7 / 16</span></div>
-</section>
-
-<section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">7. Core Foundations: On Real Data</span></div>
-  <div class="title">7.1 The estimator pattern: On Real Data</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: .12in;"><div class="card fitbox" data-start="19"><div class="tag">SEE IT ON REAL DATA</div><table class="mdtable"><tr><th>Step</th><th>Code</th><th>What happens</th></tr><tr><td>Create</td><td><code>model = LinearRegression()</code></td><td>an empty model, nothing learned yet</td></tr><tr><td>Fit</td><td><code>model.fit(X_train, y_train)</code></td><td>learns the price formula from 10 sales</td></tr><tr><td>Predict</td><td><code>model.predict(X_test)</code></td><td>4 estimated prices for the 4 test sales</td></tr><tr><td>Score</td><td><code>model.score(X_test, y_test)</code></td><td><code>0.996</code>, the share of price differences explained</td></tr></table></div><div class="check"><b>Remember:</b> create, fit, predict; learned values end with <code>_</code>.</div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 8 / 16</span></div>
-</section>
-
-<section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Code Demonstration 1</span></div>
-  <div class="title">Train a Price Model</div><div class="rule"></div>
-  <div class="body">
-    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
-      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S33_demo_1.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
-<pre><span class="sec"># 1. Input: load the sales and split them</span>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Step 1</span></div>
+  <div class="title">Step 1: Learn a Price Formula</div><div class="rule"></div>
+  <div class="body"><div class="code-panel w55 fitbox" data-start="21" data-floor="13"><div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S33_step_1.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div><pre><span class="sec"># 1. Input: 20 past sales of used iPhone 13 phones</span>
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
-df = pd.read_csv(&quot;data/session_03_03_dataset.csv&quot;)
-features = [&quot;Square_Feet_Units&quot;, &quot;Bedrooms_Count&quot;, &quot;Distance_To_CBD_Miles&quot;]
-X = df[features]
-y = df[&quot;Sale_Price_USD&quot;]
+df = pd.read_csv(&quot;data/session_03_03_dataset.csv&quot;, index_col=&quot;Listing_ID&quot;)
+features = [&quot;Age_Months&quot;, &quot;Storage_GB&quot;, &quot;Battery_Health_Pct&quot;]
 X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.25, random_state=42
-)
+    df[features], df[&quot;Sold_Price_TWD&quot;], test_size=0.25, random_state=42)
 
-<span class="sec"># 2. Process: learn the price formula from the training rows</span>
+<span class="sec"># 2. Process: learn a price formula from the 15 training sales</span>
 model = LinearRegression()
 model.fit(X_train, y_train)
 
 <span class="sec"># 3. Output: the learned formula</span>
-print(&quot;Intercept:&quot;, round(model.intercept_, 1))
+print(&quot;Start value:&quot;, round(model.intercept_, 1))
 for name, coef in zip(features, model.coef_):
-    print(f&quot;{name}: {coef:,.1f}&quot;)
-</pre>
-    </div>
-    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li>First time only, in the Terminal: <code>pip install scikit-learn</code></li><li><code>features = [...]</code> lists the 3 input columns; <code>X = df[features]</code> and <code>y = df[&quot;Sale_Price_USD&quot;]</code> separate inputs and answer (Session 3.2).</li><li><code>train_test_split(..., test_size=0.25, random_state=42)</code> keeps 4 of the 14 sales aside for testing.</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><div class="outbox">Intercept: 123568.1
-Square_Feet_Units: 180.1
-Bedrooms_Count: 14,703.6
-Distance_To_CBD_Miles: -1,915.8
-</div><ul class="tight"><li>Each extra square foot adds about <code>$180</code>, each extra room about <code>$14,700</code>, and each extra mile from the center subtracts about <code>$1,900</code>, with the other features held fixed (section 7.2).</li></ul></div></div>
-  </div>
+    print(f&quot;{name}: {coef:+,.1f}&quot;)</pre></div><div class="notes"><div class="card fitbox how" data-start="21"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>LinearRegression()</code> creates; <code>.fit()</code> learns from 15 sales</li><li><code>intercept_</code> = start value; <code>coef_</code> = one effect per feature</li></ul></div><div class="card fitbox out" data-start="21"><div class="tag">OUTPUT</div><div class="outbox">Start value: 8776.8
+Age_Months: -159.4
+Storage_GB: +12.2
+Battery_Health_Pct: +129.1</div></div><div class="check fitbox" data-start="20"><p><b>Quick Check:</b> <code>model.score(X_test, y_test)</code> is <code>0.841</code></p></div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 5 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Step 1</span></div>
+  <div class="title">Step 1: Reading the Formula</div><div class="rule"></div>
+  <div class="body"><div class="figrow" style="grid-template-columns: 1fr 1.1fr;"><div class="card fitbox" data-start="22"><ul class="tight"><li>Each month older: about <b>NT$159 less</b></li><li>Each extra GB: about <b>NT$12 more</b> (128 to 256 GB: about NT$1,560)</li><li>Each point of battery health: about <b>NT$129 more</b></li><li>Always &quot;with the other features held fixed&quot;</li></ul></div><div class="card fitbox" data-start="22"><div class="tag">24 MONTHS, 256 GB, 88% BATTERY</div><table class="mdtable"><thead><tr><th>Part</th><th>Amount</th></tr></thead><tbody><tr><td>start value</td><td><code>8,776.8</code></td></tr><tr><td>age: <code>-159.4 x 24</code></td><td><code>-3,825.6</code></td></tr><tr><td>storage: <code>12.2 x 256</code></td><td><code>3,123.2</code></td></tr><tr><td>battery: <code>129.1 x 88</code></td><td><code>11,360.8</code></td></tr><tr class="best"><td><b>price</b></td><td>about NT$<code>19,435</code></td></tr></tbody></table></div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 6 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Step 1</span></div>
+  <div class="title">Step 1: Do Not Trust It Far Outside the Data</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><table class="mdtable"><thead><tr><th>Phone</th><th>Inside the past sales?</th><th>Model&#x27;s price</th></tr></thead><tbody><tr class="best"><td>24 months, 256 GB, 88%</td><td>yes (6-42 months)</td><td>NT$<code>19,427</code></td></tr><tr class="old"><td>120 months, 128 GB, 60%</td><td>no: 10 years old</td><td>NT$<code>-1,042</code></td></tr></tbody></table></div><div class="check"><b>Common mistake:</b> a formula knows only the range it learned from. A negative price is a warning, not an answer.</div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 7 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Step 2</span></div>
+  <div class="title">Step 2: Test on Phones the Model Has Not Seen</div><div class="rule"></div>
+  <div class="body"><div class="code-panel w55 fitbox" data-start="21" data-floor="13"><div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S33_step_2.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div><pre><span class="sec"># 1. Input: the same sales, split, and model as Step 1</span>
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_absolute_error
+df = pd.read_csv(&quot;data/session_03_03_dataset.csv&quot;, index_col=&quot;Listing_ID&quot;)
+features = [&quot;Age_Months&quot;, &quot;Storage_GB&quot;, &quot;Battery_Health_Pct&quot;]
+X_train, X_test, y_train, y_test = train_test_split(
+    df[features], df[&quot;Sold_Price_TWD&quot;], test_size=0.25, random_state=42)
+model = LinearRegression().fit(X_train, y_train)
+
+<span class="sec"># 2. Process: predict the 5 test phones and measure the errors</span>
+predicted = model.predict(X_test)
+result = pd.DataFrame({&quot;Actual&quot;: y_test, &quot;Predicted&quot;: predicted.round().astype(int)})
+result[&quot;Error&quot;] = result[&quot;Predicted&quot;] - result[&quot;Actual&quot;]
+mae_model = mean_absolute_error(y_test, predicted)
+mae_guess = mean_absolute_error(y_test, [y_train.mean()] * len(y_test))
+
+<span class="sec"># 3. Output: each test phone, then the typical error of two ways to price</span>
+print(result)
+print(f&quot;Model: typical error NT${mae_model:,.0f}&quot;)
+print(f&quot;Guessing the average price: typical error NT${mae_guess:,.0f}&quot;)</pre></div><div class="notes"><div class="card fitbox how" data-start="21"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>.predict(X_test)</code>: 5 predicted prices</li><li><code>mean_absolute_error()</code>: the typical error (MAE)</li><li>Benchmark: the average training price for every phone</li></ul></div><div class="card fitbox out" data-start="21"><div class="tag">OUTPUT</div><div class="outbox">            Actual  Predicted  Error
+Listing_ID                          
+PH-101       20800      21902   1102
+PH-118       23100      23177     77
+PH-116       20800      21796    996
+PH-102       17700      17955    255
+PH-109       21200      21545    345
+Model: typical error NT$555
+Guessing the average price: typical error NT$2,448</div></div><div class="check fitbox" data-start="20"><p><b>Quick Check:</b> RMSE (large errors count extra) is NT$<code>692</code></p></div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 8 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Step 2</span></div>
+  <div class="title">Step 2: How Close Is Each Prediction?</div><div class="rule"></div>
+  <div class="body"><div class="figrow" style="grid-template-columns: 1.9fr 1fr;"><div class="figbox"><img src="../assets/session_03_03_fig_test_predictions.png" alt="Actual and predicted prices of the 5 test phones"></div><div class="card fitbox" data-start="22"><ul class="tight"><li>Very close on <code>PH-118</code> (NT$77)</li><li>About NT$1,000 high on two young phones with very good batteries</li><li>All 5 errors are positive: on these phones the model suggests a little too much</li></ul></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 9 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Quick Check 1</span></div>
-  <div class="title">Quick Check 1: <code>.score()</code></div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid2 qc" style="flex: 1; min-height: 0;">
-      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>.score()</code></h2><p><code>model.score(X_test, y_test)</code> returns R-squared on the test rows in one call. Why: a quick first check of how well the model explains prices it has not seen.</p></div>
-      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add one line to part <b>3. Output</b>: <code>print(&quot;Test R-squared:&quot;, round(model._____(X_test, y_test), 3))</code></p></div>
-    </div>
-    <div class="check"><b>Check:</b> the Terminal shows <code>Test R-squared: 0.996</code>.</div>
-  </div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Step 2</span></div>
+  <div class="title">Step 2: Beat the Simple Guess</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="figbox"><img src="../assets/session_03_03_fig_model_vs_guess.png" alt="Typical error: guessing the average vs the learned formula"></div><div class="check">The formula is about <b>4 times closer</b> than guessing the average. <b>Common mistake:</b> measuring the error on the training sales: they always look easier.</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 10 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Code Demonstration 2</span></div>
-  <div class="title">Predict the Test Sales and Measure the Error</div><div class="rule"></div>
-  <div class="body">
-    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
-      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S33_demo_2.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
-<pre><span class="sec"># 1. Input: load, split, and train (same as Micro-Example 1)</span>
-import numpy as np
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Step 3</span></div>
+  <div class="title">Step 3: Test Five Times (Cross-Validation)</div><div class="rule"></div>
+  <div class="body"><div class="code-panel w55 fitbox" data-start="21" data-floor="13"><div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S33_step_3.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div><pre><span class="sec"># 1. Input: all 20 sales</span>
 import pandas as pd
 from sklearn.linear_model import LinearRegression
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error
-df = pd.read_csv(&quot;data/session_03_03_dataset.csv&quot;)
-features = [&quot;Square_Feet_Units&quot;, &quot;Bedrooms_Count&quot;, &quot;Distance_To_CBD_Miles&quot;]
-X_train, X_test, y_train, y_test = train_test_split(
-    df[features], df[&quot;Sale_Price_USD&quot;], test_size=0.25, random_state=42
-)
-model = LinearRegression().fit(X_train, y_train)
+from sklearn.model_selection import cross_val_score
+df = pd.read_csv(&quot;data/session_03_03_dataset.csv&quot;, index_col=&quot;Listing_ID&quot;)
+features = [&quot;Age_Months&quot;, &quot;Storage_GB&quot;, &quot;Battery_Health_Pct&quot;]
 
-<span class="sec"># 2. Process: predict the 4 test sales and compute the RMSE</span>
-y_pred = model.predict(X_test)
-rmse = np.sqrt(mean_squared_error(y_test, y_pred))
-comparison = pd.DataFrame({
-    &quot;Property_ID&quot;: df.loc[X_test.index, &quot;Property_ID&quot;],
-    &quot;Actual_USD&quot;: y_test,
-    &quot;Predicted_USD&quot;: y_pred.round(0),
-})
+<span class="sec"># 2. Process: 5 rounds; each round tests on a different 4 phones</span>
+scores = cross_val_score(LinearRegression(), df[features], df[&quot;Sold_Price_TWD&quot;],
+                         cv=5, scoring=&quot;neg_mean_absolute_error&quot;)
+errors = -scores
 
-<span class="sec"># 3. Output: actual vs predicted, then the typical error</span>
-print(comparison)
-print(f&quot;Test RMSE: ${rmse:,.0f}&quot;)
-</pre>
-    </div>
-    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li>Part 1 loads, splits, and trains, as in Micro-Example 1.</li><li><code>model.predict(X_test)</code> returns 4 estimated prices.</li><li><code>mean_squared_error()</code> averages the squared errors; <code>np.sqrt()</code> (square root, from NumPy) brings the result back to dollars: the RMSE (section 7.3).</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><div class="outbox">   Property_ID  Actual_USD  Predicted_USD
-9     PROP-409    465000.0       460268.0
-11    PROP-411    330000.0       345735.0
-...</div><ul class="tight"><li>The model is close on the large building (<code>PROP-412</code>: off by <code>$2,141</code>) and on <code>PROP-409</code>.</li></ul></div></div>
-  </div>
+<span class="sec"># 3. Output: the typical error of each round, the average, and the worst</span>
+print(&quot;Typical error per round:&quot;, errors.round().tolist())
+print(f&quot;Average: NT${errors.mean():,.0f} | Worst round: NT${errors.max():,.0f}&quot;)</pre></div><div class="notes"><div class="card fitbox how" data-start="21"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>cv=5</code>: 5 rounds; each tests a different 4 phones</li><li>Scores come back negative; <code>-scores</code> gives the MAE</li></ul></div><div class="card fitbox out" data-start="21"><div class="tag">OUTPUT</div><div class="outbox">Typical error per round:
+[554.0, 533.0, 233.0, 569.0, 487.0]
+Average: NT$475 | Worst round: NT$569</div></div><div class="check fitbox" data-start="20"><p><b>Quick Check:</b> <code>cv=4</code>: average NT$<code>511</code>, worst NT$<code>611</code></p></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 11 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Quick Check 2</span></div>
-  <div class="title">Quick Check 2: <code>mean_absolute_error()</code></div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid2 qc" style="flex: 1; min-height: 0;">
-      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>mean_absolute_error()</code></h2><p><code>mean_absolute_error(y_test, y_pred)</code> returns the average error size in dollars. Why: the easiest error number to explain: &quot;on average, we are off by this much&quot;.</p></div>
-      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Change the import line to <code>from sklearn.metrics import mean_squared_error, mean_absolute_error</code>, then add one line to part <b>3. Output</b>: <code>print(f&quot;Test MAE: ${___________________(y_test, y_pred):,.0f}&quot;)</code></p></div>
-    </div>
-    <div class="check"><b>Check:</b> the Terminal shows <code>Test MAE: $9,668</code>, lower than the RMSE because RMSE weighs the two larger errors (about $16,000 each) more heavily.</div>
-  </div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Step 3</span></div>
+  <div class="title">Step 3: Every Phone Is Tested Once</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="figbox"><img src="../assets/session_03_03_fig_cv_folds.png" alt="Five rounds of cross-validation with the typical error of each"></div><div class="check">Average NT$475, close to the single test (NT$555): that result was not luck. Report the average <b>and</b> the worst round.</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 12 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Code Demonstration 3</span></div>
-  <div class="title">Five Splits Instead of One</div><div class="rule"></div>
-  <div class="body">
-    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
-      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S33_demo_3.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
-<pre><span class="sec"># 1. Input: load the sales</span>
-import pandas as pd
-from sklearn.linear_model import LinearRegression
-from sklearn.model_selection import cross_val_score
-df = pd.read_csv(&quot;data/session_03_03_dataset.csv&quot;)
-features = [&quot;Square_Feet_Units&quot;, &quot;Bedrooms_Count&quot;, &quot;Distance_To_CBD_Miles&quot;]
-
-<span class="sec"># 2. Process: train and test 5 times, each time on a different part</span>
-scores = cross_val_score(LinearRegression(), df[features],
-                         df[&quot;Sale_Price_USD&quot;], cv=5, scoring=&quot;r2&quot;)
-
-<span class="sec"># 3. Output: the 5 scores and their average</span>
-print(&quot;R-squared per fold:&quot;, scores.round(3).tolist())
-print(f&quot;Average R-squared: {scores.mean():.3f}&quot;)
-</pre>
-    </div>
-    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>cross_val_score(LinearRegression(), X, y, cv=5, scoring=&quot;r2&quot;)</code> does all the work of section 7.4: it cuts the 14 sales into 5 folds, trains 5 fresh models, and tests each one on its own fold.</li><li>It returns 5 scores, one per fold.</li><li><code>scores.mean()</code> averages them.</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><ul class="tight"><li>Every fold scores above <code>0.99</code>: the model does well no matter which sales are held out, not just on one lucky split.</li></ul></div></div>
-  </div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Summary</span></div>
+  <div class="title">What the Model Did</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="figbox"><img src="../assets/session_03_03_fig_model_steps.png" alt="The steps of a prediction model"></div><div class="card fitbox" data-start="22"><ul class="tight"><li>Session 3.4: the same create-fit-predict pattern with a classifier</li><li>Session 4.1: a saved model predicts new rows every night</li></ul></div><div class="check"><b>Remember:</b> create, fit, predict; measure the error on unseen rows; beat the simple guess; cross-validate.</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 13 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">9. Quick Check 3</span></div>
-  <div class="title">Quick Check 3: RMSE per fold</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid2 qc" style="flex: 1; min-height: 0;">
-      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2>RMSE per fold</h2><p><code>scoring=&quot;neg_root_mean_squared_error&quot;</code> makes <code>cross_val_score()</code> return the RMSE of each fold as a negative number (Scikit-Learn treats higher scores as better), so put a minus sign in front to read it. Why: shows the error in dollars for every fold.</p></div>
-      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add two lines to part <b>3. Output</b>: <code>rmse = -cross_val_score(LinearRegression(), df[features], df[&quot;Sale_Price_USD&quot;], cv=5, scoring=&quot;______________________________&quot;)</code> and <code>print(rmse.round(0).tolist())</code></p></div>
-    </div>
-    <div class="check"><b>Check:</b> <code>[7862.0, 15224.0, 4004.0, 8201.0, 3374.0]</code>. The error ranges from about $3,400 to $15,200 depending on which properties are tested.</div>
-  </div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Exercise 1: Guided</span></div>
+  <div class="title">Exercise 1: Suggest Prices for New Listings</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><p><b>Goal:</b> predict three new phones and show each price with a range of NT$500 on each side</p><p><b>Script:</b> <code>YourName_S33_suggest.py</code></p><ul class="tight"><li>Type the code in section 11 of the reading</li><li>New rows need the <b>same column names</b> as the training data</li><li>In two comments: why is the oldest phone, <code>NEW-3</code>, priced above <code>NEW-2</code>?</li></ul></div><div class="check"><b>Check:</b> NT$<code>22,600</code>, NT$<code>17,600</code>, NT$<code>19,500</code></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 14 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">10. Official References</span></div>
-  <div class="title">Where to Look Things Up</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: .14in;"><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Scikit-Learn: Linear Models (LinearRegression Documentation)</h2><p>https://scikit-learn.org/stable/modules/linear_model.html</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Scikit-Learn: Cross-Validation Metrics and Scoring</h2><p>https://scikit-learn.org/stable/modules/cross_validation.html</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Scikit-Learn: Regression Metrics (MAE, RMSE, R-squared)</h2><p>https://scikit-learn.org/stable/modules/model_evaluation.html#regression-metrics</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Gareth James et al.: An Introduction to Statistical Learning (ISLR with Applications in Python)</h2><p>https://www.statlearning.com/</p></div></div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Exercise 2: Applied</span></div>
+  <div class="title">Exercise 2: Error per Phone and a One-Row Prediction</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><p><b>Goal:</b> show each test phone&#x27;s error in percent, then price one phone</p><p><b>Script:</b> <code>YourName_S33_practice.py</code></p><ul class="tight"><li>Add <code>Error_Pct</code> and print MAPE (the average percentage error)</li><li><code>model.predict([24, 256, 88])</code> stops with a <code>ValueError</code>: ask the AI Chat what &quot;2D&quot; means</li><li>Fix it with a one-row DataFrame: <code>pd.DataFrame([[24, 256, 88]], columns=features)</code></li></ul></div><div class="check"><b>Check:</b> MAPE <code>2.7</code>%; your phone NT$<code>19,427</code></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 15 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 3</span><span class="kicker">11-13. Exercises</span></div>
-  <div class="title">Three Exercises</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid3 exg" data-uniform style="flex: 1; min-height: 0;"><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 1: GUIDED</div><h2>Property Valuation Engine</h2><p><b>Goal:</b> Train, predict, and evaluate a price model</p><p><b>File:</b> <code>YourName_S33_regression.py</code></p><p class="remember"><b>Check:</b> <code>Test RMSE: $11,539 | R-squared: 0.996</code></p></div><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 2: APPLIED</div><h2>Error per Property and a One-Row Prediction</h2><p><b>Goal:</b> Show each property&#x27;s error and price one new building</p><p><b>File:</b> <code>YourName_S33_practice.py</code></p><p class="remember"><b>Check:</b> MAPE <code>2.68</code>%</p></div><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 3: ADVANCED</div><h2>Does a Bigger Model Price Better?</h2><p><b>Goal:</b> Do more features give a better price model?</p><p><b>File:</b> <code>YourName_S33_challenge.py</code></p><p class="remember"><b>Check:</b> model C has the lowest average RMSE (<code>$7,733</code>)</p></div></div>
-    <div class="check">Full steps for all three exercises: sections 11-13 of the course page.</div>
-  </div>
+  <div><span class="eyebrow">MODULE 3</span><span class="kicker">Exercise 3: Advanced</span></div>
+  <div class="title">Exercise 3: Which Details Should the App Ask For?</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><p><b>Goal:</b> compare four feature lists with 5-fold cross-validation and pick the simplest good one</p><p><b>Script:</b> <code>YourName_S33_details.py</code></p><ul class="tight"><li>A: age; B: + storage; C: + battery; D: + photos</li><li>Rule: among models within NT$50 of the best, choose the fewest features</li><li>Requirements and hints: section 13 of the reading</li></ul></div><div class="check"><b>Check:</b> B: age + storage (MAE NT$<code>470</code>): battery health adds almost nothing</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 16 / 16</span></div>
 </section>
 
@@ -559,7 +543,7 @@ function fitAll() {
     });
     apply();
     const over = () => box.scrollHeight > box.clientHeight + 1 || box.scrollWidth > box.clientWidth + 1
-      || [...box.querySelectorAll('pre')].some((pre) => pre.scrollHeight > pre.clientHeight + 6 || pre.scrollWidth > pre.clientWidth + 6);
+      || [...box.querySelectorAll('pre, .outbox')].some((pre) => pre.scrollHeight > pre.clientHeight + 6 || pre.scrollWidth > pre.clientWidth + 2);
     while (over() && size > floor) { size -= 0.5; apply(); }
     if (over()) box.dataset.overflow = 'yes';
     box.__apply = (v) => { size = v; apply(); };

@@ -19,6 +19,8 @@ title: "{title}"
 subtitle: "Course 6141: Business Analytics & AI Application | Reading for Week {week}"
 format:
   pdf:
+    # dollar amounts such as "NT$500 to NT$600" must not become LaTeX math
+    from: markdown-tex_math_dollars
     pdf-engine: lualatex
     papersize: a4
     mainfont: "Times New Roman"
