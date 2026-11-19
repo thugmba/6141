@@ -325,214 +325,195 @@ ol.ex3 li { font-size: 18pt; line-height: 1.25; margin: .06in 0; }
 .sm-item code { font-size: .85em; white-space: normal; overflow-wrap: anywhere; }
 /* end session map */
 
+
+.stack { display: flex; flex-direction: column; gap: .14in; width: 100%; min-height: 0; }
+.answer { font-size: 19pt; margin: .06in 0; line-height: 1.25; }
+.answer b { color: #991B1B; }
+.mdtable td.good { background: #DCFCE7; font-weight: bold; }
+.mdtable td.bad { background: #FEE2E2; }
+.mdtable tr.best td { background: #DCFCE7; font-weight: bold; }
+.mdtable tr.old td { background: #FEF3C7; }
+.code-panel.w55 { width: 55%; }
+.code-panel.w48 { width: 48%; }
+.lead-q { font-size: 22pt; font-style: italic; color: #991B1B; margin: .06in 0 .1in; }
+.mdtable td, .mdtable th { vertical-align: middle; }
+.check { font-size: 22pt; }
+.check p { margin: 0; }
+.stack .card { flex-shrink: 0; }
+.mdtable.files code { white-space: nowrap; overflow-wrap: normal; }
+.overview { grid-template-columns: 1fr 1.25fr; }
+.answer { font-size: inherit; }
+.outbox.wrap { white-space: pre-wrap; overflow-wrap: anywhere; }
+.code-panel.w46 { width: 46%; }
+.stack { height: 100%; }
+.figbox { flex: 1 1 0; min-height: 0; display: flex; align-items: center; justify-content: center; }
+.figbox img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
+.figrow { display: grid; gap: .22in; width: 100%; min-height: 0; }
+.figrow > .figbox { height: 100%; }
+.figrow > .card { align-self: center; }
 </style>
 </head>
 <body>
-
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">1-2. Purpose and Outcomes</span></div>
-  <div class="title">Session 4.3: AI Applications in Business Decision-Making Part 2: Pricing Optimization and Revenue Management</div><div class="rule"></div>
-  <div class="body grid2 overview"><div class="card fitbox"><div class="tag">THE BUSINESS SITUATION</div><ul class="tight"><li>An online retailer sells 12 seasonal products; the season ends in 12 days, and stock left after that must be sold off cheaply</li><li>Prices were set by gut feeling: some may be too low (leaving profit on the table), others too high (leaving stock unsold)</li><li>The pricing manager asks: which prices should we raise, which should we cut, and how do we clear the stock before the season ends? Today, you measure how customers react to price and simulate profit before changing a single price</li></ul><p class="flow">Today's flow: 60 min lecture, then 120 min hands-on lab</p></div><div class="card fitbox"><div class="tag">EXPECTED OUTCOMES</div><h2>By the end of today, you will be able to:</h2><ol class="biz"><li><span class="q">"How strongly do customers react to price?"</span> Estimate the price elasticity of demand (the % change in units sold for a 1% change in price) from a price test</li><li><span class="q">"Would a price change raise profit?"</span> Simulate units, revenue, and gross profit for several price changes before making them</li><li><span class="q">"How do we clear the stock in time?"</span> Calculate the price cut each product needs to sell out before the season ends, and fix a <code>SyntaxError</code> (an unclosed bracket)</li></ol></div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">The Problem and the Result</span></div>
+  <div class="title">Session 4.3: What Should the Campus Store Charge?</div><div class="rule"></div>
+  <div class="body grid2 overview" style="grid-template-columns: 1fr 1.2fr;"><div class="card fitbox" data-start="22"><div class="tag">THE PROBLEM</div><ul class="tight"><li>The campus store sells 10 university products; the semester ends in <b>14 days</b></li><li>Leftovers go to a wholesaler at 40% of cost: a loss of 60% of the cost per item</li><li>Prices were set by gut feeling: some too low, some too high</li><li>The manager asks: how strongly do students react to price, which prices go up or down, and how do we clear the stock?</li></ul><p class="flow">Today: the result first, then the steps</p></div><div class="card fitbox" data-start="22"><div class="tag">THE RESULT</div><table class="mdtable"><thead><tr><th></th><th>Result</th></tr></thead><tbody><tr><td>Price test (hoodie)</td><td>elasticity -1.55</td></tr><tr><td>Best store-wide change</td><td>+5%: NT$18,646 a day</td></tr><tr class="old"><td>Will not sell out in time</td><td>5 of 10 products</td></tr><tr class="best"><td>Best price per product, 14 days</td><td>NT$253,557 (+NT$11,185)</td></tr></tbody></table><p class="answer">Profit, not revenue, is the goal; count the cost of leftovers.</p></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 1 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Session Map</span></div>
-  <div class="title">Session Map: Follow the Numbers</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: .14in;"><div class="sm-q"><b>Today's question:</b> Which prices should we raise, which should we cut, and how do we clear the stock before the season ends?</div><div class="sm-phases"><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">1</span><span><b>Why it matters</b><small>Lecture, part 1</small></span></div><p class="sm-item"><i>1.</i><span><b>Session Purpose</b><span class="d">answer today&#x27;s question</span></span></p><p class="sm-item"><i>2.</i><span><b>Learning Outcomes</b><span class="d">3 skills you will show today</span></span></p><p class="sm-item"><i>3.</i><span><b>Business Context</b><span class="d">Price, Volume, and Profit</span></span></p><p class="sm-item"><i>4.</i><span><b>Data Basics</b><span class="d">Measuring Elasticity with a Price Test</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">2</span><span><b>Learn the tools</b><small>Lecture, part 2</small></span></div><p class="sm-item"><i>5.</i><span><b>Lab Dataset</b><span class="d">2 CSVs</span></span></p><p class="sm-item"><i>6.</i><span><b>Keywords</b><span class="d">6 terms</span></span></p><p class="sm-item"><i>7.</i><span><b>Core Foundations</b><span class="d">5 ideas, one at a time</span></span></p><p class="sm-item"><i>8.</i><span><b>IDE Setup</b><span class="d">name files, run in the Terminal</span></span></p><p class="sm-item"><i>9.</i><span><b>Code Examples</b><span class="d">3 demos + Quick Checks</span></span></p><p class="sm-item"><i>10.</i><span><b>References</b><span class="d">3 official docs</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox sm-p3" data-start="22"><div class="sm-head"><span class="sm-step">3</span><span><b>Practice</b><small>Lab</small></span></div><p class="sm-item"><i>11.</i><span><b>Exercise 1: Guided</b><span class="d">Catalog Profit Curve</span></span></p><p class="sm-item"><i>12.</i><span><b>Exercise 2: Applied</b><span class="d">Markdowns That Clear the Stock</span></span></p><p class="sm-item"><i>13.</i><span><b>Exercise 3: Advanced</b><span class="d">The Best Season Price for Each Product</span></span></p></div></div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Key Ideas</span></div>
+  <div class="title">Margin, Sales, and Profit</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="figbox"><img src="../assets/session_04_03_fig_price_tradeoff.png" alt="The hoodie at three prices"></div><div class="card fitbox" data-start="22"><ul class="tight"><li><b>Unit margin</b> = price - unit cost; <b>profit</b> = margin x sales</li><li><b>Elasticity</b> <code>-1.55</code>: a 1% price rise loses about 1.55% of sales</li><li>New daily sales = old sales x (1 + elasticity x price change), for changes up to about 20%</li></ul></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 2 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">3. Business Context</span></div>
-  <div class="title">Price, Volume, and Profit</div><div class="rule"></div>
-  <div class="body grid2" style="grid-template-columns: 1fr 1.15fr;"><div class="card fitbox"><div class="tag">KEY POINTS</div><ul class="tight"><li>A lower price sells more units but earns less on each one; a higher price earns more per unit but sells fewer.</li><li>Price elasticity of demand (PED): if elasticity is <code>-1.5</code>, a 1% price increase loses about 1.5% of units.</li><li>The goal is profit, not revenue: a cut can raise revenue and still lower profit, because each extra unit brings in less margin.</li><li>Seasonal stock: units left at the season&#x27;s end lose most of their value.</li></ul></div><div class="card fitbox"><div class="tag">SEE IT ON REAL DATA</div><table class="mdtable"><tr><th>Term</th><th>Meaning</th><th>Example (<code>PRD-200</code>)</th></tr><tr><td>Unit margin</td><td>price - unit cost</td><td><code>$49.99 - $22.50 = $27.49</code></td></tr><tr><td>Gross margin %</td><td>unit margin / price x 100</td><td><code>55.0</code>%</td></tr><tr><td>Daily gross profit</td><td>unit margin x daily units</td><td><code>$27.49 x 32 = $879.68</code></td></tr><tr><td>Days of stock</td><td>inventory / daily units</td><td><code>450 / 32 = 14.1</code> days</td></tr></table></div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Key Ideas</span></div>
+  <div class="title">Stock and Time</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><table class="mdtable"><thead><tr><th>Term</th><th>Meaning</th><th>Hoodie</th></tr></thead><tbody><tr><td>Days of stock</td><td>stock / daily sales</td><td><code>120 / 8 = 15.0</code> days</td></tr><tr><td>Days left</td><td>until the semester ends</td><td><code>14</code></td></tr><tr><td>Leftover loss</td><td>0.6 x unit cost per unsold item</td><td><code>0.6 x 420 = NT$252</code> each</td></tr></tbody></table></div><div class="check">If the days of stock are more than the days left, a cut that sells the leftovers can earn more than keeping the price.</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 3 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">4. Data Basics</span></div>
-  <div class="title">Measuring Elasticity with a Price Test</div><div class="rule"></div>
-  <div class="body grid2" style="grid-template-columns: 1fr 1.15fr;"><div class="card fitbox"><div class="tag">KEY POINTS</div><ul class="tight"><li>To measure how customers react, the retailer changed the price of <code>PRD-202</code> once a week for 5 weeks and recorded daily units sold:</li><li>Elasticity is the slope of a straight line through <code>log(units)</code> against <code>log(price)</code>.</li><li><code>np.polyfit(x, y, 1)</code> fits that straight line and returns its slope and intercept.</li><li>Using elasticity for a small price change: new units = old units x (1 + elasticity x price change).</li></ul></div><div class="card fitbox"><div class="tag">AT A GLANCE</div><table class="mdtable"><tr><th>Week</th><th>Price</th><th>Daily units</th></tr><tr><td>1</td><td><code>$59.99</code></td><td><code>27.9</code></td></tr><tr><td>3</td><td><code>$69.99</code></td><td><code>22.0</code></td></tr><tr><td>5</td><td><code>$79.99</code></td><td><code>18.1</code></td></tr></table></div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">The Data</span></div>
+  <div class="title">Two Small Files (Fictional Teaching Data)</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><ul class="tight"><li><code>session_04_03_dataset.csv</code>: <b>10 campus store products</b>: price, unit cost, stock, daily sales (NT$)</li><li>Hoodie, T-shirt, Cap, Tote bag, Mug, Water bottle, Notebook, Umbrella, Lanyard, Keychain</li><li><code>session_04_03_price_test.csv</code>: <b>5 weeks</b> of tested hoodie prices (NT$790 to NT$990)</li></ul></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 4 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">5. Lab Practice Dataset</span></div>
-  <div class="title">The Data for Today</div><div class="rule"></div>
-  <div class="body grid2" style="grid-template-columns: 1fr 2.2fr;"><div class="card fitbox"><div class="tag">FILES</div><ul class="tight"><li><code>data/session_04_03_dataset.csv</code></li><li><code>data/session_04_03_price_test.csv</code></li></ul><p>Price test columns: <code>Test_Week</code> (1 to 5), <code>Product_ID</code>, <code>Test_Price_USD</code>, and <code>Avg_Daily_Units</code> (average units sold per day that week).</p></div><div class="card fitbox"><div class="tag">COLUMNS</div><table class="mdtable cols"><tr><td><code>Product_ID</code></td><td>Product code (e.g., <code>PRD-201</code>).</td></tr><tr><td><code>Current_Price_USD</code></td><td>Our current price in U.S. Dollars.</td></tr><tr><td><code>Competitor_Price_USD</code></td><td>The main competitor&#x27;s price for the same product.</td></tr><tr><td><code>Inventory_Units_Count</code></td><td>Units in stock.</td></tr><tr><td><code>Historical_Daily_Sales_Units</code></td><td>Average units sold per day at the current price.</td></tr><tr><td><code>Unit_Cost_USD</code></td><td>What one unit costs us, delivered to the warehouse.</td></tr></table></div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 5 / 16</span></div>
-</section>
-
-<section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">6. Keywords</span></div>
-  <div class="title">6 Terms You Need Today</div><div class="rule"></div>
-  <div class="body grid3" style="grid-template-rows: repeat(2, 1fr);"><div class="card fitbox"><div class="tag">TERM 1</div><h2><code>Price Elasticity of Demand (PED)</code></h2><p class="what"><b>What:</b> the % change in units sold for a 1% change in price</p><p class="why"><b>Why:</b> tells you whether a price rise loses a few customers or many</p></div><div class="card fitbox"><div class="tag">TERM 2</div><h2><code>Unit Margin</code> and <code>Gross Profit</code></h2><p class="what"><b>What:</b> price minus unit cost, and unit margin times units sold</p><p class="why"><b>Why:</b> the measure a pricing decision should maximize</p></div><div class="card fitbox"><div class="tag">TERM 3</div><h2><code>Price Simulation</code></h2><p class="what"><b>What:</b> computing units and profit for several possible prices before choosing one</p><p class="why"><b>Why:</b> test a decision on paper, not on real customers</p></div><div class="card fitbox"><div class="tag">TERM 4</div><h2><code>Days of Stock</code></h2><p class="what"><b>What:</b> inventory divided by daily sales</p><p class="why"><b>Why:</b> shows which products will not sell out in time</p></div><div class="card fitbox"><div class="tag">TERM 5</div><h2><code>Markdown</code></h2><p class="what"><b>What:</b> a planned price cut to sell stock faster</p><p class="why"><b>Why:</b> a smaller, earlier cut usually loses less than a fire sale at the end</p></div><div class="card fitbox"><div class="tag">TERM 6</div><h2><code>Salvage Value</code></h2><p class="what"><b>What:</b> what leftover stock is still worth after the season</p><p class="why"><b>Why:</b> decides how costly it is to be left with unsold units</p></div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 6 / 16</span></div>
-</section>
-
-<section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">7. Core Foundations</span></div>
-  <div class="title">How It Works</div><div class="rule"></div>
-  <div class="body f7" data-uniform style="display:grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: .16in;"><div class="card fitbox" data-start="24"><div class="tag">7.1</div><h2>Price elasticity</h2><p class="remember"><b>Remember:</b> elasticity = % change in units / % change in price; estimate it from several observations.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.2</div><h2>Why logs</h2><p class="remember"><b>Remember:</b> log price against log units: the slope is the elasticity.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.3</div><h2>Simulating a price change</h2><p class="remember"><b>Remember:</b> simulate profit, not revenue, and keep changes small.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.4</div><h2>Stock and time</h2><p class="remember"><b>Remember:</b> compare days of stock with days left; cut just enough to sell out.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.5</div><h2>Leftover stock has a cost</h2><p class="remember"><b>Remember:</b> count the cost of leftovers when you choose a price.</p></div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 7 / 16</span></div>
-</section>
-
-<section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">7. Core Foundations: On Real Data</span></div>
-  <div class="title">7.1 Price elasticity: On Real Data</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: .12in;"><div class="card fitbox" data-start="19"><div class="tag">SEE IT ON REAL DATA</div><table class="mdtable"><tr><th>Weeks</th><th>Price change</th><th>Units change</th><th>Elasticity of that step</th></tr><tr><td>1 to 2</td><td><code>+8.3</code>%</td><td><code>-12.5</code>%</td><td><code>-1.51</code></td></tr><tr><td>2 to 3</td><td><code>+7.7</code>%</td><td><code>-9.8</code>%</td><td><code>-1.28</code></td></tr><tr><td>3 to 4</td><td><code>+7.1</code>%</td><td><code>-10.9</code>%</td><td><code>-1.53</code></td></tr><tr><td>4 to 5</td><td><code>+6.7</code>%</td><td><code>-7.7</code>%</td><td><code>-1.15</code></td></tr></table></div><div class="check"><b>Remember:</b> elasticity = % change in units / % change in price; estimate it from several observations.</div></div>
-  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 8 / 16</span></div>
-</section>
-
-<section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Code Demonstration 1</span></div>
-  <div class="title">Estimate Elasticity from the Price Test</div><div class="rule"></div>
-  <div class="body">
-    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
-      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S43_demo_1.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
-<pre><span class="sec"># 1. Input: 5 weeks of tested prices for PRD-202</span>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Step 1</span></div>
+  <div class="title">Step 1: How Strongly Do Students React to Price?</div><div class="rule"></div>
+  <div class="body"><div class="code-panel w55 fitbox" data-start="21" data-floor="13"><div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S43_step_1.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div><pre><span class="sec"># 1. Input: 5 weeks of tested prices for the hoodie</span>
 import numpy as np
 import pandas as pd
 test = pd.read_csv(&quot;data/session_04_03_price_test.csv&quot;)
 
 <span class="sec"># 2. Process: a straight line through log(units) against log(price)</span>
-slope, intercept = np.polyfit(np.log(test[&quot;Test_Price_USD&quot;]),
+slope, intercept = np.polyfit(np.log(test[&quot;Test_Price_TWD&quot;]),
                               np.log(test[&quot;Avg_Daily_Units&quot;]), 1)
 elasticity = round(slope, 2)
 
 <span class="sec"># 3. Output: the elasticity and what it means</span>
 print(&quot;Price elasticity of demand:&quot;, elasticity)
-print(f&quot;A 1% price rise loses about {abs(elasticity)}% of units sold.&quot;)
-</pre>
-    </div>
-    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>import numpy as np</code> loads NumPy, the number library that pandas is built on.</li><li><code>np.log(...)</code> takes the logarithm of every price and every unit count (section 7.2).</li><li><code>np.polyfit(x, y, 1)</code> fits the best straight line through the 5 points and returns its slope and intercept.</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><div class="outbox">Price elasticity of demand: -1.51
-A 1% price rise loses about 1.51% of units sold.
-</div><ul class="tight"><li><code>-1.51</code> is below <code>-1</code>: customers of this product react strongly to price.</li></ul></div></div>
-  </div>
+print(f&quot;A 1% price rise loses about {abs(elasticity)}% of units sold.&quot;)</pre></div><div class="notes"><div class="card fitbox how" data-start="21"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>np.log()</code> turns % changes into differences</li><li><code>np.polyfit(x, y, 1)</code>: the best straight line; its slope is the elasticity</li></ul></div><div class="card fitbox out" data-start="21"><div class="tag">OUTPUT</div><div class="outbox">Price elasticity of demand: -1.55
+A 1% price rise loses about 1.55% of units sold.</div></div><div class="check fitbox" data-start="20"><p><b>Quick Check:</b> <code>.pct_change()</code> shows week-to-week reactions</p></div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 5 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Step 1</span></div>
+  <div class="title">Step 1: The Price Test</div><div class="rule"></div>
+  <div class="body"><div class="figrow" style="grid-template-columns: 1.6fr 1fr;"><div class="figbox"><img src="../assets/session_04_03_fig_price_test.png" alt="Hoodie price test with the fitted line"></div><div class="card fitbox" data-start="22"><ul class="tight"><li>5 weeks, 5 prices: higher price, fewer hoodies</li><li><code>-1.55</code> is below <code>-1</code>: students react strongly</li><li>A line through several weeks is more reliable than one change</li></ul></div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 6 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Step 1</span></div>
+  <div class="title">Step 1: Using the Elasticity</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><div class="tag">THE HOODIE: 8 A DAY AT NT$890, MARGIN NT$470</div><table class="mdtable"><thead><tr><th>Change</th><th>Price</th><th>Daily sales</th><th>Daily profit</th></tr></thead><tbody><tr><td>-10%</td><td>NT$801</td><td>8 x (1 + 0.155) = 9.2</td><td>NT$3,520</td></tr><tr><td>none</td><td>NT$890</td><td>8.0</td><td>NT$3,760</td></tr><tr class="best"><td>+10%</td><td>NT$979</td><td>8 x (1 - 0.155) = 6.8</td><td>NT$3,779</td></tr></tbody></table></div><div class="check">For the hoodie, a 10% rise keeps profit about the same: the higher margin makes up for the lost sales.</div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 7 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Step 2</span></div>
+  <div class="title">Step 2: Simulate Profit Before Changing a Price</div><div class="rule"></div>
+  <div class="body"><div class="code-panel w55 fitbox" data-start="21" data-floor="13"><div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S43_step_2.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div><pre><span class="sec"># 1. Input: the store&#x27;s products and the elasticity from Step 1</span>
+import pandas as pd
+df = pd.read_csv(&quot;data/session_04_03_dataset.csv&quot;, index_col=&quot;Product_ID&quot;)
+elasticity = -1.55
+
+<span class="sec"># 2. Process: one function, used for every price change</span>
+def daily_profit(price_change):
+    price = df[&quot;Price_TWD&quot;] * (1 + price_change)
+    units = df[&quot;Daily_Units&quot;] * (1 + elasticity * price_change)
+    return round(((price - df[&quot;Unit_Cost_TWD&quot;]) * units).sum())
+
+curve = {}
+for change in [-0.10, -0.05, 0.0, 0.05, 0.10]:
+    curve[f&quot;{change * 100:+.0f}%&quot;] = daily_profit(change)
+
+<span class="sec"># 3. Output: the whole store&#x27;s daily profit at each price change</span>
+for label, profit in curve.items():
+    print(f&quot;{label}: NT${profit:,}&quot;)</pre></div><div class="notes"><div class="card fitbox how" data-start="21"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>daily_profit(change)</code>: new prices, new sales, total profit</li><li>The hoodie&#x27;s elasticity is used for every product</li></ul></div><div class="card fitbox out" data-start="21"><div class="tag">OUTPUT</div><div class="outbox">-10%: NT$17,829
+-5%: NT$18,348
++0%: NT$18,620
++5%: NT$18,646
++10%: NT$18,424</div></div><div class="check fitbox" data-start="20"><p><b>Quick Check:</b> <code>max(curve, key=curve.get)</code> gives <code>+5%</code></p></div></div></div>
+  <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 8 / 16</span></div>
+</section>
+
+<section class="slide">
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Step 2</span></div>
+  <div class="title">Step 2: The Most Money Is Not the Most Profit</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="figbox"><img src="../assets/session_04_03_fig_profit_curve.png" alt="Revenue and profit for store-wide price changes"></div><div class="check">A 15% cut brings in the most revenue (NT$33,356) but the least profit (NT$17,063). Profit peaks at +5%.</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 9 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Quick Check 1</span></div>
-  <div class="title">Quick Check 1: <code>.pct_change()</code></div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid2 qc" style="flex: 1; min-height: 0;">
-      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>.pct_change()</code></h2><p><code>column.pct_change()</code> gives the change from the previous row, as a share (<code>0.08</code> = 8%). Why: shows the week-to-week reactions behind the single slope.</p></div>
-      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add one line to part <b>3. Output</b>: <code>print((test[[&quot;Test_Price_USD&quot;, &quot;Avg_Daily_Units&quot;]].__________() * 100).round(1))</code></p></div>
-    </div>
-    <div class="check"><b>Check:</b> the second row shows <code>8.3</code> (price up 8.3%) and <code>-12.5</code> (units down 12.5%). The first row is <code>NaN</code>, because week 1 has no previous week.</div>
-  </div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Step 3</span></div>
+  <div class="title">Step 3: Which Products Will Not Sell Out in Time?</div><div class="rule"></div>
+  <div class="body"><div class="code-panel w46 fitbox" data-start="21" data-floor="13"><div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S43_step_3.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div><pre><span class="sec"># 1. Input: the store&#x27;s products; the semester ends in 14 days</span>
+import pandas as pd
+df = pd.read_csv(&quot;data/session_04_03_dataset.csv&quot;, index_col=&quot;Product_ID&quot;)
+days_left = 14
+
+<span class="sec"># 2. Process: how many days the stock lasts at today&#x27;s sales</span>
+df[&quot;Days_Of_Stock&quot;] = (df[&quot;Stock_Units&quot;] / df[&quot;Daily_Units&quot;]).round(1)
+too_slow = df[df[&quot;Days_Of_Stock&quot;] &gt; days_left]
+
+<span class="sec"># 3. Output: the products that will still have stock when the semester ends</span>
+columns = [&quot;Product_Name&quot;, &quot;Stock_Units&quot;, &quot;Daily_Units&quot;, &quot;Days_Of_Stock&quot;]
+print(too_slow[columns])</pre></div><div class="notes"><div class="card fitbox how" data-start="21"><div class="tag">HOW IT WORKS</div><ul class="tight"><li>Days of stock = stock / daily sales</li><li>Keep the products with more than 14 days of stock</li></ul></div><div class="card fitbox out" data-start="21"><div class="tag">OUTPUT</div><div class="outbox">           Product_Name  Stock_Units  Daily_Units  Days_Of_Stock
+Product_ID                                                      
+MER-101          Hoodie          120          8.0           15.0
+MER-102         T-shirt          310         20.0           15.5
+MER-104        Tote bag          190         12.0           15.8
+MER-105             Mug           90          5.0           18.0
+MER-109         Lanyard          150          9.0           16.7</div></div><div class="check fitbox" data-start="20"><p><b>Quick Check:</b> <code>np.where()</code>: <code>Markdown</code> 5, <code>Keep</code> 5</p></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 10 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Code Demonstration 2</span></div>
-  <div class="title">Simulate Profit for Several Price Changes</div><div class="rule"></div>
-  <div class="body">
-    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
-      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S43_demo_2.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
-<pre><span class="sec"># 1. Input: the catalog and the elasticity from Micro-Example 1</span>
-import pandas as pd
-df = pd.read_csv(&quot;data/session_04_03_dataset.csv&quot;)
-elasticity = -1.51
-
-<span class="sec"># 2. Process: one function, used for every price change</span>
-def simulate(price_change):
-    price = df[&quot;Current_Price_USD&quot;] * (1 + price_change)
-    units = df[&quot;Historical_Daily_Sales_Units&quot;] * (1 + elasticity * price_change)
-    return round(((price - df[&quot;Unit_Cost_USD&quot;]) * units).sum(), 2)
-
-profit_curve = {}
-for change in [-0.10, -0.05, 0.0, 0.05, 0.10]:
-    profit_curve[f&quot;{change * 100:+.0f}%&quot;] = simulate(change)
-
-<span class="sec"># 3. Output: daily gross profit for the whole catalog at each change</span>
-for label, profit in profit_curve.items():
-    print(f&quot;{label}: ${profit:,.2f}&quot;)
-</pre>
-    </div>
-    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>elasticity = -1.51</code> uses the value measured in Micro-Example 1 for every product.</li><li><code>simulate(price_change)</code> computes the new price, the new units (section 7.3), and the total daily gross profit of the whole catalog.</li><li>The loop runs the function for 5 price changes and stores each result in a dictionary, labeled like <code>+5%</code>.</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><div class="outbox">-10%: $6,881.85
--5%: $7,163.83
-+0%: $7,342.85
-...</div><ul class="tight"><li>Profit rises from <code>-10</code>% up to <code>+5</code>%, then falls again at <code>+10</code>%: there is a best point in between.</li></ul></div></div>
-  </div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Step 3</span></div>
+  <div class="title">Step 3: Five Products Need a Cut</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="figbox"><img src="../assets/session_04_03_fig_days_of_stock.png" alt="Days of stock against 14 days left"></div><div class="check">The mug is the slowest: 20 would be left over. The other 5 products sell out in time: their prices could go up. <b>Common mistake:</b> cutting every price before a deadline.</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 11 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Quick Check 2</span></div>
-  <div class="title">Quick Check 2: <code>max(..., key=...)</code></div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid2 qc" style="flex: 1; min-height: 0;">
-      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>max(..., key=...)</code></h2><p><code>max(profit_curve, key=profit_curve.get)</code> returns the label with the highest profit. Why: finds the best scenario without reading the list by eye.</p></div>
-      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add one line to part <b>3. Output</b>: <code>print(&quot;Best change:&quot;, ___(profit_curve, key=profit_curve.get))</code></p></div>
-    </div>
-    <div class="check"><b>Check:</b> the Terminal shows <code>Best change: +5%</code>.</div>
-  </div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Plans</span></div>
+  <div class="title">One Price Rule for All, or the Best Price per Product?</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><table class="mdtable"><thead><tr><th>Plan</th><th>Profit over 14 days</th></tr></thead><tbody><tr class="old"><td>Today&#x27;s prices</td><td>NT$242,372</td></tr><tr class="best"><td>Best change per product (5 cuts, 5 rises)</td><td>NT$253,557</td></tr></tbody></table></div><div class="check">The cuts go exactly to the 5 slow products; products that sell out anyway carry a higher price (Exercise 3).</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 12 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Code Demonstration 3</span></div>
-  <div class="title">Which Products Will Not Sell Out in 12 Days?</div><div class="rule"></div>
-  <div class="body">
-    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
-      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S43_demo_3.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
-<pre><span class="sec"># 1. Input: the catalog</span>
-import pandas as pd
-df = pd.read_csv(&quot;data/session_04_03_dataset.csv&quot;)
-season_days = 12
-
-<span class="sec"># 2. Process: days of stock and our price gap to the competitor</span>
-df[&quot;Days_Of_Stock&quot;] = (
-    df[&quot;Inventory_Units_Count&quot;] / df[&quot;Historical_Daily_Sales_Units&quot;]
-).round(1)
-df[&quot;Price_Gap_Pct&quot;] = (
-    (df[&quot;Current_Price_USD&quot;] - df[&quot;Competitor_Price_USD&quot;])
-    / df[&quot;Competitor_Price_USD&quot;] * 100
-).round(1)
-at_risk = df[df[&quot;Days_Of_Stock&quot;] &gt; season_days]
-
-<span class="sec"># 3. Output: the products that need action</span>
-print(at_risk[[&quot;Product_ID&quot;, &quot;Days_Of_Stock&quot;, &quot;Price_Gap_Pct&quot;]])
-</pre>
-    </div>
-    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>Days_Of_Stock</code> divides inventory by daily sales (section 7.4).</li><li><code>Price_Gap_Pct</code> compares our price with the competitor&#x27;s: negative means we are cheaper.</li><li><code>df[df[&quot;Days_Of_Stock&quot;] &gt; season_days]</code> keeps the products that will not sell out in 12 days.</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><div class="outbox">  Product_ID  Days_Of_Stock  Price_Gap_Pct
-0     PRD-200           14.1           -3.9
-1     PRD-201           13.6            2.5
-...</div><ul class="tight"><li>6 of 12 products would still have stock at the end of the season.</li></ul></div></div>
-  </div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Summary</span></div>
+  <div class="title">Pricing with Data</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="figbox"><img src="../assets/session_04_03_fig_pricing_steps.png" alt="The pricing steps"></div><div class="check"><b>Remember:</b> measure how customers react before changing a price; simulate profit, not revenue; count the cost of what will be left over.</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 13 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Quick Check 3</span></div>
-  <div class="title">Quick Check 3: <code>np.where()</code></div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid2 qc" style="flex: 1; min-height: 0;">
-      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>np.where()</code></h2><p><code>np.where(condition, value_if_true, value_if_false)</code> fills a whole column with one of two values. Why: a one-line alternative to setting a default and overwriting it with <code>.loc[]</code>.</p></div>
-      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add <code>import numpy as np</code> to part <b>1. Input</b>, and one line at the end of part <b>2. Process</b>: <code>df[&quot;Action&quot;] = np._____(df[&quot;Days_Of_Stock&quot;] &gt; season_days, &quot;Markdown&quot;, &quot;Keep&quot;)</code>. Then print <code>df[&quot;Action&quot;].value_counts()</code>.</p></div>
-    </div>
-    <div class="check"><b>Check:</b> <code>Keep</code> <code>6</code>, <code>Markdown</code> <code>6</code>.</div>
-  </div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Exercise 1: Guided</span></div>
+  <div class="title">Exercise 1: Revenue or Profit?</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><p><b>Goal:</b> simulate units, revenue, and profit for store-wide changes from -15% to +15%</p><p><b>Script:</b> <code>YourName_S43_curve.py</code></p><ul class="tight"><li>Type the code in section 11 of the reading</li><li>Margin % per product, then one row per price change</li><li>In two comments: why is the highest revenue not the highest profit?</li></ul></div><div class="check"><b>Check:</b> profit peaks at <code>+5</code> (NT$<code>18,646</code>); revenue at <code>-15</code> (NT$<code>33,356</code>)</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 14 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">10. Official References</span></div>
-  <div class="title">Where to Look Things Up</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: .14in;"><div class="card fitbox"><div class="tag">REFERENCE</div><h2>NumPy API Reference: numpy.polyfit</h2><p>https://numpy.org/doc/stable/reference/generated/numpy.polyfit.html</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>NumPy API Reference: numpy.where</h2><p>https://numpy.org/doc/stable/reference/generated/numpy.where.html</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Phillips: Pricing and Revenue Optimization (Stanford Business Books)</h2><p>https://www.sup.org/books/title/?id=7234</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Talluri &amp; van Ryzin: The Theory and Practice of Revenue Management (Springer Standards)</h2><p>https://link.springer.com/book/10.1007/b139000</p></div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Exercise 2: Applied</span></div>
+  <div class="title">Exercise 2: Markdowns That Clear the Stock</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><p><b>Goal:</b> the price cut each slow product needs to sell out in 14 days</p><p><b>Script:</b> <code>YourName_S43_markdown.py</code></p><ul class="tight"><li>Needed sales = stock / 14; change = (needed / now - 1) / elasticity</li><li>A missing bracket gives <code>SyntaxError: &#x27;(&#x27; was never closed</code>: ask the AI Chat</li><li>Save the plan to <code>data/markdown_plan.csv</code></li></ul></div><div class="check"><b>Check:</b> mug <code>-18.4</code>% (NT$<code>286</code>), lanyard <code>-12.3</code>%, hoodie <code>-4.6</code>%</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 15 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">11-13. Exercises</span></div>
-  <div class="title">Three Exercises</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid3 exg" data-uniform style="flex: 1; min-height: 0;"><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 1: GUIDED</div><h2>Catalog Profit Curve</h2><p><b>Goal:</b> Simulate a wider range of price changes</p><p><b>File:</b> <code>YourName_S43_pricing.py</code></p><p class="remember"><b>Check:</b> gross margins from <code>52.5</code>% to <code>55.0</code>%</p></div><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 2: APPLIED</div><h2>Markdowns That Clear the Stock</h2><p><b>Goal:</b> Find the price cut each at-risk product needs</p><p><b>File:</b> <code>YourName_S43_practice.py</code></p><p class="remember"><b>Check:</b> <code>PRD-200</code> needs the deepest cut (<code>-11.4</code>%)</p></div><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 3: ADVANCED</div><h2>The Best Season Price for Each Product</h2><p><b>Goal:</b> Find each product&#x27;s best price for the season</p><p><b>File:</b> <code>YourName_S43_challenge.py</code></p><p class="remember"><b>Check:</b> 5 cuts, 4 rises, 3 unchanged</p></div></div>
-    <div class="check">Full steps for all three exercises: sections 11-13 of the course page.</div>
-  </div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Exercise 3: Advanced</span></div>
+  <div class="title">Exercise 3: The Best Semester Price for Each Product</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><p><b>Goal:</b> the price change with the most profit over 14 days, counting leftover losses</p><p><b>Script:</b> <code>YourName_S43_plan.py</code></p><ul class="tight"><li><code>season_profit(price, unit_cost, daily_units, stock)</code></li><li>Try <code>-20%</code> to <code>+20%</code> for every product; keep the best</li><li>Requirements and hints: section 13 of the reading</li></ul></div><div class="check"><b>Check:</b> 5 cuts, 5 rises: NT$<code>253,557</code> vs NT$<code>242,372</code></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 16 / 16</span></div>
 </section>
 
@@ -549,7 +530,7 @@ function fitAll() {
     });
     apply();
     const over = () => box.scrollHeight > box.clientHeight + 1 || box.scrollWidth > box.clientWidth + 1
-      || [...box.querySelectorAll('pre')].some((pre) => pre.scrollHeight > pre.clientHeight + 6 || pre.scrollWidth > pre.clientWidth + 6);
+      || [...box.querySelectorAll('pre, .outbox')].some((pre) => pre.scrollHeight > pre.clientHeight + 6 || pre.scrollWidth > pre.clientWidth + 2);
     while (over() && size > floor) { size -= 0.5; apply(); }
     if (over()) box.dataset.overflow = 'yes';
     box.__apply = (v) => { size = v; apply(); };

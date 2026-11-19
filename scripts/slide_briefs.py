@@ -62,9 +62,9 @@ EXERCISES = {
         ("The best offer for each member", "7 BOGO, 1 coupon: NT$`2,059.42`"),
     ],
     "4.3": [
-        ("Simulate a wider range of price changes", "gross margins from `52.5`% to `55.0`%"),
-        ("Find the price cut each at-risk product needs", "`PRD-200` needs the deepest cut (`-11.4`%)"),
-        ("Find each product's best price for the season", "5 cuts, 4 rises, 3 unchanged"),
+        ("Revenue or profit?", "profit peaks at `+5`; revenue at `-15`"),
+        ("Markdowns that clear the stock", "mug `-18.4`% (NT$`286`)"),
+        ("The best semester price for each product", "NT$`253,557` vs NT$`242,372`"),
     ],
     "4.4": [
         ("Audit approval rates at the current threshold", "ratio `0.286`: below the four-fifths rule"),
