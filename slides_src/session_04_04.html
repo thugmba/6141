@@ -325,204 +325,198 @@ ol.ex3 li { font-size: 18pt; line-height: 1.25; margin: .06in 0; }
 .sm-item code { font-size: .85em; white-space: normal; overflow-wrap: anywhere; }
 /* end session map */
 
+
+.stack { display: flex; flex-direction: column; gap: .14in; width: 100%; min-height: 0; }
+.answer { font-size: 19pt; margin: .06in 0; line-height: 1.25; }
+.answer b { color: #991B1B; }
+.mdtable td.good { background: #DCFCE7; font-weight: bold; }
+.mdtable td.bad { background: #FEE2E2; }
+.mdtable tr.best td { background: #DCFCE7; font-weight: bold; }
+.mdtable tr.old td { background: #FEF3C7; }
+.code-panel.w55 { width: 55%; }
+.code-panel.w48 { width: 48%; }
+.lead-q { font-size: 22pt; font-style: italic; color: #991B1B; margin: .06in 0 .1in; }
+.mdtable td, .mdtable th { vertical-align: middle; }
+.check { font-size: 22pt; }
+.check p { margin: 0; }
+.stack .card { flex-shrink: 0; }
+.mdtable.files code { white-space: nowrap; overflow-wrap: normal; }
+.overview { grid-template-columns: 1fr 1.25fr; }
+.answer { font-size: inherit; }
+.outbox.wrap { white-space: pre-wrap; overflow-wrap: anywhere; }
+.code-panel.w46 { width: 46%; }
+.stack { height: 100%; }
+.figbox { flex: 1 1 0; min-height: 0; display: flex; align-items: center; justify-content: center; }
+.figbox img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
+.figrow { display: grid; gap: .22in; width: 100%; min-height: 0; }
+.figrow > .figbox { height: 100%; }
+.figrow > .card { align-self: center; }
 </style>
 </head>
 <body>
-
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">1-2. Purpose and Outcomes</span></div>
-  <div class="title">Session 4.4: Ethical Considerations in Artificial Intelligence: Algorithmic Bias, Regulatory Compliance, and AI Governance</div><div class="rule"></div>
-  <div class="body grid2 overview"><div class="card fitbox"><div class="tag">THE BUSINESS SITUATION</div><ul class="tight"><li>A consumer lender approves loan applications automatically when its model&#x27;s approval score is <code>0.70</code> or higher</li><li>Before the model&#x27;s annual review, the board&#x27;s risk committee must confirm that it treats applicant groups fairly and that every rejection can be explained to the applicant</li><li>The chief risk officer asks: does our credit model treat applicant groups fairly, can we explain each rejection, and what should the board decide? Today, you audit the model for fairness, explain its decisions, and prepare the facts the board needs</li></ul><p class="flow">Today's flow: 60 min lecture, then 120 min hands-on lab</p></div><div class="card fitbox"><div class="tag">EXPECTED OUTCOMES</div><h2>By the end of today, you will be able to:</h2><ol class="biz"><li><span class="q">"Are the groups treated alike?"</span> Measure approval rates by group and the disparate impact ratio, and test it against the four-fifths rule</li><li><span class="q">"Why was this applicant rejected?"</span> Explain each decision with feature contributions (how much each feature pushed the score up or down)</li><li><span class="q">"What should the board decide?"</span> Compare one shared threshold&#x27;s fairness and risk, write a governance record, and fix a <code>NameError</code> caused by a variable that only exists inside a function</li></ol></div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">The Problem and the Result</span></div>
+  <div class="title">Session 4.4: Is the Internship Screening Tool Fair?</div><div class="rule"></div>
+  <div class="body grid2 overview" style="grid-template-columns: 1fr 1.2fr;"><div class="card fitbox" data-start="22"><div class="tag">THE PROBLEM</div><ul class="tight"><li>An AI tool scores internship applicants; <b>0.70 or more</b> gets an interview</li><li>It uses GPA, a coding test, and the number of club activities</li><li>Two protected groups, A and B: the tool never sees the group</li><li>Recruiting asks: are both groups invited at similar rates, why was each applicant rejected, and what should we do?</li></ul><p class="flow">Today: the result first, then the audit</p></div><div class="card fitbox" data-start="22"><div class="tag">THE RESULT (20 APPLICANTS)</div><table class="mdtable"><thead><tr><th></th><th>Group A</th><th>Group B</th></tr></thead><tbody><tr class="old"><td>Invited</td><td>70%</td><td>30%</td></tr><tr><td>GPA (average)</td><td>3.31</td><td>3.35</td></tr><tr><td>Coding test (average)</td><td>70.7</td><td>70.1</td></tr><tr class="old"><td>Club activities (average)</td><td>3.4</td><td>1.1</td></tr></tbody></table><p class="answer">Ratio <b>0.429</b>: fails the four-fifths rule. Same skills; the gap comes from club activities.</p></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 1 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Session Map</span></div>
-  <div class="title">Session Map: Follow the Numbers</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: .14in;"><div class="sm-q"><b>Today's question:</b> Does our credit model treat applicant groups fairly, can we explain each rejection, and what should the board decide?</div><div class="sm-phases"><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">1</span><span><b>Why it matters</b><small>Lecture, part 1</small></span></div><p class="sm-item"><i>1.</i><span><b>Session Purpose</b><span class="d">answer today&#x27;s question</span></span></p><p class="sm-item"><i>2.</i><span><b>Learning Outcomes</b><span class="d">3 skills you will show today</span></span></p><p class="sm-item"><i>3.</i><span><b>Business Context</b><span class="d">Fairness, Explanations, and Accountability</span></span></p><p class="sm-item"><i>4.</i><span><b>Data Basics</b><span class="d">Three Fairness Numbers</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">2</span><span><b>Learn the tools</b><small>Lecture, part 2</small></span></div><p class="sm-item"><i>5.</i><span><b>Lab Dataset</b><span class="d">1 CSV</span></span></p><p class="sm-item"><i>6.</i><span><b>Keywords</b><span class="d">6 terms</span></span></p><p class="sm-item"><i>7.</i><span><b>Core Foundations</b><span class="d">5 ideas, one at a time</span></span></p><p class="sm-item"><i>8.</i><span><b>IDE Setup</b><span class="d">name files, run in the Terminal</span></span></p><p class="sm-item"><i>9.</i><span><b>Code Examples</b><span class="d">3 demos + Quick Checks</span></span></p><p class="sm-item"><i>10.</i><span><b>References</b><span class="d">4 official docs</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox sm-p3" data-start="22"><div class="sm-head"><span class="sm-step">3</span><span><b>Practice</b><small>Lab</small></span></div><p class="sm-item"><i>11.</i><span><b>Exercise 1: Guided</b><span class="d">Fairness Audit Report</span></span></p><p class="sm-item"><i>12.</i><span><b>Exercise 2: Applied</b><span class="d">A Reusable Audit Function and a Governance Record</span></span></p><p class="sm-item"><i>13.</i><span><b>Exercise 3: Advanced</b><span class="d">Can One Shared Threshold Fix the Gap?</span></span></p></div></div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Key Ideas</span></div>
+  <div class="title">Unfair Without Seeing the Group</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="figbox"><img src="../assets/session_04_04_fig_proxy.png" alt="How a proxy feature creates a gap"></div><div class="check">A feature that differs between groups (a <b>proxy</b>) carries the gap into the score. Nobody intended it.</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 2 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">3. Business Context</span></div>
-  <div class="title">Fairness, Explanations, and Accountability</div><div class="rule"></div>
-  <div class="body"><div class="card fitbox"><div class="tag">KEY POINTS</div><ul class="tight"><li>A model learns patterns from past data.</li><li>Two kinds of unfair treatment:<ul class="tight"><li><b>Disparate treatment:</b> using a person&#x27;s group directly in the decision, such as a different threshold for each group. In lending, this is prohibited in many countries, including under the US Equal Credit Opportunity Act (ECOA).</li><li><b>Disparate impact:</b> a rule that treats everyone the same on paper, but approves one group far less often. It is a warning sign that must be investigated and justified.</li></ul></li><li>The four-fifths rule: if one group&#x27;s approval rate is less than 80% (four-fifths) of the most-approved group&#x27;s rate, the gap needs review.</li><li>Explanations are required: US lenders must give rejected applicants the main reasons (an adverse action notice), and the EU AI Act (European Union Artificial Intelligence Act) treats credit scoring of people as high-risk, with duties for documentation, human oversight, and transparency.</li><li>Governance: the board stays accountable for automated decisions.</li></ul></div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Key Ideas</span></div>
+  <div class="title">Two Kinds of Unfair Treatment and a First Test</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="23"><table class="mdtable"><thead><tr><th>Idea</th><th>Meaning</th></tr></thead><tbody><tr><td>Disparate treatment</td><td>deciding by group, e.g. a different threshold per group: forbidden</td></tr><tr><td>Disparate impact</td><td>one rule for all, but one group is selected far less often: investigate</td></tr><tr><td>Four-fifths rule</td><td>a group&#x27;s rate below 80% of the highest rate needs review</td></tr><tr><td>Feature effect</td><td>coefficient x (value - average): what pushed the score down</td></tr></tbody></table></div><div class="check">Failing the four-fifths rule is a reason to investigate, not proof of discrimination. The EU AI Act treats AI in hiring as high-risk.</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 3 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">4. Data Basics</span></div>
-  <div class="title">Three Fairness Numbers</div><div class="rule"></div>
-  <div class="body"><div class="card fitbox"><div class="tag">KEY POINTS</div><ul class="tight"><li>Approval rate of a group = approved applicants in the group / all applicants in the group.</li><li>Disparate impact ratio = the lower group&#x27;s approval rate / the higher group&#x27;s approval rate.</li><li>Feature contribution (for a model that adds up features, like linear regression) = coefficient x (applicant&#x27;s value - average value).</li><li>Our approval scores come from a model whose formula we were not given.</li></ul></div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">The Data</span></div>
+  <div class="title">One Small File (Fictional Teaching Data)</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><ul class="tight"><li><code>session_04_04_dataset.csv</code>: <b>20 internship applicants</b>, 10 per group</li><li><code>Group</code>: <code>Group_A</code> or <code>Group_B</code>, a protected characteristic, used only for the audit</li><li><code>GPA</code>, <code>Coding_Test_Score</code> (0-100), <code>Club_Activities_Count</code> (0-5)</li><li><code>Screening_Score</code>: the tool&#x27;s score; invited at <code>0.70</code> or more</li></ul></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 4 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">5. Lab Practice Dataset</span></div>
-  <div class="title">The Data for Today</div><div class="rule"></div>
-  <div class="body grid2" style="grid-template-columns: 1fr 2.2fr;"><div class="card fitbox"><div class="tag">FILES</div><ul class="tight"><li><code>data/session_04_04_dataset.csv</code></li></ul><p>Audited 16-row loan application dataset (fictional teaching data), one row per applicant, 8 in each group:</p></div><div class="card fitbox"><div class="tag">COLUMNS</div><table class="mdtable cols"><tr><td><code>Applicant_ID</code></td><td>Applicant code (e.g., <code>APP-6001</code>).</td></tr><tr><td><code>Demographic_Group</code></td><td>An anonymized protected group, <code>Group_A</code> or <code>Group_B</code>. A protected group is defined by a characteristic such as race, sex, or age that the law forbids using against an applicant. The model does not use this column; auditors use it only to test fairness.</td></tr><tr><td><code>Credit_Score_Count</code></td><td>Credit score from a credit bureau (a company that records how people repay debts); higher is better.</td></tr><tr><td><code>Debt_To_Income_Pct</code></td><td>Monthly debt payments as a share of monthly income (DTI); lower is safer.</td></tr><tr><td><code>Algorithmic_Approval_Score</code></td><td>The model&#x27;s score from 0 to 1; approved at <code>0.70</code> or higher.</td></tr><tr><td><code>Adverse_Action_Notice_Flag</code></td><td><code>1</code> if the applicant was rejected and must receive an adverse action notice, else <code>0</code>.</td></tr></table></div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Step 1</span></div>
+  <div class="title">Step 1: Are Both Groups Invited at Similar Rates?</div><div class="rule"></div>
+  <div class="body"><div class="code-panel w55 fitbox" data-start="21" data-floor="13"><div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S44_step_1.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div><pre><span class="sec"># 1. Input: 20 internship applicants and their AI screening scores</span>
+import pandas as pd
+df = pd.read_csv(&quot;data/session_04_04_dataset.csv&quot;, index_col=&quot;Applicant_ID&quot;)
+
+<span class="sec"># 2. Process: invited at 0.70, the invite rate of each group, and the ratio</span>
+df[&quot;Invited&quot;] = (df[&quot;Screening_Score&quot;] &gt;= 0.70).astype(int)
+rates = df.groupby(&quot;Group&quot;)[&quot;Invited&quot;].mean()
+ratio = rates.min() / rates.max()
+
+<span class="sec"># 3. Output: rates, the ratio, and the four-fifths test</span>
+print(rates)
+print(f&quot;Ratio of the invite rates: {ratio:.3f}&quot;)
+print(&quot;Passes the four-fifths rule:&quot;, ratio &gt;= 0.80)</pre></div><div class="notes"><div class="card fitbox how" data-start="21"><div class="tag">HOW IT WORKS</div><ul class="tight"><li>Mean of a 0/1 column = the invite rate</li><li>Ratio = lower rate / higher rate; pass at <code>0.80</code></li></ul></div><div class="card fitbox out" data-start="21"><div class="tag">OUTPUT</div><div class="outbox">Group
+Group_A    0.7
+Group_B    0.3
+Name: Invited, dtype: float64
+Ratio of the invite rates: 0.429
+Passes the four-fifths rule: False</div></div><div class="check fitbox" data-start="20"><p><b>Quick Check:</b> <code>pd.crosstab()</code>: A 7 invited, B 3 invited</p></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 5 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">6. Keywords</span></div>
-  <div class="title">6 Terms You Need Today</div><div class="rule"></div>
-  <div class="body grid3" style="grid-template-rows: repeat(2, 1fr);"><div class="card fitbox"><div class="tag">TERM 1</div><h2><code>Disparate Impact</code></h2><p class="what"><b>What:</b> a rule that approves one group much less often than another, even though it never uses the group</p><p class="why"><b>Why:</b> the most common way bias enters automated decisions</p></div><div class="card fitbox"><div class="tag">TERM 2</div><h2><code>Disparate Impact Ratio</code> and the <code>Four-Fifths Rule</code></h2><p class="what"><b>What:</b> the lower approval rate divided by the higher one, tested against <code>0.80</code></p><p class="why"><b>Why:</b> a simple, widely used first test of fairness</p></div><div class="card fitbox"><div class="tag">TERM 3</div><h2><code>Disparate Treatment</code></h2><p class="what"><b>What:</b> deciding differently because of a person&#x27;s group</p><p class="why"><b>Why:</b> prohibited in lending in many countries, so it can never be the fix</p></div><div class="card fitbox"><div class="tag">TERM 4</div><h2><code>Explainability</code> (feature contributions, SHAP)</h2><p class="what"><b>What:</b> showing how much each feature pushed a decision up or down</p><p class="why"><b>Why:</b> applicants, regulators, and managers need reasons, not just scores</p></div><div class="card fitbox"><div class="tag">TERM 5</div><h2><code>Surrogate Model</code></h2><p class="what"><b>What:</b> a simple model fitted to copy a model whose formula is hidden</p><p class="why"><b>Why:</b> makes a hidden model explainable, as long as the copy is accurate</p></div><div class="card fitbox"><div class="tag">TERM 6</div><h2><code>AI Governance</code></h2><p class="what"><b>What:</b> the rules, records, and people that keep AI decisions accountable</p><p class="why"><b>Why:</b> the board, not the model, answers for the decisions</p></div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Step 1</span></div>
+  <div class="title">Step 1: Group B Is Far Below the Line</div><div class="rule"></div>
+  <div class="body"><div class="figrow" style="grid-template-columns: 1.4fr 1fr;"><div class="figbox"><img src="../assets/session_04_04_fig_rates.png" alt="Invite rates and the four-fifths line"></div><div class="card fitbox" data-start="22"><ul class="tight"><li>7 of 10 in Group A, 3 of 10 in Group B</li><li>Four-fifths of 70% is 56%: Group B&#x27;s 30% is far below</li><li><b>Common mistake:</b> &quot;the tool never sees the group, so it is fair&quot;</li></ul></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 6 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">7. Core Foundations</span></div>
-  <div class="title">How It Works</div><div class="rule"></div>
-  <div class="body f7" data-uniform style="display:grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: .16in;"><div class="card fitbox" data-start="24"><div class="tag">7.1</div><h2>Approval rates by group</h2><p class="remember"><b>Remember:</b> the mean of a 0/1 column is a rate.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.2</div><h2>The disparate impact ratio and the four-fifths rule</h2><p class="remember"><b>Remember:</b> lower rate / higher rate; below <code>0.80</code>, investigate.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.3</div><h2>Where a gap comes from</h2><p class="remember"><b>Remember:</b> a model can be unfair without using the group column; look at the features.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.4</div><h2>Explaining one decision</h2><p class="remember"><b>Remember:</b> contribution = coefficient x (value - average); the largest negative one is the main reason.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.5</div><h2>Fair process</h2><p class="remember"><b>Remember:</b> never decide by group; fix the cause, add oversight, and document every decision.</p></div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Step 2</span></div>
+  <div class="title">Step 2: Where Does the Gap Come From?</div><div class="rule"></div>
+  <div class="body"><div class="code-panel w55 fitbox" data-start="21" data-floor="13"><div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S44_step_2.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div><pre><span class="sec"># 1. Input: the 20 applicants</span>
+import pandas as pd
+df = pd.read_csv(&quot;data/session_04_04_dataset.csv&quot;, index_col=&quot;Applicant_ID&quot;)
+features = [&quot;GPA&quot;, &quot;Coding_Test_Score&quot;, &quot;Club_Activities_Count&quot;]
+
+<span class="sec"># 2. Process: the average of each feature and of the score, by group</span>
+profile = df.groupby(&quot;Group&quot;)[features + [&quot;Screening_Score&quot;]].mean().round(2)
+
+<span class="sec"># 3. Output: the two groups side by side</span>
+print(profile.T)</pre></div><div class="notes"><div class="card fitbox how" data-start="21"><div class="tag">HOW IT WORKS</div><ul class="tight"><li>Average each feature and the score by group</li><li><code>.T</code> flips the table: measures become rows</li></ul></div><div class="card fitbox out" data-start="21"><div class="tag">OUTPUT</div><div class="outbox">Group                  Group_A  Group_B
+GPA                       3.31     3.35
+Coding_Test_Score        70.70    70.10
+Club_Activities_Count     3.40     1.10
+Screening_Score           0.75     0.62</div></div><div class="check fitbox" data-start="20"><p><b>Quick Check:</b> clubs: Group A 1-5, Group B 0-3</p></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 7 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">7. Core Foundations: On Real Data</span></div>
-  <div class="title">7.1 Approval rates by group: On Real Data</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: .12in;"><div class="card fitbox" data-start="19"><div class="tag">SEE IT ON REAL DATA</div><table class="mdtable"><tr><th>Group</th><th>Applicants</th><th>Approved</th><th>Approval rate</th></tr><tr><td><code>Group_A</code></td><td><code>8</code></td><td><code>7</code></td><td><code>0.875</code></td></tr><tr><td><code>Group_B</code></td><td><code>8</code></td><td><code>2</code></td><td><code>0.250</code></td></tr></table></div><div class="check"><b>Remember:</b> the mean of a 0/1 column is a rate.</div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Step 2</span></div>
+  <div class="title">Step 2: Same Skills, Fewer Clubs</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="figbox"><img src="../assets/session_04_04_fig_profiles.png" alt="Feature averages by group"></div><div class="check">The real question, for people: do club activities measure ability for this job, or free time? Students with part-time jobs have less time for clubs.</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 8 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Code Demonstration 1</span></div>
-  <div class="title">Approval Rates and the Four-Fifths Rule</div><div class="rule"></div>
-  <div class="body">
-    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
-      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S44_demo_1.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
-<pre><span class="sec"># 1. Input: the 16 applications</span>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Step 3</span></div>
+  <div class="title">Step 3: Why Was Each Applicant Rejected?</div><div class="rule"></div>
+  <div class="body"><div class="code-panel w55 fitbox" data-start="21" data-floor="13"><div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S44_step_3.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div><pre><span class="sec"># 1. Input: the 20 applicants and the three features</span>
 import pandas as pd
-df = pd.read_csv(&quot;data/session_04_04_dataset.csv&quot;)
+from sklearn.linear_model import LinearRegression
+df = pd.read_csv(&quot;data/session_04_04_dataset.csv&quot;, index_col=&quot;Applicant_ID&quot;)
+features = [&quot;GPA&quot;, &quot;Coding_Test_Score&quot;, &quot;Club_Activities_Count&quot;]
 
-<span class="sec"># 2. Process: decisions at 0.70, approval rate per group, and the ratio</span>
-df[&quot;Approved&quot;] = (df[&quot;Algorithmic_Approval_Score&quot;] &gt;= 0.70).astype(int)
-rates = df.groupby(&quot;Demographic_Group&quot;)[&quot;Approved&quot;].mean()
-ratio = rates.min() / rates.max()
+<span class="sec"># 2. Process: copy the hidden score, then the effect of each feature</span>
+copy = LinearRegression().fit(df[features], df[&quot;Screening_Score&quot;])
+effects = ((df[features] - df[features].mean()) * copy.coef_).round(3)
+effects.columns = [&quot;GPA&quot;, &quot;Test&quot;, &quot;Clubs&quot;]
+effects[&quot;Main_Reason&quot;] = effects.idxmin(axis=1)
+rejected = df[&quot;Screening_Score&quot;] &lt; 0.70
 
-<span class="sec"># 3. Output: rates, ratio, and the four-fifths test</span>
-print(rates)
-print(f&quot;Disparate impact ratio: {ratio:.3f}&quot;)
-print(&quot;Passes the four-fifths rule:&quot;, ratio &gt;= 0.80)
-</pre>
-    </div>
-    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>(df[&quot;Algorithmic_Approval_Score&quot;] &gt;= 0.70).astype(int)</code> turns each score into <code>1</code> (approved) or <code>0</code> (rejected).</li><li><code>df.groupby(&quot;Demographic_Group&quot;)[&quot;Approved&quot;].mean()</code> gives each group&#x27;s approval rate (section 7.1).</li><li><code>rates.min() / rates.max()</code> divides the lower rate by the higher, whichever group it is (section 7.2).</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><div class="outbox">Demographic_Group
-Group_A    0.875
-Group_B    0.250
-...</div><ul class="tight"><li>7 of 8 Group A applicants are approved, but only 2 of 8 in Group B.</li></ul></div></div>
-  </div>
+<span class="sec"># 3. Output: how well the copy fits, then the reasons for each rejection</span>
+fit = copy.score(df[features], df[&quot;Screening_Score&quot;])
+print(&quot;R-squared of the copy:&quot;, round(fit, 3))
+print(effects[rejected].join(df[&quot;Group&quot;]))</pre></div><div class="notes"><div class="card fitbox how" data-start="21"><div class="tag">HOW IT WORKS</div><ul class="tight"><li>A linear model copies the hidden score (a surrogate)</li><li>Effect = coefficient x (value - average); <code>idxmin</code> gives the main reason</li></ul></div><div class="card fitbox out" data-start="21"><div class="tag">OUTPUT</div><div class="outbox">R-squared of the copy: 0.987
+                GPA   Test  Clubs Main_Reason    Group
+Applicant_ID                                          
+APP-303       0.043 -0.080 -0.014        Test  Group_B
+APP-305      -0.068 -0.080  0.101        Test  Group_A
+APP-306      -0.052 -0.028 -0.072       Clubs  Group_B
+APP-307      -0.068 -0.086 -0.072        Test  Group_B
+APP-312      -0.005  0.010 -0.129       Clubs  Group_B
+... (5 more rejected applicants)</div></div><div class="check fitbox" data-start="20"><p><b>Quick Check:</b> Group B: clubs is the main reason 5 times</p></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 9 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Quick Check 1</span></div>
-  <div class="title">Quick Check 1: <code>.map()</code></div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid2 qc" style="flex: 1; min-height: 0;">
-      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>.map()</code></h2><p><code>column.map({1: &quot;Approved&quot;, 0: &quot;Rejected&quot;})</code> replaces each value using a dictionary. Why: tables for the board should use words, not codes.</p></div>
-      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add two lines to part <b>3. Output</b>: <code>df[&quot;Decision&quot;] = df[&quot;Approved&quot;].___({1: &quot;Approved&quot;, 0: &quot;Rejected&quot;})</code> and <code>print(pd.crosstab(df[&quot;Demographic_Group&quot;], df[&quot;Decision&quot;]))</code></p></div>
-    </div>
-    <div class="check"><b>Check:</b> Group A: <code>7</code> approved, <code>1</code> rejected; Group B: <code>2</code> approved, <code>6</code> rejected.</div>
-  </div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Step 3</span></div>
+  <div class="title">Step 3: Two Applicants Side by Side</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="figbox"><img src="../assets/session_04_04_fig_two_applicants.png" alt="Feature effects for APP-315 and APP-319"></div><div class="check"><code>APP-315</code> has the better GPA and coding score but no clubs: rejected. <code>APP-319</code> has weaker skills but 5 clubs: invited.</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 10 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Code Demonstration 2</span></div>
-  <div class="title">Where Does the Gap Come From?</div><div class="rule"></div>
-  <div class="body">
-    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
-      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S44_demo_2.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
-<pre><span class="sec"># 1. Input: the 16 applications</span>
-import pandas as pd
-df = pd.read_csv(&quot;data/session_04_04_dataset.csv&quot;)
-
-<span class="sec"># 2. Process: average features and score by group</span>
-profile = df.groupby(&quot;Demographic_Group&quot;)[
-    [&quot;Credit_Score_Count&quot;, &quot;Debt_To_Income_Pct&quot;, &quot;Algorithmic_Approval_Score&quot;]
-].mean().round(2)
-
-<span class="sec"># 3. Output: the two group profiles</span>
-print(profile)
-</pre>
-    </div>
-    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>df.groupby(&quot;Demographic_Group&quot;)[[...]].mean()</code> averages the two features and the score in each group (section 7.3).</li><li>The group column is used here only by the auditor, to compare groups; the model never sees it.</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><ul class="tight"><li>The <code>...</code> hides the debt-to-income column: Group A <code>26.58</code>%, Group B <code>36.05</code>%.</li></ul></div></div>
-  </div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Step 3</span></div>
+  <div class="title">Step 3: The Main Reason for Each Rejection</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><table class="mdtable"><thead><tr><th>Rejected in</th><th>GPA</th><th>Coding test</th><th>Club activities</th></tr></thead><tbody><tr><td>Group A (3)</td><td>1</td><td>2</td><td>0</td></tr><tr class="old"><td>Group B (7)</td><td>0</td><td>2</td><td>5</td></tr></tbody></table></div><div class="check">The copy explains 98.7% of the scores (R-squared <code>0.987</code>), so these reasons can be trusted. <b>Common mistake:</b> explaining a model you have not checked.</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 11 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Quick Check 2</span></div>
-  <div class="title">Quick Check 2: <code>.T</code></div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid2 qc" style="flex: 1; min-height: 0;">
-      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>.T</code></h2><p><code>table.T</code> flips a table so that rows become columns. Why: with many measures and few groups, the flipped table is easier to read in a report.</p></div>
-      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>In part <b>3. Output</b>, change the line to <code>print(profile._)</code></p></div>
-    </div>
-    <div class="check"><b>Check:</b> the measures are now rows and <code>Group_A</code> and <code>Group_B</code> are the two columns.</div>
-  </div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Decide</span></div>
+  <div class="title">What a Fix May and May Not Do</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="23"><table class="mdtable"><thead><tr><th>Possible fix</th><th>Allowed?</th></tr></thead><tbody><tr class="old"><td>A lower threshold for Group B</td><td>no: deciding by group</td></tr><tr><td>One lower threshold for everyone</td><td>only with care (Exercise 3)</td></tr><tr class="best"><td>Review whether club activities belong in the score</td><td>yes: fixes the cause</td></tr><tr class="best"><td>A person reviews applicants just below 0.70</td><td>yes: human oversight</td></tr><tr class="best"><td>Document every test and decision</td><td>yes: accountability</td></tr></tbody></table></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 12 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Code Demonstration 3</span></div>
-  <div class="title">Explain Each Decision</div><div class="rule"></div>
-  <div class="body">
-    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
-      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S44_demo_3.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
-<pre><span class="sec"># 1. Input: the 16 applications and the two features</span>
-import pandas as pd
-from sklearn.linear_model import LinearRegression
-df = pd.read_csv(&quot;data/session_04_04_dataset.csv&quot;)
-features = [&quot;Credit_Score_Count&quot;, &quot;Debt_To_Income_Pct&quot;]
-
-<span class="sec"># 2. Process: copy the score with a linear model, then contributions</span>
-surrogate = LinearRegression().fit(df[features], df[&quot;Algorithmic_Approval_Score&quot;])
-contributions = (df[features] - df[features].mean()) * surrogate.coef_
-contributions.columns = [&quot;Credit_Score_Effect&quot;, &quot;Debt_Ratio_Effect&quot;]
-report = pd.concat([df[[&quot;Applicant_ID&quot;, &quot;Algorithmic_Approval_Score&quot;]],
-                    contributions.round(3)], axis=1)
-
-<span class="sec"># 3. Output: how well the copy fits, then the explanations</span>
-print(&quot;Surrogate R-squared:&quot;, round(surrogate.score(df[features], df[&quot;Algorithmic_Approval_Score&quot;]), 3))
-print(report[df[&quot;Algorithmic_Approval_Score&quot;] &lt; 0.70])
-</pre>
-    </div>
-    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>LinearRegression().fit(df[features], df[&quot;Algorithmic_Approval_Score&quot;])</code> fits a simple model that copies the scores from the two features: the surrogate (section 7.4).</li><li><code>(df[features] - df[features].mean()) * surrogate.coef_</code> computes every applicant&#x27;s contribution for both features at once: each column&#x27;s average is subtracted, and each column is multiplied by its own coefficient.</li><li><code>contributions.columns = [...]</code> gives the two results readable names.</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><div class="outbox">Surrogate R-squared: 0.975
-   Applicant_ID  ...  Debt_Ratio_Effect
-1      APP-6001  ...             -0.021
-...</div><ul class="tight"><li>The surrogate explains <code>97.5</code>% of the score differences, so its explanations can be trusted.</li></ul></div></div>
-  </div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Summary</span></div>
+  <div class="title">A Fairness Audit in Three Steps</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="figbox"><img src="../assets/session_04_04_fig_audit_steps.png" alt="The audit steps"></div><div class="check"><b>Remember:</b> a tool can be unfair without seeing the group; compare rates, find the feature behind the gap, explain each decision, never decide by group, and write everything down.</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 13 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Quick Check 3</span></div>
-  <div class="title">Quick Check 3: <code>.idxmin(axis=1)</code></div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid2 qc" style="flex: 1; min-height: 0;">
-      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>.idxmin(axis=1)</code></h2><p><code>contributions.idxmin(axis=1)</code> returns, for each row, the column with the most negative value. Why: that column is the main reason to print on the adverse action notice.</p></div>
-      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add one line at the end of part <b>2. Process</b>: <code>report[&quot;Main_Reason&quot;] = contributions.______(axis=1)</code></p></div>
-    </div>
-    <div class="check"><b>Check:</b> the rejected applicants all show <code>Credit_Score_Effect</code> as the main reason.</div>
-  </div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Exercise 1: Guided</span></div>
+  <div class="title">Exercise 1: The Audit Report</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><p><b>Goal:</b> a report with counts, rates, the ratio, and an alert</p><p><b>Script:</b> <code>YourName_S44_audit.py</code></p><ul class="tight"><li>Type the code in section 11 of the reading</li><li><code>.map()</code> turns True/False into Invited/Rejected</li><li>In two comments: why investigate, and why failing is not proof?</li></ul></div><div class="check"><b>Check:</b> A 70%, B 30%; ratio <code>0.429</code>; the <code>ALERT</code> line prints</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 14 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">10. Official References</span></div>
-  <div class="title">Where to Look Things Up</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: .14in;"><div class="card fitbox"><div class="tag">REFERENCE</div><h2>European Commission: Regulatory Framework for Artificial Intelligence (EU AI Act)</h2><p>https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>US Consumer Financial Protection Bureau: Equal Credit Opportunity Act (Regulation B)</h2><p>https://www.consumerfinance.gov/rules-policy/regulations/1002/</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Fairlearn: A Python Toolkit for Assessing and Improving Fairness in AI</h2><p>https://fairlearn.org/</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Barocas, Hardt, Narayanan: Fairness and Machine Learning: Limitations and Opportunities</h2><p>https://fairmlbook.org/</p></div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Exercise 2: Applied</span></div>
+  <div class="title">Exercise 2: A Reusable Audit Function and a Governance Record</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><p><b>Goal:</b> a function for any threshold, and a one-row record for management</p><p><b>Script:</b> <code>YourName_S44_record.py</code></p><ul class="tight"><li><code>screening_audit(df, threshold)</code> returns <code>rates, ratio</code></li><li><code>print(ratio)</code> outside the function: <code>NameError</code>; ask the AI Chat why</li><li>Save the record to <code>data/governance_record.csv</code></li></ul></div><div class="check"><b>Check:</b> <code>Ratio</code> <code>0.429</code>, <code>Status</code> <code>Review before use</code></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 15 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">11-13. Exercises</span></div>
-  <div class="title">Three Exercises</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid3 exg" data-uniform style="flex: 1; min-height: 0;"><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 1: GUIDED</div><h2>Fairness Audit Report</h2><p><b>Goal:</b> Audit approval rates at the current threshold</p><p><b>File:</b> <code>YourName_S44_governance.py</code></p><p class="remember"><b>Check:</b> ratio <code>0.286</code>: below the four-fifths rule</p></div><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 2: APPLIED</div><h2>A Reusable Audit Function and a Governance Record</h2><p><b>Goal:</b> Turn the audit into a function and save a board record</p><p><b>File:</b> <code>YourName_S44_practice.py</code></p><p class="remember"><b>Check:</b> <code>Status</code>: <code>Board review required</code></p></div><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 3: ADVANCED</div><h2>Can One Shared Threshold Fix the Gap?</h2><p><b>Goal:</b> Can one shared threshold fix the gap?</p><p><b>File:</b> <code>YourName_S44_challenge.py</code></p><p class="remember"><b>Check:</b> only <code>0.45</code> and <code>0.50</code> reach <code>0.8</code> or more</p></div></div>
-    <div class="check">Full steps for all three exercises: sections 11-13 of the course page.</div>
-  </div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Exercise 3: Advanced</span></div>
+  <div class="title">Exercise 3: Can One Shared Threshold Fix the Gap?</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><p><b>Goal:</b> test thresholds 0.50 to 0.80 for fairness and for the coding skill bar (60)</p><p><b>Script:</b> <code>YourName_S44_threshold.py</code></p><ul class="tight"><li>Count invites below the skill bar at each threshold</li><li>Find the highest passing threshold, with and without below-bar invites</li><li>Requirements and hints: section 13 of the reading</li></ul></div><div class="check"><b>Check:</b> only <code>0.50</code> passes, with <code>3</code> below the skill bar: the threshold cannot fix it</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 16 / 16</span></div>
 </section>
 
@@ -539,7 +533,7 @@ function fitAll() {
     });
     apply();
     const over = () => box.scrollHeight > box.clientHeight + 1 || box.scrollWidth > box.clientWidth + 1
-      || [...box.querySelectorAll('pre')].some((pre) => pre.scrollHeight > pre.clientHeight + 6 || pre.scrollWidth > pre.clientWidth + 6);
+      || [...box.querySelectorAll('pre, .outbox')].some((pre) => pre.scrollHeight > pre.clientHeight + 6 || pre.scrollWidth > pre.clientWidth + 2);
     while (over() && size > floor) { size -= 0.5; apply(); }
     if (over()) box.dataset.overflow = 'yes';
     box.__apply = (v) => { size = v; apply(); };

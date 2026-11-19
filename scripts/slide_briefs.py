@@ -67,8 +67,8 @@ EXERCISES = {
         ("The best semester price for each product", "NT$`253,557` vs NT$`242,372`"),
     ],
     "4.4": [
-        ("Audit approval rates at the current threshold", "ratio `0.286`: below the four-fifths rule"),
-        ("Turn the audit into a function and save a board record", "`Status`: `Board review required`"),
-        ("Can one shared threshold fix the gap?", "only `0.45` and `0.50` reach `0.8` or more"),
+        ("The audit report", "A 70%, B 30%; ratio `0.429`: fails"),
+        ("A reusable audit function and a governance record", "`Status` `Review before use`"),
+        ("Can one shared threshold fix the gap?", "only `0.50` passes, with `3` below the skill bar"),
     ],
 }
