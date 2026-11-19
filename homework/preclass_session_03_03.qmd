@@ -33,7 +33,7 @@ format:
         \AtBeginDocument{\justifying\pagenumbering{arabic}\pagestyle{plain}}
 ---
 
-Course 6141: Business Analytics and AI Application | Pre-class homework, about 2 hours | Due **Tuesday, November 24, 2026, 5 pm (Taiwan time)** on iLearn
+Course 6141: Business Analytics and AI Application | Pre-class homework, about 2 hours | Submit on iLearn
 
 ## Why this homework
 
@@ -261,7 +261,7 @@ Guessing the average, typical error: 32.6
 
 1. Open the Word template `preclass_session_03_03_template.docx` (A4) in **Microsoft Word**. Fill in page 1, then one section per task: screenshots, the Task 4 table, and short answers. The grey hint text is only a guide: delete it and paste or type in its place. The finished report is about 5 pages.
 2. Save it as a PDF in Word (**File > Save As**, then choose **PDF**) named `StudentID_Name_PreClass_S33.pdf`, with your name in English letters and no spaces, for example `S11312345_JohnSmith_PreClass_S33.pdf`.
-3. Upload it to iLearn by **Tuesday, November 24, 2026, 5 pm (Taiwan time)**, the day before Session 3.3.
+3. Upload it to iLearn by the deadline in the homework announcement.
 4. Stuck on a task? Do not leave it blank: paste the error, write what you tried, and bring the same laptop to class.
 
 ## Common Errors

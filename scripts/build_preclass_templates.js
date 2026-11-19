@@ -96,7 +96,7 @@ const which = process.argv[3];
 const S = {
   "33": {
     title: "Before Session 3.3: Pre-Class Report", guide: "preclass_session_03_03.pdf",
-    due: "Due: Tuesday, November 24, 2026, 5 pm (Taiwan time), on iLearn", file: "StudentID_Name_PreClass_S33.pdf",
+    file: "StudentID_Name_PreClass_S33.pdf",
     example: "S11312345_JohnSmith_PreClass_S33.pdf",
     pages: [
       [["Task 1: Check Your Tools", "a screenshot of the four version lines.", [shotBox("python YourName_P33_task1.py", 4)]],
@@ -116,7 +116,7 @@ const S = {
   },
   "34": {
     title: "Before Session 3.4: Pre-Class Report", guide: "preclass_session_03_04.pdf",
-    due: "Due: Tuesday, December 1, 2026, 5 pm (Taiwan time), on iLearn", file: "StudentID_Name_PreClass_S34.pdf",
+    file: "StudentID_Name_PreClass_S34.pdf",
     example: "S11312345_JohnSmith_PreClass_S34.pdf",
     pages: [
       [["Task 1: Rank the Orders by Their Chance", "a screenshot of the output and one sentence.", [shotBox("python YourName_P34_task1.py", 8), gap(),
@@ -138,8 +138,7 @@ const S = {
 
 const children = [
   new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 60 }, children: [new TextRun({ text: S.title, font: FONT, size: 36, bold: true })] }),
-  new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 80 }, children: [new TextRun({ text: "Course 6141: Business Analytics and AI Application", font: FONT, size: 22, color: GREY })] }),
-  new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 240 }, children: [new TextRun({ text: S.due, font: FONT, size: 24, bold: true, color: RED })] }),
+  new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 240 }, children: [new TextRun({ text: "Course 6141: Business Analytics and AI Application", font: FONT, size: 22, color: GREY })] }),
   answerTable([["Name (in English letters)", "e.g., John Smith"], ["Student ID", ""], ["Computer", "Mac Apple Silicon / Mac Intel / Windows (delete the others)"], ["Date submitted", ""]], 3600),
   gap(),
   new Paragraph({ heading: HeadingLevel.HEADING_2, children: runs("How to complete and submit", { size: 24, bold: true }) }),
@@ -152,7 +151,7 @@ const children = [
     new ExternalHyperlink({ link: "https://software.thu.edu.tw/new/", children: [new TextRun({ text: "https://software.thu.edu.tw/new/", style: "Hyperlink" })] }),
     new TextRun(" (Microsoft campus license)."),
   ] }),
-  bullet(`When finished, save it as PDF in Word (File > Save As, then choose PDF) named \`${S.file}\`, for example \`${S.example}\`, and upload it to iLearn by the deadline above.`),
+  bullet(`When finished, save it as PDF in Word (File > Save As, then choose PDF) named \`${S.file}\`, for example \`${S.example}\`, and upload it to iLearn by the deadline in the homework announcement.`),
   bullet("Stuck on a task? Do not leave it blank: write the error and what you tried in the box at the end, and bring the same laptop to class."),
 ];
 
