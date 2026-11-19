@@ -325,221 +325,202 @@ ol.ex3 li { font-size: 18pt; line-height: 1.25; margin: .06in 0; }
 .sm-item code { font-size: .85em; white-space: normal; overflow-wrap: anywhere; }
 /* end session map */
 
+
+.stack { display: flex; flex-direction: column; gap: .14in; width: 100%; min-height: 0; }
+.answer { font-size: 19pt; margin: .06in 0; line-height: 1.25; }
+.answer b { color: #991B1B; }
+.mdtable td.good { background: #DCFCE7; font-weight: bold; }
+.mdtable td.bad { background: #FEE2E2; }
+.mdtable tr.best td { background: #DCFCE7; font-weight: bold; }
+.mdtable tr.old td { background: #FEF3C7; }
+.code-panel.w55 { width: 55%; }
+.code-panel.w48 { width: 48%; }
+.lead-q { font-size: 22pt; font-style: italic; color: #991B1B; margin: .06in 0 .1in; }
+.mdtable td, .mdtable th { vertical-align: middle; }
+.check { font-size: 22pt; }
+.check p { margin: 0; }
+.stack .card { flex-shrink: 0; }
+.mdtable.files code { white-space: nowrap; overflow-wrap: normal; }
+.overview { grid-template-columns: 1fr 1.25fr; }
+.answer { font-size: inherit; }
+.outbox.wrap { white-space: pre-wrap; overflow-wrap: anywhere; }
+.code-panel.w46 { width: 46%; }
+.stack { height: 100%; }
+.figbox { flex: 1 1 0; min-height: 0; display: flex; align-items: center; justify-content: center; }
+.figbox img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
+.figrow { display: grid; gap: .22in; width: 100%; min-height: 0; }
+.figrow > .figbox { height: 100%; }
+.figrow > .card { align-self: center; }
 </style>
 </head>
 <body>
-
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">1-2. Purpose and Outcomes</span></div>
-  <div class="title">Session 4.1: Integration of Business Analytics and Enterprise AI Architecture: End-to-End Decision Systems</div><div class="rule"></div>
-  <div class="body grid2 overview"><div class="card fitbox"><div class="tag">THE BUSINESS SITUATION</div><ul class="tight"><li>A model that lives in an analyst&#x27;s notebook creates no value; value comes only when its predictions trigger real actions, every day, without a person running the code</li><li>The card issuer from Session 3.4 wants its fraud model to score each night&#x27;s transactions automatically and hold the risky ones</li><li>The head of operations asks: how do we put the fraud model to work every night, and how will we know when it starts to fail? Today, you save a trained model, reuse it on new data, and build the checks that warn you when the world changes</li></ul><p class="flow">Today's flow: 60 min lecture, then 120 min hands-on lab</p></div><div class="card fitbox"><div class="tag">EXPECTED OUTCOMES</div><h2>By the end of today, you will be able to:</h2><ol class="biz"><li><span class="q">"How does a model get from training to daily use?"</span> Map an end-to-end decision system (data in, checks, model, action), and save and reload a model with <code>joblib</code></li><li><span class="q">"Is new data still like the training data?"</span> Detect data drift (a change in the incoming data that makes a model less reliable) by comparing averages</li><li><span class="q">"What if something breaks at night?"</span> Monitor latency and accuracy from a run log, and handle a missing model file (<code>FileNotFoundError</code>) with a safe fallback</li></ol></div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">The Problem and the Result</span></div>
+  <div class="title">Session 4.1: How Does the Coupon Model Run Every Night?</div><div class="rule"></div>
+  <div class="body grid2 overview" style="grid-template-columns: 1fr 1.2fr;"><div class="card fitbox" data-start="22"><div class="tag">THE PROBLEM</div><ul class="tight"><li>The coupon model of Session 3.4 must score new users <b>every night, by itself</b></li><li>Tonight is during final exams: students still open the app but listen much less</li><li>The data team asks: how do we run it without retraining, how do we notice when tonight looks different, and what if the model file is missing?</li></ul><p class="flow">Today: the result first, then save, score, and check drift</p></div><div class="card fitbox" data-start="22"><div class="tag">THE RESULT</div><table class="mdtable"><thead><tr><th>Tonight</th><th>Result</th></tr></thead><tbody><tr><td>Users scored</td><td>10</td></tr><tr class="best"><td>Coupons (chance 0.3 or more)</td><td>5</td></tr><tr class="old"><td>Minutes vs training</td><td>-42.7%: drift flagged</td></tr></tbody></table><p class="answer"><b>1.</b> Train once, save with <code>joblib</code>, load and score every night.</p><p class="answer"><b>2.</b> Tonight's users listen 43% less: send the coupons, but flag the night for review.</p><p class="answer"><b>3.</b> No model file? Use the 3-weeks rule (Session 3.1) instead of crashing.</p></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 1 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Session Map</span></div>
-  <div class="title">Session Map: Follow the Numbers</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: .14in;"><div class="sm-q"><b>Today's question:</b> How do we put the fraud model to work every night, and how will we know when it starts to fail?</div><div class="sm-phases"><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">1</span><span><b>Why it matters</b><small>Lecture, part 1</small></span></div><p class="sm-item"><i>1.</i><span><b>Session Purpose</b><span class="d">answer today&#x27;s question</span></span></p><p class="sm-item"><i>2.</i><span><b>Learning Outcomes</b><span class="d">3 skills you will show today</span></span></p><p class="sm-item"><i>3.</i><span><b>Business Context</b><span class="d">From a Model to a Decision System</span></span></p><p class="sm-item"><i>4.</i><span><b>Data Basics</b><span class="d">Saving a Model and Watching It</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox " data-start="22"><div class="sm-head"><span class="sm-step">2</span><span><b>Learn the tools</b><small>Lecture, part 2</small></span></div><p class="sm-item"><i>5.</i><span><b>Lab Dataset</b><span class="d">3 CSVs</span></span></p><p class="sm-item"><i>6.</i><span><b>Keywords</b><span class="d">6 terms</span></span></p><p class="sm-item"><i>7.</i><span><b>Core Foundations</b><span class="d">5 ideas, one at a time</span></span></p><p class="sm-item"><i>8.</i><span><b>IDE Setup</b><span class="d"><code>pip install scikit-learn joblib</code></span></span></p><p class="sm-item"><i>9.</i><span><b>Code Examples</b><span class="d">3 demos + Quick Checks</span></span></p><p class="sm-item"><i>10.</i><span><b>References</b><span class="d">4 official docs</span></span></p></div><div class="sm-arrow">&#8594;</div><div class="sm-phase fitbox sm-p3" data-start="22"><div class="sm-head"><span class="sm-step">3</span><span><b>Practice</b><small>Lab</small></span></div><p class="sm-item"><i>11.</i><span><b>Exercise 1: Guided</b><span class="d">Read the Run Log</span></span></p><p class="sm-item"><i>12.</i><span><b>Exercise 2: Applied</b><span class="d">Survive a Missing Model File</span></span></p><p class="sm-item"><i>13.</i><span><b>Exercise 3: Advanced</b><span class="d">One Function for the Whole Night</span></span></p></div></div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Key Ideas</span></div>
+  <div class="title">Train Once, Use Every Night</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="figbox"><img src="../assets/session_04_01_fig_decision_system.png" alt="Train once and save; every night ingest, validate, score, act"></div><div class="check">Training needs past users <b>with answers</b>, so it is done rarely. Scoring needs only the saved model, so it runs every night.</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 2 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">3. Business Context</span></div>
-  <div class="title">From a Model to a Decision System</div><div class="rule"></div>
-  <div class="body grid2" style="grid-template-columns: 1fr 1.15fr;"><div class="card fitbox"><div class="tag">KEY POINTS</div><ul class="tight"><li>A decision system has four stages, run every night as one batch (a group of records processed together):</li><li>Batch vs real-time:<ul class="tight"><li><b>Batch</b> scoring runs on a schedule, such as every night, for many records at once. It is cheaper, and fine when decisions can wait a few hours.</li><li><b>Real-time</b> scoring answers one request within milliseconds, for example while a customer waits at the checkout. It is faster but costs more to build and run.</li></ul></li><li>Models get worse over time, because customers and markets change.<ul class="tight"><li><b>Data drift:</b> the new data no longer looks like the training data (for example, purchases are much larger in the holiday season)</li><li><b>Performance decay:</b> accuracy on recent, checked cases falls</li></ul></li></ul></div><div class="card fitbox"><div class="tag">SEE IT ON REAL DATA</div><table class="mdtable"><tr><th>Stage</th><th>What happens</th><th>Example</th></tr><tr><td>Ingestion</td><td>collect the day&#x27;s data</td><td>120,000 card transactions</td></tr><tr><td>Validation</td><td>check it before use</td><td>no missing values, all columns present</td></tr><tr><td>Scoring</td><td>the model gives each record a probability</td><td>fraud probability from 0 to 1</td></tr><tr><td>Action</td><td>a business rule turns scores into actions</td><td>hold every transaction at 0.5 or above</td></tr></table></div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Key Ideas</span></div>
+  <div class="title">Drift, Monitoring, and a Fallback</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><table class="mdtable"><thead><tr><th>Idea</th><th>Meaning</th><th>Today</th></tr></thead><tbody><tr><td>Data drift</td><td>new data no longer looks like the training data</td><td>exam season: minutes fall</td></tr><tr><td>Monitoring</td><td>a run log: records, latency (ms), accuracy per night</td><td>Exercise 1</td></tr><tr><td>Fallback</td><td>a simple, safe rule when the model cannot run</td><td>3+ weeks inactive (Exercise 2)</td></tr></tbody></table></div><div class="check">A model never says "I have not seen data like this": the system has to check and report it.</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 3 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">4. Data Basics</span></div>
-  <div class="title">Saving a Model and Watching It</div><div class="rule"></div>
-  <div class="body"><div class="card fitbox"><div class="tag">KEY POINTS</div><ul class="tight"><li>Training is slow and done rarely; scoring is fast and done often.<ul class="tight"><li><code>joblib.dump(model, &quot;models/fraud_model.joblib&quot;)</code> saves it</li><li><code>joblib.load(&quot;models/fraud_model.joblib&quot;)</code> loads it back, ready to predict, with no retraining</li></ul></li><li>A simple drift check compares each feature&#x27;s average in the new batch with its average in the training data:<ul class="tight"><li>change in percent = (new average - training average) / training average x 100</li><li>Our rule: flag a feature when the change is more than 20% in either direction</li></ul></li><li>A run log records every night&#x27;s stages with their record counts and latency (how long a stage took, in milliseconds; 1,000 ms = 1 second).</li></ul></div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">The Data</span></div>
+  <div class="title">Three Small Files (Fictional Teaching Data)</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><ul class="tight"><li><code>session_03_04_dataset.csv</code>: the <b>40 users with answers</b> from Session 3.4: train once</li><li><code>session_04_01_new_batch.csv</code>: <b>10 new users tonight</b>, during final exams: no answers</li><li><code>session_04_01_dataset.csv</code>: a <b>run log</b>, 5 nights x 4 stages, for Exercise 1</li></ul></div><div class="check"><code>joblib</code> comes with Scikit-Learn: nothing new to install. Step 1 creates a <code>models/</code> folder.</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 4 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">5. Lab Practice Dataset</span></div>
-  <div class="title">The Data for Today</div><div class="rule"></div>
-  <div class="body grid2" style="grid-template-columns: 1fr 2.2fr;"><div class="card fitbox"><div class="tag">FILES</div><ul class="tight"><li><code>data/session_03_04_dataset.csv</code></li><li><code>data/session_04_01_new_batch.csv</code></li><li><code>data/session_04_01_dataset.csv</code></li></ul><p>Run log columns:</p></div><div class="card fitbox"><div class="tag">COLUMNS</div><table class="mdtable cols"><tr><td><code>Run_Date</code></td><td>The night of the run, <code>2024-12-01</code> to <code>2024-12-05</code>.</td></tr><tr><td><code>Pipeline_Stage</code></td><td><code>Ingestion</code>, <code>Validation</code>, <code>Scoring</code>, or <code>Action</code>.</td></tr><tr><td><code>Records_Count</code></td><td>Records processed by the stage. For <code>Action</code>, the number of held transactions.</td></tr><tr><td><code>Latency_Ms</code></td><td>Time the stage took, in milliseconds.</td></tr><tr><td><code>Model_Accuracy</code></td><td>Accuracy on that night&#x27;s investigated cases. Filled only for the <code>Scoring</code> stage; empty (<code>NaN</code>) for the others.</td></tr></table></div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Step 1</span></div>
+  <div class="title">Step 1: Train Once and Save</div><div class="rule"></div>
+  <div class="body"><div class="code-panel w55 fitbox" data-start="21" data-floor="13"><div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S41_step_1.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div><pre><span class="sec"># 1. Input: all 40 users with known answers (Session 3.4)</span>
+import os
+import joblib
+import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+train = pd.read_csv(&quot;data/session_03_04_dataset.csv&quot;, index_col=&quot;User_ID&quot;)
+features = [&quot;Weeks_Inactive_Count&quot;, &quot;Monthly_Minutes_Count&quot;]
+
+<span class="sec"># 2. Process: train once on every user, then save the trained model to a file</span>
+model = make_pipeline(StandardScaler(), LogisticRegression())
+model.fit(train[features], train[&quot;Cancelled_Binary&quot;])
+os.makedirs(&quot;models&quot;, exist_ok=True)
+joblib.dump(model, &quot;models/coupon_model.joblib&quot;)
+
+<span class="sec"># 3. Output: where the model went, and how it does on its own training users</span>
+accuracy = model.score(train[features], train[&quot;Cancelled_Binary&quot;])
+print(&quot;Saved: models/coupon_model.joblib&quot;)
+print(f&quot;Training accuracy: {accuracy:.2f}&quot;)</pre></div><div class="notes"><div class="card fitbox how" data-start="21"><div class="tag">HOW IT WORKS</div><ul class="tight"><li>Same pipeline as 3.4, now trained on <b>all</b> 40 users</li><li><code>joblib.dump(model, path)</code> saves the scaler and the classifier together</li></ul></div><div class="card fitbox out" data-start="21"><div class="tag">OUTPUT</div><div class="outbox">Saved: models/coupon_model.joblib
+Training accuracy: 0.90</div></div><div class="check fitbox" data-start="20"><p><b>Quick Check:</b> <code>os.path.exists(...)</code> prints <code>True</code></p></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 5 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">6. Keywords</span></div>
-  <div class="title">6 Terms You Need Today</div><div class="rule"></div>
-  <div class="body grid3" style="grid-template-rows: repeat(2, 1fr);"><div class="card fitbox"><div class="tag">TERM 1</div><h2><code>End-to-End Decision System</code></h2><p class="what"><b>What:</b> ingestion, validation, scoring, and action joined into one automatic run</p><p class="why"><b>Why:</b> turns predictions into business actions without manual steps</p></div><div class="card fitbox"><div class="tag">TERM 2</div><h2><code>Batch vs Real-Time Scoring</code></h2><p class="what"><b>What:</b> many records on a schedule vs one record on request</p><p class="why"><b>Why:</b> the business deadline decides which one is worth its cost</p></div><div class="card fitbox"><div class="tag">TERM 3</div><h2><code>Model Persistence</code> (<code>joblib</code>)</h2><p class="what"><b>What:</b> saving a trained model to a file and loading it later</p><p class="why"><b>Why:</b> train once, score every night</p></div><div class="card fitbox"><div class="tag">TERM 4</div><h2><code>Data Drift</code></h2><p class="what"><b>What:</b> new data that no longer looks like the training data</p><p class="why"><b>Why:</b> a model is only reliable on data like the data it learned from</p></div><div class="card fitbox"><div class="tag">TERM 5</div><h2><code>Monitoring</code></h2><p class="what"><b>What:</b> tracking counts, latency, and accuracy for every run</p><p class="why"><b>Why:</b> catches a failing system before customers do</p></div><div class="card fitbox"><div class="tag">TERM 6</div><h2><code>Fallback</code></h2><p class="what"><b>What:</b> a simple, safe rule used when the model is not available</p><p class="why"><b>Why:</b> the business keeps running when something breaks</p></div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Step 1</span></div>
+  <div class="title">Step 1: Why Train on All Users, and Save the Whole Pipeline?</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><ul class="tight"><li>Session 3.4 <b>tested</b> the model on half of the users; now it learns from every example</li><li>Training accuracy <code>0.90</code> is optimistic: the honest test was in Session 3.4</li><li>The saved file holds the <b>scaler and the classifier</b> together</li></ul></div><div class="check"><b>Common mistake:</b> saving only the classifier. Tonight's minutes would go in unscaled, and every chance would be wrong.</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 6 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">7. Core Foundations</span></div>
-  <div class="title">How It Works</div><div class="rule"></div>
-  <div class="body f7" data-uniform style="display:grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: .16in;"><div class="card fitbox" data-start="24"><div class="tag">7.1</div><h2>Train once, use many times</h2><p class="remember"><b>Remember:</b> save the whole pipeline once; load it every night.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.2</div><h2>Probabilities, not just yes or no</h2><p class="remember"><b>Remember:</b> use probabilities when the cut-off is a business decision.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.3</div><h2>Data drift</h2><p class="remember"><b>Remember:</b> compare new averages with training averages, in both directions.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.4</div><h2>Monitoring</h2><p class="remember"><b>Remember:</b> log every run, then watch the trends, not just single nights.</p></div><div class="card fitbox" data-start="24"><div class="tag">7.5</div><h2>When something breaks</h2><p class="remember"><b>Remember:</b> plan for failure, and always report which method made the decisions.</p></div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Step 2</span></div>
+  <div class="title">Step 2: The Nightly Job: Load, Score, Decide</div><div class="rule"></div>
+  <div class="body"><div class="code-panel w55 fitbox" data-start="21" data-floor="13"><div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S41_step_2.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div><pre><span class="sec"># 1. Input: the saved model and tonight&#x27;s new users</span>
+import joblib
+import pandas as pd
+model = joblib.load(&quot;models/coupon_model.joblib&quot;)
+tonight = pd.read_csv(&quot;data/session_04_01_new_batch.csv&quot;, index_col=&quot;User_ID&quot;)
+features = [&quot;Weeks_Inactive_Count&quot;, &quot;Monthly_Minutes_Count&quot;]
+
+<span class="sec"># 2. Process: score every user, then apply the threshold chosen in Session 3.4</span>
+chance = model.predict_proba(tonight[features])[:, 1]
+tonight[&quot;Chance&quot;] = chance.round(2)
+tonight[&quot;Coupon&quot;] = (chance &gt;= 0.3).astype(int)
+tonight.to_csv(&quot;data/coupons_tonight.csv&quot;)
+
+<span class="sec"># 3. Output: tonight&#x27;s decisions</span>
+print(tonight[[&quot;Chance&quot;, &quot;Coupon&quot;]])
+print(&quot;Coupons to send:&quot;, tonight[&quot;Coupon&quot;].sum(), &quot;of&quot;, len(tonight))</pre></div><div class="notes"><div class="card fitbox how" data-start="21"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>joblib.load(path)</code>: the trained pipeline, no training data needed</li><li>Coupon at a chance of <code>0.3</code> or more (Session 3.4); <code>.to_csv()</code> is the action</li></ul></div><div class="card fitbox out" data-start="21"><div class="tag">OUTPUT</div><div class="outbox">         Chance  Coupon
+User_ID                
+USR-401    0.32       1
+USR-402    0.05       0
+USR-403    0.72       1
+USR-404    0.19       0
+... (6 more users)
+Coupons to send: 5 of 10</div></div><div class="check fitbox" data-start="20"><p><b>Quick Check:</b> <code>chance.sum()</code>: about <code>4.0</code> cancellations expected</p></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 7 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">7. Core Foundations: On Real Data</span></div>
-  <div class="title">7.1 Train once, use many times: On Real Data</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: .12in;"><div class="card fitbox" data-start="19"><div class="tag">SEE IT ON REAL DATA</div><table class="mdtable"><tr><th>Step</th><th>Code</th><th>Result</th></tr><tr><td>Save</td><td><code>joblib.dump(model, &quot;models/fraud_model.joblib&quot;)</code></td><td>a small file, about 1.7 KB</td></tr><tr><td>Load</td><td><code>loaded = joblib.load(&quot;models/fraud_model.joblib&quot;)</code></td><td>the same trained model</td></tr><tr><td>Check</td><td><code>(model.predict_proba(X) == loaded.predict_proba(X)).all()</code></td><td><code>True</code>: identical predictions</td></tr></table></div><div class="check"><b>Remember:</b> save the whole pipeline once; load it every night.</div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Step 2</span></div>
+  <div class="title">Step 2: Tonight&#x27;s Coupons</div><div class="rule"></div>
+  <div class="body"><div class="figrow" style="grid-template-columns: 1.6fr 1fr;"><div class="figbox"><img src="../assets/session_04_01_fig_tonight.png" alt="Tonight&#x27;s 10 users and the coupon threshold"></div><div class="card fitbox" data-start="22"><ul class="tight"><li>5 coupons; <code>USR-407</code> is the clearest case (<code>0.94</code>)</li><li><code>USR-401</code>: only 2 weeks inactive, but just 250 minutes: coupon</li><li><code>USR-410</code>: 3 weeks inactive, but 1,650 minutes: no coupon</li></ul></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 8 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Code Demonstration 1</span></div>
-  <div class="title">Train Once, Save to a File</div><div class="rule"></div>
-  <div class="body">
-    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
-      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S41_demo_1.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
-<pre><span class="sec"># 1. Input: the investigated transactions from Session 3.4</span>
-import os
-import joblib
-import pandas as pd
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LogisticRegression
-train = pd.read_csv(&quot;data/session_03_04_dataset.csv&quot;)
-features = [&quot;Transaction_Amount_USD&quot;, &quot;Foreign_IP_Flag&quot;,
-            &quot;Failed_Login_Attempts_Count&quot;]
-
-<span class="sec"># 2. Process: scale + logistic regression, trained in one Pipeline</span>
-model = Pipeline([
-    (&quot;scale&quot;, StandardScaler()),
-    (&quot;classify&quot;, LogisticRegression()),
-])
-model.fit(train[features], train[&quot;Actual_Fraud_Binary&quot;])
-
-<span class="sec"># 3. Output: save the trained model as a file</span>
-os.makedirs(&quot;models&quot;, exist_ok=True)
-joblib.dump(model, &quot;models/fraud_model.joblib&quot;)
-print(&quot;Saved: models/fraud_model.joblib&quot;)
-print(&quot;Training accuracy:&quot;, model.score(train[features], train[&quot;Actual_Fraud_Binary&quot;]))
-</pre>
-    </div>
-    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li>First time only, in the Terminal: <code>pip install scikit-learn joblib</code></li><li>The training data is the 16 investigated transactions from Session 3.4; the model uses 3 features.</li><li><code>Pipeline([(&quot;scale&quot;, StandardScaler()), (&quot;classify&quot;, LogisticRegression())])</code> joins two steps into one object: first standardize, then classify.</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><div class="outbox">Saved: models/fraud_model.joblib
-Training accuracy: 0.9375
-</div><ul class="tight"><li>The file now exists in the <code>models</code> folder, visible in Panel <code>[1]</code>.</li></ul></div></div>
-  </div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Step 2</span></div>
+  <div class="title">Batch or Real-Time?</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><table class="mdtable"><thead><tr><th></th><th>Batch</th><th>Real-time</th></tr></thead><tbody><tr><td>When</td><td>on a schedule, e.g., every night</td><td>on each request, in milliseconds</td></tr><tr><td>Example</td><td>tonight&#x27;s coupons</td><td>a song recommendation while the user waits</td></tr><tr><td>Cost</td><td>cheaper</td><td>more expensive to build and run</td></tr></tbody></table></div><div class="check">The coupon can wait until morning, so a nightly batch is enough. <b>Common mistake:</b> retraining inside the nightly job: tonight's users have no answers yet.</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 9 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Quick Check 1</span></div>
-  <div class="title">Quick Check 1: <code>os.path.exists()</code></div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid2 qc" style="flex: 1; min-height: 0;">
-      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>os.path.exists()</code></h2><p><code>os.path.exists(path)</code> returns <code>True</code> if the file exists. Why: the nightly job should confirm the model is there before it starts.</p></div>
-      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add one line to part <b>3. Output</b>: <code>print(os.path.______(&quot;models/fraud_model.joblib&quot;))</code></p></div>
-    </div>
-    <div class="check"><b>Check:</b> the Terminal shows <code>True</code>.</div>
-  </div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Step 3</span></div>
+  <div class="title">Step 3: Is Tonight Like the Training Data?</div><div class="rule"></div>
+  <div class="body"><div class="code-panel w46 fitbox" data-start="21" data-floor="13"><div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S41_step_3.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div><pre><span class="sec"># 1. Input: the training users and tonight&#x27;s users</span>
+import pandas as pd
+train = pd.read_csv(&quot;data/session_03_04_dataset.csv&quot;, index_col=&quot;User_ID&quot;)
+tonight = pd.read_csv(&quot;data/session_04_01_new_batch.csv&quot;, index_col=&quot;User_ID&quot;)
+features = [&quot;Weeks_Inactive_Count&quot;, &quot;Monthly_Minutes_Count&quot;]
+
+<span class="sec"># 2. Process: compare each feature&#x27;s average tonight with its training average</span>
+drift = pd.DataFrame({&quot;Train_Avg&quot;: train[features].mean(),
+                      &quot;Tonight_Avg&quot;: tonight[features].mean()})
+change = drift[&quot;Tonight_Avg&quot;] - drift[&quot;Train_Avg&quot;]
+drift[&quot;Change_Pct&quot;] = change / drift[&quot;Train_Avg&quot;] * 100
+drift[&quot;Drift_Flag&quot;] = drift[&quot;Change_Pct&quot;].abs() &gt; 20
+
+<span class="sec"># 3. Output: the averages, the change in percent, and the flag</span>
+print(drift.round(1))</pre></div><div class="notes"><div class="card fitbox how" data-start="21"><div class="tag">HOW IT WORKS</div><ul class="tight"><li>Average per feature: training vs tonight</li><li>Change in percent; <code>.abs() &gt; 20</code> flags a large drop or rise</li></ul></div><div class="card fitbox out" data-start="21"><div class="tag">OUTPUT</div><div class="outbox">                       Train_Avg  Tonight_Avg  Change_Pct  Drift_Flag
+Weeks_Inactive_Count         3.1          2.9        -5.7       False
+Monthly_Minutes_Count     1361.8        780.0       -42.7        True</div></div><div class="check fitbox" data-start="20"><p><b>Quick Check:</b> <code>&gt; 5</code> flags both features</p></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 10 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Code Demonstration 2</span></div>
-  <div class="title">The Nightly Job: Load, Score, Decide</div><div class="rule"></div>
-  <div class="body">
-    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
-      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S41_demo_2.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
-<pre><span class="sec"># 1. Input: the saved model and tonight&#x27;s new transactions</span>
-import joblib
-import pandas as pd
-model = joblib.load(&quot;models/fraud_model.joblib&quot;)
-batch = pd.read_csv(&quot;data/session_04_01_new_batch.csv&quot;)
-features = [&quot;Transaction_Amount_USD&quot;, &quot;Foreign_IP_Flag&quot;,
-            &quot;Failed_Login_Attempts_Count&quot;]
-
-<span class="sec"># 2. Process: fraud probability, then the business rule (hold at 0.5 or above)</span>
-batch[&quot;Fraud_Probability&quot;] = model.predict_proba(batch[features])[:, 1].round(3)
-batch[&quot;Decision&quot;] = &quot;Pass&quot;
-batch.loc[batch[&quot;Fraud_Probability&quot;] &gt;= 0.5, &quot;Decision&quot;] = &quot;Hold&quot;
-
-<span class="sec"># 3. Output: print and save tonight&#x27;s decisions</span>
-print(batch[[&quot;Transaction_ID&quot;, &quot;Fraud_Probability&quot;, &quot;Decision&quot;]])
-batch.to_csv(&quot;data/nightly_decisions.csv&quot;, index=False)
-</pre>
-    </div>
-    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>joblib.load(...)</code> brings back the trained pipeline: no training happens here, so this script runs in a fraction of a second.</li><li><code>model.predict_proba(batch[features])[:, 1]</code> gives each new transaction its fraud probability (section 7.2).</li><li><code>batch[&quot;Decision&quot;] = &quot;Pass&quot;</code> sets every row to &quot;Pass&quot;; <code>batch.loc[batch[&quot;Fraud_Probability&quot;] &gt;= 0.5, &quot;Decision&quot;] = &quot;Hold&quot;</code> changes only the risky rows.</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><div class="outbox">  Transaction_ID  Fraud_Probability Decision
-0     N-TXN-9001              0.862     Hold
-1     N-TXN-9002              0.070     Pass
-...</div><ul class="tight"><li>4 of 8 transactions are held, all foreign purchases above $2,800.</li></ul></div></div>
-  </div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Step 3</span></div>
+  <div class="title">Step 3: Exam Season Shows Up as Drift</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="figbox"><img src="../assets/session_04_01_fig_drift.png" alt="Minutes of training users and tonight&#x27;s users"></div><div class="check">Weeks inactive barely moved (<code>-5.7</code>%), minutes fell <code>42.7</code>%. The model learned that low minutes mean "about to leave": this week, that may not be true. Flag the night for review.</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 11 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Quick Check 2</span></div>
-  <div class="title">Quick Check 2: Run date stamp</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid2 qc" style="flex: 1; min-height: 0;">
-      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2>Run date stamp</h2><p><code>from datetime import date</code> and <code>date.today()</code> give today&#x27;s date. Why: every decision file must show when the decisions were made, for audits.</p></div>
-      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>Add <code>from datetime import date</code> to part <b>1. Input</b>, and one line at the end of part <b>2. Process</b>: <code>batch[&quot;Run_Date&quot;] = str(date._____())</code></p></div>
-    </div>
-    <div class="check"><b>Check:</b> the saved <code>data/nightly_decisions.csv</code> has a <code>Run_Date</code> column with today&#x27;s date, written as <code>YYYY-MM-DD</code>.</div>
-  </div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Monitoring</span></div>
+  <div class="title">What a Run Log Records</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><table class="mdtable"><thead><tr><th>Run_Date</th><th>Pipeline_Stage</th><th>Records_Count</th><th>Latency_Ms</th><th>Model_Accuracy</th></tr></thead><tbody><tr><td>2026-12-07</td><td>Ingestion</td><td>52000</td><td>350</td><td></td></tr><tr><td>2026-12-07</td><td>Validation</td><td>51880</td><td>180</td><td></td></tr><tr><td>2026-12-07</td><td>Scoring</td><td>51880</td><td>820</td><td>0.912</td></tr><tr><td>2026-12-07</td><td>Action</td><td>2100</td><td>120</td><td></td></tr></tbody></table></div><div class="check">One row per stage per night. Rising latency or falling accuracy is an early warning: Exercise 1 reads 5 nights.</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 12 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Code Demonstration 3</span></div>
-  <div class="title">Drift Check: Does Tonight Look Like Training?</div><div class="rule"></div>
-  <div class="body">
-    <div class="code-panel fitbox" data-start="15.5" data-floor="13">
-      <div class="code-header"><span class="dot" style="background:#EF4444"></span><span class="dot" style="background:#F59E0B"></span><span class="dot" style="background:#22C55E"></span>&nbsp;YourName_S41_demo_3.py<span class="ipo">Input &#8594; Process &#8594; Output</span></div>
-<pre><span class="sec"># 1. Input: training data and tonight&#x27;s batch</span>
-import pandas as pd
-train = pd.read_csv(&quot;data/session_03_04_dataset.csv&quot;)
-batch = pd.read_csv(&quot;data/session_04_01_new_batch.csv&quot;)
-features = [&quot;Transaction_Amount_USD&quot;, &quot;Foreign_IP_Flag&quot;,
-            &quot;Failed_Login_Attempts_Count&quot;]
-
-<span class="sec"># 2. Process: compare the averages, feature by feature</span>
-drift = pd.DataFrame({
-    &quot;Train_Avg&quot;: train[features].mean().round(2),
-    &quot;Batch_Avg&quot;: batch[features].mean().round(2),
-})
-drift[&quot;Change_Pct&quot;] = (
-    (drift[&quot;Batch_Avg&quot;] - drift[&quot;Train_Avg&quot;]) / drift[&quot;Train_Avg&quot;] * 100
-).round(1)
-drift[&quot;Drift_Flag&quot;] = drift[&quot;Change_Pct&quot;] &gt; 20
-
-<span class="sec"># 3. Output: the drift report</span>
-print(drift)
-</pre>
-    </div>
-    <div class="notes"><div class="card fitbox how" data-start="17"><div class="tag">HOW IT WORKS</div><ul class="tight"><li><code>train[features].mean()</code> and <code>batch[features].mean()</code> give each feature&#x27;s average in the two files.</li><li>Putting both into <code>pd.DataFrame({...})</code> lines them up by feature name, one row per feature.</li><li><code>Change_Pct</code> is the change in percent from the training average (section 7.3).</li></ul></div><div class="card fitbox out" data-start="17"><div class="tag">READ THE OUTPUT</div><ul class="tight"><li>Tonight&#x27;s purchases are on average 86% larger than the training purchases: amount has drifted.</li></ul></div></div>
-  </div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Summary</span></div>
+  <div class="title">The Nightly Decision System</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="figbox"><img src="../assets/session_04_01_fig_nightly_job.png" alt="The nightly job with its fallback and review flag"></div><div class="check"><b>Remember:</b> train once, save, load every night; check that tonight looks like training; keep a fallback; log every run.</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 13 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">9. Quick Check 3</span></div>
-  <div class="title">Quick Check 3: <code>.abs()</code></div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid2 qc" style="flex: 1; min-height: 0;">
-      <div class="card fitbox" data-start="20"><div class="tag">NEW TOOL</div><h2><code>.abs()</code></h2><p><code>column.abs()</code> removes the minus sign. Why: a feature that <b>falls</b> by 30% has drifted too; <code>&gt; 20</code> alone misses it.</p></div>
-      <div class="card fitbox" data-start="20"><div class="tag">YOUR TASK</div><h2>Fill in the Blank</h2><p>In part <b>2. Process</b>, change the flag line to <code>drift[&quot;Drift_Flag&quot;] = drift[&quot;Change_Pct&quot;].___() &gt; 20</code></p></div>
-    </div>
-    <div class="check"><b>Check:</b> the flags do not change for tonight&#x27;s batch, but a change of <code>-30.0</code> would now be flagged as well.</div>
-  </div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Exercise 1: Guided</span></div>
+  <div class="title">Exercise 1: Read the Run Log</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><p><b>Goal:</b> find the nights that need attention</p><p><b>Script:</b> <code>YourName_S41_monitoring.py</code></p><ul class="tight"><li>Type the code in section 11 of the reading</li><li>Alert: latency above <code>900</code> ms <b>or</b> accuracy below <code>0.88</code></li><li>In two comments: the trend over 5 nights, and what the team should do</li></ul></div><div class="check"><b>Check:</b> alerts on <code>2026-12-10</code> and <code>2026-12-11</code>; latency <code>1470</code> to <code>1730</code> ms</div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 14 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">10. Official References</span></div>
-  <div class="title">Where to Look Things Up</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: .14in;"><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Scikit-Learn Model Persistence Guide (Joblib Documentation)</h2><p>https://scikit-learn.org/stable/model_persistence.html</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Python Library: os.path (Checking Files and Paths)</h2><p>https://docs.python.org/3/library/os.path.html</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>MLflow Official Documentation: Open Source Platform for the Machine Learning Lifecycle</h2><p>https://mlflow.org/docs/latest/index.html</p></div><div class="card fitbox"><div class="tag">REFERENCE</div><h2>Sculley et al.: Hidden Technical Debt in Machine Learning Systems (NeurIPS Standards)</h2><p>https://papers.nips.cc/paper/5656-hidden-technical-debt-in-machine-learning-systems.pdf</p></div></div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Exercise 2: Applied</span></div>
+  <div class="title">Exercise 2: Survive a Missing Model File</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><p><b>Goal:</b> keep the nightly job running when the model file is missing</p><p><b>Script:</b> <code>YourName_S41_fallback.py</code></p><ul class="tight"><li>A typo in the path stops the job with <code>FileNotFoundError</code>: ask the AI Chat how to check first</li><li><code>if os.path.exists(model_path):</code> model; otherwise the 3-weeks rule of Session 3.1</li><li>Run both ways and print who gets a coupon</li></ul></div><div class="check"><b>Check:</b> 5 coupons both ways, but different users: the rule misses <code>USR-401</code> and wastes one on <code>USR-410</code></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 15 / 16</span></div>
 </section>
 
 <section class="slide">
-  <div><span class="eyebrow">MODULE 4</span><span class="kicker">11-13. Exercises</span></div>
-  <div class="title">Three Exercises</div><div class="rule"></div>
-  <div class="body" style="flex-direction: column; gap: 0;">
-    <div class="grid3 exg" data-uniform style="flex: 1; min-height: 0;"><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 1: GUIDED</div><h2>Read the Run Log</h2><p><b>Goal:</b> Find the nights in the run log that need attention</p><p><b>File:</b> <code>YourName_S41_monitoring.py</code></p><p class="remember"><b>Check:</b> alerts on <code>2024-12-04</code> and <code>2024-12-05</code></p></div><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 2: APPLIED</div><h2>Survive a Missing Model File</h2><p><b>Goal:</b> Keep the nightly job working without the model file</p><p><b>File:</b> <code>YourName_S41_practice.py</code></p><p class="remember"><b>Check:</b> fallback holds 3; the model holds 4</p></div><div class="card fitbox" data-start="21"><div class="tag">EXERCISE 3: ADVANCED</div><h2>One Function for the Whole Night</h2><p><b>Goal:</b> One function for the whole night: validate, score, act, report</p><p><b>File:</b> <code>YourName_S41_challenge.py</code></p><p class="remember"><b>Check:</b> <code>held: 4</code>, <code>needs_review: True</code></p></div></div>
-    <div class="check">Full steps for all three exercises: sections 11-13 of the course page.</div>
-  </div>
+  <div><span class="eyebrow">MODULE 4</span><span class="kicker">Exercise 3: Advanced</span></div>
+  <div class="title">Exercise 3: One Function for the Whole Night</div><div class="rule"></div>
+  <div class="body"><div class="stack"><div class="card fitbox" data-start="24"><p><b>Goal:</b> validate, check drift, score or fall back, save, and report in one function</p><p><b>Script:</b> <code>YourName_S41_nightly.py</code></p><ul class="tight"><li><code>run_nightly(batch_path, model_path, train_path)</code> returns a summary dictionary</li><li><code>needs_review</code> is <code>True</code> if anything drifted or the fallback was used</li><li>Requirements and hints: section 13 of the reading</li></ul></div><div class="check"><b>Check:</b> both runs: 10 records, 5 coupons, drift in <code>Monthly_Minutes_Count</code>, <code>needs_review: True</code></div></div></div>
   <div class="footer"><span>Business Analytics &amp; AI Application | Course 6141</span><span>Slide 16 / 16</span></div>
 </section>
 
@@ -556,7 +537,7 @@ function fitAll() {
     });
     apply();
     const over = () => box.scrollHeight > box.clientHeight + 1 || box.scrollWidth > box.clientWidth + 1
-      || [...box.querySelectorAll('pre')].some((pre) => pre.scrollHeight > pre.clientHeight + 6 || pre.scrollWidth > pre.clientWidth + 6);
+      || [...box.querySelectorAll('pre, .outbox')].some((pre) => pre.scrollHeight > pre.clientHeight + 6 || pre.scrollWidth > pre.clientWidth + 2);
     while (over() && size > floor) { size -= 0.5; apply(); }
     if (over()) box.dataset.overflow = 'yes';
     box.__apply = (v) => { size = v; apply(); };

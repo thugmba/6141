@@ -52,9 +52,9 @@ EXERCISES = {
         ("Is the best-ranking model the cheapest?", "best AUC: weeks only; cheapest: both (NT$`180`)"),
     ],
     "4.1": [
-        ("Find the nights in the run log that need attention", "alerts on `2024-12-04` and `2024-12-05`"),
-        ("Keep the nightly job working without the model file", "fallback holds 3; the model holds 4"),
-        ("One function for the whole night: validate, score, act, report", "`held: 4`, `needs_review: True`"),
+        ("Read the run log for warning signs", "alerts on `2026-12-10` and `2026-12-11`"),
+        ("Survive a missing model file", "fallback: 5 coupons, but `USR-410` instead of `USR-401`"),
+        ("One function for the whole night", "10 records, 5 coupons, `needs_review: True`"),
     ],
     "4.2": [
         ("Price a campaign for customers at `0.5` or above", "net benefit `$1,899.68`; ROI `633.2`%"),
