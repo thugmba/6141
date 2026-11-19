@@ -81,7 +81,7 @@ def convert(module, session, title, body):
                 alt = re.match(r"!\[([^\]]*)\]", stripped).group(1).replace('"', "'")
                 out.append(f'{indent[2:]}![](../../{img.group(1)}){{width=95% fig-alt="{alt}"}}')
                 continue
-            if stripped.startswith(("* **Lecture Presentation:**", "* **Reading (PDF):**")):
+            if stripped.startswith(("* **Lecture Presentation:**", "* **Reading (PDF):**", "* **Before class (homework):**")):
                 continue
             head = re.match(r"^\* \*\*(.+?)\*\*\s*(.*)$", line)
             if head:

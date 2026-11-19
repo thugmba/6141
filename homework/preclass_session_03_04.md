@@ -1,0 +1,234 @@
+# Before Session 3.4: Practice Turning Chances into Decisions
+
+Course 6141: Business Analytics and AI Application | Pre-class homework, about 2 hours | Due **Tuesday, December 1, 2026, 5 pm (Taiwan time)** on iLearn
+
+## Why this homework
+
+In Session 3.4 you will decide which music app users get a "come back" coupon, judge the decisions with a confusion matrix, precision, and recall, and find groups of listeners with K-Means. This homework teaches those tools on a smaller, simpler example, so that in class you can focus on the ideas instead of the typing.
+
+| You practice today | You will use it in Session 3.4 to |
+|---|---|
+| sort rows by a chance | rank users by their chance of cancelling |
+| turn chances into decisions with a threshold | decide who gets a coupon |
+| count the four cases by hand and with code | read the coupon model's confusion matrix |
+| calculate accuracy, precision, and recall | judge the coupon decisions |
+| see why accuracy alone can mislead | spot the "never send a coupon" trap |
+| scale two columns and find groups with K-Means | find three kinds of listeners |
+
+**What you need:** your laptop with Python 3.13 and a `.venv` (see the Python Setup Clinic), Google Antigravity IDE, Microsoft Word (free for Tunghai University students from <https://software.thu.edu.tw/new/>), and the Word template `preclass_session_03_04_template.docx`.
+
+---
+
+## Part 1: The Example
+
+A food delivery app shows a warning, "Your order may be late", when its model thinks an order is likely to arrive late. The model gives each order a **chance of being late** between 0 and 1. The app checked 16 past orders against what really happened.
+
+File: `data/preclass_03_04_dataset.csv` (fictional teaching data).
+
+| Column | Meaning |
+|---|---|
+| `Order_ID` | Order code, `ORD-501` to `ORD-516`. A label, not a clue. |
+| `Distance_Km` | Distance from the restaurant to the customer, in km. |
+| `Prep_Minutes` | Minutes the restaurant needed to prepare the food. |
+| `Chance_Late` | The model's chance that the order arrives late, from 0 to 1. |
+| `Was_Late` | What really happened: `1` = late, `0` = on time. |
+
+## Part 2: Five Ideas You Need
+
+1. **A chance is not a decision.** A **threshold** turns it into one: show the warning if the chance is at or above the threshold, for example `0.5`.
+2. **Four cases.** Each decision is one of four:
+
+   | | Warning shown | No warning |
+   |---|---|---|
+   | **Really late** | caught (TP, True Positive) | missed (FN, False Negative) |
+   | **Really on time** | false alarm (FP, False Positive) | left alone (TN, True Negative) |
+
+   This 2x2 table of counts is called a **confusion matrix**.
+3. **Three scores:**
+   * **Accuracy** = (caught + left alone) / all: the share of decisions that were right.
+   * **Precision** = caught / (caught + false alarms): of the warnings shown, the share that were right.
+   * **Recall** = caught / (caught + missed): of the late orders, the share that got a warning.
+4. **The accuracy trap.** If most orders are on time, a lazy rule "never warn" is right most of the time but warns nobody. Look at recall too.
+5. **Groups without answers.** K-Means puts similar rows into groups by itself, without using the answer column. Columns are first put on one scale (`StandardScaler`, Session 3.2), so that minutes and kilometers count equally.
+
+## Part 3: Get Ready
+
+1. In your `6141_labs` folder, make a folder named `s34_preclass`, and inside it a folder named `data`.
+2. Download the data file from the course page and save it in `s34_preclass/data`: <https://github.com/thugmba/6141/blob/main/data/preclass_03_04_dataset.csv> (click **Download raw file**, the download icon at the top right of the table).
+3. Open `s34_preclass` in Antigravity (**File > Open Folder**) and open a Terminal.
+4. Create and activate a `.venv`, then install two packages.
+
+   Mac:
+
+   ```text
+   python3.13 -m venv .venv
+   source .venv/bin/activate
+   python -m pip install pandas scikit-learn
+   ```
+
+   Windows (Command Prompt):
+
+   ```text
+   py -3.13 -m venv .venv
+   .venv\Scripts\activate
+   python -m pip install pandas scikit-learn
+   ```
+
+5. For every task, create the script in `s34_preclass`, save it, and run it with `python` followed by the file name. Name each script with your name and the task number, for example `Reacher_P34_task1.py`.
+
+**Screenshots:** every screenshot in your report must be readable. Capture only the Terminal, with the text made bigger first (see "How to Take a Readable Screenshot" in the Python Setup Clinic).
+
+---
+
+## Part 4: Six Tasks
+
+### Task 1: Rank the Orders by Their Chance
+
+**Do:** create `YourName_P34_task1.py`, then run it.
+
+```python
+import pandas as pd
+
+df = pd.read_csv("data/preclass_03_04_dataset.csv", index_col="Order_ID")
+ranked = df.sort_values("Chance_Late", ascending=False)
+print(ranked[["Chance_Late", "Was_Late"]])
+print("Late orders:", df["Was_Late"].sum(), "of", len(df))
+```
+
+* `.sort_values("Chance_Late", ascending=False)` puts the highest chance first.
+* `ranked[["Chance_Late", "Was_Late"]]` shows two columns; double brackets keep a table.
+
+**Check:** `ORD-515` is first (`0.95`, late); `Late orders: 7 of 16`.
+
+**Report:** a screenshot of the output, and one sentence: is the ranking perfect? Name one order that was late although its chance was below `0.5`.
+
+### Task 2: Count the Four Cases by Hand
+
+**Do:** using your Task 1 output and a threshold of `0.5` (warning if the chance is `0.5` or more), count the orders in each of the four cases and fill in the confusion matrix in the template. Then calculate accuracy, precision, and recall by hand, as fractions and as decimals with 2 decimals.
+
+**Check:** caught `5`, missed `2`, false alarms `2`, left alone `7` (16 in total). Task 3 checks your three scores.
+
+**Report:** the completed confusion matrix and your three calculations, for example "Recall = 5 / (5 + 2) = 0.71".
+
+### Task 3: Let Python Count and Score
+
+**Do:** create `YourName_P34_task3.py`, then run it.
+
+```python
+import pandas as pd
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import accuracy_score, precision_score, recall_score
+
+df = pd.read_csv("data/preclass_03_04_dataset.csv", index_col="Order_ID")
+threshold = 0.5
+warn = (df["Chance_Late"] >= threshold).astype(int)
+tn, fp, fn, tp = confusion_matrix(df["Was_Late"], warn).ravel()
+
+print(f"Threshold {threshold}")
+print(f"Caught: {tp} | False alarms: {fp} | Missed: {fn} | Left alone: {tn}")
+print(f"Accuracy: {accuracy_score(df['Was_Late'], warn):.2f}")
+print(f"Precision: {precision_score(df['Was_Late'], warn):.2f}")
+print(f"Recall: {recall_score(df['Was_Late'], warn):.2f}")
+```
+
+* `(df["Chance_Late"] >= threshold).astype(int)` gives `1` (warn) or `0` (no warning) for each order.
+* `confusion_matrix(actual, decision).ravel()` counts the four cases and returns them in the order TN, FP, FN, TP; unpacking them into four variables names each count.
+* Inside the f-strings, the column name uses single quotes, `'Was_Late'`, because the f-string itself uses double quotes.
+
+**Check:**
+
+```text
+Threshold 0.5
+Caught: 5 | False alarms: 2 | Missed: 2 | Left alone: 7
+Accuracy: 0.75
+Precision: 0.71
+Recall: 0.71
+```
+
+**Report:** a screenshot of the output, and one sentence: did Python agree with your hand count in Task 2?
+
+### Task 4: Move the Threshold
+
+**Do:** in `YourName_P34_task3.py`, change `threshold = 0.5` to `threshold = 0.3`, save, and run it again.
+
+**Check:** `Caught: 7 | False alarms: 3 | Missed: 0 | Left alone: 6`; accuracy `0.81`, precision `0.70`, recall `1.00`.
+
+**Report:** a screenshot of the output, and two sentences: what improved and what got worse? If a late order without a warning makes customers very angry, which threshold would you choose?
+
+### Task 5: The Accuracy Trap
+
+**Do:** create `YourName_P34_task5.py`, then run it.
+
+```python
+import pandas as pd
+from sklearn.metrics import accuracy_score
+
+df = pd.read_csv("data/preclass_03_04_dataset.csv", index_col="Order_ID")
+never = [0] * len(df)
+print("Never warn, accuracy:", accuracy_score(df["Was_Late"], never))
+```
+
+* `[0] * len(df)` makes a list of 16 zeros: the rule "never show a warning".
+
+**Check:** `Never warn, accuracy: 0.5625`.
+
+**Report:** a screenshot of the output, and one sentence: what is the recall of the "never warn" rule, and why does accuracy alone not show the problem?
+
+### Task 6: Find Groups Without the Answers (K-Means)
+
+**Do:** create `YourName_P34_task6.py`, then run it.
+
+```python
+import pandas as pd
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+
+df = pd.read_csv("data/preclass_03_04_dataset.csv", index_col="Order_ID")
+columns = ["Distance_Km", "Prep_Minutes"]
+scaled = StandardScaler().fit_transform(df[columns])
+kmeans = KMeans(n_clusters=2, random_state=42, n_init=10)
+df["Group"] = kmeans.fit_predict(scaled)
+
+profile = df.groupby("Group").agg(
+    Orders=("Was_Late", "size"),
+    Distance=("Distance_Km", "mean"),
+    Prep=("Prep_Minutes", "mean"),
+    Late_Rate=("Was_Late", "mean"))
+print(profile.round(2))
+```
+
+* Only the two columns go into K-Means; it never sees `Was_Late`.
+* `StandardScaler().fit_transform(...)` puts kilometers and minutes on one scale first (Session 3.2).
+* `KMeans(n_clusters=2, ...)` asks for 2 groups; `random_state=42` gives everyone the same groups. `.fit_predict()` returns a group number for each order.
+* `.agg(Name=(column, function))` makes one summary column per pair: the number of orders, the average distance and preparation time, and the share that were late.
+
+**Check:**
+
+```text
+       Orders  Distance   Prep  Late_Rate
+Group                                    
+0           9      2.27  10.44       0.22
+1           7      4.86  21.57       0.71
+```
+
+The group numbers may come out the other way round on some computers; the two profiles are what matter.
+
+**Report:** a screenshot of the output, and two sentences: give each group a short name (for example "near and quick"), and say which group the app should watch most closely.
+
+---
+
+## Part 5: Submit Your Report
+
+1. Open the Word template `preclass_session_03_04_template.docx` (A4) in **Microsoft Word**. Fill in page 1, then one section per task: screenshots, the Task 2 confusion matrix and calculations, and short answers. The grey hint text is only a guide: delete it and paste or type in its place. The finished report is about 5 pages.
+2. Save it as a PDF in Word (**File > Save As**, then choose **PDF**) named `StudentID_Name_PreClass_S34.pdf`, with your name in English letters and no spaces, for example `S11312345_JohnSmith_PreClass_S34.pdf`.
+3. Upload it to iLearn by **Tuesday, December 1, 2026, 5 pm (Taiwan time)**, the day before Session 3.4.
+4. Stuck on a task? Do not leave it blank: paste the error, write what you tried, and bring the same laptop to class.
+
+## Common Errors
+
+| You see | Fix |
+|---|---|
+| `FileNotFoundError: ... 'data/preclass_03_04_dataset.csv'` | the file is not in `s34_preclass/data`, or the Terminal is in another folder (check with `pwd` on a Mac, `cd` on Windows) |
+| `ModuleNotFoundError: No module named 'sklearn'` | activate `.venv`, then `python -m pip install scikit-learn` |
+| `ValueError: Classification metrics can't handle a mix of binary and continuous targets` | you passed the chances instead of the 0/1 decisions: use `warn`, not `df["Chance_Late"]` |
+| `KeyError: 'Was_Late'` | a column name is misspelled; names are case-sensitive |
