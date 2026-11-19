@@ -38,11 +38,12 @@ Use this guide to remove old Python installations first, then install a fresh co
 ## 5. Install Python
 
 1. Go to the official Python download page: <https://www.python.org/downloads/windows/>.
-2. Download the latest stable **Python 3** Windows installer (normally **Windows installer (64-bit)**).
+2. Under **Stable Releases**, find the newest **Python 3.13** release that offers **Windows installer (64-bit)** and download it. Do not choose Python 3.14 or 3.15: TensorFlow, which the course uses, supports Python 3.10 to 3.13 only.
 3. Run the downloaded installer.
 4. On the first installer screen, **select `Add python.exe to PATH`**.
 5. Select **Install Now** and allow the installation to finish.
 6. If Windows asks for permission, select **Yes**.
+7. On the last screen, if **Disable path length limit** appears, select it. TensorFlow's long file names can otherwise fail to install.
 
 ## 6. Verify Python and pip
 
@@ -55,7 +56,7 @@ Use this guide to remove old Python installations first, then install a fresh co
    pip --version
    ```
 
-3. Confirm that each command displays a Python or pip version. If `pip --version` does not work but `python -m pip --version` does, close and reopen Command Prompt once more. If necessary, rerun the Python installer and ensure the PATH option is selected.
+3. Confirm that `python --version` displays `Python 3.13.x` and that each pip command displays a pip version. If `pip --version` does not work but `python -m pip --version` does, close and reopen Command Prompt once more. If necessary, rerun the Python installer and ensure the PATH option is selected.
 
 ## 7. Install Google Antigravity
 
